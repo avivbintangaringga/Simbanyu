@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -19,14 +18,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.ui.theme.Blue30
 import com.avivba.simbanyu.ui.theme.Blue40
-import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
-fun ButtonPrimary(
+fun SimbanyuButton(
     modifier: Modifier = Modifier,
     iconLeft: @Composable (() -> Unit)? = null,
     iconRight: @Composable (() -> Unit)? = null,
@@ -51,7 +51,7 @@ fun ButtonPrimary(
                     minWidth = ButtonDefaults.MinWidth,
                     minHeight = ButtonDefaults.MinHeight
                 )
-                .padding(PaddingValues(horizontal = 24.dp, vertical = 8.dp)),
+                .padding(PaddingValues(horizontal = 24.dp, vertical = 12.dp)),
             contentAlignment = Alignment.Center
         ) {
             CompositionLocalProvider(LocalContentColor provides Color.White) {
@@ -63,7 +63,10 @@ fun ButtonPrimary(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     iconLeft?.invoke()
-                    Text(text)
+                    Text(
+                        text = text,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
                     iconRight?.invoke()
                 }
             }
@@ -73,8 +76,8 @@ fun ButtonPrimary(
 
 @Preview
 @Composable
-fun ButtonPrimaryPreview() {
-    ButtonPrimary(
+fun SimbanyuButtonPreview() {
+    SimbanyuButton(
         modifier = Modifier.padding(32.dp),
         text = "Hello World!",
         iconRight = {
