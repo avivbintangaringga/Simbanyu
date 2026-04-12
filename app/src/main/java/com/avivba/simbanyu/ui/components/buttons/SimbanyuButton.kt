@@ -65,7 +65,6 @@ fun SimbanyuButton(
                     iconLeft?.invoke()
                     Text(
                         text = text,
-                        style = MaterialTheme.typography.labelMedium,
                     )
                     iconRight?.invoke()
                 }

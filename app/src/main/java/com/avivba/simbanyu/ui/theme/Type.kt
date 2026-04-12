@@ -1,48 +1,49 @@
 package com.avivba.simbanyu.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontVariation
 import com.avivba.simbanyu.R
 
+@OptIn(ExperimentalTextApi::class)
+val interRegular = FontFamily(
+    Font(
+        R.font.inter,
+        variationSettings = FontVariation.Settings(
+            FontVariation.weight(500)
+        )
+    )
+)
 
+@OptIn(ExperimentalTextApi::class)
+val plusJakartaSansRegular = FontFamily(
+    Font(
+        R.font.plus_jakarta_sans,
+        variationSettings = FontVariation.Settings(
+            FontVariation.weight(500)
+        )
+    )
+)
+
+private val defaultTypography = Typography()
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    ),
-   labelMedium = TextStyle(
-       fontFamily = FontFamily(
-           Font(
-               R.font.inter
-           )
-       ),
-       fontSize = 16.sp,
-       fontWeight = FontWeight.Bold
-   )
-
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+    displayLarge = defaultTypography.displayLarge.copy(fontFamily = plusJakartaSansRegular),
+    displayMedium = defaultTypography.displayMedium.copy(fontFamily = plusJakartaSansRegular),
+    displaySmall = defaultTypography.displaySmall.copy(fontFamily = plusJakartaSansRegular),
+    headlineLarge = defaultTypography.headlineLarge.copy(fontFamily = plusJakartaSansRegular),
+    headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = plusJakartaSansRegular),
+    headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = plusJakartaSansRegular),
+    titleLarge = defaultTypography.titleLarge.copy(fontFamily = plusJakartaSansRegular),
+    titleMedium = defaultTypography.titleMedium.copy(fontFamily = plusJakartaSansRegular),
+    titleSmall = defaultTypography.titleSmall.copy(fontFamily = plusJakartaSansRegular),
+    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = plusJakartaSansRegular),
+    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = plusJakartaSansRegular),
+    bodySmall = defaultTypography.bodySmall.copy(fontFamily = plusJakartaSansRegular),
+    labelLarge = defaultTypography.labelLarge.copy(fontFamily = plusJakartaSansRegular),
+    labelMedium = defaultTypography.labelMedium.copy(fontFamily = plusJakartaSansRegular),
+    labelSmall = defaultTypography.labelSmall.copy(fontFamily = plusJakartaSansRegular)
 )
