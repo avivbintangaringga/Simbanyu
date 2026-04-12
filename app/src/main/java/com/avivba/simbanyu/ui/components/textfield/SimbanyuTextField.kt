@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import com.avivba.simbanyu.ui.theme.Grey20
 import com.avivba.simbanyu.ui.theme.Grey50
 import com.avivba.simbanyu.ui.theme.Grey90
+import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
 fun SimbanyuTextField(
@@ -66,10 +67,6 @@ fun SimbanyuTextField(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val textStyle = TextStyle(
-            fontSize = 14.sp
-        )
-
         val modifier2 = Modifier.fillMaxWidth()
         val decorator = TextFieldDecorator { innerTextField ->
             Row(
@@ -86,8 +83,7 @@ fun SimbanyuTextField(
                     if (state.text.isEmpty()) {
                         Text(
                             text = hint,
-                            color = Grey50,
-                            fontSize = 14.sp
+                            style = SimbanyuTheme.typography.textField
                         )
                     }
                 }
@@ -99,7 +95,7 @@ fun SimbanyuTextField(
             BasicSecureTextField(
                 state = state,
                 modifier = modifier2,
-                textStyle = textStyle,
+                textStyle = SimbanyuTheme.typography.textField,
                 decorator = decorator,
                 keyboardOptions = KeyboardOptions(
                     imeAction = imeAction
@@ -115,7 +111,7 @@ fun SimbanyuTextField(
             BasicTextField(
                 state = state,
                 modifier = modifier2,
-                textStyle = textStyle,
+                textStyle = SimbanyuTheme.typography.textField,
                 lineLimits = lineLimits,
                 decorator = decorator,
                 keyboardOptions = KeyboardOptions(

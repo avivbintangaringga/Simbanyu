@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SimbanyuTheme(darkTheme = false, dynamicColor = false) {
+            SimbanyuTheme() {
                 LoginScreen()
             }
         }
