@@ -40,10 +40,10 @@ val Typography = Typography(
     titleLarge = defaultTypography.titleLarge.copy(fontFamily = plusJakartaSansRegular),
     titleMedium = defaultTypography.titleMedium.copy(fontFamily = plusJakartaSansRegular),
     titleSmall = defaultTypography.titleSmall.copy(fontFamily = plusJakartaSansRegular),
-    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = plusJakartaSansRegular),
-    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = plusJakartaSansRegular),
-    bodySmall = defaultTypography.bodySmall.copy(fontFamily = plusJakartaSansRegular),
-    labelLarge = defaultTypography.labelLarge.copy(fontFamily = plusJakartaSansRegular),
-    labelMedium = defaultTypography.labelMedium.copy(fontFamily = plusJakartaSansRegular),
-    labelSmall = defaultTypography.labelSmall.copy(fontFamily = plusJakartaSansRegular)
+    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = interRegular),
+    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = interRegular),
+    bodySmall = defaultTypography.bodySmall.copy(fontFamily = interRegular),
+    labelLarge = defaultTypography.labelLarge.copy(fontFamily = interRegular),
+    labelMedium = defaultTypography.labelMedium.copy(fontFamily = interRegular),
+    labelSmall = defaultTypography.labelSmall.copy(fontFamily = interRegular)
 )

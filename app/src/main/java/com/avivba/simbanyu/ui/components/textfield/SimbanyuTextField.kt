@@ -1,18 +1,17 @@
 package com.avivba.simbanyu.ui.components.textfield
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.OutputTransformation
 import androidx.compose.foundation.text.input.TextFieldBuffer
 import androidx.compose.foundation.text.input.TextFieldDecorator
@@ -56,6 +55,7 @@ fun SimbanyuTextField(
     lineLimits: TextFieldLineLimits = TextFieldLineLimits.SingleLine,
     imeAction: ImeAction = ImeAction.Default,
     isPasswordVisible: Boolean = false,
+    onKeyboardAction: KeyboardActionHandler? = null,
 ) {
     Row(
         modifier = modifier
@@ -108,7 +108,8 @@ fun SimbanyuTextField(
                     if (isPasswordVisible)
                         TextObfuscationMode.Visible
                     else
-                        TextObfuscationMode.Hidden
+                        TextObfuscationMode.Hidden,
+                onKeyboardAction = onKeyboardAction
             )
         } else {
             BasicTextField(
@@ -119,7 +120,8 @@ fun SimbanyuTextField(
                 decorator = decorator,
                 keyboardOptions = KeyboardOptions(
                     imeAction = imeAction
-                )
+                ),
+                onKeyboardAction = onKeyboardAction
             )
         }
 
