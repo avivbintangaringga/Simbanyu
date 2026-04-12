@@ -28,19 +28,19 @@ private val materialDefaultTypography = Typography()
 
 // Set of Material typography styles to start with
 val MaterialTypography = Typography(
-    displayLarge = materialDefaultTypography.displayLarge.copy(fontFamily = plusJakartaSansRegular),
-    displayMedium = materialDefaultTypography.displayMedium.copy(fontFamily = plusJakartaSansRegular),
-    displaySmall = materialDefaultTypography.displaySmall.copy(fontFamily = plusJakartaSansRegular),
-    headlineLarge = materialDefaultTypography.headlineLarge.copy(fontFamily = plusJakartaSansRegular),
-    headlineMedium = materialDefaultTypography.headlineMedium.copy(fontFamily = plusJakartaSansRegular),
-    headlineSmall = materialDefaultTypography.headlineSmall.copy(fontFamily = plusJakartaSansRegular),
-    titleLarge = materialDefaultTypography.titleLarge.copy(fontFamily = plusJakartaSansRegular),
-    titleMedium = materialDefaultTypography.titleMedium.copy(fontFamily = plusJakartaSansRegular),
-    titleSmall = materialDefaultTypography.titleSmall.copy(fontFamily = plusJakartaSansRegular),
-    bodyLarge = materialDefaultTypography.bodyLarge.copy(fontFamily = interRegular),
-    bodyMedium = materialDefaultTypography.bodyMedium.copy(fontFamily = interRegular),
-    bodySmall = materialDefaultTypography.bodySmall.copy(fontFamily = interRegular),
-    labelLarge = materialDefaultTypography.labelLarge.copy(fontFamily = interRegular),
-    labelMedium = materialDefaultTypography.labelMedium.copy(fontFamily = interRegular),
-    labelSmall = materialDefaultTypography.labelSmall.copy(fontFamily = interRegular)
+    displayLarge = materialDefaultTypography.displayLarge.copy(fontFamily = FontPlusJakartaSansRegular),
+    displayMedium = materialDefaultTypography.displayMedium.copy(fontFamily = FontPlusJakartaSansRegular),
+    displaySmall = materialDefaultTypography.displaySmall.copy(fontFamily = FontPlusJakartaSansRegular),
+    headlineLarge = materialDefaultTypography.headlineLarge.copy(fontFamily = FontPlusJakartaSansRegular),
+    headlineMedium = materialDefaultTypography.headlineMedium.copy(fontFamily = FontPlusJakartaSansRegular),
+    headlineSmall = materialDefaultTypography.headlineSmall.copy(fontFamily = FontPlusJakartaSansRegular),
+    titleLarge = materialDefaultTypography.titleLarge.copy(fontFamily = FontPlusJakartaSansRegular),
+    titleMedium = materialDefaultTypography.titleMedium.copy(fontFamily = FontPlusJakartaSansRegular),
+    titleSmall = materialDefaultTypography.titleSmall.copy(fontFamily = FontPlusJakartaSansRegular),
+    bodyLarge = materialDefaultTypography.bodyLarge.copy(fontFamily = FontInterRegular),
+    bodyMedium = materialDefaultTypography.bodyMedium.copy(fontFamily = FontInterRegular),
+    bodySmall = materialDefaultTypography.bodySmall.copy(fontFamily = FontInterRegular),
+    labelLarge = materialDefaultTypography.labelLarge.copy(fontFamily = FontInterRegular),
+    labelMedium = materialDefaultTypography.labelMedium.copy(fontFamily = FontInterRegular),
+    labelSmall = materialDefaultTypography.labelSmall.copy(fontFamily = FontInterRegular)
 )

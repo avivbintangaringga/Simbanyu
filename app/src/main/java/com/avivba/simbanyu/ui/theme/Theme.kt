@@ -1,15 +1,8 @@
 package com.avivba.simbanyu.ui.theme
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 
 @Composable
@@ -22,7 +15,9 @@ fun SimbanyuTheme(
     CompositionLocalProvider(
         LocalSimbanyuColorScheme provides colorScheme,
         LocalSimbanyuTypography provides SimbanyuTypography(),
+        LocalSimbanyuShapes provides SimbanyuShapes(),
         LocalSimbanyuSpacing provides SimbanyuSpacing(),
+        LocalSimbanyuPadding provides SimbanyuPadding(),
     ) {
         MaterialTheme(
             colorScheme = MaterialColorScheme,
@@ -36,6 +31,14 @@ object SimbanyuTheme {
     val colors: SimbanyuColorScheme
         @Composable
         get() = LocalSimbanyuColorScheme.current
+
+    val padding: SimbanyuPadding
+        @Composable
+        get() = LocalSimbanyuPadding.current
+
+    val shapes: SimbanyuShapes
+        @Composable
+        get() = LocalSimbanyuShapes.current
 
     val spacing: SimbanyuSpacing
         @Composable

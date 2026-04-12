@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.FontVariation
 import com.avivba.simbanyu.R
 
 @OptIn(ExperimentalTextApi::class)
-val interRegular = FontFamily(
+val FontInterRegular = FontFamily(
     Font(
         R.font.inter,
         variationSettings = FontVariation.Settings(
@@ -17,7 +17,7 @@ val interRegular = FontFamily(
 )
 
 @OptIn(ExperimentalTextApi::class)
-val plusJakartaSansRegular = FontFamily(
+val FontPlusJakartaSansRegular = FontFamily(
     Font(
         R.font.plus_jakarta_sans,
         variationSettings = FontVariation.Settings(

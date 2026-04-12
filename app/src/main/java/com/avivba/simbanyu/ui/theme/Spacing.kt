@@ -7,9 +7,13 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 data class SimbanyuSpacing(
-    val small: Dp = 0.dp,
-    val medium: Dp = 0.dp,
-    val large: Dp = 0.dp,
+    val default: Dp = 0.dp,
+    val extraSmall: Dp = 2.dp,
+    val small: Dp = 4.dp,
+    val medium: Dp = 8.dp,
+    val large: Dp = 16.dp,
+    val extraLarge: Dp = 24.dp,
+    val extraExtraLarge: Dp = 32.dp
 )
 
 val LocalSimbanyuSpacing = staticCompositionLocalOf { SimbanyuSpacing() }
