@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,10 +45,16 @@ import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.theme.Blue95
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.leftBorder
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 @Preview
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    onLoginSuccess: () -> Unit = {}
+) {
     val context = LocalContext.current
     var isWrongCredentials by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
@@ -55,12 +62,15 @@ fun LoginScreen() {
     val passwordState = rememberTextFieldState()
     val isPasswordVisible = remember { mutableStateOf(false) }
     val toggleVisibility = { isPasswordVisible.value = !isPasswordVisible.value }
+    val scope = rememberCoroutineScope()
 
-    Scaffold() { paddingValues ->
+    Scaffold(
+        modifier = modifier
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Blue95)
+                .background(SimbanyuTheme.colors.background)
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
                 .padding(SimbanyuTheme.padding.extraLarge),
@@ -120,14 +130,14 @@ fun LoginScreen() {
                     style = SimbanyuTheme.typography.body
                 )
 
-                if (true) {
+                if (isWrongCredentials) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .background(Color.Red.copy(alpha = 0.2f))
-                            .leftBorder(Color.Red, 8.dp)
+                            .background(SimbanyuTheme.colors.error.copy(alpha = 0.2f))
+                            .leftBorder(SimbanyuTheme.colors.error, 8.dp)
                             .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -135,12 +145,11 @@ fun LoginScreen() {
                         Icon(
                             painter = painterResource(R.drawable.ic_error),
                             contentDescription = "Icon",
-                            tint = Color.Red
+                            tint = SimbanyuTheme.colors.error
                         )
                         SimbanyuText(
                             text = "Username atau password salah!",
-                            color = Color.Red,
-                            fontSize = 12.sp
+                            color = SimbanyuTheme.colors.error,
                         )
                     }
                 }
@@ -215,6 +224,12 @@ fun LoginScreen() {
                     }
                 ) {
                     doLogin(context)
+
+                    scope.launch {
+                        delay(3000)
+                        onLoginSuccess()
+                    }
+
                     isWrongCredentials = true
                 }
             }

@@ -18,6 +18,9 @@ data class SimbanyuColorScheme(
     )),
     val onPrimary: Color = Color.White,
 
+    val background: Color = Blue95,
+    val error: Color = Color.Red,
+
     val cardBackground: Color = Color.White,
     val text: Color = Grey20,
     val textField: Color = Grey20,

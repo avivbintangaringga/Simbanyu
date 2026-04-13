@@ -12,7 +12,12 @@ data class SimbanyuShapes(
     val medium: RoundedCornerShape = RoundedCornerShape(8.dp),
     val large: RoundedCornerShape = RoundedCornerShape(16.dp),
     val extraLarge: RoundedCornerShape = RoundedCornerShape(24.dp),
-    val extraExtraLarge: RoundedCornerShape = RoundedCornerShape(32.dp)
+    val extraExtraLarge: RoundedCornerShape = RoundedCornerShape(32.dp),
+
+    val bottomBar: RoundedCornerShape = RoundedCornerShape(
+        topStart = 32.dp,
+        topEnd = 32.dp
+    )
 )
 
 val LocalSimbanyuShapes = staticCompositionLocalOf { SimbanyuShapes() }
