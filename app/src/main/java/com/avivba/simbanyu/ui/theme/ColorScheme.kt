@@ -5,32 +5,54 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
+data class SimbanyuBrush(
+    val brandVertical: Brush,
+    val brandHorizontal: Brush
+)
+
 @Immutable
 data class SimbanyuColorScheme(
-    val primary: Color = Blue30,
-    val primaryLight: Color = Blue40,
-    val primaryGradient: List<Color> = listOf(
-        primary,
-        primaryLight
+    val brand: Color = Blue30,
+    val brandLight: Color = Blue40,
+    val brandGradient: List<Color> = listOf(
+        brand,
+        brandLight
     ),
-    val primaryGradientVerticalBrush: Brush = Brush.verticalGradient(primaryGradient),
-    val primaryGradientHorizontalBrush: Brush = Brush.horizontalGradient(primaryGradient),
-    val onPrimary: Color = Color.White,
-    val primaryContainer: Color = Grey95,
+    val brandText: Color = Color.White,
 
-    val background: Color = Blue95,
-    val error: Color = Color.Red,
+    val actionBrand: Color = brand,
+    val actionBrandText: Color = brandText,
 
-    val cardBackground: Color = Color.White,
-    val text: Color = Grey20,
-    val textField: Color = Grey20,
-    val textFieldHint: Color = textField.copy(alpha = 0.5f),
+    val screenBackground: Color = Color.White,
+    val surfaceCard: Color = Color.White,
+    val surfaceCardAlternate: Color = Grey95,
+    val surfaceInput: Color = Grey90,
 
-    val shadow: Color = Grey30
+    val textHeading: Color = Grey20,
+    val textLabel: Color = Grey20,
+    val textBody: Color = Grey20,
+    val textInput: Color = Grey20,
+    val textInputDisabled: Color = textInput.copy(alpha = 0.5f),
+
+    val shadow: Color = Grey30,
+
+    // Brushes
+    val brush: SimbanyuBrush = SimbanyuBrush(
+        brandVertical = Brush.verticalGradient(brandGradient),
+        brandHorizontal = Brush.horizontalGradient(brandGradient)
+    ),
+
+    // Status colors
+    val statusPositive: Color = Color.Green,
+    val statusPositiveText: Color = Color.White,
+    val statusNegative: Color = Color.Red,
+    val statusNegativeText: Color = Color.White,
+    val statusWarning: Color = Color.Yellow,
+    val statusWarningText: Color = Color.Black,
+    val statusNeutral: Color = Color.Gray,
+    val statusNeutralText: Color = Color.White,
 )
 
-val SimbanyuDarkColorScheme = SimbanyuColorScheme(
-    primaryGradientVerticalBrush = Brush.verticalGradient()
-)
+val SimbanyuDarkColorScheme = SimbanyuColorScheme()
 
 val LocalSimbanyuColorScheme = staticCompositionLocalOf { SimbanyuColorScheme() }

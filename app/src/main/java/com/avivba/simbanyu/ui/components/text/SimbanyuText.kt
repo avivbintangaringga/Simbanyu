@@ -36,9 +36,9 @@ fun SimbanyuText(
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
-    style: TextStyle = SimbanyuTheme.typography.body
+    style: TextStyle = SimbanyuTheme.typography.bodyStandard
 ) {
-    val textColor = if (color != Color.Unspecified) color else SimbanyuTheme.colors.text
+    val textColor = if (color != Color.Unspecified) color else SimbanyuTheme.colors.textBody
 
     Text(
         text = text,

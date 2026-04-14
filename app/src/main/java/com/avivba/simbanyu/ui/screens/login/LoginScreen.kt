@@ -37,18 +37,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.avivba.simbanyu.R
-import com.avivba.simbanyu.ui.components.background.Background
-import com.avivba.simbanyu.ui.components.buttons.SimbanyuGradientButton
+import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
-import com.avivba.simbanyu.ui.theme.Blue95
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.leftBorder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 @Preview
 @Composable
@@ -91,9 +87,9 @@ fun LoginScreen(
                 )
                 SimbanyuText(
                     text = "SIMBANYU",
-                    style = SimbanyuTheme.typography.titleLarge,
+                    style = SimbanyuTheme.typography.displayHero,
                     fontWeight = FontWeight.Bold,
-                    color = SimbanyuTheme.colors.primary,
+                    color = SimbanyuTheme.colors.brand,
                 )
                 SimbanyuText(
                     text = "Manajemen Sumber Daya Air"
@@ -110,7 +106,7 @@ fun LoginScreen(
                         )
                     )
                     .background(
-                        color = SimbanyuTheme.colors.cardBackground,
+                        color = SimbanyuTheme.colors.surfaceCard,
                         shape = SimbanyuTheme.shapes.extraLarge
                     )
                     .padding(
@@ -123,13 +119,13 @@ fun LoginScreen(
             ) {
                 SimbanyuText(
                     text = "Selamat Datang",
-                    style = SimbanyuTheme.typography.title,
+                    style = SimbanyuTheme.typography.titlePage,
                 )
 
                 SimbanyuText(
                     modifier = Modifier.padding(bottom = 24.dp),
                     text = "Masuk untuk mengelola layanan air anda",
-                    style = SimbanyuTheme.typography.body
+                    style = SimbanyuTheme.typography.bodyStandard
                 )
 
                 if (isWrongCredentials) {
@@ -138,8 +134,8 @@ fun LoginScreen(
                             .fillMaxWidth()
                             .padding(bottom = 16.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .background(SimbanyuTheme.colors.error.copy(alpha = 0.2f))
-                            .leftBorder(SimbanyuTheme.colors.error, 8.dp)
+                            .background(SimbanyuTheme.colors.statusNegative.copy(alpha = 0.2f))
+                            .leftBorder(SimbanyuTheme.colors.statusNegative, 8.dp)
                             .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -147,11 +143,11 @@ fun LoginScreen(
                         Icon(
                             painter = painterResource(R.drawable.ic_error),
                             contentDescription = "Icon",
-                            tint = SimbanyuTheme.colors.error
+                            tint = SimbanyuTheme.colors.statusNegative
                         )
                         SimbanyuText(
                             text = "Username atau password salah!",
-                            color = SimbanyuTheme.colors.error,
+                            color = SimbanyuTheme.colors.statusNegative,
                         )
                     }
                 }
@@ -159,7 +155,7 @@ fun LoginScreen(
                 SimbanyuText(
                     modifier = Modifier.padding(bottom = 8.dp),
                     text = "USERNAME / NO. HP / NO. METER",
-                    style = SimbanyuTheme.typography.label
+                    style = SimbanyuTheme.typography.labelOverline
                 )
 
                 SimbanyuTextField(
@@ -170,7 +166,7 @@ fun LoginScreen(
                         Icon(
                             painter = painterResource(R.drawable.ic_person),
                             contentDescription = "Username",
-                            tint = SimbanyuTheme.colors.textFieldHint
+                            tint = SimbanyuTheme.colors.textInputDisabled
                         )
                     },
                     imeAction = ImeAction.Next
@@ -179,7 +175,7 @@ fun LoginScreen(
                 SimbanyuText(
                     modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
                     text = "PASSWORD",
-                    style = SimbanyuTheme.typography.label
+                    style = SimbanyuTheme.typography.labelOverline
                 )
 
                 SimbanyuTextField(
@@ -192,7 +188,7 @@ fun LoginScreen(
                         Icon(
                             painter = painterResource(R.drawable.ic_lock),
                             contentDescription = "Login",
-                            tint = SimbanyuTheme.colors.textFieldHint
+                            tint = SimbanyuTheme.colors.textInputDisabled
                         )
                     },
                     suffix = {
@@ -216,13 +212,17 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                SimbanyuGradientButton(
-                    modifier = Modifier.fillMaxWidth(), text = "Login", iconRight = {
+                SimbanyuButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush = SimbanyuTheme.colors.brush.brandVertical
+                        ), text = "Login", iconRight = {
                         Icon(
                             modifier = Modifier.height(18.dp),
                             painter = painterResource(R.drawable.ic_login),
                             contentDescription = "Login",
-                            tint = SimbanyuTheme.colors.onPrimary
+                            tint = SimbanyuTheme.colors.actionBrandText
                         )
                     }
                 ) {

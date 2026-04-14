@@ -30,7 +30,7 @@ fun BottomBar(
                 )
             )
             .background(
-                color = SimbanyuTheme.colors.cardBackground,
+                color = SimbanyuTheme.colors.surfaceCard,
                 shape = SimbanyuTheme.shapes.bottomBar
             ),
         containerColor = Color.Transparent,

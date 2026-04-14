@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.dashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
-import com.avivba.simbanyu.ui.components.buttons.SimbanyuGradientButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.main.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -47,7 +47,7 @@ fun DashboardScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    SimbanyuTheme.colors.primaryContainer,
+                    SimbanyuTheme.colors.surfaceCardAlternate,
                     SimbanyuTheme.shapes.large
                 )
                 .padding(
@@ -56,12 +56,12 @@ fun DashboardScreen(
         ) {
             SimbanyuText(
                 text = "SELAMAT DATANG",
-                style = SimbanyuTheme.typography.label,
+                style = SimbanyuTheme.typography.labelOverline,
             )
 
             SimbanyuText(
                 text = "Budi Budiman 👋",
-                style = SimbanyuTheme.typography.title
+                style = SimbanyuTheme.typography.displayMedium
             )
         }
 
@@ -69,7 +69,7 @@ fun DashboardScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    brush = SimbanyuTheme.colors.primaryGradientHorizontalBrush,
+                    brush = SimbanyuTheme.colors.brush.brandHorizontal,
                     shape = SimbanyuTheme.shapes.extraLarge
                 )
                 .padding(SimbanyuTheme.padding.extraLarge),
@@ -80,41 +80,50 @@ fun DashboardScreen(
 
             SimbanyuText(
                 text = "TAGIHAN BELUM DIBAYAR\nPeriode Januari 2026",
-                style = SimbanyuTheme.typography.label,
-                color = SimbanyuTheme.colors.onPrimary
+                style = SimbanyuTheme.typography.bodyProminent,
+                color = SimbanyuTheme.colors.brandText
             )
 
             Spacer(
                 modifier = Modifier.height(SimbanyuTheme.spacing.medium)
             )
 
-            SimbanyuText(
-                modifier = Modifier
-                    .offset(y = SimbanyuTheme.spacing.small),
-                text = "IDR",
-                color = SimbanyuTheme.colors.onPrimary,
-                fontSize = 18.sp
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimbanyuText(
+                    modifier = Modifier,
+                    text = "Rp.",
+                    color = SimbanyuTheme.colors.brandText,
+                    fontSize = 18.sp
+                )
 
-            SimbanyuText(
-                text = "153.000",
-                style = SimbanyuTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.ExtraBold
-                ),
-                color = SimbanyuTheme.colors.onPrimary
-            )
+                SimbanyuText(
+                    text = "153.000",
+                    style = SimbanyuTheme.typography.displayHero.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    ),
+                    color = SimbanyuTheme.colors.brandText
+                )
+            }
 
 
             SimbanyuButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = SimbanyuTheme.colors.actionBrandText,
+                        shape = SimbanyuTheme.shapes.extraLarge
+                    ),
                 text = "Bayar Sekarang",
-                backgroundColor = SimbanyuTheme.colors.onPrimary,
-                textColor = SimbanyuTheme.colors.primary,
+                textColor = SimbanyuTheme.colors.actionBrand,
                 iconRight = {
                     Icon(
                         painter = painterResource(R.drawable.ic_arrow_forward),
                         contentDescription = null,
-                        tint = SimbanyuTheme.colors.primary
+                        tint = SimbanyuTheme.colors.actionBrand
                     )
                 }
             ) {
@@ -123,7 +132,7 @@ fun DashboardScreen(
         }
 
         Spacer(
-            modifier = Modifier.height(SimbanyuTheme.spacing.large)
+            modifier = Modifier.height(SimbanyuTheme.spacing.extraSmall)
         )
 
         SimbanyuText(
@@ -131,7 +140,7 @@ fun DashboardScreen(
                 SimbanyuTheme.padding.small
             ),
             text = "Pemberitahuan Terbaru",
-            style = SimbanyuTheme.typography.body,
+            style = SimbanyuTheme.typography.titleSection,
         )
 
 
@@ -140,7 +149,7 @@ fun DashboardScreen(
                 SimbanyuTheme.padding.small
             ),
             text = "Penggunaan Air",
-            style = SimbanyuTheme.typography.body,
+            style = SimbanyuTheme.typography.titleSection,
         )
     }
 }

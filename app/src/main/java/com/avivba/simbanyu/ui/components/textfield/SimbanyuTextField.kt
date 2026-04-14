@@ -42,8 +42,13 @@ fun SimbanyuTextField(
         modifier = modifier
             .fillMaxWidth()
             .clip(SimbanyuTheme.shapes.extraLarge)
-            .background(Grey90) // TODO: Set correct background color theme
-            .padding(SimbanyuTheme.padding.large),
+            .background(SimbanyuTheme.colors.surfaceInput)
+            .padding(
+                horizontal = SimbanyuTheme.padding.large,
+                vertical = SimbanyuTheme.padding.medium.plus(
+                    SimbanyuTheme.padding.small
+                )
+            ),
         horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.large),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -63,8 +68,8 @@ fun SimbanyuTextField(
                     if (state.text.isEmpty()) {
                         SimbanyuText(
                             text = hint,
-                            style = SimbanyuTheme.typography.textField,
-                            color = SimbanyuTheme.colors.textFieldHint
+                            style = SimbanyuTheme.typography.bodyStandard,
+                            color = SimbanyuTheme.colors.textInputDisabled
                         )
                     }
                 }
@@ -76,8 +81,8 @@ fun SimbanyuTextField(
             BasicSecureTextField(
                 state = state,
                 modifier = modifier2,
-                textStyle = SimbanyuTheme.typography.textField.copy(
-                    color = SimbanyuTheme.colors.textField
+                textStyle = SimbanyuTheme.typography.bodyStandard.copy(
+                    color = SimbanyuTheme.colors.textInput
                 ),
                 decorator = decorator,
                 keyboardOptions = KeyboardOptions(
@@ -94,8 +99,8 @@ fun SimbanyuTextField(
             BasicTextField(
                 state = state,
                 modifier = modifier2,
-                textStyle = SimbanyuTheme.typography.textField.copy(
-                    color = SimbanyuTheme.colors.textField
+                textStyle = SimbanyuTheme.typography.bodyStandard.copy(
+                    color = SimbanyuTheme.colors.textInput
                 ),
                 lineLimits = lineLimits,
                 decorator = decorator,

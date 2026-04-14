@@ -16,7 +16,7 @@ fun Background(
     Spacer(
         modifier = modifier.fillMaxSize()
             .background(
-                SimbanyuTheme.colors.background
+                SimbanyuTheme.colors.screenBackground
             )
     )
 }

@@ -31,7 +31,7 @@ fun TopBar(
                 .padding(horizontal = SimbanyuTheme.padding.large),
             painter = painterResource(R.drawable.logo_only),
             contentDescription = null,
-            tint = SimbanyuTheme.colors.primary
+            tint = SimbanyuTheme.colors.brand
         )
     },
     actions: @Composable RowScope.() -> Unit = {
@@ -40,7 +40,7 @@ fun TopBar(
                 .padding(horizontal = SimbanyuTheme.padding.large),
             painter = painterResource(R.drawable.ic_logout),
             contentDescription = null,
-            tint = SimbanyuTheme.colors.text
+            tint = SimbanyuTheme.colors.textHeading
         )
     }
 ) {
@@ -57,8 +57,8 @@ fun TopBar(
         title = {
             SimbanyuText(
                 text = text,
-                style = SimbanyuTheme.typography.title,
-                color = SimbanyuTheme.colors.primary
+                style = SimbanyuTheme.typography.displayMedium,
+                color = SimbanyuTheme.colors.brand
             )
         },
         actions = actions
