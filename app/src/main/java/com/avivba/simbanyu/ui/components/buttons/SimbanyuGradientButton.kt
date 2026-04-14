@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,44 +28,18 @@ fun SimbanyuGradientButton(
     text: String,
     onClick: () -> Unit
 ) {
-    Surface(
-        onClick = onClick,
-        modifier = modifier,
-        shape = SimbanyuTheme.shapes.extraLarge,
-        color = Color.Transparent
-    ) {
-        Box(
-            modifier = Modifier
-                .background(SimbanyuTheme.colors.primaryGradient)
-                .defaultMinSize(
-                    minWidth = ButtonDefaults.MinWidth,
-                    minHeight = ButtonDefaults.MinHeight
-                )
-                .padding(
-                    horizontal = SimbanyuTheme.padding.extraLarge,
-                    vertical = SimbanyuTheme.padding.large
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            CompositionLocalProvider(LocalContentColor provides Color.White) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(
-                        space = SimbanyuTheme.padding.medium,
-                        alignment = Alignment.CenterHorizontally
-                    ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    iconLeft?.invoke()
-                    SimbanyuText(
-                        text = text,
-                        style = SimbanyuTheme.typography.button,
-                        color = SimbanyuTheme.colors.onPrimary
-                    )
-                    iconRight?.invoke()
-                }
-            }
-        }
-    }
+    SimbanyuButtonBase(
+        modifier = modifier
+            .background(
+                brush = SimbanyuTheme.colors.primaryGradientVerticalBrush,
+                shape = SimbanyuTheme.shapes.extraLarge
+            ),
+        iconLeft = iconLeft,
+        iconRight = iconRight,
+        text = text,
+        textColor = SimbanyuTheme.colors.onPrimary,
+        onClick = onClick
+    )
 }
 
 @Preview

@@ -24,8 +24,8 @@ data class SimbanyuTypography(
     ),
     val label: TextStyle = base.copy(
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 10.sp,
-        letterSpacing = 2.sp
+        fontSize = 12.sp,
+        letterSpacing = 1.sp
     ),
     val title: TextStyle = base.copy(
         fontFamily = FontPlusJakartaSansRegular,

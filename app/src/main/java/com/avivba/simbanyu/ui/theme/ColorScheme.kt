@@ -4,19 +4,19 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.compositeOver
-import androidx.compose.ui.graphics.shadow.Shadow
-import androidx.compose.ui.unit.dp
 
 @Immutable
 data class SimbanyuColorScheme(
     val primary: Color = Blue30,
     val primaryLight: Color = Blue40,
-    val primaryGradient: Brush = Brush.verticalGradient(listOf(
+    val primaryGradient: List<Color> = listOf(
         primary,
         primaryLight
-    )),
+    ),
+    val primaryGradientVerticalBrush: Brush = Brush.verticalGradient(primaryGradient),
+    val primaryGradientHorizontalBrush: Brush = Brush.horizontalGradient(primaryGradient),
     val onPrimary: Color = Color.White,
+    val primaryContainer: Color = Grey95,
 
     val background: Color = Blue95,
     val error: Color = Color.Red,
@@ -30,7 +30,7 @@ data class SimbanyuColorScheme(
 )
 
 val SimbanyuDarkColorScheme = SimbanyuColorScheme(
-    primaryGradient = Brush.verticalGradient()
+    primaryGradientVerticalBrush = Brush.verticalGradient()
 )
 
 val LocalSimbanyuColorScheme = staticCompositionLocalOf { SimbanyuColorScheme() }

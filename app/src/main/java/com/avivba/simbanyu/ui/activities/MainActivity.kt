@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.avivba.simbanyu.ui.screens.main.MainAppNavigation
+import com.avivba.simbanyu.ui.screens.main.SimbanyuApp
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SimbanyuTheme() {
-                MainAppNavigation()
+                SimbanyuApp()
             }
         }
     }

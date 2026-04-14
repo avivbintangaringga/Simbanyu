@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.background.Background
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuGradientButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
@@ -65,12 +66,13 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
 
     Scaffold(
-        modifier = modifier
+        modifier = modifier,
+        containerColor = Color.Transparent
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(SimbanyuTheme.colors.background)
+//               .background(SimbanyuTheme.colors.background)
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
                 .padding(SimbanyuTheme.padding.extraLarge),
@@ -219,7 +221,8 @@ fun LoginScreen(
                         Icon(
                             modifier = Modifier.height(18.dp),
                             painter = painterResource(R.drawable.ic_login),
-                            contentDescription = "Login"
+                            contentDescription = "Login",
+                            tint = SimbanyuTheme.colors.onPrimary
                         )
                     }
                 ) {
