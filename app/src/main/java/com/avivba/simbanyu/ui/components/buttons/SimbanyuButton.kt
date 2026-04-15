@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -47,7 +48,8 @@ fun SimbanyuButton(
         color = Color.Transparent
     ) {
         Row(
-            modifier = Modifier,
+            modifier = Modifier
+                .padding(horizontal = SimbanyuTheme.padding.large),
             horizontalArrangement = Arrangement.spacedBy(
                 space = SimbanyuTheme.padding.medium,
                 alignment = Alignment.CenterHorizontally

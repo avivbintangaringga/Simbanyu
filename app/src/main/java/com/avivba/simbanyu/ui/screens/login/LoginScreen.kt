@@ -132,11 +132,17 @@ fun LoginScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(SimbanyuTheme.colors.statusNegative.copy(alpha = 0.2f))
+                            .clip(
+                                shape = SimbanyuTheme.shapes.large
+                            )
+                            .background(
+                                color = SimbanyuTheme.colors.statusNegative.copy(alpha = 0.2f),
+                            )
                             .leftBorder(SimbanyuTheme.colors.statusNegative, 8.dp)
-                            .padding(16.dp),
+                            .padding(
+                                vertical = SimbanyuTheme.padding.large,
+                                horizontal = SimbanyuTheme.padding.large
+                            ),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
@@ -150,6 +156,11 @@ fun LoginScreen(
                             color = SimbanyuTheme.colors.statusNegative,
                         )
                     }
+                    Spacer(
+                        modifier = Modifier.height(
+                            SimbanyuTheme.spacing.large
+                        )
+                    )
                 }
 
                 SimbanyuText(
