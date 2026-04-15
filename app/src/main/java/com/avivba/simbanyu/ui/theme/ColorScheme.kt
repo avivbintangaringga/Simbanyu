@@ -24,9 +24,13 @@ data class SimbanyuColorScheme(
     val actionBrandText: Color = brandText,
 
     val screenBackground: Color = Color.White,
+
     val surfaceCard: Color = Color.White,
     val surfaceCardAlternate: Color = Grey95,
     val surfaceInput: Color = Grey90,
+
+    val borderCard: Color = Grey90,
+    val borderCardAlternate: Color = Grey90,
 
     val textHeading: Color = Grey20,
     val textLabel: Color = Grey20,
