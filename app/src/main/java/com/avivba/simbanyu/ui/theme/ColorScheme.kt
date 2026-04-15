@@ -29,7 +29,7 @@ data class SimbanyuColorScheme(
     val surfaceCardAlternate: Color = Grey95,
     val surfaceInput: Color = Grey90,
 
-    val borderCard: Color = Grey90,
+    val borderCard: Color = Grey95,
     val borderCardAlternate: Color = Grey90,
 
     val textHeading: Color = Grey20,

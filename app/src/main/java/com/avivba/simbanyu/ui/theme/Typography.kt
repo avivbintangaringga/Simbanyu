@@ -32,7 +32,7 @@ data class SimbanyuTypography(
         fontFamily = FontPlusJakartaSansRegular,
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
-        lineHeight = 24.sp
+        lineHeight = 24.sp,
     ),
 
     // --- TITLE (Hierarchy & Structure) ---
@@ -87,7 +87,8 @@ data class SimbanyuTypography(
         fontFamily = FontInterRegular,
         fontSize = 10.sp,
         fontWeight = FontWeight.ExtraBold,
-        lineHeight = 12.sp
+        lineHeight = 12.sp,
+        letterSpacing = 1.2.sp
     ),
     val labelAction: TextStyle = TextStyle(
         fontFamily = FontInterRegular,
