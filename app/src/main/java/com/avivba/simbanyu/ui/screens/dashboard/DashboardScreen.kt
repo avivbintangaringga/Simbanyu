@@ -226,6 +226,105 @@ fun DashboardScreen(
             modifier = Modifier.padding(
                 SimbanyuTheme.padding.small
             ),
+            text = "Penggunaan Air",
+            style = SimbanyuTheme.typography.titleSection,
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    2.dp,
+                    SimbanyuTheme.colors.borderCard,
+                    shape = SimbanyuTheme.shapes.extraLarge
+                )
+                .background(
+                    color = SimbanyuTheme.colors.surfaceCard,
+                    shape = SimbanyuTheme.shapes.extraLarge
+                )
+                .padding(SimbanyuTheme.padding.large)
+        ) {
+            ColumnChart(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp),
+                data = tmpUsageData,
+                barProperties = BarProperties(
+                    cornerRadius = Bars.Data.Radius.Rectangle(
+                        topLeft = 8.dp,
+                        topRight = 8.dp
+                    ),
+                    thickness = 24.dp
+                ),
+                gridProperties = GridProperties(
+                    enabled = true,
+                    yAxisProperties = GridProperties.AxisProperties(
+                        enabled = false
+                    ),
+                    xAxisProperties = GridProperties.AxisProperties(
+                        enabled = true,
+                        lineCount = 3
+                    )
+                ),
+                labelHelperProperties = LabelHelperProperties(
+                    enabled = false
+                ),
+                indicatorProperties = HorizontalIndicatorProperties(
+                    count = IndicatorCount.CountBased(3)
+                ),
+                dividerProperties = DividerProperties(
+                    yAxisProperties = LineProperties(
+                        enabled = false
+                    )
+                ),
+                labelProperties = LabelProperties(
+                    enabled = true,
+                    textStyle = SimbanyuTheme.typography.bodySmall
+                )
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = SimbanyuTheme.padding.large
+                    )
+            ) {
+                SimbanyuText(
+                    modifier = Modifier.weight(1f),
+                    text = "RATA-RATA",
+                    style = SimbanyuTheme.typography.labelBadge
+                )
+
+                SimbanyuText(
+                    text = "PUNCAK (SEP)",
+                    style = SimbanyuTheme.typography.labelBadge,
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                SimbanyuText(
+                    modifier = Modifier.weight(1f),
+                    text = "15.2 m³",
+                    style = SimbanyuTheme.typography.displayMedium,
+                    color = SimbanyuTheme.colors.brand
+                )
+
+                SimbanyuText(
+                    text = "15.2 m³",
+                    style = SimbanyuTheme.typography.displayMedium,
+                    color = SimbanyuTheme.colors.brand
+                )
+            }
+        }
+
+        SimbanyuText(
+            modifier = Modifier.padding(
+                SimbanyuTheme.padding.small
+            ),
             text = "Pemberitahuan Terbaru",
             style = SimbanyuTheme.typography.titleSection,
         )
@@ -331,104 +430,6 @@ fun DashboardScreen(
             ) { }
         }
 
-        SimbanyuText(
-            modifier = Modifier.padding(
-                SimbanyuTheme.padding.small
-            ),
-            text = "Penggunaan Air",
-            style = SimbanyuTheme.typography.titleSection,
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    2.dp,
-                    SimbanyuTheme.colors.borderCard,
-                    shape = SimbanyuTheme.shapes.extraLarge
-                )
-                .background(
-                    color = SimbanyuTheme.colors.surfaceCard,
-                    shape = SimbanyuTheme.shapes.extraLarge
-                )
-                .padding(SimbanyuTheme.padding.large)
-        ) {
-            ColumnChart(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp),
-                data = tmpUsageData,
-                barProperties = BarProperties(
-                    cornerRadius = Bars.Data.Radius.Rectangle(
-                        topLeft = 8.dp,
-                        topRight = 8.dp
-                    ),
-                    thickness = 24.dp
-                ),
-                gridProperties = GridProperties(
-                    enabled = true,
-                    yAxisProperties = GridProperties.AxisProperties(
-                        enabled = false
-                    ),
-                    xAxisProperties = GridProperties.AxisProperties(
-                        enabled = true,
-                        lineCount = 3
-                    )
-                ),
-                labelHelperProperties = LabelHelperProperties(
-                    enabled = false
-                ),
-                indicatorProperties = HorizontalIndicatorProperties(
-                    count = IndicatorCount.CountBased(3)
-                ),
-                dividerProperties = DividerProperties(
-                    yAxisProperties = LineProperties(
-                        enabled = false
-                    )
-                ),
-                labelProperties = LabelProperties(
-                    enabled = true,
-                    textStyle = SimbanyuTheme.typography.bodySmall
-                )
-            )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = SimbanyuTheme.padding.large
-                    )
-            ) {
-                SimbanyuText(
-                    modifier = Modifier.weight(1f),
-                    text = "RATA-RATA",
-                    style = SimbanyuTheme.typography.labelBadge
-                )
-
-                SimbanyuText(
-                    text = "PUNCAK (SEP)",
-                    style = SimbanyuTheme.typography.labelBadge,
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                SimbanyuText(
-                    modifier = Modifier.weight(1f),
-                    text = "15.2 m³",
-                    style = SimbanyuTheme.typography.displayMedium,
-                    color = SimbanyuTheme.colors.brand
-                )
-
-                SimbanyuText(
-                    text = "15.2 m³",
-                    style = SimbanyuTheme.typography.displayMedium,
-                    color = SimbanyuTheme.colors.brand
-                )
-            }
-        }
     }
 }
 
