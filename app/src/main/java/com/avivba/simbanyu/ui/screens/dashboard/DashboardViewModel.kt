@@ -8,11 +8,36 @@ import kotlinx.coroutines.launch
 class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, DashboardEvent>(
     DashboardUiState()
 ) {
+    init {
+        onAction(DashboardAction.Load)
+    }
+
     override fun onAction(action: DashboardAction) {
         when (action) {
             DashboardAction.Load -> load()
             DashboardAction.PayBill -> {}
             DashboardAction.ViewAllAnnouncements -> sendEvent(DashboardEvent.ViewAllAnnouncements)
+            DashboardAction.Refresh -> refresh()
+        }
+    }
+
+    private fun refresh() {
+        viewModelScope.launch {
+            updateState {
+                it.copy(
+                    isRefreshing = true,
+                    isLoading = true
+                )
+            }
+
+            delay(3000)
+
+            updateState {
+                it.copy(
+                    isRefreshing = false,
+                    isLoading = false
+                )
+            }
         }
     }
 
@@ -39,6 +64,13 @@ class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, Dash
                     waterUsageMaximumMonth = "FEB",
                     announcements = fakeAnnouncements,
                     isLoading = false
+                )
+            }
+
+            delay(5000)
+            updateState {
+                it.copy(
+                    bill = null
                 )
             }
         }

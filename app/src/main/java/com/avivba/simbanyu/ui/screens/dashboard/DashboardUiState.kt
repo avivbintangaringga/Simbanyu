@@ -19,6 +19,7 @@ data class Bill(
 
 data class DashboardUiState(
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val name: String = "User",
     val bill: Bill? = null,
     val waterUsage: List<WaterUsage> = emptyList(),
@@ -30,6 +31,7 @@ data class DashboardUiState(
 
 sealed interface DashboardAction {
     data object Load : DashboardAction
+    data object Refresh : DashboardAction
     data object PayBill : DashboardAction
     data object ViewAllAnnouncements : DashboardAction
 }

@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.dashboard
 
+import android.util.MutableInt
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,10 +18,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -58,21 +62,24 @@ fun DashboardScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.onAction(DashboardAction.Load)
-    }
-
     ObserveAsEvent(viewModel.event) {
         when (it) {
             DashboardEvent.ViewAllAnnouncements -> {}
         }
     }
 
-    DashboardContent(
-        state = state,
-        onAction = viewModel::onAction,
-        onNavigate = onNavigate
-    )
+    PullToRefreshBox(
+        isRefreshing = state.isRefreshing,
+        onRefresh = {
+            viewModel.onAction(DashboardAction.Refresh)
+        }
+    ) {
+        DashboardContent(
+            state = state,
+            onAction = viewModel::onAction,
+            onNavigate = onNavigate
+        )
+    }
 }
 
 
@@ -91,18 +98,20 @@ fun DashboardContent(
             SimbanyuTheme.colors.brandLight
         )
     )
-    val usageData = state.waterUsage.map { usage ->
-        Bars(
-            label = usage.month,
-            values = listOf(
-                Bars.Data(
-                    value = usage.usage,
-                    color = if (usage.isMaximum) barColorMax else barColor
+
+    val usageData = rememberSaveable(state.waterUsage, barColor, barColorMax) {
+        state.waterUsage.map { usage ->
+            Bars(
+                label = usage.month,
+                values = listOf(
+                    Bars.Data(
+                        value = usage.usage,
+                        color = if (usage.isMaximum) barColorMax else barColor
+                    )
                 )
             )
-        )
+        }
     }
-
 
     Column(
         modifier = modifier
@@ -146,7 +155,6 @@ fun DashboardContent(
                     SimbanyuTheme.spacing.medium
                 )
             ) {
-
                 SimbanyuText(
                     text = "TAGIHAN BELUM DIBAYAR\nPeriode ${state.bill.period}",
                     style = SimbanyuTheme.typography.bodySmall,
@@ -201,8 +209,29 @@ fun DashboardContent(
                 }
             }
         } else {
-            // TODO: Handle null bill
-            SimbanyuText("TIDAK ADA TAGIHAN")
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            listOf(
+                                SimbanyuTheme.colors.brand,
+                                SimbanyuTheme.colors.statusPositive
+                            )
+                        ),
+                        shape = SimbanyuTheme.shapes.extraLarge
+                    )
+                    .padding(SimbanyuTheme.padding.extraLarge),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                )
+            ) {
+                SimbanyuText(
+                    text = "Anda tidak memiliki tagihan \uD83C\uDF89",
+                    style = SimbanyuTheme.typography.displayMedium,
+                    color = SimbanyuTheme.colors.brandText
+                )
+            }
         }
 
         Spacer(

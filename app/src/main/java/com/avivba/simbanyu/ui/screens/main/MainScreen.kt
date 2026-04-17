@@ -10,12 +10,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.avivba.simbanyu.di.viewModelModule
 import com.avivba.simbanyu.ui.components.bottombar.BottomBar
 import com.avivba.simbanyu.ui.components.topbar.TopBar
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardContent
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardScreen
+import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
+import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import org.koin.compose.KoinApplication
+import org.koin.dsl.KoinConfiguration
 
-@Preview(showBackground = true)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
@@ -45,5 +49,17 @@ fun MainScreen(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MainScreenPreview() {
+    KoinApplication(
+        configuration = KoinConfiguration {
+            modules(viewModelModule)
+        }
+    ) {
+        MainScreen()
     }
 }

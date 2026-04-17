@@ -14,7 +14,6 @@ import com.avivba.simbanyu.ui.screens.login.LoginScreen
 
 @Composable
 fun SimbanyuApp(
-    modifier: Modifier = Modifier,
     navHostController: NavHostController = rememberNavController(),
 ) {
     Background()
@@ -25,6 +24,7 @@ fun SimbanyuApp(
     ) {
         composable<Screen.Login> {
             LoginScreen(onNavigate = { dest ->
+                navHostController.popBackStack()
                 navHostController.navigate(dest)
             })
         }
@@ -34,7 +34,6 @@ fun SimbanyuApp(
         ) {
             composable<Screen.MainScreen.Home> {
                 MainScreen(onNavigate = { dest ->
-                    navHostController.popBackStack()
                     navHostController.navigate(dest)
                 })
             }
