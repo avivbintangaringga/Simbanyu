@@ -27,12 +27,10 @@ import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 @Composable
 fun UsageHistoryItem(
     modifier: Modifier = Modifier,
-    id: String,
     period: String,
     amount: String,
-    status: String,
-    statusColor: Color = SimbanyuTheme.colors.brandText,
-    statusBackgroundColor: Color = SimbanyuTheme.colors.brand,
+    meterStart: String,
+    meterEnd: String,
     @DrawableRes iconId: Int,
     iconTint: Color = SimbanyuTheme.colors.brand,
     iconBackgroundColor: Color = SimbanyuTheme.colors.surfaceCard,
@@ -78,44 +76,25 @@ fun UsageHistoryItem(
             )
             Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
             SimbanyuText(
-                text = "ID: $id",
+                text = "METER: $meterStart - $meterEnd",
                 style = SimbanyuTheme.typography.bodyStandard
             )
         }
-        Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SimbanyuText(
-                text = "Rp. $amount",
-                style = SimbanyuTheme.typography.titleCard
-            )
-            Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-            SimbanyuText(
-                modifier = Modifier
-                    .background(
-                        color = statusBackgroundColor,
-                        shape = SimbanyuTheme.shapes.medium
-                    ).padding(
-                        vertical = SimbanyuTheme.padding.extraSmall,
-                        horizontal = SimbanyuTheme.padding.medium
-                    ),
-                text = status,
-                style = SimbanyuTheme.typography.labelUnit,
-                color = statusColor
-            )
-        }
+        SimbanyuText(
+            text = "$amount m³",
+            style = SimbanyuTheme.typography.displayMedium
+        )
     }
 }
 
 @Preview
 @Composable
-private fun BillHistoryItemPreview() {
-    BillHistoryItem(
-        id = "JK32301023",
+private fun UsageHistoryItemPreview() {
+    UsageHistoryItem(
         period = "Januari 2025",
         iconId = R.drawable.ic_history,
-        amount = "150.000",
-        status = "LUNAS"
+        amount = "15",
+        meterStart = "113",
+        meterEnd = "128",
     )
 }

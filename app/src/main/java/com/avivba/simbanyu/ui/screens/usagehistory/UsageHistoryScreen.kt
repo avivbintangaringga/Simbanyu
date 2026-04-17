@@ -1,5 +1,7 @@
 package com.avivba.simbanyu.ui.screens.usagehistory
 
+import androidx.compose.animation.core.EaseInOutCubic
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -17,37 +19,42 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
-import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.item.UsageHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.main.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import ir.ehsannarmani.compose_charts.ColumnChart
+import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.models.BarProperties
 import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.DividerProperties
+import ir.ehsannarmani.compose_charts.models.DotProperties
+import ir.ehsannarmani.compose_charts.models.DrawStyle
 import ir.ehsannarmani.compose_charts.models.GridProperties
 import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
 import ir.ehsannarmani.compose_charts.models.IndicatorCount
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
+import ir.ehsannarmani.compose_charts.models.Line
 import ir.ehsannarmani.compose_charts.models.LineProperties
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -60,11 +67,6 @@ fun UsageHistoryScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ObserveAsEvent(viewModel.event) {
-        when (it) {
-            is UsageHistoryEvent.ShowUsage -> {
-                onNavigate(Screen.BillDetails(it.usage.id))
-            }
-        }
     }
 
     PullToRefreshBox(
@@ -90,6 +92,23 @@ fun UsageHistoryContent(
     onNavigate: (Screen) -> Unit = {}
 ) {
     var isExpanded by remember { mutableStateOf(false) }
+
+    val chartColor = SimbanyuTheme.colors.brush.brandHorizontal
+    val chartGradientColor = SimbanyuTheme.colors.brandLighter
+    val usageData = rememberSaveable(state.usages, chartColor, chartGradientColor) {
+        listOf(
+            Line(
+                label = "Penggunaan",
+                values = state.usages.map { it.amount.toDouble() },
+                color = chartColor,
+                firstGradientFillColor = chartGradientColor,
+                secondGradientFillColor = Color.Transparent,
+                strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
+                gradientAnimationDelay = 1000,
+                drawStyle = DrawStyle.Stroke(width = 2.dp),
+            )
+        )
+    }
 
     Column(
         modifier = modifier
@@ -182,17 +201,17 @@ fun UsageHistoryContent(
                         )
                         .padding(SimbanyuTheme.padding.large)
                 ) {
-                    ColumnChart(
+                    LineChart(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(150.dp),
-                        data = emptyList(),
-                        barProperties = BarProperties(
-                            cornerRadius = Bars.Data.Radius.Rectangle(
-                                topLeft = 8.dp,
-                                topRight = 8.dp
-                            ),
-                            thickness = 24.dp
+                        data = usageData,
+                        dotsProperties = DotProperties(
+                            enabled = true,
+                            color = SolidColor(SimbanyuTheme.colors.brandText),
+                            strokeColor = SolidColor(SimbanyuTheme.colors.brand),
+                            strokeWidth = 2.dp,
+                            radius = 4.dp
                         ),
                         gridProperties = GridProperties(
                             enabled = true,
@@ -216,8 +235,7 @@ fun UsageHistoryContent(
                             )
                         ),
                         labelProperties = LabelProperties(
-                            enabled = true,
-                            textStyle = SimbanyuTheme.typography.bodySmall
+                            enabled = false,
                         )
                     )
                 }
@@ -252,7 +270,7 @@ fun UsageHistoryContent(
                         )
 
                         SimbanyuText(
-                            text = state.totalPaid,
+                            text = "${state.usageTotal} m³",
                             style = SimbanyuTheme.typography.displayMedium,
                             color = SimbanyuTheme.colors.brandText
                         )
@@ -281,7 +299,7 @@ fun UsageHistoryContent(
                         )
 
                         SimbanyuText(
-                            text = state.totalUnpaid,
+                            text = "%.1f m³".format(state.usageAverage),
                             style = SimbanyuTheme.typography.displayMedium,
                             color = SimbanyuTheme.colors.brandText
                         )
@@ -292,13 +310,13 @@ fun UsageHistoryContent(
             items(
                 items = state.usages.sortedByDescending { it.id },
                 key = { it.id }
-            ) { bill ->
+            ) { usage ->
                 UsageHistoryItem(
-                    period = "${bill.periodMonth} ${bill.periodYear}",
-                    id = bill.id,
-                    amount = bill.amount,
-                    status = bill.status.status,
-                    iconId = R.drawable.ic_history
+                    period = "${usage.periodMonth} ${usage.periodYear}",
+                    amount = usage.amount.toString(),
+                    iconId = R.drawable.ic_history,
+                    meterStart = usage.meterStart.toString(),
+                    meterEnd = usage.meterEnd.toString()
                 )
             }
         }
@@ -311,8 +329,8 @@ fun UsageHistoryPreview() {
     UsageHistoryContent(
         state = UsageHistoryUiState(
             usages = fakeUsages,
-            totalPaid = "100.000",
-            totalUnpaid = "150.000"
+            usageTotal = 103,
+            usageAverage = 23.5
         )
     )
 }

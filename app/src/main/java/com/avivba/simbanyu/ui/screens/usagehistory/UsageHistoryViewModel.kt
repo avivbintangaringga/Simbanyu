@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.usagehistory
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.ui.base.BaseViewModel
 import kotlinx.coroutines.delay
@@ -11,10 +12,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.collections.filter
 
-class UsageHistoryViewModel : BaseViewModel<UsageHistoryUiState, UsageHistoryAction, UsageHistoryEvent>(
-    UsageHistoryUiState()
-) {
-    private val _bills = MutableStateFlow<List<Usage>>(emptyList())
+class UsageHistoryViewModel :
+    BaseViewModel<UsageHistoryUiState, UsageHistoryAction, UsageHistoryEvent>(
+        UsageHistoryUiState()
+    ) {
+    private val _usages = MutableStateFlow<List<Usage>>(emptyList())
 
     init {
         observeDataChanges()
@@ -26,29 +28,37 @@ class UsageHistoryViewModel : BaseViewModel<UsageHistoryUiState, UsageHistoryAct
             UsageHistoryAction.Load -> load()
             UsageHistoryAction.Refresh -> refresh()
             is UsageHistoryAction.Filter -> filter(action.year)
-            is UsageHistoryAction.ClickUsage -> sendEvent(UsageHistoryEvent.ShowUsage(action.usage))
+            is UsageHistoryAction.ClickUsage -> {
+
+            }
         }
     }
 
     private fun observeDataChanges() {
         viewModelScope.launch {
             combine(
-                _bills,
+                _usages,
                 state.map { it.selectedYear }.distinctUntilChanged()
-            ) { bills, year ->
-                bills.filter { it.periodYear == year }
+            ) { usages, year ->
+                usages.filter { it.periodYear == year }
             }.collect { filtered ->
-                // TODO: Implement real total bill calculation
-                val totalPaid = filtered.filter { it.status == BillingStatus.PAID }
-                    .sumOf { it.amount.toDouble() }
-                val totalUnpaid = filtered.filter { it.status == BillingStatus.UNPAID }
-                    .sumOf { it.amount.toDouble() }
+                val usageTotal = filtered.sumOf { it.amount }
+                val usageAverage = filtered.map {
+                    it.amount
+                }.average().takeUnless {
+                    it.isNaN()
+                } ?: 0.0
+
+                Log.d("UsageHistoryViewModel", "observeDataChanges: $filtered")
+                Log.d("UsageHistoryViewModel", "observeDataChanges: $usageTotal")
+                Log.d("UsageHistoryViewModel", "observeDataChanges: $usageAverage")
+
 
                 updateState {
                     it.copy(
                         usages = filtered,
-                        totalPaid = totalPaid.toString(),
-                        totalUnpaid = totalUnpaid.toString()
+                        usageTotal = usageTotal,
+                        usageAverage = usageAverage
                     )
                 }
             }
@@ -92,7 +102,7 @@ class UsageHistoryViewModel : BaseViewModel<UsageHistoryUiState, UsageHistoryAct
 
             // TODO: Implement load data
             val newData = fakeUsages
-            _bills.update { newData }
+            _usages.update { newData }
 
             val years = newData.map { it.periodYear }.distinct().sortedDescending()
             val selectedYear = years.firstOrNull() ?: 0

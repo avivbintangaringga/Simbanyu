@@ -60,7 +60,7 @@ class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, Dash
                     ),
                     waterUsage = fakeWaterUsage,
                     waterUsageAverage = 14.3,
-                    waterUsageMaximum = 22.0,
+                    waterUsageMaximum = 22,
                     waterUsageMaximumMonth = "FEB",
                     announcements = fakeAnnouncements,
                     isLoading = false

@@ -1,16 +1,12 @@
 package com.avivba.simbanyu.ui.screens.usagehistory
 
-enum class BillingStatus(val status: String) {
-    PAID("LUNAS"),
-    UNPAID("BELUM DIBAYAR")
-}
-
 data class Usage(
     val id: String,
-    val amount: String,
+    val meterStart: Int,
+    val meterEnd: Int,
+    val amount: Int,
     val periodMonth: String,
     val periodYear: Int,
-    val status: BillingStatus,
 )
 
 data class UsageHistoryUiState(
@@ -18,8 +14,8 @@ data class UsageHistoryUiState(
     val isRefreshing: Boolean = false,
     val years: List<Int> = emptyList(),
     val selectedYear: Int = 0,
-    val totalPaid : String = "",
-    val totalUnpaid : String = "",
+    val usageTotal: Int = 0,
+    val usageAverage: Double = 0.0,
     val usages: List<Usage> = emptyList()
 )
 
@@ -31,47 +27,46 @@ sealed interface UsageHistoryAction {
 }
 
 sealed interface UsageHistoryEvent {
-    data class ShowUsage(val usage: Usage) : UsageHistoryEvent
 }
 
 val fakeUsages = listOf(
     // 2024
-    Usage("24-1", "150.000", "Januari", 2024, BillingStatus.PAID),
-    Usage("24-2", "165.000", "Februari", 2024, BillingStatus.PAID),
-    Usage("24-3", "140.000", "Maret", 2024, BillingStatus.PAID),
-    Usage("24-4", "155.000", "April", 2024, BillingStatus.UNPAID),
-    Usage("24-5", "145.000", "Mei", 2024, BillingStatus.UNPAID),
-    Usage("24-6", "160.000", "Juni", 2024, BillingStatus.UNPAID),
-    Usage("24-7", "150.000", "Juli", 2024, BillingStatus.UNPAID),
-    Usage("24-8", "155.000", "Agustus", 2024, BillingStatus.UNPAID),
-    Usage("24-9", "140.000", "September", 2024, BillingStatus.UNPAID),
-    Usage("24-10", "165.000", "Oktober", 2024, BillingStatus.UNPAID),
-    Usage("24-11", "150.000", "November", 2024, BillingStatus.UNPAID),
-    Usage("24-12", "170.000", "Desember", 2024, BillingStatus.UNPAID),
+    Usage("24-1", 100, 120, 50, "Januari", 2024),
+    Usage("24-2", 120, 145, 25, "Februari", 2024),
+    Usage("24-3", 145, 163, 18, "Maret", 2024),
+    Usage("24-4", 163, 185, 22, "April", 2024),
+    Usage("24-5", 185, 210, 25, "Mei", 2024),
+    Usage("24-6", 210, 230, 20, "Juni", 2024),
+    Usage("24-7", 230, 255, 25, "Juli", 2024),
+    Usage("24-8", 255, 271, 16, "Agustus", 2024),
+    Usage("24-9", 271, 290, 19, "September", 2024),
+    Usage("24-10", 290, 314, 24, "Oktober", 2024),
+    Usage("24-11", 314, 335, 21, "November", 2024),
+    Usage("24-12", 335, 360, 25, "Desember", 2024),
     // 2023
-    Usage("23-1", "145.000", "Januari", 2023, BillingStatus.PAID),
-    Usage("23-2", "150.000", "Februari", 2023, BillingStatus.PAID),
-    Usage("23-3", "140.000", "Maret", 2023, BillingStatus.PAID),
-    Usage("23-4", "155.000", "April", 2023, BillingStatus.PAID),
-    Usage("23-5", "150.000", "Mei", 2023, BillingStatus.PAID),
-    Usage("23-6", "145.000", "Juni", 2023, BillingStatus.PAID),
-    Usage("23-7", "160.000", "Juli", 2023, BillingStatus.PAID),
-    Usage("23-8", "155.000", "Agustus", 2023, BillingStatus.PAID),
-    Usage("23-9", "140.000", "September", 2023, BillingStatus.PAID),
-    Usage("23-10", "165.000", "Oktober", 2023, BillingStatus.PAID),
-    Usage("23-11", "150.000", "November", 2023, BillingStatus.PAID),
-    Usage("23-12", "170.000", "Desember", 2023, BillingStatus.PAID),
+    Usage("23-1", 400, 422, 22, "Januari", 2023),
+    Usage("23-2", 422, 440, 18, "Februari", 2023),
+    Usage("23-3", 440, 465, 25, "Maret", 2023),
+    Usage("23-4", 465, 485, 20, "April", 2023),
+    Usage("23-5", 485, 508, 23, "Mei", 2023),
+    Usage("23-6", 508, 528, 40, "Juni", 2023),
+    Usage("23-7", 528, 550, 22, "Juli", 2023),
+    Usage("23-8", 550, 575, 25, "Agustus", 2023),
+    Usage("23-9", 575, 592, 17, "September", 2023),
+    Usage("23-10", 592, 615, 23, "Oktober", 2023),
+    Usage("23-11", 615, 636, 21, "November", 2023),
+    Usage("23-12", 636, 660, 24, "Desember", 2023),
     // 2022
-    Usage("22-1", "140.000", "Januari", 2022, BillingStatus.PAID),
-    Usage("22-2", "145.000", "Februari", 2022, BillingStatus.PAID),
-    Usage("22-3", "135.000", "Maret", 2022, BillingStatus.PAID),
-    Usage("22-4", "150.000", "April", 2022, BillingStatus.PAID),
-    Usage("22-5", "145.000", "Mei", 2022, BillingStatus.PAID),
-    Usage("22-6", "140.000", "Juni", 2022, BillingStatus.PAID),
-    Usage("22-7", "155.000", "Juli", 2022, BillingStatus.PAID),
-    Usage("22-8", "150.000", "Agustus", 2022, BillingStatus.PAID),
-    Usage("22-9", "135.000", "September", 2022, BillingStatus.PAID),
-    Usage("22-10", "160.000", "Oktober", 2022, BillingStatus.PAID),
-    Usage("22-11", "145.000", "November", 2022, BillingStatus.PAID),
-    Usage("22-12", "165.000", "Desember", 2022, BillingStatus.PAID),
+    Usage("22-1", 700, 720, 20, "Januari", 2022),
+    Usage("22-2", 720, 742, 22, "Februari", 2022),
+    Usage("22-3", 742, 760, 18, "Maret", 2022),
+    Usage("22-4", 760, 785, 25, "April", 2022),
+    Usage("22-5", 785, 805, 20, "Mei", 2022),
+    Usage("22-6", 805, 828, 23, "Juni", 2022),
+    Usage("22-7", 828, 850, 22, "Juli", 2022),
+    Usage("22-8", 850, 875, 25, "Agustus", 2022),
+    Usage("22-9", 875, 892, 17, "September", 2022),
+    Usage("22-10", 892, 915, 23, "Oktober", 2022),
+    Usage("22-11", 915, 936, 21, "November", 2022),
+    Usage("22-12", 936, 960, 24, "Desember", 2022),
 )
