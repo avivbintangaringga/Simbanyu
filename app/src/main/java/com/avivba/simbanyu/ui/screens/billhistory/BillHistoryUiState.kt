@@ -15,7 +15,8 @@ data class Bill(
 data class BillHistoryUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
-    val year: String = "",
+    val years: List<Int> = emptyList(),
+    val selectedYear: Int = 0,
     val totalPaid : String = "",
     val totalUnpaid : String = "",
     val bills: List<Bill> = emptyList()
@@ -24,7 +25,7 @@ data class BillHistoryUiState(
 sealed interface BillHistoryAction {
     data object Load : BillHistoryAction
     data object Refresh : BillHistoryAction
-    data class Filter(val year: String) : BillHistoryAction
+    data class Filter(val year: Int) : BillHistoryAction
     data class ClickBill(val bill: Bill) : BillHistoryAction
 }
 
