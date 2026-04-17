@@ -117,7 +117,7 @@ fun DashboardContent(
                 label = usage.month,
                 values = listOf(
                     Bars.Data(
-                        value = usage.usage,
+                        value = usage.usage.toDouble(),
                         color = if (usage.isMaximum) barColorMax else barColor
                     )
                 )
@@ -351,7 +351,7 @@ fun DashboardContent(
             ) {
                 SimbanyuText(
                     modifier = Modifier.weight(1f),
-                    text = "${state.waterUsageAverage} m³",
+                    text = "%.1f m³".format(state.waterUsageAverage),
                     style = SimbanyuTheme.typography.displayMedium,
                     color = SimbanyuTheme.colors.brand
                 )

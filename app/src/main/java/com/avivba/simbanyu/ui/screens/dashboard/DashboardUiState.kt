@@ -1,7 +1,7 @@
 package com.avivba.simbanyu.ui.screens.dashboard
 
 data class WaterUsage(
-    val usage: Double,
+    val usage: Int,
     val month: String,
     val isMaximum: Boolean
 )
@@ -24,7 +24,7 @@ data class DashboardUiState(
     val bill: Bill? = null,
     val waterUsage: List<WaterUsage> = emptyList(),
     val waterUsageAverage: Double = 0.0,
-    val waterUsageMaximum: Double = 0.0,
+    val waterUsageMaximum: Int = 0,
     val waterUsageMaximumMonth: String = "-",
     val announcements: List<Announcement> = emptyList()
 )
@@ -41,12 +41,12 @@ sealed interface DashboardEvent {
 }
 
 val fakeWaterUsage = listOf(
-    WaterUsage(usage = 12.0, month = "OKT", isMaximum = false),
-    WaterUsage(usage = 15.0, month = "NOV", isMaximum = false),
-    WaterUsage(usage = 10.0, month = "DES", isMaximum = false),
-    WaterUsage(usage = 18.0, month = "JAN", isMaximum = false),
-    WaterUsage(usage = 22.0, month = "FEB", isMaximum = true),
-    WaterUsage(usage = 14.0, month = "MAR", isMaximum = false)
+    WaterUsage(usage = 12, month = "OKT", isMaximum = false),
+    WaterUsage(usage = 15, month = "NOV", isMaximum = false),
+    WaterUsage(usage = 10, month = "DES", isMaximum = false),
+    WaterUsage(usage = 18, month = "JAN", isMaximum = false),
+    WaterUsage(usage = 22, month = "FEB", isMaximum = true),
+    WaterUsage(usage = 14, month = "MAR", isMaximum = false)
 )
 
 val fakeAnnouncements = listOf(
