@@ -151,10 +151,10 @@ fun LoginContent(
                                 shape = SimbanyuTheme.shapes.large
                             )
                             .background(
-                                color = SimbanyuTheme.colors.statusNegative.copy(alpha = 0.2f),
+                                color = SimbanyuTheme.colors.statusNegative,
                             )
                             .leftBorder(
-                                SimbanyuTheme.colors.statusNegative,
+                                SimbanyuTheme.colors.statusNegativeText,
                                 SimbanyuTheme.padding.medium
                             )
                             .padding(
@@ -169,11 +169,11 @@ fun LoginContent(
                         Icon(
                             painter = painterResource(R.drawable.ic_error),
                             contentDescription = "Icon",
-                            tint = SimbanyuTheme.colors.statusNegative
+                            tint = SimbanyuTheme.colors.statusNegativeText
                         )
                         SimbanyuText(
                             text = state.errorMessage,
-                            color = SimbanyuTheme.colors.statusNegative,
+                            color = SimbanyuTheme.colors.statusNegativeText,
                         )
                     }
                     Spacer(

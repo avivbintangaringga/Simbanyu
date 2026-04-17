@@ -47,12 +47,15 @@ data class SimbanyuColorScheme(
     ),
 
     // Status colors
-    val statusPositive: Color = Color.Green,
-    val statusPositiveText: Color = Color.White,
-    val statusNegative: Color = Color.Red,
-    val statusNegativeText: Color = Color.White,
-    val statusWarning: Color = Color.Yellow,
-    val statusWarningText: Color = Color.Black,
+    val statusPositive: Color = Green80,
+    val statusPositiveText: Color = Green40,
+
+    val statusNegative: Color = Red80,
+    val statusNegativeText: Color = Red40,
+
+    val statusWarning: Color = Orange80,
+    val statusWarningText: Color = Orange40,
+
     val statusNeutral: Color = Color.Gray,
     val statusNeutralText: Color = Color.White,
 )

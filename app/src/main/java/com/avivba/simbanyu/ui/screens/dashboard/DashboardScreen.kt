@@ -1,23 +1,32 @@
 package com.avivba.simbanyu.ui.screens.dashboard
 
-import android.util.MutableInt
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowColumn
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +37,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +48,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.buttons.SimbanyuCardButton
+import com.avivba.simbanyu.ui.components.item.AnnouncementItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.main.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -94,7 +106,7 @@ fun DashboardContent(
     val barColor = SimbanyuTheme.colors.brush.brandVertical
     val barColorMax = Brush.verticalGradient(
         listOf(
-            SimbanyuTheme.colors.statusNegative,
+            SimbanyuTheme.colors.statusNegativeText,
             SimbanyuTheme.colors.brandLight
         )
     )
@@ -147,7 +159,12 @@ fun DashboardContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        brush = SimbanyuTheme.colors.brush.brandHorizontal,
+                        brush = Brush.horizontalGradient(
+                            listOf(
+                                SimbanyuTheme.colors.brand,
+                                SimbanyuTheme.colors.statusWarningText,
+                            )
+                        ),
                         shape = SimbanyuTheme.shapes.extraLarge
                     )
                     .padding(SimbanyuTheme.padding.extraLarge),
@@ -216,7 +233,7 @@ fun DashboardContent(
                         brush = Brush.horizontalGradient(
                             listOf(
                                 SimbanyuTheme.colors.brand,
-                                SimbanyuTheme.colors.statusPositive
+                                SimbanyuTheme.colors.statusPositiveText
                             )
                         ),
                         shape = SimbanyuTheme.shapes.extraLarge
@@ -332,10 +349,39 @@ fun DashboardContent(
                 SimbanyuText(
                     text = "${state.waterUsageMaximum} m³",
                     style = SimbanyuTheme.typography.displayMedium,
-                    color = SimbanyuTheme.colors.brand
+                    color = SimbanyuTheme.colors.statusNegativeText
                 )
             }
         }
+
+//        Row(
+//            modifier = Modifier
+//                .height(IntrinsicSize.Max)
+//                .fillMaxWidth(),
+//            horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.large)
+//        ) {
+//            SimbanyuCardButton(
+//                modifier = Modifier
+//                    .weight(1f),
+//                title = "Riwayat",
+//                subTitle = "Lihat riwayat penggunaan",
+//                iconId = R.drawable.ic_history,
+//                onClick = {
+//                    // TODO: handle onclick
+//                }
+//            )
+//
+//            SimbanyuCardButton(
+//                modifier = Modifier
+//                    .weight(1f),
+//                title = "Lapor",
+//                subTitle = "Jika terjadi gangguan",
+//                iconId = R.drawable.ic_report,
+//                onClick = {
+//                    // TODO: handle onclick
+//                }
+//            )
+//        }
 
         SimbanyuText(
             modifier = Modifier.padding(
@@ -353,81 +399,12 @@ fun DashboardContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             state.announcements.forEach { announcement ->
-                Card(
-                    modifier = Modifier,
-                    shape = SimbanyuTheme.shapes.extraLarge,
-                    colors = CardColors(
-                        containerColor = SimbanyuTheme.colors.surfaceCardAlternate,
-                        contentColor = SimbanyuTheme.colors.textBody,
-                        disabledContainerColor = SimbanyuTheme.colors.surfaceCardAlternate,
-                        disabledContentColor = SimbanyuTheme.colors.textBody
-                    ),
-                    border = BorderStroke(
-                        width = 1.dp,
-                        color = SimbanyuTheme.colors.borderCardAlternate
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(
-                                SimbanyuTheme.padding.medium.plus(
-                                    SimbanyuTheme.padding.small
-                                )
-                            )
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            SimbanyuTheme.spacing.large
-                        ),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .background(
-                                    SimbanyuTheme.colors.brandText,
-                                    shape = CircleShape
-                                )
-                                .padding(
-                                    SimbanyuTheme.padding.large
-                                ),
-                            painter = painterResource(R.drawable.ic_error),
-                            contentDescription = null
-                        )
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                        ) {
-                            Row(
-                                Modifier.fillMaxWidth(),
-                            ) {
-                                SimbanyuText(
-                                    modifier = Modifier.weight(1f),
-                                    text = announcement.title,
-                                    style = SimbanyuTheme.typography.titleSection,
-                                )
-                                SimbanyuText(
-                                    modifier = Modifier.padding(
-                                        horizontal = SimbanyuTheme.padding.medium
-                                    ),
-                                    text = announcement.time,
-                                    textAlign = TextAlign.End,
-                                    fontStyle = FontStyle.Italic,
-                                    fontSize = 11.sp,
-                                    color = SimbanyuTheme.colors.textInputDisabled
-                                )
-                            }
-
-                            Spacer(
-                                modifier = Modifier.height(
-                                    SimbanyuTheme.spacing.small
-                                )
-                            )
-
-                            SimbanyuText(
-                                text = announcement.content
-                            )
-                        }
-                    }
-                }
+                AnnouncementItem(
+                    title = announcement.title,
+                    content = announcement.content,
+                    time = announcement.time,
+                    iconId = R.drawable.ic_error //TODO: Map Icon
+                )
             }
 
             SimbanyuButton(

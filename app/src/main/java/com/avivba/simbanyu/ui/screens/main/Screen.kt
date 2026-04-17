@@ -17,11 +17,21 @@ sealed class Screen {
         object Home : MainScreen()
 
         @Serializable
-        object Profile : MainScreen()
+        object UsageHistory : MainScreen()
 
         @Serializable
-        object Settings : MainScreen()
+        object BillHistory : MainScreen()
+
+        @Serializable
+        object Report : MainScreen()
+
+        @Serializable
+        object Profile : MainScreen()
+
     }
+
+    @Serializable
+    data class BillDetails(val id: String) : Screen()
 
     @Serializable
     object Settings : Screen()

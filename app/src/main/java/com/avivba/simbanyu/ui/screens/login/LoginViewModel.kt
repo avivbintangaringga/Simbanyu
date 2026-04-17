@@ -25,10 +25,11 @@ class LoginViewModel : BaseViewModel<LoginUiState, LoginAction, LoginEvent>(
             updateState {
                 it.copy(
                     isLoading = true,
+                    errorMessage = "Terjadi kesalahan (test)"
                 )
             }
 
-            delay(500)
+            delay(1000)
 
             updateState { it.copy(isLoading = false) }
             sendEvent(LoginEvent.LoginSuccess)

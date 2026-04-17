@@ -68,11 +68,6 @@ class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, Dash
             }
 
             delay(5000)
-            updateState {
-                it.copy(
-                    bill = null
-                )
-            }
         }
     }
 }

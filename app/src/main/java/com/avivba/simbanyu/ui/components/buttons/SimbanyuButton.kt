@@ -30,7 +30,7 @@ fun SimbanyuButton(
     iconRight: @Composable (() -> Unit)? = null,
     text: String,
     textColor: Color = SimbanyuTheme.colors.actionBrandText,
-    onClick: () -> Unit
+    onClick: () -> Unit = {}
 ) {
     Surface(
         onClick = onClick,
