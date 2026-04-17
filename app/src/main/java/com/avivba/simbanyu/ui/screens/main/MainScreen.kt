@@ -22,6 +22,7 @@ import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryScreen
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardContent
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardScreen
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
+import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryScreen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
@@ -69,7 +70,9 @@ fun MainScreen(
                 )
             }
             composable<Screen.MainScreen.UsageHistory> {
-                SimbanyuText("USAGE HISTORY")
+                UsageHistoryScreen(
+                    onNavigate = onNavigate
+                )
             }
             composable<Screen.MainScreen.BillHistory> {
                 BillHistoryScreen(

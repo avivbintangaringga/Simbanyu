@@ -99,7 +99,7 @@ fun BillHistoryContent(
             SimbanyuText(
                 modifier = Modifier.weight(1f),
                 text = "Riwayat Tagihan",
-                style = SimbanyuTheme.typography.displayLarge
+                style = SimbanyuTheme.typography.displayMedium
             )
 
             Box(
@@ -252,7 +252,7 @@ fun BillHistoryContent(
             )
         ) {
             items(
-                items = state.bills,
+                items = state.bills.sortedByDescending { it.id },
                 key = { it.id }
             ) { bill ->
                 BillHistoryItem(

@@ -14,6 +14,7 @@ data class SimbanyuBrush(
 data class SimbanyuColorScheme(
     val brand: Color = Blue30,
     val brandLight: Color = Blue40,
+    val brandLighter: Color = Blue50,
     val brandGradient: List<Color> = listOf(
         brand,
         brandLight

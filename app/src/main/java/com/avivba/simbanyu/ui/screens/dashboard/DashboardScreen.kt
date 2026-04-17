@@ -255,13 +255,23 @@ fun DashboardContent(
             modifier = Modifier.height(SimbanyuTheme.spacing.extraSmall)
         )
 
-        SimbanyuText(
-            modifier = Modifier.padding(
-                SimbanyuTheme.padding.small
-            ),
-            text = "Penggunaan Air",
-            style = SimbanyuTheme.typography.titleSection,
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SimbanyuText(
+                modifier = Modifier.padding(
+                    SimbanyuTheme.padding.small
+                ).weight(1f),
+                text = "Penggunaan Air",
+                style = SimbanyuTheme.typography.titleSection,
+            )
+            SimbanyuText(
+                text = "6 bulan terakhir",
+                style = SimbanyuTheme.typography.bodyProminent,
+                color = SimbanyuTheme.colors.brand
+            )
+        }
 
         Column(
             modifier = Modifier
