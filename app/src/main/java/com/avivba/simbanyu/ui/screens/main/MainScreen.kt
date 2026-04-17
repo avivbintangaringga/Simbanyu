@@ -1,6 +1,5 @@
 package com.avivba.simbanyu.ui.screens.main
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -12,8 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.avivba.simbanyu.ui.components.bottombar.BottomBar
-import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
+import com.avivba.simbanyu.ui.screens.dashboard.DashboardContent
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardScreen
 
 @Preview(showBackground = true)
@@ -41,7 +40,9 @@ fun MainScreen(
             startDestination = Screen.MainScreen.Home
         ) {
             composable<Screen.MainScreen.Home> {
-                DashboardScreen()
+                DashboardScreen(
+                    onNavigate = onNavigate
+                )
             }
         }
     }
