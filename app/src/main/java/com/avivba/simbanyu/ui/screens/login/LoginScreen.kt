@@ -1,7 +1,5 @@
 package com.avivba.simbanyu.ui.screens.login
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,53 +11,71 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
+import com.avivba.simbanyu.ui.screens.main.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.leftBorder
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 
-@Preview
+
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier,
-    onLoginSuccess: () -> Unit = {}
+    viewModel: LoginViewModel = koinViewModel(),
+    onNavigate: (Screen) -> Unit = {}
 ) {
-    val context = LocalContext.current
-    var isWrongCredentials by remember { mutableStateOf(false) }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvent(viewModel.event) {
+        when (it) {
+            is LoginEvent.LoginSuccess -> {
+                onNavigate(Screen.Main)
+            }
+        }
+    }
+
+    LoginContent(
+        state = state,
+        onAction = viewModel::onAction,
+    )
+}
+
+@Composable
+fun LoginContent(
+    modifier: Modifier = Modifier,
+    state: LoginUiState,
+    onAction: (LoginAction) -> Unit,
+) {
     val scrollState = rememberScrollState()
-    val usernameState = rememberTextFieldState()
-    val passwordState = rememberTextFieldState()
-    val isPasswordVisible = remember { mutableStateOf(false) }
-    val toggleVisibility = { isPasswordVisible.value = !isPasswordVisible.value }
-    val scope = rememberCoroutineScope()
+
+    fun tryLogin() {
+        if (!state.isLoading) {
+            onAction(LoginAction.Login)
+        }
+    }
 
     Scaffold(
         modifier = modifier,
@@ -68,7 +84,6 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-//               .background(SimbanyuTheme.colors.background)
                 .padding(paddingValues)
                 .verticalScroll(scrollState)
                 .padding(SimbanyuTheme.padding.extraLarge),
@@ -92,7 +107,7 @@ fun LoginScreen(
                     color = SimbanyuTheme.colors.brand,
                 )
                 SimbanyuText(
-                    text = "Manajemen Sumber Daya Air"
+                    text = "PAM Dusun Sawahan 5"
                 )
             }
             Column(
@@ -123,12 +138,12 @@ fun LoginScreen(
                 )
 
                 SimbanyuText(
-                    modifier = Modifier.padding(bottom = 24.dp),
+                    modifier = Modifier.padding(bottom = SimbanyuTheme.padding.extraLarge),
                     text = "Masuk untuk mengelola layanan air anda",
                     style = SimbanyuTheme.typography.bodyStandard
                 )
 
-                if (isWrongCredentials) {
+                if (!state.errorMessage.isEmpty()) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -138,13 +153,18 @@ fun LoginScreen(
                             .background(
                                 color = SimbanyuTheme.colors.statusNegative.copy(alpha = 0.2f),
                             )
-                            .leftBorder(SimbanyuTheme.colors.statusNegative, 8.dp)
+                            .leftBorder(
+                                SimbanyuTheme.colors.statusNegative,
+                                SimbanyuTheme.padding.medium
+                            )
                             .padding(
                                 vertical = SimbanyuTheme.padding.large,
                                 horizontal = SimbanyuTheme.padding.large
                             ),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.padding.medium
+                        )
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_error),
@@ -152,7 +172,7 @@ fun LoginScreen(
                             tint = SimbanyuTheme.colors.statusNegative
                         )
                         SimbanyuText(
-                            text = "Username atau password salah!",
+                            text = state.errorMessage,
                             color = SimbanyuTheme.colors.statusNegative,
                         )
                     }
@@ -164,14 +184,14 @@ fun LoginScreen(
                 }
 
                 SimbanyuText(
-                    modifier = Modifier.padding(bottom = 8.dp),
+                    modifier = Modifier.padding(bottom = SimbanyuTheme.padding.medium),
                     text = "USERNAME / NO. HP / NO. METER",
                     style = SimbanyuTheme.typography.labelOverline
                 )
 
                 SimbanyuTextField(
                     modifier = Modifier,
-                    state = usernameState,
+                    state = state.username,
                     hint = "Masukkan identitas anda",
                     prefix = {
                         Icon(
@@ -184,17 +204,20 @@ fun LoginScreen(
                 )
 
                 SimbanyuText(
-                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+                    modifier = Modifier.padding(
+                        top = SimbanyuTheme.padding.large,
+                        bottom = SimbanyuTheme.padding.medium
+                    ),
                     text = "PASSWORD",
                     style = SimbanyuTheme.typography.labelOverline
                 )
 
                 SimbanyuTextField(
                     modifier = Modifier,
-                    state = passwordState,
+                    state = state.password,
                     hint = "Password anda",
                     isPassword = true,
-                    isPasswordVisible = isPasswordVisible.value,
+                    isPasswordVisible = state.isPasswordVisible,
                     prefix = {
                         Icon(
                             painter = painterResource(R.drawable.ic_lock),
@@ -203,60 +226,68 @@ fun LoginScreen(
                         )
                     },
                     suffix = {
-                        if (isPasswordVisible.value) {
+                        if (state.isPasswordVisible) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_visibility_off),
                                 contentDescription = "Hide password",
-                                modifier = Modifier.clickable { toggleVisibility() })
+                                modifier = Modifier.clickable { onAction(LoginAction.TogglePasswordVisibility) })
                         } else {
                             Icon(
                                 painter = painterResource(R.drawable.ic_visibility_on),
                                 contentDescription = "Show password",
-                                modifier = Modifier.clickable { toggleVisibility() })
+                                modifier = Modifier.clickable { onAction(LoginAction.TogglePasswordVisibility) })
                         }
                     },
                     imeAction = ImeAction.Go,
                     onKeyboardAction = {
-                        doLogin(context)
+                        tryLogin()
                     }
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.extraLarge))
 
                 SimbanyuButton(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
                             brush = SimbanyuTheme.colors.brush.brandVertical
-                        ), text = "Login", iconRight = {
-                        Icon(
-                            modifier = Modifier.height(18.dp),
-                            painter = painterResource(R.drawable.ic_login),
-                            contentDescription = "Login",
-                            tint = SimbanyuTheme.colors.actionBrandText
-                        )
-                    }
+                        ),
+                    text = "Login",
+                    iconRight = {
+                        if (state.isLoading) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(18.dp),
+                                strokeWidth = 2.dp,
+                                color = SimbanyuTheme.colors.actionBrandText
+                            )
+                        } else {
+                            Icon(
+                                modifier = Modifier.size(18.dp),
+                                painter = painterResource(R.drawable.ic_login),
+                                contentDescription = "Login",
+                                tint = SimbanyuTheme.colors.actionBrandText
+                            )
+                        }
+                    },
                 ) {
-                    doLogin(context)
-
-                    scope.launch {
-                        delay(3000)
-                        onLoginSuccess()
-                    }
-
-                    isWrongCredentials = true
+                    tryLogin()
                 }
             }
 
             Spacer(
                 modifier = Modifier
-                    .height(8.dp)
+                    .height(SimbanyuTheme.spacing.medium)
                     .fillMaxWidth()
             )
         }
     }
 }
 
-fun doLogin(context: Context) {
-    Toast.makeText(context, "LOGIN", Toast.LENGTH_SHORT).show()
+@Preview
+@Composable
+private fun LoginScreenPreview() {
+    LoginContent(
+        onAction = {},
+        state = LoginUiState(),
+    )
 }
