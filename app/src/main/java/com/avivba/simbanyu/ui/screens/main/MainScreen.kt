@@ -29,6 +29,7 @@ import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryScreen
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardContent
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardScreen
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
+import com.avivba.simbanyu.ui.screens.profile.ProfileScreen
 import com.avivba.simbanyu.ui.screens.report.ReportScreen
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryScreen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -126,7 +127,9 @@ fun MainScreenContent(
                 )
             }
             composable<Screen.MainScreen.Profile> {
-                SimbanyuText("PROFILE")
+                ProfileScreen(
+                    onNavigate = onNavigate
+                )
             }
         }
     }

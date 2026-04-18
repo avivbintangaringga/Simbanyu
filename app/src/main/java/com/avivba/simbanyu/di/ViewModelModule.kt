@@ -4,6 +4,7 @@ import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryViewModel
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
 import com.avivba.simbanyu.ui.screens.login.LoginViewModel
 import com.avivba.simbanyu.ui.screens.main.MainViewModel
+import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryViewModel
 import org.koin.dsl.module
@@ -16,4 +17,5 @@ val viewModelModule = module {
     viewModel<BillHistoryViewModel>()
     viewModel<UsageHistoryViewModel>()
     viewModel<ReportViewModel>()
+    viewModel<ProfileViewModel>()
 }
