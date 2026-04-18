@@ -72,12 +72,12 @@ fun UsageHistoryItem(
         ) {
             SimbanyuText(
                 text = period,
-                style = SimbanyuTheme.typography.titleCard
+                style = SimbanyuTheme.typography.bodyProminent
             )
             Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
             SimbanyuText(
                 text = "METER: $meterStart - $meterEnd",
-                style = SimbanyuTheme.typography.bodyStandard
+                style = SimbanyuTheme.typography.bodySmall
             )
         }
         SimbanyuText(

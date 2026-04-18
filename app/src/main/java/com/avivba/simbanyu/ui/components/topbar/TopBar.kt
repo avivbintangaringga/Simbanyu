@@ -34,15 +34,7 @@ fun TopBar(
             tint = SimbanyuTheme.colors.brand
         )
     },
-    actions: @Composable RowScope.() -> Unit = {
-        Icon(
-            modifier = Modifier
-                .padding(horizontal = SimbanyuTheme.padding.large),
-            painter = painterResource(R.drawable.ic_logout),
-            contentDescription = null,
-            tint = SimbanyuTheme.colors.textHeading
-        )
-    }
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         modifier = modifier

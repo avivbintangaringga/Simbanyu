@@ -63,7 +63,7 @@ fun AnnouncementItem(
                 )
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.large
+                SimbanyuTheme.spacing.medium
             ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -71,11 +71,9 @@ fun AnnouncementItem(
                 modifier = Modifier
                     .background(
                         color = iconBackgroundColor,
-                        shape = CircleShape
+                        shape = SimbanyuTheme.shapes.medium
                     )
-                    .padding(
-                        SimbanyuTheme.padding.large
-                    ),
+                    .padding(SimbanyuTheme.padding.medium),
                 painter = painterResource(iconId),
                 contentDescription = null,
                 tint = color
@@ -90,7 +88,7 @@ fun AnnouncementItem(
                     SimbanyuText(
                         modifier = Modifier.weight(1f),
                         text = title,
-                        style = SimbanyuTheme.typography.titleSection,
+                        style = SimbanyuTheme.typography.bodyProminent,
                         color = color
                     )
                     SimbanyuText(
@@ -113,7 +111,8 @@ fun AnnouncementItem(
 
                 SimbanyuText(
                     text = content,
-                    color = color
+                    color = color,
+                    style = SimbanyuTheme.typography.bodySmall
                 )
             }
         }

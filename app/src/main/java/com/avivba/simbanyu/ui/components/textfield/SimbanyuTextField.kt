@@ -41,7 +41,7 @@ fun SimbanyuTextField(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clip(SimbanyuTheme.shapes.extraLarge)
+            .clip(SimbanyuTheme.shapes.large)
             .background(SimbanyuTheme.colors.surfaceInput)
             .padding(
                 horizontal = SimbanyuTheme.padding.large,
@@ -62,7 +62,7 @@ fun SimbanyuTextField(
                 prefix?.invoke()
                 Box(
                     modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.CenterStart
+                    contentAlignment = Alignment.TopStart
                 ) {
                     innerTextField()
                     if (state.text.isEmpty()) {

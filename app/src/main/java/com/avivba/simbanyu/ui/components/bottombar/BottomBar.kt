@@ -37,12 +37,12 @@ private val menus = listOf(
     ),
     MenuItem(
         title = "Penggunaan",
-        iconId = R.drawable.ic_history,
+        iconId = R.drawable.ic_chart,
         screen = Screen.MainScreen.UsageHistory
     ),
     MenuItem(
         title = "Tagihan",
-        iconId = R.drawable.ic_map,
+        iconId = R.drawable.ic_contract,
         screen = Screen.MainScreen.BillHistory
     ),
     MenuItem(

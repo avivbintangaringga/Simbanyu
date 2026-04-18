@@ -61,6 +61,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun UsageHistoryScreen(
+    modifier: Modifier = Modifier,
     viewModel: UsageHistoryViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {}
 ) {
@@ -93,7 +94,7 @@ fun UsageHistoryContent(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
-    val chartColor = SimbanyuTheme.colors.brush.brandHorizontal
+    val chartColor = SolidColor(SimbanyuTheme.colors.brand)
     val chartGradientColor = SimbanyuTheme.colors.brandLighter
     val usageData = rememberSaveable(state.usages, chartColor, chartGradientColor) {
         listOf(
@@ -211,7 +212,7 @@ fun UsageHistoryContent(
                             color = SolidColor(SimbanyuTheme.colors.brandText),
                             strokeColor = SolidColor(SimbanyuTheme.colors.brand),
                             strokeWidth = 2.dp,
-                            radius = 4.dp
+                            radius = 3.dp
                         ),
                         gridProperties = GridProperties(
                             enabled = true,
@@ -314,7 +315,7 @@ fun UsageHistoryContent(
                 UsageHistoryItem(
                     period = "${usage.periodMonth} ${usage.periodYear}",
                     amount = usage.amount.toString(),
-                    iconId = R.drawable.ic_history,
+                    iconId = R.drawable.ic_water_droplet,
                     meterStart = usage.meterStart.toString(),
                     meterEnd = usage.meterEnd.toString()
                 )

@@ -1,0 +1,101 @@
+package com.avivba.simbanyu.ui.screens.report
+
+import androidx.compose.foundation.text.input.TextFieldState
+
+enum class ReportType(val value: String) {
+    OUTAGE("outage"),
+    LEAK("leak"),
+    MUDDY("muddy"),
+    MISC("misc"),
+}
+
+data class Coordinate(
+    val lat: Double,
+    val lng: Double,
+)
+
+data class Report(
+    val id: String,
+    val title: String,
+    val type: ReportType,
+    val status: String,
+    val location: String,
+    val locationCoordinate: Coordinate,
+    val description: String,
+    val image: String,
+    val date: String,
+    val isExpanded: Boolean = false,
+)
+
+data class ReportUiState(
+    val isRefreshing: Boolean = false,
+    val isLoading: Boolean = false,
+    val locationState: TextFieldState = TextFieldState(),
+    val descriptionState: TextFieldState = TextFieldState(),
+    val locationCoordinate: Coordinate? = null,
+    val imageUri: String? = null,
+    val selectedTabIndex: Int = 0,
+    val reports: List<Report> = emptyList(),
+)
+
+sealed interface ReportAction {
+    data object Load : ReportAction
+    data object Refresh : ReportAction
+    data object PickImage : ReportAction
+    data object GetMyLocation : ReportAction
+    data object SendReport : ReportAction
+    data class ChangeTab(val index: Int) : ReportAction
+    data class ExpandItem(val report: Report) : ReportAction
+}
+
+sealed interface ReportEvent {
+    data class ImagePicked(val uri: String) : ReportEvent
+    data object ReportSent : ReportEvent
+}
+
+val fakeReports = listOf(
+    Report(
+        id = "REP-001",
+        title = "Kebocoran Pipa Utama",
+        type = ReportType.LEAK,
+        status = "Dalam Proses",
+        location = "Jl. Merdeka No. 10, Jakarta",
+        locationCoordinate = Coordinate(-6.1754, 106.8272),
+        description = "Pipa air depan rumah pecah, air meluap ke jalanan.",
+        image = "https://example.com/leak1.jpg",
+        date = "24 Mei 2024"
+    ),
+    Report(
+        id = "REP-002",
+        title = "Air Keruh dan Berpasir",
+        type = ReportType.MUDDY,
+        status = "Selesai",
+        location = "Perumahan Indah, Blok C2",
+        locationCoordinate = Coordinate(-6.2000, 106.8166),
+        description = "Sudah 2 hari air keluar berwarna coklat dan ada endapan pasir.",
+        image = "https://example.com/muddy1.jpg",
+        date = "20 Mei 2024"
+    ),
+    Report(
+        id = "REP-003",
+        title = "Aliran Air Mati Total",
+        type = ReportType.OUTAGE,
+        status = "Menunggu",
+        location = "Kp. Melayu RT 05/RW 02",
+        locationCoordinate = Coordinate(-6.2333, 106.8500),
+        description = "Air tidak mengalir sama sekali sejak tadi pagi pukul 06.00.",
+        image = "https://example.com/outage1.jpg",
+        date = "25 Mei 2024"
+    ),
+    Report(
+        id = "REP-004",
+        title = "Pipa Bocor Kecil",
+        type = ReportType.LEAK,
+        status = "Selesai",
+        location = "Jl. Sudirman Gg. 5",
+        locationCoordinate = Coordinate(-6.2146, 106.8202),
+        description = "Ada rembesan di sambungan meteran air.",
+        image = "https://example.com/leak2.jpg",
+        date = "15 April 2024"
+    )
+)

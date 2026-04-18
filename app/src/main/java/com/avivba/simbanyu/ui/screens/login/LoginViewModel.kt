@@ -3,7 +3,6 @@ package com.avivba.simbanyu.ui.screens.login
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.ui.base.BaseViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel : BaseViewModel<LoginUiState, LoginAction, LoginEvent>(

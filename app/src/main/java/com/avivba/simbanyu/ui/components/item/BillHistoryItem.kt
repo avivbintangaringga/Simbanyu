@@ -74,12 +74,12 @@ fun BillHistoryItem(
         ) {
             SimbanyuText(
                 text = period,
-                style = SimbanyuTheme.typography.titleCard
+                style = SimbanyuTheme.typography.bodyProminent
             )
             Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
             SimbanyuText(
                 text = "ID: $id",
-                style = SimbanyuTheme.typography.bodyStandard
+                style = SimbanyuTheme.typography.bodySmall
             )
         }
         Column(

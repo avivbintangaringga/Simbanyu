@@ -1,5 +1,8 @@
 package com.avivba.simbanyu.ui.screens.dashboard
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -106,7 +109,7 @@ fun DashboardContent(
     val barColor = SimbanyuTheme.colors.brush.brandVertical
     val barColorMax = Brush.verticalGradient(
         listOf(
-            SimbanyuTheme.colors.statusNegativeText,
+            SimbanyuTheme.colors.statusWarningText,
             SimbanyuTheme.colors.brandLight
         )
     )
@@ -214,13 +217,20 @@ fun DashboardContent(
                         ),
                     text = "Bayar Sekarang",
                     textColor = SimbanyuTheme.colors.actionBrand,
-                    iconRight = {
+                    iconLeft = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_arrow_forward),
+                            painter = painterResource(R.drawable.ic_payment),
                             contentDescription = null,
                             tint = SimbanyuTheme.colors.actionBrand
                         )
-                    }
+                    },
+//                    iconRight = {
+//                        Icon(
+//                            painter = painterResource(R.drawable.ic_arrow_forward),
+//                            contentDescription = null,
+//                            tint = SimbanyuTheme.colors.actionBrand
+//                        )
+//                    }
                 ) {
                     onAction(DashboardAction.PayBill)
                 }
@@ -359,7 +369,7 @@ fun DashboardContent(
                 SimbanyuText(
                     text = "${state.waterUsageMaximum} m³",
                     style = SimbanyuTheme.typography.displayMedium,
-                    color = SimbanyuTheme.colors.statusNegativeText
+                    color = SimbanyuTheme.colors.statusWarningText
                 )
             }
         }

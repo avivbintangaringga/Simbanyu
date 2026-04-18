@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.login
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -120,6 +121,7 @@ fun LoginContent(
                             alpha = 0.2f
                         )
                     )
+                    .animateContentSize()
                     .background(
                         color = SimbanyuTheme.colors.surfaceCard,
                         shape = SimbanyuTheme.shapes.extraLarge
@@ -283,7 +285,7 @@ fun LoginContent(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
     LoginContent(

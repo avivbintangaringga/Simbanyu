@@ -1,6 +1,9 @@
 package com.avivba.simbanyu.ui.screens.main
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,12 +11,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.avivba.simbanyu.R
 import com.avivba.simbanyu.di.viewModelModule
 import com.avivba.simbanyu.ui.components.bottombar.BottomBar
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
@@ -22,6 +28,7 @@ import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryScreen
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardContent
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardScreen
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
+import com.avivba.simbanyu.ui.screens.report.ReportScreen
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryScreen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import org.koin.compose.KoinApplication
@@ -54,7 +61,21 @@ fun MainScreen(
                 })
         },
         topBar = {
-            TopBar()
+            TopBar(
+                actions = {
+                    Icon(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .clickable {
+
+                            }
+                            .padding(horizontal = SimbanyuTheme.padding.large),
+                        painter = painterResource(R.drawable.ic_notifications),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.textHeading
+                    )
+                }
+            )
         }
     ) { paddingValues ->
         NavHost(
@@ -80,7 +101,9 @@ fun MainScreen(
                 )
             }
             composable<Screen.MainScreen.Report> {
-                SimbanyuText("REPORT")
+                ReportScreen(
+                    onNavigate = onNavigate
+                )
             }
             composable<Screen.MainScreen.Profile> {
                 SimbanyuText("PROFILE")
