@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,12 +40,26 @@ import org.koin.dsl.KoinConfiguration
 fun MainScreen(
     modifier: Modifier = Modifier,
     onNavigate: (Screen) -> Unit = {},
+    viewModel: MainViewModel = koinInject()
 ) {
-    //TODO: TEMP!
-    var selectedScreen by remember {
-        mutableStateOf<Screen>(Screen.MainScreen.Home)
-    }
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
+    MainScreenContent(
+        modifier = modifier,
+        onNavigate = onNavigate,
+        onAction = viewModel::onAction,
+        state = state
+    )
+}
+
+
+@Composable
+fun MainScreenContent(
+    modifier: Modifier = Modifier,
+    state: MainUiState,
+    onAction: (MainAction) -> Unit = {},
+    onNavigate: (Screen) -> Unit = {},
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -52,12 +67,17 @@ fun MainScreen(
         containerColor = Color.Transparent,
         bottomBar = {
             BottomBar(
-                selected = selectedScreen,
+                selected = state.selectedScreen,
                 onSelectedMenuChanged = { menu ->
-                    selectedScreen = menu.screen
-                    // TODO: FIX BACKSTACK
-                    navController.popBackStack()
-                    navController.navigate(menu.screen)
+                    onAction(MainAction.ChangeScreen(menu.screen))
+                    navController.navigate(menu.screen) {
+                        popUpTo(navController.graph.id) {
+                            saveState = true
+                        }
+
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 })
         },
         topBar = {

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -381,6 +382,7 @@ private fun ReportList(
     state: ReportUiState,
     onAction: (ReportAction) -> Unit
 ) {
+    val listState = rememberLazyListState()
     PullToRefreshBox(
         isRefreshing = state.isRefreshing,
         onRefresh = {
@@ -392,7 +394,8 @@ private fun ReportList(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
-            )
+            ),
+            state = listState
         ) {
             items(
                 items = state.reports,

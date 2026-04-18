@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -94,9 +95,10 @@ fun UsageHistoryContent(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
+    val listState = rememberLazyListState()
     val chartColor = SolidColor(SimbanyuTheme.colors.brand)
     val chartGradientColor = SimbanyuTheme.colors.brandLighter
-    val usageData = rememberSaveable(state.usages, chartColor, chartGradientColor) {
+    val usageData = remember(state.usages, chartColor, chartGradientColor) {
         listOf(
             Line(
                 label = "Penggunaan",
@@ -183,6 +185,7 @@ fun UsageHistoryContent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
+            state = listState,
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
             )

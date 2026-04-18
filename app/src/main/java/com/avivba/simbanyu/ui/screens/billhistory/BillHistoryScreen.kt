@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
@@ -83,6 +84,7 @@ fun BillHistoryContent(
     onNavigate: (Screen) -> Unit = {}
 ) {
     var isExpanded by remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
 
     Column(
         modifier = modifier
@@ -249,7 +251,8 @@ fun BillHistoryContent(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
-            )
+            ),
+            state = listState,
         ) {
             items(
                 items = state.bills.sortedByDescending { it.id },

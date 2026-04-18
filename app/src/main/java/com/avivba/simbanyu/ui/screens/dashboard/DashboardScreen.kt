@@ -114,7 +114,7 @@ fun DashboardContent(
         )
     )
 
-    val usageData = rememberSaveable(state.waterUsage, barColor, barColorMax) {
+    val usageData = remember(state.waterUsage, barColor, barColorMax) {
         state.waterUsage.map { usage ->
             Bars(
                 label = usage.month,

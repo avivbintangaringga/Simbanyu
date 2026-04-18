@@ -3,36 +3,37 @@ package com.avivba.simbanyu.ui.screens.main
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Screen {
+sealed interface Screen {
     @Serializable
-    object Login : Screen()
-
-    @Serializable
-    object Main : Screen()
+    data object Login : Screen
 
     @Serializable
-    sealed class MainScreen : Screen() {
+    data object Main : Screen
+
+    @Serializable
+    data object Notifications : Screen
+
+    @Serializable
+    sealed interface MainScreen : Screen {
 
         @Serializable
-        object Home : MainScreen()
+        data object Home : MainScreen
 
         @Serializable
-        object UsageHistory : MainScreen()
+        data object UsageHistory : MainScreen
 
         @Serializable
-        object BillHistory : MainScreen()
+        data object BillHistory : MainScreen
 
         @Serializable
-        object Report : MainScreen()
+        data object Report : MainScreen
 
         @Serializable
-        object Profile : MainScreen()
+        data object Profile : MainScreen
 
     }
 
     @Serializable
-    data class BillDetails(val id: String) : Screen()
+    data class BillDetails(val id: String) : Screen
 
-    @Serializable
-    object Settings : Screen()
 }

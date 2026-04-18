@@ -38,9 +38,5 @@ fun SimbanyuApp(
                 })
             }
         }
-
-        composable<Screen.Settings> {
-            SimbanyuText("Settings Screen")
-        }
     }
 }
