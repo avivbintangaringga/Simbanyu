@@ -44,12 +44,19 @@ fun SimbanyuApp(
             InvoiceScreen(
                 onNavigate = { dest ->
                     navHostController.navigate(dest)
+                },
+                onNavigateBack = {
+                    navHostController.popBackStack()
                 }
             )
         }
 
         composable<Screen.BillDetails> {
             SimbanyuText(text = "Bill Details")
+        }
+
+        composable<Screen.PaymentMethods> {
+            SimbanyuText(text = "Payment Methods")
         }
     }
 }

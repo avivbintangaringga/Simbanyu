@@ -16,6 +16,11 @@ sealed interface Screen {
     @Serializable
     data class Invoice(val ids: List<String>) : Screen
 
+    @Serializable
+    data object PaymentMethods : Screen
+
+    @Serializable
+    data class BillDetails(val id: String) : Screen
 
     @Serializable
     sealed interface MainScreen : Screen {
@@ -36,8 +41,5 @@ sealed interface Screen {
         data object Profile : MainScreen
 
     }
-
-    @Serializable
-    data class BillDetails(val id: String) : Screen
 
 }

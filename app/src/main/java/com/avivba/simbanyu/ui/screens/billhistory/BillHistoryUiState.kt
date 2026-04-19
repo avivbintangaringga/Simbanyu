@@ -30,6 +30,7 @@ sealed interface BillHistoryAction {
     data object Load : BillHistoryAction
     data object Refresh : BillHistoryAction
     data object ActivateMultipleSelectMode : BillHistoryAction
+    data object PayMultipleBills : BillHistoryAction
     data class Filter(val year: Int) : BillHistoryAction
     data class ClickBill(val bill: Bill) : BillHistoryAction
     data class LongClickBill(val bill: Bill) : BillHistoryAction
@@ -37,7 +38,7 @@ sealed interface BillHistoryAction {
 
 sealed interface BillHistoryEvent {
     data class ShowBill(val bill: Bill) : BillHistoryEvent
-    data class PayBill(val bills: List<Bill>) : BillHistoryEvent
+    data class PayBill(val billIds: List<String>) : BillHistoryEvent
 }
 
 val fakeBills = listOf(

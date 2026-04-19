@@ -412,7 +412,8 @@ fun DashboardContent(
         )
 
         Column(
-            modifier = Modifier,
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
             ),
@@ -437,7 +438,7 @@ fun DashboardContent(
                 ),
                 iconRight = {
                     Icon(
-                        painter = painterResource(R.drawable.ic_arrow_forward),
+                        painter = painterResource(R.drawable.ic_chevron_forward),
                         contentDescription = null,
                         tint = SimbanyuTheme.colors.actionBrand
                     )

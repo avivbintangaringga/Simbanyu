@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.billhistory
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,12 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,17 +30,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
-import com.avivba.simbanyu.ui.components.buttons.SimbanyuCardButton
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.screens.dashboard.DashboardAction
-import com.avivba.simbanyu.ui.screens.dashboard.DashboardContent
 import com.avivba.simbanyu.ui.screens.main.Screen
-import com.avivba.simbanyu.ui.screens.main.Screen.*
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.viewmodel.koinViewModel
@@ -59,11 +51,11 @@ fun BillHistoryScreen(
     ObserveAsEvent(viewModel.event) {
         when (it) {
             is BillHistoryEvent.ShowBill -> {
-                onNavigate(BillDetails(it.bill.id))
+                onNavigate(Screen.BillDetails(it.bill.id))
             }
 
             is BillHistoryEvent.PayBill -> {
-
+                onNavigate(Screen.Invoice(it.billIds))
             }
         }
     }
@@ -317,7 +309,6 @@ fun BillHistoryContent(
         }
 
         if (state.isMultipleSelectMode) {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -341,6 +332,9 @@ fun BillHistoryContent(
                             contentDescription = null,
                             tint = SimbanyuTheme.colors.actionBrandText
                         )
+                    },
+                    onClick = {
+                        onAction(BillHistoryAction.PayMultipleBills)
                     }
                 )
             }

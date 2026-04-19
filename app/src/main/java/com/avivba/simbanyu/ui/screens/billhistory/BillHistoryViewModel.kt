@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -40,6 +41,7 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
 
                 is BillHistoryAction.ClickBill -> clickBill(action.bill)
                 is BillHistoryAction.LongClickBill -> longClickBill(action.bill)
+                is BillHistoryAction.PayMultipleBills -> payMultipleBills()
             }
         }
     }
@@ -86,13 +88,17 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
         if (state.value.isMultipleSelectMode) {
             changeBillSelection(bill, !bill.isSelected)
         } else {
-            if (bill.status != BillingStatus.PAID) {
+            if (bill.status == BillingStatus.PAID) {
                 sendEvent(ShowBill(bill))
             } else {
-                val selectedBills = state.value.bills.filter { it.isSelected }
-                sendEvent(PayBill(selectedBills))
+                sendEvent(PayBill(listOf(bill.id)))
             }
         }
+    }
+
+    private fun payMultipleBills() {
+        val selectedBillIds = _bills.value.filter { it.isSelected }.map { it.id }
+        sendEvent(PayBill(selectedBillIds))
     }
 
     private fun longClickBill(bill: Bill) {

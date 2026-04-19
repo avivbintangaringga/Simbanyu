@@ -41,6 +41,7 @@ import org.koin.dsl.KoinConfiguration
 fun MainScreen(
     modifier: Modifier = Modifier,
     onNavigate: (Screen) -> Unit = {},
+    onNavigateBack: () -> Unit = {},
     viewModel: MainViewModel = koinInject()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

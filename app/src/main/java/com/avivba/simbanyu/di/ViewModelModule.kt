@@ -14,7 +14,9 @@ import org.koin.plugin.module.dsl.viewModel
 val viewModelModule = module {
     viewModel<LoginViewModel>()
     viewModel<DashboardViewModel>()
-    viewModel<MainViewModel>()
+    single {
+        MainViewModel()
+    }
     viewModel<BillHistoryViewModel>()
     viewModel<UsageHistoryViewModel>()
     viewModel<ReportViewModel>()
