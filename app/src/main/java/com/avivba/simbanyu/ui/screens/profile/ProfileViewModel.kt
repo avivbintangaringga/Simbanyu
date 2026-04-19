@@ -24,6 +24,7 @@ class ProfileViewModel : BaseViewModel<ProfileUiState, ProfileAction, ProfileEve
                 meterId = "DX920130",
                 phone = "08123412312",
                 address = "Jl. Raya No. 123",
+                category = "Rumah Tangga"
             )
         }
     }

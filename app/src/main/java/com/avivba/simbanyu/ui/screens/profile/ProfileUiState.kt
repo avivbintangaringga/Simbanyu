@@ -6,6 +6,7 @@ data class ProfileUiState(
     val phone: String = "",
     val address: String = "",
     val image: String = "",
+    val category: String = "",
 )
 
 sealed interface ProfileAction {

@@ -1,7 +1,10 @@
 package com.avivba.simbanyu.ui.screens.report
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -21,6 +25,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
@@ -32,10 +37,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
@@ -45,6 +52,7 @@ import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.screens.main.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
+import com.avivba.simbanyu.ui.utils.conditional
 import com.avivba.simbanyu.ui.utils.dashedBorder
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
@@ -56,11 +64,18 @@ fun ReportScreen(
     onNavigate: (Screen) -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context: Context = LocalContext.current
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
             is ReportEvent.ImagePicked -> {}
-            is ReportEvent.ReportSent -> {}
+            is ReportEvent.ReportSent -> {
+                Toast.makeText(
+                    context,
+                    "Laporan berhasil dikirim",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -224,6 +239,15 @@ private fun CreateReport(
             }
 
             SimbanyuTextField(
+                modifier = Modifier
+                    .conditional(state.errorFields.fastAny { it == Fields.LOCATION }) {
+                        border(
+                            width = 2.dp,
+                            color = SimbanyuTheme.colors.statusNegativeText,
+                            shape = SimbanyuTheme.shapes.large
+
+                        )
+                    },
                 state = state.locationState,
                 lineLimits = TextFieldLineLimits.MultiLine(3, 6),
                 hint = "Masukkan lokasi terjadinya gangguan...",
@@ -284,6 +308,15 @@ private fun CreateReport(
             }
 
             SimbanyuTextField(
+                modifier = Modifier
+                    .conditional(state.errorFields.fastAny { it == Fields.DESCRIPTION }) {
+                        border(
+                            width = 2.dp,
+                            color = SimbanyuTheme.colors.statusNegativeText,
+                            shape = SimbanyuTheme.shapes.large
+
+                        )
+                    },
                 state = state.descriptionState,
                 lineLimits = TextFieldLineLimits.MultiLine(6, 8),
                 hint = "Ceritakan detail gangguan yang dialami...",
@@ -325,6 +358,19 @@ private fun CreateReport(
                     .clickable {
                         onAction(ReportAction.PickImage)
                     }
+                    .conditional(
+                        state.errorFields.fastAny {
+                            it == Fields.IMAGE
+                        }
+                    ) {
+                        dashedBorder(
+                            strokeWidth = 4.dp,
+                            gapLength = 6.dp,
+                            dashLength = 8.dp,
+                            color = SimbanyuTheme.colors.statusNegativeText,
+                            shape = SimbanyuTheme.shapes.large
+                        )
+                    }
                     .dashedBorder(
                         strokeWidth = 4.dp,
                         gapLength = 6.dp,
@@ -363,11 +409,19 @@ private fun CreateReport(
                 ),
             text = "Kirim Laporan",
             iconRight = {
-                Icon(
-                    painter = painterResource(R.drawable.ic_send),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brandText
-                )
+                if (state.isSendingReport) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(18.dp),
+                        strokeWidth = 2.dp,
+                        color = SimbanyuTheme.colors.actionBrandText
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_send),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brandText
+                    )
+                }
             },
             onClick = {
                 onAction(ReportAction.SendReport)
@@ -423,7 +477,7 @@ private fun ReportList(
 private fun ReportPreview() {
     ReportContent(
         state = ReportUiState(
-            selectedTabIndex = 1,
+            selectedTabIndex = 0,
             reports = fakeReports
         )
     )

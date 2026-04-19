@@ -91,12 +91,19 @@ fun ProfileContent(
                 modifier = Modifier
                     .padding(8.dp)
                     .clip(CircleShape)
-                    .size(150.dp)
+                    .size(130.dp)
                     .background(
-                        color = SimbanyuTheme.colors.brand
-                    )
+                        color = SimbanyuTheme.colors.brand.copy(alpha = 0.4f)
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-
+                Icon(
+                    painter = painterResource(R.drawable.ic_person),
+                    contentDescription = null,
+                    tint = SimbanyuTheme.colors.brand,
+                    modifier = Modifier
+                        .size(64.dp)
+                )
             }
         }
 
@@ -104,6 +111,21 @@ fun ProfileContent(
             modifier = Modifier.padding(top = SimbanyuTheme.spacing.medium),
             text = state.name,
             style = SimbanyuTheme.typography.displayLarge
+        )
+
+        SimbanyuText(
+            modifier = Modifier
+                .background(
+                    color = SimbanyuTheme.colors.brand,
+                    shape = SimbanyuTheme.shapes.medium
+                )
+                .padding(
+                    vertical = SimbanyuTheme.padding.extraSmall,
+                    horizontal = SimbanyuTheme.padding.medium
+                ),
+            text = state.category,
+            style = SimbanyuTheme.typography.labelUnit,
+            color = SimbanyuTheme.colors.brandText
         )
 
         Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.extraExtraLarge))
@@ -239,7 +261,7 @@ private fun ProfilePreview() {
             meterId = "DX920130",
             phone = "08123412312",
             address = "Jl. Raya No. 123",
-
-            )
+            category = "Rumah Tangga"
+        )
     )
 }

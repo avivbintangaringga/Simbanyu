@@ -9,6 +9,12 @@ enum class ReportType(val value: String) {
     MISC("misc"),
 }
 
+enum class Fields() {
+    LOCATION,
+    DESCRIPTION,
+    IMAGE,
+}
+
 data class Coordinate(
     val lat: Double,
     val lng: Double,
@@ -28,6 +34,7 @@ data class Report(
 )
 
 data class ReportUiState(
+    val isSendingReport: Boolean = false,
     val isRefreshing: Boolean = false,
     val isLoading: Boolean = false,
     val locationState: TextFieldState = TextFieldState(),
@@ -36,6 +43,7 @@ data class ReportUiState(
     val imageUri: String? = null,
     val selectedTabIndex: Int = 0,
     val reports: List<Report> = emptyList(),
+    val errorFields: List<Fields> = emptyList(),
 )
 
 sealed interface ReportAction {
