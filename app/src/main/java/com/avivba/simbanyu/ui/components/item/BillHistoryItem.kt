@@ -3,19 +3,25 @@ package com.avivba.simbanyu.ui.components.item
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import com.avivba.simbanyu.ui.utils.conditional
 
 @Composable
 fun BillHistoryItem(
@@ -36,10 +43,13 @@ fun BillHistoryItem(
     @DrawableRes iconId: Int,
     iconTint: Color = SimbanyuTheme.colors.brand,
     iconBackgroundColor: Color = SimbanyuTheme.colors.surfaceCard,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
+    isDisabled: Boolean = false,
 ) {
-    Row(
+    Box(
         modifier = modifier
+            .height(IntrinsicSize.Min)
             .fillMaxWidth()
             .background(
                 color = SimbanyuTheme.colors.surfaceCardAlternate,
@@ -48,61 +58,77 @@ fun BillHistoryItem(
             .clip(
                 shape = SimbanyuTheme.shapes.large
             )
-            .clickable {
-                onClick()
-            }
-            .padding(SimbanyuTheme.padding.large),
-        horizontalArrangement = Arrangement.spacedBy(
-            SimbanyuTheme.spacing.large
-        ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(iconId),
-            contentDescription = null,
-            tint = iconTint,
-            modifier = Modifier
-                .background(
-                    color = iconBackgroundColor,
-                    shape = SimbanyuTheme.shapes.medium
+            .conditional(!isDisabled) {
+                combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick
                 )
-                .padding(SimbanyuTheme.padding.medium)
-        )
-        Column(
+            }
+    ) {
+        Row(
             modifier = Modifier
-                .weight(1f)
+                .padding(SimbanyuTheme.padding.large),
+            horizontalArrangement = Arrangement.spacedBy(
+                SimbanyuTheme.spacing.large
+            ),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            SimbanyuText(
-                text = period,
-                style = SimbanyuTheme.typography.bodyProminent
-            )
-            Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-            SimbanyuText(
-                text = "ID: $id",
-                style = SimbanyuTheme.typography.bodySmall
-            )
-        }
-        Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SimbanyuText(
-                text = "Rp. $amount",
-                style = SimbanyuTheme.typography.titleCard
-            )
-            Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-            SimbanyuText(
+            Icon(
+                painter = painterResource(iconId),
+                contentDescription = null,
+                tint = iconTint,
                 modifier = Modifier
                     .background(
-                        color = statusBackgroundColor,
-                        shape = SimbanyuTheme.shapes.medium
-                    ).padding(
-                        vertical = SimbanyuTheme.padding.extraSmall,
-                        horizontal = SimbanyuTheme.padding.medium
-                    ),
-                text = status,
-                style = SimbanyuTheme.typography.labelUnit,
-                color = statusColor
+                        color = iconBackgroundColor,
+                        shape = CircleShape
+                    )
+                    .padding(SimbanyuTheme.padding.medium)
+            )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                SimbanyuText(
+                    text = period,
+                    style = SimbanyuTheme.typography.bodyProminent
+                )
+                Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
+                SimbanyuText(
+                    text = "ID: $id",
+                    style = SimbanyuTheme.typography.bodySmall
+                )
+            }
+            Column(
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                SimbanyuText(
+                    text = "Rp. $amount",
+                    style = SimbanyuTheme.typography.titleCard
+                )
+                Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
+                SimbanyuText(
+                    modifier = Modifier
+                        .background(
+                            color = statusBackgroundColor,
+                            shape = SimbanyuTheme.shapes.medium
+                        )
+                        .padding(
+                            vertical = SimbanyuTheme.padding.extraSmall,
+                            horizontal = SimbanyuTheme.padding.medium
+                        ),
+                    text = status,
+                    style = SimbanyuTheme.typography.labelUnit,
+                    color = statusColor
+                )
+            }
+        }
+
+        if (isDisabled) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.5f))
             )
         }
     }
@@ -116,6 +142,6 @@ private fun BillHistoryItemPreview() {
         period = "Januari 2025",
         iconId = R.drawable.ic_history,
         amount = "150.000",
-        status = "LUNAS"
+        status = "LUNAS",
     )
 }

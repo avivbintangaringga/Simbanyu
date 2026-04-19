@@ -11,27 +11,33 @@ data class Bill(
     val periodMonth: String,
     val periodYear: Int,
     val status: BillingStatus,
+    val isSelected: Boolean = false
 )
 
 data class BillHistoryUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
+    val isMultipleSelectMode: Boolean = false,
     val years: List<Int> = emptyList(),
     val selectedYear: Int = 0,
     val totalPaid : String = "",
     val totalUnpaid : String = "",
-    val bills: List<Bill> = emptyList()
+    val totalSelectedBills : Double = 0.0,
+    val bills: List<Bill> = emptyList(),
 )
 
 sealed interface BillHistoryAction {
     data object Load : BillHistoryAction
     data object Refresh : BillHistoryAction
+    data object ActivateMultipleSelectMode : BillHistoryAction
     data class Filter(val year: Int) : BillHistoryAction
     data class ClickBill(val bill: Bill) : BillHistoryAction
+    data class LongClickBill(val bill: Bill) : BillHistoryAction
 }
 
 sealed interface BillHistoryEvent {
     data class ShowBill(val bill: Bill) : BillHistoryEvent
+    data class PayBill(val bills: List<Bill>) : BillHistoryEvent
 }
 
 val fakeBills = listOf(

@@ -33,14 +33,17 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuCardButton
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardAction
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardContent
 import com.avivba.simbanyu.ui.screens.main.Screen
+import com.avivba.simbanyu.ui.screens.main.Screen.*
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.viewmodel.koinViewModel
@@ -56,7 +59,11 @@ fun BillHistoryScreen(
     ObserveAsEvent(viewModel.event) {
         when (it) {
             is BillHistoryEvent.ShowBill -> {
-                onNavigate(Screen.BillDetails(it.bill.id))
+                onNavigate(BillDetails(it.bill.id))
+            }
+
+            is BillHistoryEvent.PayBill -> {
+
             }
         }
     }
@@ -248,6 +255,7 @@ fun BillHistoryContent(
 
         LazyColumn(
             modifier = Modifier
+                .weight(1f)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
@@ -258,12 +266,82 @@ fun BillHistoryContent(
                 items = state.bills.sortedByDescending { it.id },
                 key = { it.id }
             ) { bill ->
+                var iconId = R.drawable.ic_history
+                var iconTint = SimbanyuTheme.colors.brand
+                var iconBackgroundColor = SimbanyuTheme.colors.surfaceCardAlternate
+                var statusBackgroundColor = SimbanyuTheme.colors.brand
+
+                if (bill.status == BillingStatus.PAID) {
+                    iconId = R.drawable.ic_payment
+                    iconTint = SimbanyuTheme.colors.statusPositiveText
+                    iconBackgroundColor = SimbanyuTheme.colors.statusPositive
+                    statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
+                } else {
+                    statusBackgroundColor = SimbanyuTheme.colors.statusNegativeText
+
+                    if (state.isMultipleSelectMode) {
+                        if (bill.isSelected) {
+                            iconId = R.drawable.ic_check_circle
+                            iconTint = SimbanyuTheme.colors.statusPositiveText
+                            iconBackgroundColor = SimbanyuTheme.colors.statusPositive
+                        } else {
+                            iconId = R.drawable.ic_contract
+                            iconTint = SimbanyuTheme.colors.statusNeutralText
+                            iconBackgroundColor = SimbanyuTheme.colors.statusNeutral
+                        }
+                    } else {
+                        iconId = R.drawable.ic_contract
+                        iconTint = SimbanyuTheme.colors.statusNegativeText
+                        iconBackgroundColor = SimbanyuTheme.colors.statusNegative
+                    }
+                }
+
                 BillHistoryItem(
                     period = "${bill.periodMonth} ${bill.periodYear}",
                     id = bill.id,
                     amount = bill.amount,
                     status = bill.status.status,
-                    iconId = R.drawable.ic_history
+                    iconId = iconId,
+                    iconTint = iconTint,
+                    iconBackgroundColor = iconBackgroundColor,
+                    statusBackgroundColor = statusBackgroundColor,
+                    isDisabled = state.isMultipleSelectMode && bill.status == BillingStatus.PAID,
+                    onClick = {
+                        onAction(BillHistoryAction.ClickBill(bill))
+                    },
+                    onLongClick = {
+                        onAction(BillHistoryAction.LongClickBill(bill))
+                    }
+                )
+            }
+        }
+
+        if (state.isMultipleSelectMode) {
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SimbanyuText(
+                    modifier = Modifier.weight(1f),
+                    text = "Rp. ${state.totalSelectedBills}",
+                    style = SimbanyuTheme.typography.displaySmall,
+                    color = SimbanyuTheme.colors.brand
+                )
+                SimbanyuButton(
+                    text = "Bayar tagihan",
+                    modifier = Modifier
+                        .background(
+                            brush = SimbanyuTheme.colors.brush.brandVertical,
+                        ),
+                    iconRight = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_arrow_forward),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.actionBrandText
+                        )
+                    }
                 )
             }
         }
@@ -277,7 +355,8 @@ fun BillHistoryPreview() {
         state = BillHistoryUiState(
             bills = fakeBills,
             totalPaid = "100.000",
-            totalUnpaid = "150.000"
+            totalUnpaid = "150.000",
+            isMultipleSelectMode = true
         )
     )
 }

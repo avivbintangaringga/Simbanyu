@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.ui.base.BaseViewModel
+import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -24,11 +25,83 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
     }
 
     override fun onAction(action: BillHistoryAction) {
-        when (action) {
-            BillHistoryAction.Load -> load()
-            BillHistoryAction.Refresh -> refresh()
-            is BillHistoryAction.Filter -> filter(action.year)
-            is BillHistoryAction.ClickBill -> sendEvent(BillHistoryEvent.ShowBill(action.bill))
+        viewModelScope.launch {
+            when (action) {
+                BillHistoryAction.Load -> load()
+                BillHistoryAction.Refresh -> refresh()
+                is BillHistoryAction.Filter -> filter(action.year)
+                BillHistoryAction.ActivateMultipleSelectMode -> {
+                    updateState {
+                        it.copy(
+                            isMultipleSelectMode = true
+                        )
+                    }
+                }
+
+                is BillHistoryAction.ClickBill -> clickBill(action.bill)
+                is BillHistoryAction.LongClickBill -> longClickBill(action.bill)
+            }
+        }
+    }
+
+    private fun dismissMultipleSelectMode() {
+        _bills.update {
+            it.map { bill ->
+                bill.copy(
+                    isSelected = false
+                )
+            }
+        }
+
+        updateState {
+            it.copy(
+                isMultipleSelectMode = false
+            )
+        }
+    }
+
+    private fun changeBillSelection(bill: Bill, selected: Boolean) {
+        _bills.update {
+            it.map { b ->
+                if (b.id == bill.id) b.copy(isSelected = selected) else b
+            }
+        }
+
+        val anySelected = _bills.value.any { it.isSelected }
+
+        updateState {
+            it.copy(
+                isMultipleSelectMode = anySelected,
+                totalSelectedBills = calculateTotalSelectedBills()
+            )
+        }
+    }
+
+    private fun calculateTotalSelectedBills(): Double {
+        val selectedBills = _bills.value.filter { it.isSelected }
+        return selectedBills.sumOf { it.amount.toDouble() }
+    }
+
+    private fun clickBill(bill: Bill) {
+        if (state.value.isMultipleSelectMode) {
+            changeBillSelection(bill, !bill.isSelected)
+        } else {
+            if (bill.status != BillingStatus.PAID) {
+                sendEvent(ShowBill(bill))
+            } else {
+                val selectedBills = state.value.bills.filter { it.isSelected }
+                sendEvent(PayBill(selectedBills))
+            }
+        }
+    }
+
+    private fun longClickBill(bill: Bill) {
+        if (state.value.isMultipleSelectMode) {
+            dismissMultipleSelectMode()
+        } else {
+            if (!bill.isSelected && bill.status != BillingStatus.PAID) {
+                changeBillSelection(bill, true)
+            }
         }
     }
 

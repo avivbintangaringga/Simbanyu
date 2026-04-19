@@ -84,6 +84,8 @@ fun UsageHistoryItem(
             text = "$amount m³",
             style = SimbanyuTheme.typography.displayMedium
         )
+
+        // TODO: Tambahkan fitur expand lihat detail
     }
 }
 
