@@ -88,7 +88,7 @@ fun MainScreenContent(
                         modifier = Modifier
                             .clip(CircleShape)
                             .clickable {
-
+                                // TODO: Show notifications popup
                             }
                             .padding(horizontal = SimbanyuTheme.padding.large),
                         painter = painterResource(R.drawable.ic_notifications),
