@@ -144,7 +144,6 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
                 )
             }
             // TODO: Reload data
-            delay(3000)
             updateState {
                 it.copy(
                     isRefreshing = false
@@ -168,8 +167,6 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
                     isLoading = true
                 )
             }
-
-            delay(1000)
 
             // TODO: Implement load data
             val newData = fakeBills

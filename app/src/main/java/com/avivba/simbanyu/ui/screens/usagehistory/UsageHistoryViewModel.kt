@@ -73,7 +73,6 @@ class UsageHistoryViewModel :
                 )
             }
             // TODO: Reload data
-            delay(3000)
             updateState {
                 it.copy(
                     isRefreshing = false
@@ -97,8 +96,6 @@ class UsageHistoryViewModel :
                     isLoading = true
                 )
             }
-
-            delay(1000)
 
             // TODO: Implement load data
             val newData = fakeUsages

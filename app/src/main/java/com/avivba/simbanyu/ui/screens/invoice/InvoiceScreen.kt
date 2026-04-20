@@ -117,7 +117,7 @@ fun InvoiceContent(
                     )
                     .padding(
                         horizontal = SimbanyuTheme.padding.extraLarge,
-                        vertical = SimbanyuTheme.padding.large
+                        vertical = SimbanyuTheme.padding.extraLarge
                     ),
             ) {
                 Column(

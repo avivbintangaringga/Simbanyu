@@ -5,6 +5,7 @@ import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceViewModel
 import com.avivba.simbanyu.ui.screens.login.LoginViewModel
 import com.avivba.simbanyu.ui.screens.main.MainViewModel
+import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodViewModel
 import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryViewModel
@@ -22,4 +23,6 @@ val viewModelModule = module {
     viewModel<ReportViewModel>()
     viewModel<ProfileViewModel>()
     viewModel<InvoiceViewModel>()
+    viewModel<PaymentMethodViewModel>()
+    viewModel<MainViewModel>()
 }

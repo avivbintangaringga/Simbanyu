@@ -277,7 +277,7 @@ fun BillHistoryContent(
                             iconTint = SimbanyuTheme.colors.statusPositiveText
                             iconBackgroundColor = SimbanyuTheme.colors.statusPositive
                         } else {
-                            iconId = R.drawable.ic_contract
+                            iconId = R.drawable.ic_circle
                             iconTint = SimbanyuTheme.colors.statusNeutralText
                             iconBackgroundColor = SimbanyuTheme.colors.statusNeutral
                         }

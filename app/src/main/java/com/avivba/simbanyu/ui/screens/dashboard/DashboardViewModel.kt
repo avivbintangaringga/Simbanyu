@@ -30,8 +30,6 @@ class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, Dash
                 )
             }
 
-            delay(3000)
-
             updateState {
                 it.copy(
                     isRefreshing = false,
@@ -49,8 +47,6 @@ class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, Dash
                     name = "Budiman Man"
                 )
             }
-
-            delay(1000)
 
             updateState {
                 it.copy(

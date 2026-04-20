@@ -12,6 +12,7 @@ import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceScreen
 import com.avivba.simbanyu.ui.screens.login.LoginContent
 import com.avivba.simbanyu.ui.screens.login.LoginScreen
+import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 
 @Composable
 fun SimbanyuApp(
@@ -56,7 +57,14 @@ fun SimbanyuApp(
         }
 
         composable<Screen.PaymentMethods> {
-            SimbanyuText(text = "Payment Methods")
+            PaymentMethodScreen(
+                onNavigate = { dest ->
+                    navHostController.navigate(dest)
+                },
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
+            )
         }
     }
 }
