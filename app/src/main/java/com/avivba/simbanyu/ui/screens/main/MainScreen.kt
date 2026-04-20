@@ -1,8 +1,20 @@
 package com.avivba.simbanyu.ui.screens.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.requiredWidthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -10,11 +22,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -85,17 +101,156 @@ fun MainScreenContent(
         topBar = {
             TopBar(
                 actions = {
-                    Icon(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable {
-                                // TODO: Show notifications popup
+                    Box(
+                        modifier = Modifier,
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .clickable {
+                                    onAction(MainAction.ShowNotifications)
+                                }
+                                .padding(
+                                    vertical = SimbanyuTheme.padding.large,
+                                    horizontal = SimbanyuTheme.padding.large
+                                ),
+                            painter = painterResource(R.drawable.ic_notifications),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.textHeading
+                        )
+
+                        if (state.isShowNotificationDot) {
+                            Box(
+                                modifier = Modifier
+                                    .offset(
+                                        x = 5.dp,
+                                        y = 5.dp
+                                    )
+                                    .requiredWidth(8.dp)
+                                    .height(8.dp)
+                                    .clip(CircleShape)
+                                    .background(SimbanyuTheme.colors.statusNegativeText)
+                            )
+                        }
+                    }
+
+                    DropdownMenu(
+                        expanded = state.isShowNotification,
+                        onDismissRequest = {
+                            onAction(MainAction.HideNotifications)
+                        },
+                        containerColor = SimbanyuTheme.colors.surfaceCard,
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .requiredWidthIn(
+                                    min = 250.dp
+                                )
+                                .padding(
+                                    horizontal = SimbanyuTheme.padding.medium,
+                                    vertical = SimbanyuTheme.padding.small
+                                ),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            SimbanyuText(
+                                modifier = Modifier,
+                                text = "Notifikasi",
+                                style = SimbanyuTheme.typography.titleSection,
+                                color = SimbanyuTheme.colors.textHeading
+                            )
+
+                            SimbanyuText(
+                                modifier = Modifier
+                                    .padding(
+                                        vertical = SimbanyuTheme.padding.small,
+                                        horizontal = SimbanyuTheme.padding.medium
+                                    )
+                                    .clip(SimbanyuTheme.shapes.medium)
+                                    .clickable {
+                                        onAction(MainAction.MarkAllAsRead)
+                                    },
+                                text = "Tandai baca",
+                                style = SimbanyuTheme.typography.bodyProminent,
+                                color = SimbanyuTheme.colors.brand
+                            )
+                        }
+
+                        Spacer(
+                            Modifier
+                                .height(1.dp)
+                                .fillMaxWidth()
+                                .background(SimbanyuTheme.colors.borderCard)
+                        )
+
+                        Column(
+                            modifier = Modifier
+                                .padding(
+                                    vertical = SimbanyuTheme.padding.small
+                                ),
+                        ) {
+                            state.notifications.forEach { notification ->
+                                Column(
+                                    modifier = Modifier
+                                        .clickable {
+                                            onAction(MainAction.MarkAsRead(notification))
+                                        }
+                                        .padding(
+                                            vertical = SimbanyuTheme.spacing.medium,
+                                            horizontal = SimbanyuTheme.padding.medium
+                                        ),
+                                    verticalArrangement = Arrangement.spacedBy(
+                                        SimbanyuTheme.spacing.small
+                                    )
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(
+                                            SimbanyuTheme.spacing.medium
+                                        )
+                                    ) {
+                                        if (!notification.isRead) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .requiredWidth(8.dp)
+                                                    .height(8.dp)
+                                                    .clip(CircleShape)
+                                                    .background(SimbanyuTheme.colors.brand)
+                                            )
+                                        }
+
+                                        SimbanyuText(
+                                            modifier = Modifier
+                                                .weight(1f),
+                                            text = notification.title,
+                                            style = SimbanyuTheme.typography.bodyProminent,
+                                            color = SimbanyuTheme.colors.textHeading
+                                        )
+
+                                    }
+
+                                    SimbanyuText(
+                                        modifier = Modifier,
+                                        text = notification.date,
+                                        style = SimbanyuTheme.typography.bodySmall,
+                                        color = SimbanyuTheme.colors.textInputDisabled,
+                                        fontStyle = FontStyle.Italic
+                                    )
+
+                                    SimbanyuText(
+                                        modifier = Modifier,
+                                        text = notification.body,
+                                        style = SimbanyuTheme.typography.bodyStandard,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                }
                             }
-                            .padding(horizontal = SimbanyuTheme.padding.large),
-                        painter = painterResource(R.drawable.ic_notifications),
-                        contentDescription = null,
-                        tint = SimbanyuTheme.colors.textHeading
-                    )
+                        }
+                    }
                 }
             )
         }
