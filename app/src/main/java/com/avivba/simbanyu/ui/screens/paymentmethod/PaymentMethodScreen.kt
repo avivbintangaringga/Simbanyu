@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.item.PaymentMethodItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceAction
@@ -99,7 +100,12 @@ fun PaymentMethodContent(
         bottomBar = {
             SimbanyuButton(
                 modifier = Modifier
-                    .padding(SimbanyuTheme.padding.large)
+                    .padding(
+                        horizontal = SimbanyuTheme.padding.large
+                    )
+                    .padding(
+                        bottom = SimbanyuTheme.padding.extraLarge
+                    )
                     .fillMaxWidth()
                     .background(
                         brush = SimbanyuTheme.colors.brush.brandVertical,
@@ -152,69 +158,16 @@ fun PaymentMethodContent(
                     )
 
                     types.second.forEach { method ->
-                        Box(
-                            modifier = modifier
+                        PaymentMethodItem(
+                            modifier = Modifier
                                 .fillMaxWidth()
-                                .background(
-                                    color = SimbanyuTheme.colors.surfaceCardAlternate,
-                                    shape = SimbanyuTheme.shapes.large
-                                )
-                                .clip(
-                                    shape = SimbanyuTheme.shapes.large
-                                )
-                                .clickable {
-                                    onAction(PaymentMethodUiAction.SelectPaymentMethod(method))
-                                }
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .padding(SimbanyuTheme.padding.large),
-                                horizontalArrangement = Arrangement.spacedBy(
-                                    SimbanyuTheme.spacing.large
-                                ),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_payment),
-                                    contentDescription = null,
-                                    tint = SimbanyuTheme.colors.brand,
-                                    modifier = Modifier
-                                        .background(
-                                            color = SimbanyuTheme.colors.brand.copy(alpha = 0.3f),
-                                            shape = CircleShape
-                                        )
-                                        .padding(SimbanyuTheme.padding.medium)
-                                )
-                                Column(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                ) {
-                                    SimbanyuText(
-                                        text = method.name,
-                                        style = SimbanyuTheme.typography.bodyProminent
-                                    )
-                                    Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-                                    SimbanyuText(
-                                        text = "Biaya layanan: ${method.fee}",
-                                        style = SimbanyuTheme.typography.bodySmall
-                                    )
-                                }
-
-                                var checkIcon = R.drawable.ic_circle
-                                var iconTint = SimbanyuTheme.colors.statusNeutral
-
-                                if (state.selectedPaymentMethod?.id == method.id) {
-                                    checkIcon = R.drawable.ic_check_circle
-                                    iconTint = SimbanyuTheme.colors.brand
-                                }
-
-                                Icon(
-                                    painter = painterResource(checkIcon),
-                                    contentDescription = null,
-                                    tint = iconTint,
-                                )
+                                .height(IntrinsicSize.Min),
+                            method = method,
+                            selected = state.selectedPaymentMethod == method,
+                            onClick = {
+                                onAction(PaymentMethodUiAction.SelectPaymentMethod(method))
                             }
-                        }
+                        )
                     }
                 }
             }

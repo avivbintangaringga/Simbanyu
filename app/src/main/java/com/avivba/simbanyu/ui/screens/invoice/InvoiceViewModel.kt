@@ -14,7 +14,6 @@ class InvoiceViewModel(
     private val billIds = savedStateHandle.toRoute<Screen.Invoice>().ids
 
     init {
-        Log.d("InvoiceViewModel", "BillIds: $billIds")
         updateState {
             fakeInvoiceState
         }

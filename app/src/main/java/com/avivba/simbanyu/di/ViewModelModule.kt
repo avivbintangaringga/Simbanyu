@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.di
 
+import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsViewModel
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryViewModel
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceViewModel
@@ -25,4 +26,5 @@ val viewModelModule = module {
     viewModel<InvoiceViewModel>()
     viewModel<PaymentMethodViewModel>()
     viewModel<MainViewModel>()
+    viewModel<BillDetailsViewModel>()
 }

@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.avivba.simbanyu.ui.components.background.Background
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
+import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceScreen
 import com.avivba.simbanyu.ui.screens.login.LoginContent
 import com.avivba.simbanyu.ui.screens.login.LoginScreen
@@ -53,7 +54,11 @@ fun SimbanyuApp(
         }
 
         composable<Screen.BillDetails> {
-            SimbanyuText(text = "Bill Details")
+            BillDetailsScreen(
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
+            )
         }
 
         composable<Screen.PaymentMethods> {
