@@ -55,16 +55,16 @@ val fakeInvoiceState = InvoiceUiState(
             ),
             subtotal = "Rp 135.000"
         ),
-        Bill(
-            id = "INV-2023-11-001",
-            periodMonth = "November",
-            periodYear = 2023,
-            details = listOf(
-                Cost("Biaya Air (Sisa)", "Rp 21.000"),
-                Cost("Pajak", "Rp 1.000")
-            ),
-            subtotal = "Rp 22.000"
-        )
+//        Bill(
+//            id = "INV-2023-11-001",
+//            periodMonth = "November",
+//            periodYear = 2023,
+//            details = listOf(
+//                Cost("Biaya Air (Sisa)", "Rp 21.000"),
+//                Cost("Pajak", "Rp 1.000")
+//            ),
+//            subtotal = "Rp 22.000"
+//        )
     ),
     paymentMethodId = "pm_gopay",
     paymentMethodName = "Gopay",

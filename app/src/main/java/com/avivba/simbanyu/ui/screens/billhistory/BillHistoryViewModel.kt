@@ -97,8 +97,12 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
     }
 
     private fun payMultipleBills() {
-        val selectedBillIds = _bills.value.filter { it.isSelected }.map { it.id }
-        sendEvent(PayBill(selectedBillIds))
+        viewModelScope.launch {
+            val selectedBillIds = _bills.value.filter { it.isSelected }.map { it.id }
+            sendEvent(PayBill(selectedBillIds))
+            delay(500)
+            dismissMultipleSelectMode()
+        }
     }
 
     private fun longClickBill(bill: Bill) {
