@@ -1,7 +1,7 @@
 package com.avivba.simbanyu.ui.screens.dashboard
 
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.shared.BaseViewModel
+import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

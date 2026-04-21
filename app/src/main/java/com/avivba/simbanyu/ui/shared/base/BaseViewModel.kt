@@ -1,4 +1,4 @@
-package com.avivba.simbanyu.ui.shared
+package com.avivba.simbanyu.ui.shared.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +15,7 @@ abstract class BaseViewModel<State, Action, Event>(
     private val _state = MutableStateFlow(initialState)
     val state = _state.asStateFlow()
 
-    private val _event = Channel<Event>(capacity = Channel.BUFFERED)
+    private val _event = Channel<Event>(capacity = Channel.Factory.BUFFERED)
     val event = _event.receiveAsFlow()
 
     protected fun sendEvent(event: Event) {

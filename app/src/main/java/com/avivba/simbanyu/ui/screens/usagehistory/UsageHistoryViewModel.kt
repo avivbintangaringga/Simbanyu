@@ -2,7 +2,7 @@ package com.avivba.simbanyu.ui.screens.usagehistory
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.shared.BaseViewModel
+import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged

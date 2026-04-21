@@ -3,7 +3,7 @@ package com.avivba.simbanyu.ui.screens.billdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.avivba.simbanyu.ui.shared.BaseViewModel
+import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.Screen
 import kotlinx.coroutines.launch
 
