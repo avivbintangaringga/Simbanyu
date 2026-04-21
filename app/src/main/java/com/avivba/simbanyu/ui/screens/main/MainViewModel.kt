@@ -34,6 +34,7 @@ class MainViewModel : BaseViewModel<MainUiState, MainAction, MainEvent>(
                             selectedScreen = action.screen
                         )
                     }
+                    sendEvent(MainEvent.ChangeScreen(action.screen))
                 }
 
                 MainAction.ShowNotifications -> {

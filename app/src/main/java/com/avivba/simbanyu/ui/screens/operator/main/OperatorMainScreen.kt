@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -41,6 +42,7 @@ import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.screens.operator.dashboard.OperatorDashboardScreen
 import com.avivba.simbanyu.ui.screens.profile.ProfileScreen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.KoinApplication
 import org.koin.compose.viewmodel.koinActivityViewModel
 import org.koin.dsl.KoinConfiguration
@@ -54,9 +56,26 @@ fun OperatorMainScreen(
     viewModel: OperatorMainViewModel = koinActivityViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val navController = rememberNavController()
+
+    ObserveAsEvent(viewModel.event) {
+        when (it) {
+            is OperatorMainEvent.ChangeScreen -> {
+                navController.navigate(it.screen) {
+                    popUpTo(navController.graph.id) {
+                        saveState = true
+                    }
+
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        }
+    }
 
     OperatorMainScreenContent(
         modifier = modifier,
+        navController = navController,
         onNavigate = onNavigate,
         onAction = viewModel::onAction,
         onLogout = onLogout,
@@ -96,12 +115,11 @@ private val menus = listOf(
 fun OperatorMainScreenContent(
     modifier: Modifier = Modifier,
     state: OperatorMainUiState,
+    navController: NavHostController = rememberNavController(),
     onAction: (OperatorMainAction) -> Unit = {},
     onNavigate: (Screen) -> Unit = {},
     onLogout: () -> Unit
 ) {
-    val navController = rememberNavController()
-
     Scaffold(
         modifier = modifier,
         containerColor = Color.Transparent,
@@ -111,14 +129,6 @@ fun OperatorMainScreenContent(
                 menus = menus,
                 onSelectedMenuChanged = { menu ->
                     onAction(OperatorMainAction.ChangeScreen(menu.screen))
-                    navController.navigate(menu.screen) {
-                        popUpTo(navController.graph.id) {
-                            saveState = true
-                        }
-
-                        launchSingleTop = true
-                        restoreState = true
-                    }
                 })
         },
         topBar = {
@@ -237,7 +247,10 @@ fun OperatorMainScreenContent(
         ) {
             composable<Screen.OperatorMainScreen.Home> {
                 OperatorDashboardScreen(
-                    onNavigate = onNavigate
+                    onNavigate = onNavigate,
+                    onChangeTab = { tab ->
+                        onAction(OperatorMainAction.ChangeScreen(tab))
+                    }
                 )
             }
             composable<Screen.OperatorMainScreen.Subscribers> {

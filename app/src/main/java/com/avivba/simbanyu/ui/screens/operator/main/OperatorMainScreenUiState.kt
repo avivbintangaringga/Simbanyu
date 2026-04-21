@@ -18,7 +18,9 @@ sealed interface OperatorMainAction {
     data class MarkAsRead(val notification: Notification): OperatorMainAction
 }
 
-sealed interface OperatorMainEvent {}
+sealed interface OperatorMainEvent {
+    data class ChangeScreen(val screen: Screen) : OperatorMainEvent
+}
 
 val fakeNotifications = (1..15).map { i ->
     Notification(

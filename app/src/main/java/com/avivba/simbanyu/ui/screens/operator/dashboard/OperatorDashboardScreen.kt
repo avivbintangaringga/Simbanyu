@@ -33,7 +33,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun OperatorDashboardScreen(
     viewModel: OperatorDashboardViewModel = koinViewModel(),
-    onNavigate: (Screen) -> Unit = {}
+    onNavigate: (Screen) -> Unit = {},
+    onChangeTab: (Screen) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -53,7 +54,8 @@ fun OperatorDashboardScreen(
     ) {
         OperatorDashboardContent(
             state = state,
-            onAction = viewModel::onAction
+            onAction = viewModel::onAction,
+            onChangeTab = onChangeTab
         )
     }
 }
@@ -62,7 +64,8 @@ fun OperatorDashboardScreen(
 fun OperatorDashboardContent(
     modifier: Modifier = Modifier,
     state: OperatorDashboardUiState,
-    onAction: (OperatorDashboardAction) -> Unit = {}
+    onAction: (OperatorDashboardAction) -> Unit = {},
+    onChangeTab: (Screen) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
@@ -169,7 +172,10 @@ fun OperatorDashboardContent(
                 iconId = R.drawable.ic_group_filled,
                 iconTint = SimbanyuTheme.colors.statusWarningText,
                 title = "Pelanggan",
-                subTitle = "Daftar pelanggan aktif"
+                subTitle = "Daftar pelanggan aktif",
+                onClick = {
+                    onChangeTab(Screen.OperatorMainScreen.Subscribers)
+                }
             )
 
             SimbanyuCardButton(
@@ -177,7 +183,10 @@ fun OperatorDashboardContent(
                 iconId = R.drawable.ic_feedback_filled,
                 iconTint = SimbanyuTheme.colors.statusNegativeText,
                 title = "Laporan",
-                subTitle = "Lihat aduan pelanggan"
+                subTitle = "Lihat aduan pelanggan",
+                onClick = {
+                    onChangeTab(Screen.OperatorMainScreen.Report)
+                }
             )
         }
 

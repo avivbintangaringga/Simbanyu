@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.operator.dashboard
 
+import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.model.ActivityData
 
 data class OperatorDashboardUiState(

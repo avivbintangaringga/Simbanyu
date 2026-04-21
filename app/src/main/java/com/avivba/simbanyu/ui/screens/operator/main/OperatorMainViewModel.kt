@@ -5,9 +5,10 @@ import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Notification
 import kotlinx.coroutines.launch
 
-class OperatorMainViewModel : BaseViewModel<OperatorMainUiState, OperatorMainAction, OperatorMainEvent>(
-    OperatorMainUiState()
-) {
+class OperatorMainViewModel :
+    BaseViewModel<OperatorMainUiState, OperatorMainAction, OperatorMainEvent>(
+        OperatorMainUiState()
+    ) {
     init {
         viewModelScope.launch {
             state.collect { currentState ->
@@ -34,6 +35,7 @@ class OperatorMainViewModel : BaseViewModel<OperatorMainUiState, OperatorMainAct
                             selectedScreen = action.screen
                         )
                     }
+                    sendEvent(OperatorMainEvent.ChangeScreen(action.screen))
                 }
 
                 OperatorMainAction.ShowNotifications -> {

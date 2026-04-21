@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.main
 
+import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainEvent
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.model.Notification
 
@@ -19,7 +20,9 @@ sealed interface MainAction {
     data class MarkAsRead(val notification: Notification): MainAction
 }
 
-sealed interface MainEvent {}
+sealed interface MainEvent {
+    data class ChangeScreen(val screen: Screen) : MainEvent
+}
 
 val fakeNotifications = (1..15).map { i ->
     Notification(
