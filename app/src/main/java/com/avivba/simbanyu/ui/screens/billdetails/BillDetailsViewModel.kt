@@ -24,6 +24,9 @@ class BillDetailsViewModel(
             when(action) {
                 BillDetailsAction.DownloadReceipt -> downloadReceipt()
                 BillDetailsAction.NavigateBack -> sendEvent(BillDetailsEvent.NavigateBack)
+                BillDetailsAction.OpenPaymentPage -> {
+
+                }
             }
         }
     }

@@ -154,96 +154,96 @@ fun BillHistoryContent(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .height(IntrinsicSize.Max)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            listOf(
-                                SimbanyuTheme.colors.brand,
-                                SimbanyuTheme.colors.statusPositiveText
-                            )
-                        ),
-                        shape = SimbanyuTheme.shapes.large
-                    )
-                    .padding(
-                        SimbanyuTheme.padding.large
-                    ),
-            ) {
-                SimbanyuText(
-                    text = "TELAH DIBAYAR",
-                    style = SimbanyuTheme.typography.labelBadge,
-                    color = SimbanyuTheme.colors.brandText
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SimbanyuText(
-                        modifier = Modifier,
-                        text = "Rp.",
-                        color = SimbanyuTheme.colors.brandText,
-                        style = SimbanyuTheme.typography.titleSection
-                    )
-
-                    SimbanyuText(
-                        text = state.totalPaid,
-                        style = SimbanyuTheme.typography.displayMedium,
-                        color = SimbanyuTheme.colors.brandText
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            listOf(
-                                SimbanyuTheme.colors.brand,
-                                SimbanyuTheme.colors.statusNegativeText
-                            )
-                        ),
-                        shape = SimbanyuTheme.shapes.large
-                    )
-                    .padding(
-                        SimbanyuTheme.padding.large
-                    ),
-            ) {
-                SimbanyuText(
-                    text = "BELUM DIBAYAR",
-                    style = SimbanyuTheme.typography.labelBadge,
-                    color = SimbanyuTheme.colors.brandText
-                )
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SimbanyuText(
-                        modifier = Modifier,
-                        text = "Rp.",
-                        color = SimbanyuTheme.colors.brandText,
-                        style = SimbanyuTheme.typography.titleSection
-                    )
-
-                    SimbanyuText(
-                        text = state.totalUnpaid,
-                        style = SimbanyuTheme.typography.displayMedium,
-                        color = SimbanyuTheme.colors.brandText
-                    )
-                }
-            }
-        }
+//        Row(
+//            modifier = Modifier
+//                .height(IntrinsicSize.Max)
+//                .fillMaxWidth(),
+//            horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
+//        ) {
+//            Column(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .background(
+//                        brush = Brush.horizontalGradient(
+//                            listOf(
+//                                SimbanyuTheme.colors.brand,
+//                                SimbanyuTheme.colors.statusPositiveText
+//                            )
+//                        ),
+//                        shape = SimbanyuTheme.shapes.large
+//                    )
+//                    .padding(
+//                        SimbanyuTheme.padding.large
+//                    ),
+//            ) {
+//                SimbanyuText(
+//                    text = "TELAH DIBAYAR",
+//                    style = SimbanyuTheme.typography.labelBadge,
+//                    color = SimbanyuTheme.colors.brandText
+//                )
+//
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.Start,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    SimbanyuText(
+//                        modifier = Modifier,
+//                        text = "Rp.",
+//                        color = SimbanyuTheme.colors.brandText,
+//                        style = SimbanyuTheme.typography.titleSection
+//                    )
+//
+//                    SimbanyuText(
+//                        text = state.totalPaid,
+//                        style = SimbanyuTheme.typography.displayMedium,
+//                        color = SimbanyuTheme.colors.brandText
+//                    )
+//                }
+//            }
+//
+//            Column(
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .background(
+//                        brush = Brush.horizontalGradient(
+//                            listOf(
+//                                SimbanyuTheme.colors.brand,
+//                                SimbanyuTheme.colors.statusNegativeText
+//                            )
+//                        ),
+//                        shape = SimbanyuTheme.shapes.large
+//                    )
+//                    .padding(
+//                        SimbanyuTheme.padding.large
+//                    ),
+//            ) {
+//                SimbanyuText(
+//                    text = "BELUM DIBAYAR",
+//                    style = SimbanyuTheme.typography.labelBadge,
+//                    color = SimbanyuTheme.colors.brandText
+//                )
+//
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.Start,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    SimbanyuText(
+//                        modifier = Modifier,
+//                        text = "Rp.",
+//                        color = SimbanyuTheme.colors.brandText,
+//                        style = SimbanyuTheme.typography.titleSection
+//                    )
+//
+//                    SimbanyuText(
+//                        text = state.totalUnpaid,
+//                        style = SimbanyuTheme.typography.displayMedium,
+//                        color = SimbanyuTheme.colors.brandText
+//                    )
+//                }
+//            }
+//        }
 
         LazyColumn(
             modifier = Modifier
@@ -264,10 +264,15 @@ fun BillHistoryContent(
                 var statusBackgroundColor = SimbanyuTheme.colors.brand
 
                 if (bill.status == BillingStatus.PAID) {
-                    iconId = R.drawable.ic_payment
+                    iconId = R.drawable.ic_done_all
                     iconTint = SimbanyuTheme.colors.statusPositiveText
                     iconBackgroundColor = SimbanyuTheme.colors.statusPositive
                     statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
+                } else if (bill.status == BillingStatus.PENDING) {
+                    iconId = R.drawable.ic_pending
+                    iconTint = SimbanyuTheme.colors.statusWarningText
+                    iconBackgroundColor = SimbanyuTheme.colors.statusWarning
+                    statusBackgroundColor = SimbanyuTheme.colors.statusWarningText
                 } else {
                     statusBackgroundColor = SimbanyuTheme.colors.statusNegativeText
 
@@ -288,6 +293,12 @@ fun BillHistoryContent(
                     }
                 }
 
+                val isDisabled = if(state.isMultipleSelectMode) {
+                    bill.status == BillingStatus.PAID || bill.status == BillingStatus.PENDING
+                } else {
+                    false
+                }
+
                 BillHistoryItem(
                     period = "${bill.periodMonth} ${bill.periodYear}",
                     id = bill.id,
@@ -297,7 +308,7 @@ fun BillHistoryContent(
                     iconTint = iconTint,
                     iconBackgroundColor = iconBackgroundColor,
                     statusBackgroundColor = statusBackgroundColor,
-                    isDisabled = state.isMultipleSelectMode && bill.status == BillingStatus.PAID,
+                    isDisabled = isDisabled,
                     onClick = {
                         onAction(BillHistoryAction.ClickBill(bill))
                     },

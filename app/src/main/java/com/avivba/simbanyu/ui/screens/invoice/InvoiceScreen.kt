@@ -369,82 +369,82 @@ fun InvoiceContent(
                 }
             }
 
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = SimbanyuTheme.padding.medium)
-                ) {
-                    SimbanyuText(
-                        text = "Metode Pembayaran",
-                        style = SimbanyuTheme.typography.titleSection,
-                    )
-
-                    Box(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = SimbanyuTheme.padding.large,
-                            )
-                            .background(
-                                color = SimbanyuTheme.colors.surfaceCardAlternate,
-                                shape = SimbanyuTheme.shapes.large
-                            )
-                            .clip(
-                                shape = SimbanyuTheme.shapes.large
-                            )
-                            .clickable {
-                                onAction(InvoiceAction.SelectPaymentMethod)
-                            }
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .padding(SimbanyuTheme.padding.large),
-                            horizontalArrangement = Arrangement.spacedBy(
-                                SimbanyuTheme.spacing.large
-                            ),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_payment),
-                                contentDescription = null,
-                                tint = SimbanyuTheme.colors.brand,
-                                modifier = Modifier
-                                    .background(
-                                        color = SimbanyuTheme.colors.brand.copy(alpha = 0.3f),
-                                        shape = CircleShape
-                                    )
-                                    .padding(SimbanyuTheme.padding.medium)
-                            )
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                            ) {
-                                SimbanyuText(
-                                    text = if (state.paymentMethodId.isEmpty()) {
-                                        "Pilih metode pembayaran"
-                                    } else {
-                                        state.paymentMethodName
-                                    },
-                                    style = SimbanyuTheme.typography.bodyProminent
-                                )
-                                if (!state.paymentMethodId.isEmpty()) {
-                                    Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-                                    SimbanyuText(
-                                        text = "Biaya layanan: Rp. 5000",
-                                        style = SimbanyuTheme.typography.bodySmall
-                                    )
-                                }
-                            }
-                            Icon(
-                                painter = painterResource(R.drawable.ic_chevron_forward),
-                                contentDescription = null,
-                                tint = SimbanyuTheme.colors.brand,
-                            )
-                        }
-                    }
-                }
-            }
+//            item {
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(vertical = SimbanyuTheme.padding.medium)
+//                ) {
+//                    SimbanyuText(
+//                        text = "Metode Pembayaran",
+//                        style = SimbanyuTheme.typography.titleSection,
+//                    )
+//
+//                    Box(
+//                        modifier = modifier
+//                            .fillMaxWidth()
+//                            .padding(
+//                                top = SimbanyuTheme.padding.large,
+//                            )
+//                            .background(
+//                                color = SimbanyuTheme.colors.surfaceCardAlternate,
+//                                shape = SimbanyuTheme.shapes.large
+//                            )
+//                            .clip(
+//                                shape = SimbanyuTheme.shapes.large
+//                            )
+//                            .clickable {
+//                                onAction(InvoiceAction.SelectPaymentMethod)
+//                            }
+//                    ) {
+//                        Row(
+//                            modifier = Modifier
+//                                .padding(SimbanyuTheme.padding.large),
+//                            horizontalArrangement = Arrangement.spacedBy(
+//                                SimbanyuTheme.spacing.large
+//                            ),
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Icon(
+//                                painter = painterResource(R.drawable.ic_payment),
+//                                contentDescription = null,
+//                                tint = SimbanyuTheme.colors.brand,
+//                                modifier = Modifier
+//                                    .background(
+//                                        color = SimbanyuTheme.colors.brand.copy(alpha = 0.3f),
+//                                        shape = CircleShape
+//                                    )
+//                                    .padding(SimbanyuTheme.padding.medium)
+//                            )
+//                            Column(
+//                                modifier = Modifier
+//                                    .weight(1f)
+//                            ) {
+//                                SimbanyuText(
+//                                    text = if (state.paymentMethodId.isEmpty()) {
+//                                        "Pilih metode pembayaran"
+//                                    } else {
+//                                        state.paymentMethodName
+//                                    },
+//                                    style = SimbanyuTheme.typography.bodyProminent
+//                                )
+//                                if (!state.paymentMethodId.isEmpty()) {
+//                                    Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
+//                                    SimbanyuText(
+//                                        text = "Biaya layanan: Rp. 5000",
+//                                        style = SimbanyuTheme.typography.bodySmall
+//                                    )
+//                                }
+//                            }
+//                            Icon(
+//                                painter = painterResource(R.drawable.ic_chevron_forward),
+//                                contentDescription = null,
+//                                tint = SimbanyuTheme.colors.brand,
+//                            )
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

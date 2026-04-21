@@ -109,7 +109,7 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
         if (state.value.isMultipleSelectMode) {
             dismissMultipleSelectMode()
         } else {
-            if (!bill.isSelected && bill.status != BillingStatus.PAID) {
+            if (!bill.isSelected && bill.status == BillingStatus.UNPAID) {
                 changeBillSelection(bill, true)
             }
         }

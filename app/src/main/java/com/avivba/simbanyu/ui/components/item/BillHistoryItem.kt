@@ -111,14 +111,14 @@ fun BillHistoryItem(
                     modifier = Modifier
                         .background(
                             color = statusBackgroundColor,
-                            shape = SimbanyuTheme.shapes.medium
+                            shape = SimbanyuTheme.shapes.large
                         )
                         .padding(
                             vertical = SimbanyuTheme.padding.extraSmall,
                             horizontal = SimbanyuTheme.padding.medium
                         ),
                     text = status,
-                    style = SimbanyuTheme.typography.labelUnit,
+                    style = SimbanyuTheme.typography.bodySmall,
                     color = statusColor
                 )
             }

@@ -24,10 +24,10 @@ data class InvoiceUiState(
 
     val totalAmount: String = "",
     val bills: List<Bill> = emptyList(),
-    val paymentMethodId: String = "",
-    val paymentMethodImage: String = "",
-    val paymentMethodName: String = "",
-    val paymentMethodFee: String = "",
+//    val paymentMethodId: String = "",
+//    val paymentMethodImage: String = "",
+//    val paymentMethodName: String = "",
+//    val paymentMethodFee: String = "",
 )
 
 sealed interface InvoiceAction {
@@ -66,10 +66,10 @@ val fakeInvoiceState = InvoiceUiState(
 //            subtotal = "Rp 22.000"
 //        )
     ),
-    paymentMethodId = "pm_gopay",
-    paymentMethodName = "Gopay",
-    paymentMethodFee = "Rp 2.500",
-    paymentMethodImage = "",
+//    paymentMethodId = "pm_gopay",
+//    paymentMethodName = "Gopay",
+//    paymentMethodFee = "Rp 2.500",
+//    paymentMethodImage = "",
     name = "Raditya Dika",
     address = "Sawahan 5, Jatiayu, Karangmojo",
     meterId = "123456789",

@@ -2,6 +2,7 @@ package com.avivba.simbanyu.ui.screens.billhistory
 
 enum class BillingStatus(val status: String) {
     PAID("LUNAS"),
+    PENDING("MENUNGGU PEMBAYARAN"),
     UNPAID("BELUM DIBAYAR")
 }
 
@@ -46,9 +47,9 @@ val fakeBills = listOf(
     Bill("24-1", "150.000", "Januari", 2024, BillingStatus.PAID),
     Bill("24-2", "165.000", "Februari", 2024, BillingStatus.PAID),
     Bill("24-3", "140.000", "Maret", 2024, BillingStatus.PAID),
-    Bill("24-4", "155.000", "April", 2024, BillingStatus.UNPAID),
-    Bill("24-5", "145.000", "Mei", 2024, BillingStatus.UNPAID),
-    Bill("24-6", "160.000", "Juni", 2024, BillingStatus.UNPAID),
+    Bill("24-4", "155.000", "April", 2024, BillingStatus.PENDING),
+    Bill("24-5", "145.000", "Mei", 2024, BillingStatus.PENDING),
+    Bill("24-6", "160.000", "Juni", 2024, BillingStatus.PENDING),
     Bill("24-7", "150.000", "Juli", 2024, BillingStatus.UNPAID),
     Bill("24-8", "155.000", "Agustus", 2024, BillingStatus.UNPAID),
     Bill("24-9", "140.000", "September", 2024, BillingStatus.UNPAID),
