@@ -9,6 +9,7 @@ import com.avivba.simbanyu.ui.screens.main.MainViewModel
 import com.avivba.simbanyu.ui.screens.operator.announcement.OperatorAnnouncementViewModel
 import com.avivba.simbanyu.ui.screens.operator.dashboard.OperatorDashboardViewModel
 import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainViewModel
+import com.avivba.simbanyu.ui.screens.operator.subsribers.SubscribersViewModel
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodViewModel
 import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel
@@ -29,7 +30,9 @@ val viewModelModule = module {
     viewModel<PaymentMethodViewModel>()
     viewModel<BillDetailsViewModel>()
 
+    // OPERATOR
     viewModel<OperatorMainViewModel>()
     viewModel<OperatorDashboardViewModel>()
     viewModel<OperatorAnnouncementViewModel>()
+    viewModel<SubscribersViewModel>()
 }

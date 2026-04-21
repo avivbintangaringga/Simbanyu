@@ -5,7 +5,7 @@ data class ProfileUiState(
     val meterId: String = "",
     val phone: String = "",
     val address: String = "",
-    val image: String = "",
+    val imageUrl: String = "",
     val category: String = "",
 )
 
