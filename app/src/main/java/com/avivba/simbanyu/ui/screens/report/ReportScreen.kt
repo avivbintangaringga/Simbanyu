@@ -79,8 +79,7 @@ fun ReportScreen(
     }
 
     ReportContent(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier,
         state = state,
         onAction = viewModel::onAction
     )

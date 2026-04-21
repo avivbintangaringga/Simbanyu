@@ -485,7 +485,7 @@ fun BillDetailsContent(
 
 @Preview(showBackground = true, device = Devices.PIXEL_7, showSystemUi = false)
 @Composable
-fun BillDetailsPreview() {
+private fun BillDetailsPreview() {
     BillDetailsContent(
         state = fakeBillDetailsUiState
     )

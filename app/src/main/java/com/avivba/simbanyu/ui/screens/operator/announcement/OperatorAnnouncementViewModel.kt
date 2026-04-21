@@ -5,31 +5,33 @@ import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Announcement
 import kotlinx.coroutines.launch
 
-class AnnouncementViewModel :
-    BaseViewModel<AnnouncementUiState, AnnouncementAction, AnnouncementEvent>(
-        AnnouncementUiState()
+class OperatorAnnouncementViewModel :
+    BaseViewModel<OperatorAnnouncementUiState, OperatorAnnouncementAction, OperatorAnnouncementEvent>(
+        OperatorAnnouncementUiState()
     ) {
 
     init {
-        load()
+        viewModelScope.launch {
+            load()
+        }
     }
 
-    override fun onAction(action: AnnouncementAction) {
+    override fun onAction(action: OperatorAnnouncementAction) {
         viewModelScope.launch {
             when (action) {
-                AnnouncementAction.Load -> load()
-                AnnouncementAction.Refresh -> refresh()
-                AnnouncementAction.CreateAnnouncement -> createAnnouncement()
-                is AnnouncementAction.DeleteAnnouncement -> deleteAnnouncement(action.announcement)
-                AnnouncementAction.NavigateBack -> sendEvent(AnnouncementEvent.NavigateBack)
-                AnnouncementAction.ShowCreateDialog -> {
+                OperatorAnnouncementAction.Load -> load()
+                OperatorAnnouncementAction.Refresh -> refresh()
+                OperatorAnnouncementAction.CreateAnnouncement -> createAnnouncement()
+                is OperatorAnnouncementAction.DeleteAnnouncement -> deleteAnnouncement(action.announcement)
+                OperatorAnnouncementAction.NavigateBack -> sendEvent(OperatorAnnouncementEvent.NavigateBack)
+                OperatorAnnouncementAction.ShowCreateDialog -> {
                     updateState {
                         it.copy(
                             isShowCreateDialog = true
                         )
                     }
                 }
-                AnnouncementAction.HideCreateDialog -> {
+                OperatorAnnouncementAction.HideCreateDialog -> {
                     updateState {
                         it.copy(
                             isShowCreateDialog = false
@@ -42,7 +44,7 @@ class AnnouncementViewModel :
 
     private fun load() {
         updateState {
-            fakeAnnouncementUiState
+            fakeOperatorAnnouncementUiState
         }
     }
 

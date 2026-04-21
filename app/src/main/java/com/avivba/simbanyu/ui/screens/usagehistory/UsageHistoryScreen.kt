@@ -68,6 +68,7 @@ fun UsageHistoryScreen(
     }
 
     PullToRefreshBox(
+        modifier = modifier,
         isRefreshing = state.isRefreshing,
         onRefresh = {
             viewModel.onAction(UsageHistoryAction.Refresh)

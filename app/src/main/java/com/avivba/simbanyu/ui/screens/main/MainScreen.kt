@@ -279,7 +279,7 @@ fun MainScreenContent(
 
 @Preview(showBackground = true)
 @Composable
-fun MainScreenPreview() {
+private fun MainScreenPreview() {
     KoinApplication(
         configuration = KoinConfiguration {
             modules(viewModelModule)

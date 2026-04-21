@@ -37,6 +37,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ProfileScreen(
+    modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {},
     onLogout: () -> Unit
@@ -52,6 +53,7 @@ fun ProfileScreen(
     }
 
     ProfileContent(
+        modifier = modifier,
         state = state,
         onAction = viewModel::onAction
     )

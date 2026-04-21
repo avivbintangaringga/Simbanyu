@@ -45,6 +45,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
+    modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {}
 ) {
@@ -62,6 +63,7 @@ fun LoginScreen(
     }
 
     LoginContent(
+        modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
     )
@@ -71,7 +73,7 @@ fun LoginScreen(
 fun LoginContent(
     modifier: Modifier = Modifier,
     state: LoginUiState,
-    onAction: (LoginAction) -> Unit,
+    onAction: (LoginAction) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
 
@@ -292,7 +294,6 @@ fun LoginContent(
 @Composable
 private fun LoginScreenPreview() {
     LoginContent(
-        onAction = {},
         state = LoginUiState(),
     )
 }

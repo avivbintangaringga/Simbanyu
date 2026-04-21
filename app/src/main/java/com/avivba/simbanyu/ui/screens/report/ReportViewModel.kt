@@ -11,46 +11,50 @@ class ReportViewModel : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
     ReportUiState()
 ) {
     init {
-        load()
+        viewModelScope.launch {
+            load()
+        }
     }
 
     override fun onAction(action: ReportAction) {
-        when (action) {
-            is ReportAction.PickImage -> {
-                // TODO: Implement pick image
-                updateState {
-                    it.copy(
-                        imageUri = "https://example.com/image.jpg"
-                    )
+        viewModelScope.launch {
+            when (action) {
+                is ReportAction.PickImage -> {
+                    // TODO: Implement pick image
+                    updateState {
+                        it.copy(
+                            imageUri = "https://example.com/image.jpg"
+                        )
+                    }
                 }
-            }
 
-            is ReportAction.GetMyLocation -> {
-            }
+                is ReportAction.GetMyLocation -> {
+                }
 
-            is ReportAction.SendReport -> {
-                sendReport()
-            }
+                is ReportAction.SendReport -> {
+                    sendReport()
+                }
 
-            is ReportAction.ChangeTab -> {
-                changeTab(action.index)
-            }
+                is ReportAction.ChangeTab -> {
+                    changeTab(action.index)
+                }
 
-            is ReportAction.Load -> {
-                load()
-            }
+                is ReportAction.Load -> {
+                    load()
+                }
 
-            is ReportAction.Refresh -> {
-                refresh()
-            }
+                is ReportAction.Refresh -> {
+                    refresh()
+                }
 
-            is ReportAction.ExpandItem -> {
-                setItemExpanded(action.report)
+                is ReportAction.ExpandItem -> {
+                    setItemExpanded(action.report)
+                }
             }
         }
     }
 
-    private fun validateFields(): Boolean  {
+    private fun validateFields(): Boolean {
         var isValid = true
 
         if (state.value.locationState.text.isEmpty()) {

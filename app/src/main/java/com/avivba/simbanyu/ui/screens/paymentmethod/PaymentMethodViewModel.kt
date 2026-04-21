@@ -11,7 +11,9 @@ class PaymentMethodViewModel(
 ) {
 
     init {
-        load()
+        viewModelScope.launch {
+            load()
+        }
     }
 
     override fun onAction(action: PaymentMethodUiAction) {

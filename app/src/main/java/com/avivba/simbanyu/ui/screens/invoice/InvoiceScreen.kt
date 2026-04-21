@@ -42,6 +42,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun InvoiceScreen(
+    modifier: Modifier = Modifier,
     viewModel: InvoiceViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {}
@@ -61,6 +62,7 @@ fun InvoiceScreen(
     }
 
     InvoiceContent(
+        modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
     )

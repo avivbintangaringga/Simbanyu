@@ -39,9 +39,9 @@ import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun AnnouncementScreen(
+fun OperatorAnnouncementScreen(
     modifier: Modifier = Modifier,
-    viewModel: AnnouncementViewModel = koinViewModel(),
+    viewModel: OperatorAnnouncementViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {}
 ) {
@@ -49,25 +49,25 @@ fun AnnouncementScreen(
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
-            AnnouncementEvent.NavigateBack -> {
+            OperatorAnnouncementEvent.NavigateBack -> {
                 onNavigateBack()
             }
         }
     }
 
-    AnnouncementContent(
+    OperatorAnnouncementContent(
+        modifier = modifier,
         state = state,
         onNavigate = onNavigate,
         onAction = viewModel::onAction
     )
-
 }
 
 @Composable
-fun AnnouncementContent(
+fun OperatorAnnouncementContent(
     modifier: Modifier = Modifier,
-    state: AnnouncementUiState,
-    onAction: (AnnouncementAction) -> Unit = {},
+    state: OperatorAnnouncementUiState,
+    onAction: (OperatorAnnouncementAction) -> Unit = {},
     onNavigate: (Screen) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
@@ -90,7 +90,7 @@ fun AnnouncementContent(
                             )
                             .clip(CircleShape)
                             .clickable {
-                                onAction(AnnouncementAction.NavigateBack)
+                                onAction(OperatorAnnouncementAction.NavigateBack)
                             }
                             .padding(
                                 SimbanyuTheme.padding.large
@@ -105,7 +105,7 @@ fun AnnouncementContent(
                 .padding(paddingValues),
             isRefreshing = state.isRefreshing,
             onRefresh = {
-                onAction(AnnouncementAction.Refresh)
+                onAction(OperatorAnnouncementAction.Refresh)
             }
         ) {
             Column(
@@ -142,7 +142,7 @@ fun AnnouncementContent(
                             )
                         }
                     ) {
-                        onAction(AnnouncementAction.ShowCreateDialog)
+                        onAction(OperatorAnnouncementAction.ShowCreateDialog)
                     }
                 }
 //                SimbanyuText(
@@ -182,9 +182,9 @@ fun AnnouncementContent(
 
 @Preview(showBackground = true, device = Devices.PIXEL_7, showSystemUi = false)
 @Composable
-fun AnnouncementPreview() {
-    AnnouncementContent(
-        state = AnnouncementUiState(
+private fun OperatorAnnouncementPreview() {
+    OperatorAnnouncementContent(
+        state = OperatorAnnouncementUiState(
             announcements = fakeAnnouncements
         )
     )

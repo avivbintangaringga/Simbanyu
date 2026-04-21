@@ -27,6 +27,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OperatorDashboardScreen(
+    modifier: Modifier = Modifier,
     viewModel: OperatorDashboardViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {},
     onChangeTab: (Screen) -> Unit = {}
@@ -48,6 +49,7 @@ fun OperatorDashboardScreen(
         }
     ) {
         OperatorDashboardContent(
+            modifier = modifier,
             state = state,
             onAction = viewModel::onAction,
             onChangeTab = onChangeTab
@@ -211,7 +213,7 @@ fun OperatorDashboardContent(
 
 @Preview(showBackground = true)
 @Composable
-fun OperatorDashboardPreview() {
+private fun OperatorDashboardPreview() {
     OperatorDashboardContent(
         state = fakeOperatorDashboardUiState
     )

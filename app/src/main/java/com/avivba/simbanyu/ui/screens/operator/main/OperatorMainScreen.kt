@@ -280,7 +280,7 @@ fun OperatorMainScreenContent(
 
 @Preview(showBackground = true)
 @Composable
-fun OperatorMainScreenPreview() {
+private fun OperatorMainScreenPreview() {
     KoinApplication(
         configuration = KoinConfiguration {
             modules(viewModelModule)

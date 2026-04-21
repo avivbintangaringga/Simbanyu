@@ -172,7 +172,7 @@ fun PaymentMethodContent(
 
 @Preview(showBackground = true, device = Devices.PIXEL_7, showSystemUi = false)
 @Composable
-fun PaymentMethodPreview() {
+private fun PaymentMethodPreview() {
     PaymentMethodContent(
         state = PaymentMethodUiState(
             isLoading = false,

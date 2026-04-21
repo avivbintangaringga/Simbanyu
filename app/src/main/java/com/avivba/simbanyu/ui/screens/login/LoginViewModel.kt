@@ -8,9 +8,11 @@ class LoginViewModel : BaseViewModel<LoginUiState, LoginAction, LoginEvent>(
     LoginUiState()
 ) {
     override fun onAction(action: LoginAction) {
-        when (action) {
-            LoginAction.Login -> tryLogin()
-            LoginAction.TogglePasswordVisibility -> togglePasswordVisibility()
+        viewModelScope.launch {
+            when (action) {
+                LoginAction.Login -> tryLogin()
+                LoginAction.TogglePasswordVisibility -> togglePasswordVisibility()
+            }
         }
     }
 

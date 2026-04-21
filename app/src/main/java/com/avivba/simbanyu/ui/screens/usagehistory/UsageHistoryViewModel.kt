@@ -18,17 +18,21 @@ class UsageHistoryViewModel :
     private val _usages = MutableStateFlow<List<Usage>>(emptyList())
 
     init {
-        observeDataChanges()
-        load()
+        viewModelScope.launch {
+            observeDataChanges()
+            load()
+        }
     }
 
     override fun onAction(action: UsageHistoryAction) {
-        when (action) {
-            UsageHistoryAction.Load -> load()
-            UsageHistoryAction.Refresh -> refresh()
-            is UsageHistoryAction.Filter -> filter(action.year)
-            is UsageHistoryAction.ClickUsage -> {
+        viewModelScope.launch {
+            when (action) {
+                UsageHistoryAction.Load -> load()
+                UsageHistoryAction.Refresh -> refresh()
+                is UsageHistoryAction.Filter -> filter(action.year)
+                is UsageHistoryAction.ClickUsage -> {
 
+                }
             }
         }
     }

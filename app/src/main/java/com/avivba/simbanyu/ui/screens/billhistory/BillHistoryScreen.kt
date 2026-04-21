@@ -39,6 +39,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BillHistoryScreen(
+    modifier: Modifier = Modifier,
     viewModel: BillHistoryViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {}
 ) {
@@ -57,6 +58,7 @@ fun BillHistoryScreen(
     }
 
     PullToRefreshBox(
+        modifier = modifier,
         isRefreshing = state.isRefreshing,
         onRefresh = {
             viewModel.onAction(BillHistoryAction.Refresh)
@@ -351,7 +353,7 @@ fun BillHistoryContent(
 
 @Preview(showBackground = true, device = Devices.PIXEL_7, showSystemUi = false)
 @Composable
-fun BillHistoryPreview() {
+private fun BillHistoryPreview() {
     BillHistoryContent(
         state = BillHistoryUiState(
             bills = fakeBills,

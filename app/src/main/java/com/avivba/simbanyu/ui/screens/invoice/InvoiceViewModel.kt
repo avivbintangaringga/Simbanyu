@@ -1,9 +1,11 @@
 package com.avivba.simbanyu.ui.screens.invoice
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.Screen
+import kotlinx.coroutines.launch
 
 class InvoiceViewModel(
     savedStateHandle: SavedStateHandle
@@ -19,16 +21,19 @@ class InvoiceViewModel(
     }
 
     override fun onAction(action: InvoiceAction) {
-        when (action) {
-            is InvoiceAction.Pay -> {
-                pay()
-            }
+        viewModelScope.launch {
+            when (action) {
+                is InvoiceAction.Pay -> {
+                    pay()
+                }
 
-            InvoiceAction.NavigateBack -> {
-                sendEvent(InvoiceEvent.NavigateBack)
-            }
-            InvoiceAction.SelectPaymentMethod -> {
-                sendEvent(InvoiceEvent.GoToPaymentMethod)
+                InvoiceAction.NavigateBack -> {
+                    sendEvent(InvoiceEvent.NavigateBack)
+                }
+
+                InvoiceAction.SelectPaymentMethod -> {
+                    sendEvent(InvoiceEvent.GoToPaymentMethod)
+                }
             }
         }
     }

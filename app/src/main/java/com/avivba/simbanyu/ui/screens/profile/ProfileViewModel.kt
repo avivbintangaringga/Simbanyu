@@ -1,20 +1,26 @@
 package com.avivba.simbanyu.ui.screens.profile
 
+import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
+import kotlinx.coroutines.launch
 
 class ProfileViewModel : BaseViewModel<ProfileUiState, ProfileAction, ProfileEvent>(
     ProfileUiState()
 ) {
     init {
-        getProfile()
+        viewModelScope.launch {
+            getProfile()
+        }
     }
 
     override fun onAction(action: ProfileAction) {
-        when (action) {
-            ProfileAction.Logout -> {
-                // TODO: Implement logout logic
+        viewModelScope.launch {
+            when (action) {
+                ProfileAction.Logout -> {
+                    // TODO: Implement logout logic
 
-                sendEvent(ProfileEvent.GoToLogin)
+                    sendEvent(ProfileEvent.GoToLogin)
+                }
             }
         }
     }

@@ -49,6 +49,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun DashboardScreen(
+    modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {}
 ) {
@@ -61,6 +62,7 @@ fun DashboardScreen(
     }
 
     PullToRefreshBox(
+        modifier = modifier,
         isRefreshing = state.isRefreshing,
         onRefresh = {
             viewModel.onAction(DashboardAction.Refresh)
@@ -444,6 +446,7 @@ fun DashboardContent(
                     )
                 }
             ) {
+                // TODO: View All Announcements (SUBSCRIBER)
                 onAction(DashboardAction.ViewAllAnnouncements)
             }
         }
@@ -453,7 +456,7 @@ fun DashboardContent(
 
 @Preview(showBackground = true, device = Devices.PIXEL_7, showSystemUi = false)
 @Composable
-fun DashboardPreview() {
+private fun DashboardPreview() {
     SimbanyuTheme {
         DashboardContent(
             state = DashboardUiState(

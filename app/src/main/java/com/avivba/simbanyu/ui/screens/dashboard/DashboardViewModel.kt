@@ -13,11 +13,13 @@ class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, Dash
     }
 
     override fun onAction(action: DashboardAction) {
-        when (action) {
-            DashboardAction.Load -> load()
-            DashboardAction.PayBill -> {}
-            DashboardAction.ViewAllAnnouncements -> sendEvent(DashboardEvent.ViewAllAnnouncements)
-            DashboardAction.Refresh -> refresh()
+        viewModelScope.launch {
+            when (action) {
+                DashboardAction.Load -> load()
+                DashboardAction.PayBill -> {}
+                DashboardAction.ViewAllAnnouncements -> sendEvent(DashboardEvent.ViewAllAnnouncements)
+                DashboardAction.Refresh -> refresh()
+            }
         }
     }
 

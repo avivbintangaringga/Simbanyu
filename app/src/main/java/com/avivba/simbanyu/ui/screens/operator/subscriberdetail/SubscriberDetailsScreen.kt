@@ -40,6 +40,7 @@ fun SubscriberDetailsScreen(
     }
 
     SubscriberDetailsContent(
+        modifier = modifier,
         state = state,
         onAction = viewModel::onAction,
         onNavigate = onNavigate

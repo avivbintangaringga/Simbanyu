@@ -10,7 +10,9 @@ class OperatorDashboardViewModel(
     OperatorDashboardUiState()
 ) {
     init {
-        load()
+        viewModelScope.launch {
+            load()
+        }
     }
 
     override fun onAction(action: OperatorDashboardAction) {
