@@ -53,7 +53,7 @@ fun AnnouncementItem(
         Row(
             modifier = Modifier
                 .padding(
-                    SimbanyuTheme.padding.medium
+                    SimbanyuTheme.padding.large
                 )
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(

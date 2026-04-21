@@ -22,8 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.screens.report.Report
 import com.avivba.simbanyu.ui.screens.report.fakeReports
+import com.avivba.simbanyu.ui.shared.model.Report
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable

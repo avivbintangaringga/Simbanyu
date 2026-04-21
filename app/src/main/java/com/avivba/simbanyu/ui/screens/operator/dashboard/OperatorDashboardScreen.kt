@@ -4,16 +4,21 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.buttons.SimbanyuCardButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -103,8 +108,69 @@ fun OperatorDashboardContent(
                     style = SimbanyuTheme.typography.bodySmall,
                     color = SimbanyuTheme.colors.brandText
                 )
+
+
             }
         }
+
+
+        SimbanyuText(
+            modifier = Modifier.padding(
+                SimbanyuTheme.padding.small
+            ),
+            text = "Menu Utama",
+            style = SimbanyuTheme.typography.titleSection,
+        )
+
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(
+                SimbanyuTheme.spacing.medium
+            ),
+            verticalArrangement = Arrangement.spacedBy(
+                SimbanyuTheme.spacing.medium
+            ),
+            maxItemsInEachRow = 2
+        ) {
+            SimbanyuCardButton(
+                modifier = Modifier.weight(1f),
+                iconId = R.drawable.ic_speed,
+                title = "Catat Meter",
+                subTitle = "Catat meter pelanggan"
+            )
+
+            SimbanyuCardButton(
+                modifier = Modifier.weight(1f),
+                iconId = R.drawable.ic_map,
+                iconTint = SimbanyuTheme.colors.statusPositiveText,
+                title = "Peta",
+                subTitle = "Peta lokasi pelanggan"
+            )
+
+            SimbanyuCardButton(
+                modifier = Modifier.weight(1f),
+                iconId = R.drawable.ic_group,
+                iconTint = SimbanyuTheme.colors.statusWarningText,
+                title = "Pelanggan",
+                subTitle = "Daftar pelanggan aktif"
+            )
+
+            SimbanyuCardButton(
+                modifier = Modifier.weight(1f),
+                iconId = R.drawable.ic_report,
+                iconTint = SimbanyuTheme.colors.statusNegativeText,
+                title = "Laporan",
+                subTitle = "Lihat aduan pelanggan"
+            )
+        }
+
+        SimbanyuText(
+            modifier = Modifier.padding(
+                SimbanyuTheme.padding.small
+            ),
+            text = "Aktivitas Terbaru",
+            style = SimbanyuTheme.typography.titleSection,
+        )
     }
 }
 

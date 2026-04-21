@@ -1,6 +1,8 @@
 package com.avivba.simbanyu.ui.screens.report
 
 import androidx.compose.foundation.text.input.TextFieldState
+import com.avivba.simbanyu.ui.shared.model.Coordinate
+import com.avivba.simbanyu.ui.shared.model.Report
 
 enum class ReportType(val value: String) {
     OUTAGE("outage"),
@@ -15,23 +17,6 @@ enum class Fields() {
     IMAGE,
 }
 
-data class Coordinate(
-    val lat: Double,
-    val lng: Double,
-)
-
-data class Report(
-    val id: String,
-    val title: String,
-    val type: ReportType,
-    val status: String,
-    val location: String,
-    val locationCoordinate: Coordinate,
-    val description: String,
-    val image: String,
-    val date: String,
-    val isExpanded: Boolean = false,
-)
 
 data class ReportUiState(
     val isSendingReport: Boolean = false,
