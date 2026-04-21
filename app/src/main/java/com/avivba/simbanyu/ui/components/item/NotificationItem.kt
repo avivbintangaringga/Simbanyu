@@ -76,19 +76,20 @@ fun NotificationItem(
 
             SimbanyuText(
                 modifier = Modifier,
+                text = notification.body,
+                style = SimbanyuTheme.typography.bodyStandard,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            SimbanyuText(
+                modifier = Modifier,
                 text = notification.date,
                 style = SimbanyuTheme.typography.bodySmall,
                 color = SimbanyuTheme.colors.textInputDisabled,
                 fontStyle = FontStyle.Italic
             )
 
-            SimbanyuText(
-                modifier = Modifier,
-                text = notification.body,
-                style = SimbanyuTheme.typography.bodyStandard,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
         }
 
         Spacer(

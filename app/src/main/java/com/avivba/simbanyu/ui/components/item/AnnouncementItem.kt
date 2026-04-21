@@ -57,7 +57,7 @@ fun AnnouncementItem(
                 )
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
+                SimbanyuTheme.spacing.large
             ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -74,39 +74,28 @@ fun AnnouncementItem(
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.small
+                )
             ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                ) {
-                    SimbanyuText(
-                        modifier = Modifier.weight(1f),
-                        text = title,
-                        style = SimbanyuTheme.typography.bodyProminent,
-                        color = color
-                    )
-                    SimbanyuText(
-                        modifier = Modifier.padding(
-                            horizontal = SimbanyuTheme.padding.medium
-                        ),
-                        text = time,
-                        textAlign = TextAlign.End,
-                        fontStyle = FontStyle.Italic,
-                        fontSize = 11.sp,
-                        color = SimbanyuTheme.colors.textInputDisabled
-                    )
-                }
-
-                Spacer(
-                    modifier = Modifier.height(
-                        SimbanyuTheme.spacing.small
-                    )
+                SimbanyuText(
+                    text = title,
+                    style = SimbanyuTheme.typography.bodyProminent,
+                    color = color
                 )
 
                 SimbanyuText(
                     text = content,
                     color = color,
                     style = SimbanyuTheme.typography.bodySmall
+                )
+
+                SimbanyuText(
+                    text = time,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 11.sp,
+                    color = SimbanyuTheme.colors.textInputDisabled
                 )
             }
         }

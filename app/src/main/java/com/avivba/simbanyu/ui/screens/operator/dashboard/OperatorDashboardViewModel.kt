@@ -9,6 +9,10 @@ class OperatorDashboardViewModel(
 ) : BaseViewModel<OperatorDashboardUiState, OperatorDashboardAction, OperatorDashboardEvent>(
     OperatorDashboardUiState()
 ) {
+    init {
+        load()
+    }
+
     override fun onAction(action: OperatorDashboardAction) {
         viewModelScope.launch {
             when (action) {
@@ -18,6 +22,10 @@ class OperatorDashboardViewModel(
     }
 
     private fun load() {
-
+        viewModelScope.launch {
+            updateState {
+                fakeOperatorDashboardUiState
+            }
+        }
     }
 }

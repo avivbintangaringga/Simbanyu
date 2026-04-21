@@ -120,7 +120,7 @@ fun OperatorMainScreenContent(
         },
         topBar = {
             TopBar(
-                text = "Operator",
+                text = "Simbanyu Operator",
                 actions = {
                     Box(
                         modifier = Modifier,
