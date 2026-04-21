@@ -34,6 +34,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.di.viewModelModule
+import com.avivba.simbanyu.ui.core.Screen
 import com.avivba.simbanyu.ui.components.bottombar.BottomBar
 import com.avivba.simbanyu.ui.components.bottombar.BottomBarMenuItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText

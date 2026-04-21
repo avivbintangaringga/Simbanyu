@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,13 +39,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.item.UsageHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.screens.main.Screen
+import com.avivba.simbanyu.ui.core.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
-import ir.ehsannarmani.compose_charts.ColumnChart
 import ir.ehsannarmani.compose_charts.LineChart
-import ir.ehsannarmani.compose_charts.models.BarProperties
-import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.DividerProperties
 import ir.ehsannarmani.compose_charts.models.DotProperties
 import ir.ehsannarmani.compose_charts.models.DrawStyle

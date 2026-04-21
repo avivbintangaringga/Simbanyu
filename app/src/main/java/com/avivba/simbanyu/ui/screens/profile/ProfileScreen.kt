@@ -1,7 +1,6 @@
 package com.avivba.simbanyu.ui.screens.profile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,22 +11,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -37,9 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
-import com.avivba.simbanyu.ui.screens.main.Screen
-import com.avivba.simbanyu.ui.screens.report.ReportAction
+import com.avivba.simbanyu.ui.core.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import org.koin.compose.viewmodel.koinViewModel
 

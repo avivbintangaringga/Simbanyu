@@ -1,9 +1,7 @@
 package com.avivba.simbanyu.ui.screens.main
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.base.BaseViewModel
+import com.avivba.simbanyu.ui.core.BaseViewModel
 import kotlinx.coroutines.launch
 
 class MainViewModel : BaseViewModel<MainUiState, MainAction, MainEvent>(

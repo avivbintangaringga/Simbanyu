@@ -2,10 +2,9 @@ package com.avivba.simbanyu.ui.screens.billdetails
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.toRoute
-import com.avivba.simbanyu.ui.base.BaseViewModel
-import com.avivba.simbanyu.ui.screens.main.Screen
+import com.avivba.simbanyu.ui.core.BaseViewModel
+import com.avivba.simbanyu.ui.core.Screen
 import kotlinx.coroutines.launch
 
 class BillDetailsViewModel(

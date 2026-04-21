@@ -1,18 +1,15 @@
-package com.avivba.simbanyu.ui.screens.main
+package com.avivba.simbanyu.ui.core
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import com.avivba.simbanyu.ui.components.background.Background
-import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceScreen
-import com.avivba.simbanyu.ui.screens.login.LoginContent
 import com.avivba.simbanyu.ui.screens.login.LoginScreen
+import com.avivba.simbanyu.ui.screens.main.MainScreen
 import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 

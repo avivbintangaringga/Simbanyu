@@ -1,15 +1,12 @@
 package com.avivba.simbanyu.ui.screens.billhistory
 
-import android.util.Log
-import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.base.BaseViewModel
+import com.avivba.simbanyu.ui.core.BaseViewModel
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch

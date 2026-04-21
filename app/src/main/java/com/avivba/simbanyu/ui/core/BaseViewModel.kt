@@ -1,4 +1,4 @@
-package com.avivba.simbanyu.ui.base
+package com.avivba.simbanyu.ui.core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

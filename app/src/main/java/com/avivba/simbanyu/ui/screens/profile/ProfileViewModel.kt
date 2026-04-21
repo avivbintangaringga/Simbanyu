@@ -1,6 +1,6 @@
 package com.avivba.simbanyu.ui.screens.profile
 
-import com.avivba.simbanyu.ui.base.BaseViewModel
+import com.avivba.simbanyu.ui.core.BaseViewModel
 
 class ProfileViewModel : BaseViewModel<ProfileUiState, ProfileAction, ProfileEvent>(
     ProfileUiState()

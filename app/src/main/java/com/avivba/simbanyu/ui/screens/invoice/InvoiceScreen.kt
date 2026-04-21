@@ -3,7 +3,6 @@ package com.avivba.simbanyu.ui.screens.invoice
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -35,7 +34,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
-import com.avivba.simbanyu.ui.screens.main.Screen
+import com.avivba.simbanyu.ui.core.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.leftBorder

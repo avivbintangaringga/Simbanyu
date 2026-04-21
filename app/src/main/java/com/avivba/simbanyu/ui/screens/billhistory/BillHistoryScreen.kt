@@ -1,16 +1,13 @@
 package com.avivba.simbanyu.ui.screens.billhistory
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +31,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.screens.main.Screen
+import com.avivba.simbanyu.ui.core.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.viewmodel.koinViewModel

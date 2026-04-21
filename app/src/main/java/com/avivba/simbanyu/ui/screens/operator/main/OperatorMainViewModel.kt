@@ -1,7 +1,7 @@
 package com.avivba.simbanyu.ui.screens.operator.main
 
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.base.BaseViewModel
+import com.avivba.simbanyu.ui.core.BaseViewModel
 import kotlinx.coroutines.launch
 
 class OperatorMainViewModel : BaseViewModel<OperatorMainUiState, OperatorMainAction, OperatorMainEvent>(

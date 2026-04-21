@@ -38,7 +38,7 @@ import com.avivba.simbanyu.ui.components.bottombar.BottomBar
 import com.avivba.simbanyu.ui.components.bottombar.BottomBarMenuItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
-import com.avivba.simbanyu.ui.screens.main.Screen
+import com.avivba.simbanyu.ui.core.Screen
 import com.avivba.simbanyu.ui.screens.profile.ProfileScreen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import org.koin.compose.KoinApplication

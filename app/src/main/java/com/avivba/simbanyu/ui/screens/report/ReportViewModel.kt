@@ -1,9 +1,8 @@
 package com.avivba.simbanyu.ui.screens.report
 
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.base.BaseViewModel
+import com.avivba.simbanyu.ui.core.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

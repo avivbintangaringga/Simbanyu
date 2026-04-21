@@ -1,6 +1,6 @@
 package com.avivba.simbanyu.ui.screens.operator.main
 
-import com.avivba.simbanyu.ui.screens.main.Screen
+import com.avivba.simbanyu.ui.core.Screen
 
 data class Notification(
     val id: String,
