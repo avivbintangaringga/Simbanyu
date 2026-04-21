@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.dashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +31,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.core.Screen
+import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import ir.ehsannarmani.compose_charts.ColumnChart
@@ -111,26 +112,38 @@ fun DashboardContent(
             .padding(SimbanyuTheme.padding.large),
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(
-                    SimbanyuTheme.colors.surfaceCardAlternate,
-                    SimbanyuTheme.shapes.large
+                    color = SimbanyuTheme.colors.brand,
+                    shape = SimbanyuTheme.shapes.large
                 )
                 .padding(
-                    SimbanyuTheme.padding.large
+                    bottom = SimbanyuTheme.spacing.small
                 )
         ) {
-            SimbanyuText(
-                text = "SELAMAT DATANG",
-                style = SimbanyuTheme.typography.labelOverline,
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        SimbanyuTheme.colors.surfaceCardAlternate,
+                        SimbanyuTheme.shapes.large
+                    )
+                    .padding(
+                        SimbanyuTheme.padding.large
+                    )
+            ) {
+                SimbanyuText(
+                    text = "SELAMAT DATANG",
+                    style = SimbanyuTheme.typography.labelOverline,
+                )
 
-            SimbanyuText(
-                text = "${state.name} 👋",
-                style = SimbanyuTheme.typography.displayMedium
-            )
+                SimbanyuText(
+                    text = "${state.name} 👋",
+                    style = SimbanyuTheme.typography.displayMedium
+                )
+            }
         }
 
         if (state.bill.isNotEmpty()) {
@@ -273,7 +286,7 @@ fun DashboardContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    2.dp,
+                    1.dp,
                     SimbanyuTheme.colors.borderCard,
                     shape = SimbanyuTheme.shapes.extraLarge
                 )

@@ -49,17 +49,11 @@ fun AnnouncementItem(
         onClick = onClick,
         shape = shape,
         color = backgroundColor,
-        border = BorderStroke(
-            width = 1.dp,
-            color = borderColor
-        )
     ) {
         Row(
             modifier = Modifier
                 .padding(
-                    SimbanyuTheme.padding.medium.plus(
-                        SimbanyuTheme.padding.small
-                    )
+                    SimbanyuTheme.padding.medium
                 )
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(
@@ -71,7 +65,7 @@ fun AnnouncementItem(
                 modifier = Modifier
                     .background(
                         color = iconBackgroundColor,
-                        shape = SimbanyuTheme.shapes.medium
+                        shape = CircleShape
                     )
                     .padding(SimbanyuTheme.padding.medium),
                 painter = painterResource(iconId),

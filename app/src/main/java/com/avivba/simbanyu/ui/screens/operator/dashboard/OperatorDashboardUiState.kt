@@ -1,7 +1,8 @@
 package com.avivba.simbanyu.ui.screens.operator.dashboard
 
 data class OperatorDashboardUiState(
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val name: String = "Operator"
 )
 
 sealed interface OperatorDashboardAction {

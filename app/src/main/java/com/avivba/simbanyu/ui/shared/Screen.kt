@@ -1,4 +1,4 @@
-package com.avivba.simbanyu.ui.core
+package com.avivba.simbanyu.ui.shared
 
 import kotlinx.serialization.Serializable
 

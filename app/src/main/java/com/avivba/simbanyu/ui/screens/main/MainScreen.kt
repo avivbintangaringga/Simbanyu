@@ -24,8 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,9 +32,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.di.viewModelModule
-import com.avivba.simbanyu.ui.core.Screen
+import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.components.bottombar.BottomBar
 import com.avivba.simbanyu.ui.components.bottombar.BottomBarMenuItem
+import com.avivba.simbanyu.ui.components.item.NotificationItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryScreen
@@ -215,63 +214,12 @@ fun MainScreenContent(
                                 ),
                         ) {
                             state.notifications.forEach { notification ->
-                                Column(
-                                    modifier = Modifier
-                                        .clickable {
-                                            onAction(MainAction.MarkAsRead(notification))
-                                        }
-                                        .padding(
-                                            vertical = SimbanyuTheme.spacing.medium,
-                                            horizontal = SimbanyuTheme.padding.medium
-                                        ),
-                                    verticalArrangement = Arrangement.spacedBy(
-                                        SimbanyuTheme.spacing.small
-                                    )
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.spacedBy(
-                                            SimbanyuTheme.spacing.medium
-                                        )
-                                    ) {
-                                        if (!notification.isRead) {
-                                            Box(
-                                                modifier = Modifier
-                                                    .requiredWidth(8.dp)
-                                                    .height(8.dp)
-                                                    .clip(CircleShape)
-                                                    .background(SimbanyuTheme.colors.brand)
-                                            )
-                                        }
-
-                                        SimbanyuText(
-                                            modifier = Modifier
-                                                .weight(1f),
-                                            text = notification.title,
-                                            style = SimbanyuTheme.typography.bodyProminent,
-                                            color = SimbanyuTheme.colors.textHeading
-                                        )
-
+                                NotificationItem(
+                                    notification = notification,
+                                    onClick = {
+                                        onAction(MainAction.MarkAsRead(notification))
                                     }
-
-                                    SimbanyuText(
-                                        modifier = Modifier,
-                                        text = notification.date,
-                                        style = SimbanyuTheme.typography.bodySmall,
-                                        color = SimbanyuTheme.colors.textInputDisabled,
-                                        fontStyle = FontStyle.Italic
-                                    )
-
-                                    SimbanyuText(
-                                        modifier = Modifier,
-                                        text = notification.body,
-                                        style = SimbanyuTheme.typography.bodyStandard,
-                                        maxLines = 2,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                }
+                                )
                             }
                         }
                     }
@@ -323,6 +271,8 @@ fun MainScreenPreview() {
             modules(viewModelModule)
         }
     ) {
-        MainScreen()
+        MainScreen(
+            viewModel = MainViewModel()
+        )
     }
 }

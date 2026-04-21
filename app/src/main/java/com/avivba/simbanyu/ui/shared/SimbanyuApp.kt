@@ -1,4 +1,4 @@
-package com.avivba.simbanyu.ui.core
+package com.avivba.simbanyu.ui.shared
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

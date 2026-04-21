@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.avivba.simbanyu.ui.core.SimbanyuApp
+import com.avivba.simbanyu.ui.shared.SimbanyuApp
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 class MainActivity : ComponentActivity() {

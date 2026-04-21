@@ -1,14 +1,8 @@
 package com.avivba.simbanyu.ui.screens.main
 
-import com.avivba.simbanyu.ui.core.Screen
+import com.avivba.simbanyu.ui.shared.Screen
+import com.avivba.simbanyu.ui.shared.model.Notification
 
-data class Notification(
-    val id: String,
-    val title: String,
-    val body: String,
-    val date: String,
-    val isRead: Boolean
-)
 
 data class MainUiState(
     val selectedScreen: Screen = Screen.MainScreen.Home,

@@ -1,7 +1,7 @@
 package com.avivba.simbanyu.ui.screens.login
 
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.core.BaseViewModel
+import com.avivba.simbanyu.ui.shared.BaseViewModel
 import kotlinx.coroutines.launch
 
 class LoginViewModel : BaseViewModel<LoginUiState, LoginAction, LoginEvent>(

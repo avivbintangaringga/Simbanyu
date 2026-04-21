@@ -2,8 +2,8 @@ package com.avivba.simbanyu.ui.screens.invoice
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.avivba.simbanyu.ui.core.BaseViewModel
-import com.avivba.simbanyu.ui.core.Screen
+import com.avivba.simbanyu.ui.shared.BaseViewModel
+import com.avivba.simbanyu.ui.shared.Screen
 
 class InvoiceViewModel(
     savedStateHandle: SavedStateHandle

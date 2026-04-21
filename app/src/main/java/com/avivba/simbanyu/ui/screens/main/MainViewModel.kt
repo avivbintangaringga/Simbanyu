@@ -1,7 +1,8 @@
 package com.avivba.simbanyu.ui.screens.main
 
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.core.BaseViewModel
+import com.avivba.simbanyu.ui.shared.BaseViewModel
+import com.avivba.simbanyu.ui.shared.model.Notification
 import kotlinx.coroutines.launch
 
 class MainViewModel : BaseViewModel<MainUiState, MainAction, MainEvent>(

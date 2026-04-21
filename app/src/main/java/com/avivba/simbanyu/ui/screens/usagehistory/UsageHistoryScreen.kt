@@ -39,7 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.item.UsageHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.core.Screen
+import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import ir.ehsannarmani.compose_charts.LineChart
@@ -191,7 +191,7 @@ fun UsageHistoryContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(
-                            2.dp,
+                            1.dp,
                             SimbanyuTheme.colors.borderCard,
                             shape = SimbanyuTheme.shapes.extraLarge
                         )
