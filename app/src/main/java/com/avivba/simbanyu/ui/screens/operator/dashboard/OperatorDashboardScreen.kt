@@ -5,8 +5,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -135,22 +138,22 @@ fun OperatorDashboardContent(
         ) {
             SimbanyuCardButton(
                 modifier = Modifier.weight(1f),
-                iconId = R.drawable.ic_speed,
+                iconId = R.drawable.ic_speed_filled,
                 title = "Catat Meter",
                 subTitle = "Catat meter pelanggan"
             )
 
             SimbanyuCardButton(
                 modifier = Modifier.weight(1f),
-                iconId = R.drawable.ic_map,
+                iconId = R.drawable.ic_campaign_filled,
                 iconTint = SimbanyuTheme.colors.statusPositiveText,
-                title = "Peta",
-                subTitle = "Peta lokasi pelanggan"
+                title = "Pemberitahuan",
+                subTitle = "Sampaikan informasi"
             )
 
             SimbanyuCardButton(
                 modifier = Modifier.weight(1f),
-                iconId = R.drawable.ic_group,
+                iconId = R.drawable.ic_group_filled,
                 iconTint = SimbanyuTheme.colors.statusWarningText,
                 title = "Pelanggan",
                 subTitle = "Daftar pelanggan aktif"
@@ -158,7 +161,7 @@ fun OperatorDashboardContent(
 
             SimbanyuCardButton(
                 modifier = Modifier.weight(1f),
-                iconId = R.drawable.ic_report,
+                iconId = R.drawable.ic_feedback_filled,
                 iconTint = SimbanyuTheme.colors.statusNegativeText,
                 title = "Laporan",
                 subTitle = "Lihat aduan pelanggan"

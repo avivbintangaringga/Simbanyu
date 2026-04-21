@@ -80,7 +80,7 @@ private val menus = listOf(
     ),
     BottomBarMenuItem(
         title = "Laporan",
-        iconId = R.drawable.ic_report,
+        iconId = R.drawable.ic_feedback,
         screen = Screen.OperatorMainScreen.Report
     ),
     BottomBarMenuItem(

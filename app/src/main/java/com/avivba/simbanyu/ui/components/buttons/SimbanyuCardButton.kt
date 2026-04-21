@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -51,7 +52,8 @@ fun SimbanyuCardButton(
                     modifier = Modifier
                         .padding(
                             bottom = SimbanyuTheme.padding.medium
-                        ).size(40.dp)
+                        )
+                        .size(40.dp)
                         .background(
                             color = iconBackgroundColor,
                             shape = CircleShape
@@ -68,13 +70,17 @@ fun SimbanyuCardButton(
                 text = title,
                 modifier = Modifier.weight(1f),
                 style = SimbanyuTheme.typography.displaySmall,
-                color = color
+                color = color,
+                textAlign = TextAlign.Center,
             )
             if (subTitle != null) {
                 SimbanyuText(
                     text = subTitle,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(top = SimbanyuTheme.padding.small),
                     style = SimbanyuTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
                     color = color
                 )
             }

@@ -423,7 +423,8 @@ fun DashboardContent(
                     title = announcement.title,
                     content = announcement.content,
                     time = announcement.time,
-                    iconId = R.drawable.ic_error //TODO: Map Icon
+                    iconId = R.drawable.ic_campaign_filled,
+                    iconTint = SimbanyuTheme.colors.brand
                 )
             }
 

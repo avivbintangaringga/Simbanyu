@@ -39,6 +39,7 @@ fun AnnouncementItem(
     @DrawableRes iconId: Int,
     backgroundColor: Color = SimbanyuTheme.colors.surfaceCardAlternate,
     borderColor: Color = SimbanyuTheme.colors.borderCardAlternate,
+    iconTint: Color = SimbanyuTheme.colors.brand,
     iconBackgroundColor: Color = SimbanyuTheme.colors.surfaceCard,
     color: Color = SimbanyuTheme.colors.textBody,
     shape: Shape = SimbanyuTheme.shapes.extraLarge,
@@ -70,7 +71,7 @@ fun AnnouncementItem(
                     .padding(SimbanyuTheme.padding.medium),
                 painter = painterResource(iconId),
                 contentDescription = null,
-                tint = color
+                tint = iconTint
             )
             Column(
                 modifier = Modifier
