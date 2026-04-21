@@ -16,5 +16,6 @@ sealed interface LoginAction {
 }
 
 sealed interface LoginEvent {
-    data object LoginSuccess : LoginEvent
+    data object GoToSubscriberDashboard : LoginEvent
+    data object GoToOperatorDashboard : LoginEvent
 }

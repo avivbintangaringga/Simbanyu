@@ -24,14 +24,16 @@ class LoginViewModel : BaseViewModel<LoginUiState, LoginAction, LoginEvent>(
             updateState {
                 it.copy(
                     isLoading = true,
-                    errorMessage = "Terjadi kesalahan (test)"
                 )
             }
 
-            delay(1000)
-
             updateState { it.copy(isLoading = false) }
-            sendEvent(LoginEvent.LoginSuccess)
+
+            if (state.value.username.text.toString() != "a") {
+                sendEvent(LoginEvent.GoToSubscriberDashboard)
+            } else {
+                sendEvent(LoginEvent.GoToOperatorDashboard)
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceViewModel
 import com.avivba.simbanyu.ui.screens.login.LoginViewModel
 import com.avivba.simbanyu.ui.screens.main.MainViewModel
+import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainViewModel
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodViewModel
 import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel
@@ -16,15 +17,13 @@ import org.koin.plugin.module.dsl.viewModel
 val viewModelModule = module {
     viewModel<LoginViewModel>()
     viewModel<DashboardViewModel>()
-    single {
-        MainViewModel()
-    }
     viewModel<BillHistoryViewModel>()
     viewModel<UsageHistoryViewModel>()
     viewModel<ReportViewModel>()
     viewModel<ProfileViewModel>()
     viewModel<InvoiceViewModel>()
     viewModel<PaymentMethodViewModel>()
-    viewModel<MainViewModel>()
     viewModel<BillDetailsViewModel>()
+    viewModel<MainViewModel>()
+    viewModel<OperatorMainViewModel>()
 }

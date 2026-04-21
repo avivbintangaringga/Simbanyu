@@ -13,6 +13,7 @@ import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceScreen
 import com.avivba.simbanyu.ui.screens.login.LoginContent
 import com.avivba.simbanyu.ui.screens.login.LoginScreen
+import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 
 @Composable
@@ -32,15 +33,26 @@ fun SimbanyuApp(
             })
         }
 
-        navigation<Screen.Main>(
-            startDestination = Screen.MainScreen.Home
-        ) {
-            composable<Screen.MainScreen.Home> {
-                MainScreen(onNavigate = { dest ->
-                    navHostController.navigate(dest)
-                })
-            }
+        composable<Screen.Main> {
+            MainScreen(onNavigate = { dest ->
+                navHostController.navigate(dest)
+            })
         }
+
+        composable<Screen.OperatorMain> {
+            OperatorMainScreen(onNavigate = { dest ->
+                navHostController.navigate(dest)
+            })
+        }
+//        navigation<Screen.Main>(
+//            startDestination = Screen.MainScreen.Home
+//        ) {
+//            composable<Screen.MainScreen.Home> {
+//                MainScreen(onNavigate = { dest ->
+//                    navHostController.navigate(dest)
+//                })
+//            }
+//        }
 
         composable<Screen.Invoice> {
             InvoiceScreen(
