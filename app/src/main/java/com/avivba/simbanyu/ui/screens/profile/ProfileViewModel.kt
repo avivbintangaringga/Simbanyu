@@ -12,7 +12,9 @@ class ProfileViewModel : BaseViewModel<ProfileUiState, ProfileAction, ProfileEve
     override fun onAction(action: ProfileAction) {
         when (action) {
             ProfileAction.Logout -> {
+                // TODO: Implement logout logic
 
+                sendEvent(ProfileEvent.GoToLogin)
             }
         }
     }

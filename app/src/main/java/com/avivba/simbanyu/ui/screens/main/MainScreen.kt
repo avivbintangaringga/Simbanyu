@@ -53,6 +53,7 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {},
+    onLogout: () -> Unit,
     viewModel: MainViewModel = koinActivityViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -61,7 +62,8 @@ fun MainScreen(
         modifier = modifier,
         onNavigate = onNavigate,
         onAction = viewModel::onAction,
-        state = state
+        state = state,
+        onLogout = onLogout
     )
 }
 
@@ -99,6 +101,7 @@ fun MainScreenContent(
     state: MainUiState,
     onAction: (MainAction) -> Unit = {},
     onNavigate: (Screen) -> Unit = {},
+    onLogout: () -> Unit
 ) {
     val navController = rememberNavController()
 
@@ -256,7 +259,8 @@ fun MainScreenContent(
             }
             composable<Screen.MainScreen.Profile> {
                 ProfileScreen(
-                    onNavigate = onNavigate
+                    onNavigate = onNavigate,
+                    onLogout = onLogout
                 )
             }
         }
@@ -272,7 +276,8 @@ fun MainScreenPreview() {
         }
     ) {
         MainScreen(
-            viewModel = MainViewModel()
+            viewModel = MainViewModel(),
+            onLogout = {}
         )
     }
 }

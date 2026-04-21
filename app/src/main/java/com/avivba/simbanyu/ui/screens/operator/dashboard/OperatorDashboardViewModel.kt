@@ -16,7 +16,11 @@ class OperatorDashboardViewModel(
     override fun onAction(action: OperatorDashboardAction) {
         viewModelScope.launch {
             when (action) {
-                OperatorDashboardAction.LoadData -> load()
+                OperatorDashboardAction.Load -> load()
+                OperatorDashboardAction.Refresh -> refresh()
+                OperatorDashboardAction.ViewAllAnnouncements -> {
+                    sendEvent(OperatorDashboardEvent.GoToAnnouncementsPage)
+                }
             }
         }
     }
@@ -27,5 +31,9 @@ class OperatorDashboardViewModel(
                 fakeOperatorDashboardUiState
             }
         }
+    }
+
+    private fun refresh() {
+        // TODO: Implement
     }
 }

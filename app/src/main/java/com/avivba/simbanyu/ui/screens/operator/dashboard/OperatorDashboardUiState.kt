@@ -4,16 +4,19 @@ import com.avivba.simbanyu.ui.shared.model.ActivityData
 
 data class OperatorDashboardUiState(
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val name: String = "Operator",
     val activities: List<ActivityData> = emptyList()
 )
 
 sealed interface OperatorDashboardAction {
-    data object LoadData : OperatorDashboardAction
+    data object Load : OperatorDashboardAction
+    data object Refresh : OperatorDashboardAction
+    data object ViewAllAnnouncements: OperatorDashboardAction
 }
 
 sealed interface OperatorDashboardEvent {
-    data class ShowError(val message: String) : OperatorDashboardEvent
+    data object GoToAnnouncementsPage : OperatorDashboardEvent
 }
 
 val fakeOperatorDashboardUiState = OperatorDashboardUiState(

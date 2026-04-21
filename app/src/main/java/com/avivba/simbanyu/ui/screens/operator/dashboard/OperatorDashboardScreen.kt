@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -38,14 +39,23 @@ fun OperatorDashboardScreen(
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
-            is OperatorDashboardEvent.ShowError -> {}
+            OperatorDashboardEvent.GoToAnnouncementsPage -> {
+                onNavigate(Screen.OperatorAnnouncementScreen)
+            }
         }
     }
 
-    OperatorDashboardContent(
-        state = state,
-        onAction = viewModel::onAction
-    )
+    PullToRefreshBox(
+        isRefreshing = state.isRefreshing,
+        onRefresh = {
+            viewModel.onAction(OperatorDashboardAction.Refresh)
+        }
+    ) {
+        OperatorDashboardContent(
+            state = state,
+            onAction = viewModel::onAction
+        )
+    }
 }
 
 @Composable
@@ -148,7 +158,10 @@ fun OperatorDashboardContent(
                 iconId = R.drawable.ic_campaign_filled,
                 iconTint = SimbanyuTheme.colors.statusPositiveText,
                 title = "Pemberitahuan",
-                subTitle = "Sampaikan informasi"
+                subTitle = "Sampaikan informasi",
+                onClick = {
+                    onAction(OperatorDashboardAction.ViewAllAnnouncements)
+                }
             )
 
             SimbanyuCardButton(

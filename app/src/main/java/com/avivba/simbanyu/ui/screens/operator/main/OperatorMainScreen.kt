@@ -50,6 +50,7 @@ fun OperatorMainScreen(
     modifier: Modifier = Modifier,
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {},
+    onLogout: () -> Unit,
     viewModel: OperatorMainViewModel = koinActivityViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -58,6 +59,7 @@ fun OperatorMainScreen(
         modifier = modifier,
         onNavigate = onNavigate,
         onAction = viewModel::onAction,
+        onLogout = onLogout,
         state = state
     )
 }
@@ -96,6 +98,7 @@ fun OperatorMainScreenContent(
     state: OperatorMainUiState,
     onAction: (OperatorMainAction) -> Unit = {},
     onNavigate: (Screen) -> Unit = {},
+    onLogout: () -> Unit
 ) {
     val navController = rememberNavController()
 
@@ -250,7 +253,8 @@ fun OperatorMainScreenContent(
 
             composable<Screen.OperatorMainScreen.Profile> {
                 ProfileScreen(
-                    onNavigate = onNavigate
+                    onNavigate = onNavigate,
+                    onLogout = onLogout
                 )
             }
         }
@@ -266,7 +270,8 @@ fun OperatorMainScreenPreview() {
         }
     ) {
         OperatorMainScreen(
-            viewModel = OperatorMainViewModel()
+            viewModel = OperatorMainViewModel(),
+            onLogout = {}
         )
     }
 }

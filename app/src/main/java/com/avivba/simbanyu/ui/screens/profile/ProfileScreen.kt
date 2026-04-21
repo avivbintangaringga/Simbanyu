@@ -32,14 +32,24 @@ import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel = koinViewModel(),
-    onNavigate: (Screen) -> Unit = {}
+    onNavigate: (Screen) -> Unit = {},
+    onLogout: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvent(viewModel.event) {
+        when (it) {
+            ProfileEvent.GoToLogin -> {
+                onLogout()
+            }
+        }
+    }
 
     ProfileContent(
         state = state,

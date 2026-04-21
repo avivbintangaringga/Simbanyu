@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.components.item
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
@@ -44,6 +46,8 @@ fun AnnouncementItem(
     color: Color = SimbanyuTheme.colors.textBody,
     shape: Shape = SimbanyuTheme.shapes.extraLarge,
     onClick: () -> Unit = {},
+    canDelete: Boolean = false,
+    onDelete: () -> Unit = {}
 ) {
     Surface(
         modifier = modifier,
@@ -75,7 +79,7 @@ fun AnnouncementItem(
             )
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(
                     SimbanyuTheme.spacing.small
                 )
@@ -97,6 +101,20 @@ fun AnnouncementItem(
                     fontStyle = FontStyle.Italic,
                     fontSize = 11.sp,
                     color = SimbanyuTheme.colors.textInputDisabled
+                )
+            }
+
+            if (canDelete) {
+                Icon(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable {
+                            onDelete()
+                        }
+                        .padding(SimbanyuTheme.padding.medium),
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = null,
+                    tint = SimbanyuTheme.colors.statusNegativeText
                 )
             }
         }

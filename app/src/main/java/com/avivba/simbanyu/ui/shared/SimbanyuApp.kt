@@ -10,6 +10,7 @@ import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceScreen
 import com.avivba.simbanyu.ui.screens.login.LoginScreen
 import com.avivba.simbanyu.ui.screens.main.MainScreen
+import com.avivba.simbanyu.ui.screens.operator.announcement.OperatorAnnouncementScreen
 import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 
@@ -31,25 +32,15 @@ fun SimbanyuApp(
         }
 
         composable<Screen.Main> {
-            MainScreen(onNavigate = { dest ->
-                navHostController.navigate(dest)
-            })
+            MainScreen(
+                onNavigate = { dest ->
+                    navHostController.navigate(dest)
+                },
+                onLogout = {
+                    navHostController.popBackStack()
+                    navHostController.navigate(Screen.Login)
+                })
         }
-
-        composable<Screen.OperatorMain> {
-            OperatorMainScreen(onNavigate = { dest ->
-                navHostController.navigate(dest)
-            })
-        }
-//        navigation<Screen.Main>(
-//            startDestination = Screen.MainScreen.Home
-//        ) {
-//            composable<Screen.MainScreen.Home> {
-//                MainScreen(onNavigate = { dest ->
-//                    navHostController.navigate(dest)
-//                })
-//            }
-//        }
 
         composable<Screen.Invoice> {
             InvoiceScreen(
@@ -72,6 +63,31 @@ fun SimbanyuApp(
 
         composable<Screen.PaymentMethods> {
             PaymentMethodScreen(
+                onNavigate = { dest ->
+                    navHostController.navigate(dest)
+                },
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+
+        // OPERATOR
+
+        composable<Screen.OperatorMain> {
+            OperatorMainScreen(
+                onNavigate = { dest ->
+                    navHostController.navigate(dest)
+                },
+                onLogout = {
+                    navHostController.popBackStack()
+                    navHostController.navigate(Screen.Login)
+                }
+            )
+        }
+
+        composable<Screen.OperatorAnnouncementScreen> {
+            OperatorAnnouncementScreen(
                 onNavigate = { dest ->
                     navHostController.navigate(dest)
                 },

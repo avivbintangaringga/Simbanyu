@@ -44,6 +44,9 @@ sealed interface Screen {
     }
 
     @Serializable
+    data object OperatorAnnouncementScreen : Screen
+
+    @Serializable
     sealed interface OperatorMainScreen : Screen {
         @Serializable
         data object Home : OperatorMainScreen
