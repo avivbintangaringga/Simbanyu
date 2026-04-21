@@ -3,14 +3,11 @@ package com.avivba.simbanyu.ui.screens.operator.announcement
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -35,8 +32,6 @@ import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
-import com.avivba.simbanyu.ui.screens.dashboard.DashboardAction
-import com.avivba.simbanyu.ui.screens.invoice.InvoiceAction
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
@@ -44,9 +39,9 @@ import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun OperatorAnnouncementScreen(
+fun AnnouncementScreen(
     modifier: Modifier = Modifier,
-    viewModel: OperatorAnnouncementViewModel = koinViewModel(),
+    viewModel: AnnouncementViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {}
 ) {
@@ -54,13 +49,13 @@ fun OperatorAnnouncementScreen(
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
-            OperatorAnnouncementEvent.NavigateBack -> {
+            AnnouncementEvent.NavigateBack -> {
                 onNavigateBack()
             }
         }
     }
 
-    OperatorAnnouncementContent(
+    AnnouncementContent(
         state = state,
         onNavigate = onNavigate,
         onAction = viewModel::onAction
@@ -69,10 +64,10 @@ fun OperatorAnnouncementScreen(
 }
 
 @Composable
-fun OperatorAnnouncementContent(
+fun AnnouncementContent(
     modifier: Modifier = Modifier,
-    state: OperatorAnnouncementUiState,
-    onAction: (OperatorAnnouncementAction) -> Unit = {},
+    state: AnnouncementUiState,
+    onAction: (AnnouncementAction) -> Unit = {},
     onNavigate: (Screen) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
@@ -95,7 +90,7 @@ fun OperatorAnnouncementContent(
                             )
                             .clip(CircleShape)
                             .clickable {
-                                onAction(OperatorAnnouncementAction.NavigateBack)
+                                onAction(AnnouncementAction.NavigateBack)
                             }
                             .padding(
                                 SimbanyuTheme.padding.large
@@ -110,7 +105,7 @@ fun OperatorAnnouncementContent(
                 .padding(paddingValues),
             isRefreshing = state.isRefreshing,
             onRefresh = {
-                onAction(OperatorAnnouncementAction.Refresh)
+                onAction(AnnouncementAction.Refresh)
             }
         ) {
             Column(
@@ -147,7 +142,7 @@ fun OperatorAnnouncementContent(
                             )
                         }
                     ) {
-                        onAction(OperatorAnnouncementAction.ShowCreateDialog)
+                        onAction(AnnouncementAction.ShowCreateDialog)
                     }
                 }
 //                SimbanyuText(
@@ -187,9 +182,9 @@ fun OperatorAnnouncementContent(
 
 @Preview(showBackground = true, device = Devices.PIXEL_7, showSystemUi = false)
 @Composable
-fun OperatorAnnouncementPreview() {
-    OperatorAnnouncementContent(
-        state = OperatorAnnouncementUiState(
+fun AnnouncementPreview() {
+    AnnouncementContent(
+        state = AnnouncementUiState(
             announcements = fakeAnnouncements
         )
     )

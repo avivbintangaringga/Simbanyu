@@ -10,7 +10,7 @@ import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceScreen
 import com.avivba.simbanyu.ui.screens.login.LoginScreen
 import com.avivba.simbanyu.ui.screens.main.MainScreen
-import com.avivba.simbanyu.ui.screens.operator.announcement.OperatorAnnouncementScreen
+import com.avivba.simbanyu.ui.screens.operator.announcement.AnnouncementScreen
 import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 
@@ -87,7 +87,7 @@ fun SimbanyuApp(
         }
 
         composable<Screen.OperatorAnnouncementScreen> {
-            OperatorAnnouncementScreen(
+            AnnouncementScreen(
                 onNavigate = { dest ->
                     navHostController.navigate(dest)
                 },

@@ -2,25 +2,25 @@ package com.avivba.simbanyu.ui.screens.operator.announcement
 
 import com.avivba.simbanyu.ui.shared.model.Announcement
 
-data class OperatorAnnouncementUiState(
+data class AnnouncementUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
     val announcements: List<Announcement> = emptyList(),
     val isShowCreateDialog: Boolean = false
 )
 
-sealed interface OperatorAnnouncementAction {
-    data object Load : OperatorAnnouncementAction
-    data object Refresh : OperatorAnnouncementAction
-    data object ShowCreateDialog : OperatorAnnouncementAction
-    data object HideCreateDialog : OperatorAnnouncementAction
-    data object CreateAnnouncement : OperatorAnnouncementAction
-    data class DeleteAnnouncement(val announcement: Announcement) : OperatorAnnouncementAction
-    data object NavigateBack : OperatorAnnouncementAction
+sealed interface AnnouncementAction {
+    data object Load : AnnouncementAction
+    data object Refresh : AnnouncementAction
+    data object ShowCreateDialog : AnnouncementAction
+    data object HideCreateDialog : AnnouncementAction
+    data object CreateAnnouncement : AnnouncementAction
+    data class DeleteAnnouncement(val announcement: Announcement) : AnnouncementAction
+    data object NavigateBack : AnnouncementAction
 }
 
-sealed interface OperatorAnnouncementEvent {
-    data object NavigateBack : OperatorAnnouncementEvent
+sealed interface AnnouncementEvent {
+    data object NavigateBack : AnnouncementEvent
 }
 
 val fakeAnnouncements = listOf(
@@ -44,7 +44,7 @@ val fakeAnnouncements = listOf(
     )
 )
 
-val fakeOperatorAnnouncementUiState = OperatorAnnouncementUiState(
+val fakeAnnouncementUiState = AnnouncementUiState(
     isLoading = false,
     isRefreshing = false,
     announcements = fakeAnnouncements
