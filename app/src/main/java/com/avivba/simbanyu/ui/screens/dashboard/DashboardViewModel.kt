@@ -50,10 +50,7 @@ class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, Dash
 
             updateState {
                 it.copy(
-                    bill = Bill(
-                        amount = "125.000",
-                        period = "Januari 2023"
-                    ),
+                    bill = "125.000",
                     waterUsage = fakeWaterUsage,
                     waterUsageAverage = 14.3,
                     waterUsageMaximum = 22,

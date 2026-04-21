@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -132,7 +133,7 @@ fun DashboardContent(
             )
         }
 
-        if (state.bill != null) {
+        if (state.bill.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -151,13 +152,9 @@ fun DashboardContent(
                 )
             ) {
                 SimbanyuText(
-                    text = "TAGIHAN BELUM DIBAYAR\nPeriode ${state.bill.period}",
+                    text = "ANDA MEMILIKI TAGIHAN BELUM DIBAYAR",
                     style = SimbanyuTheme.typography.bodySmall,
                     color = SimbanyuTheme.colors.brandText
-                )
-
-                Spacer(
-                    modifier = Modifier.height(SimbanyuTheme.spacing.small)
                 )
 
                 Row(
@@ -173,9 +170,21 @@ fun DashboardContent(
                     )
 
                     SimbanyuText(
-                        text = state.bill.amount,
+                        modifier = Modifier.weight(1f),
+                        text = state.bill,
                         style = SimbanyuTheme.typography.displayHero,
                         color = SimbanyuTheme.colors.brandText
+                    )
+
+                    Icon(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(
+                                end = SimbanyuTheme.padding.small
+                            ),
+                        painter = painterResource(R.drawable.ic_contract),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brandText.copy(alpha = 0.3f)
                     )
                 }
 
@@ -245,9 +254,11 @@ fun DashboardContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             SimbanyuText(
-                modifier = Modifier.padding(
-                    SimbanyuTheme.padding.small
-                ).weight(1f),
+                modifier = Modifier
+                    .padding(
+                        SimbanyuTheme.padding.small
+                    )
+                    .weight(1f),
                 text = "Penggunaan Air",
                 style = SimbanyuTheme.typography.titleSection,
             )
@@ -433,7 +444,8 @@ fun DashboardPreview() {
         DashboardContent(
             state = DashboardUiState(
                 waterUsage = fakeWaterUsage,
-                announcements = fakeAnnouncements
+                announcements = fakeAnnouncements,
+                bill = "125.000"
             )
         )
     }

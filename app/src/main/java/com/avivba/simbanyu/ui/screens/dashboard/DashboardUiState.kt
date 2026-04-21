@@ -12,16 +12,11 @@ data class Announcement(
     val time: String,
 )
 
-data class Bill(
-    val amount: String,
-    val period: String
-)
-
 data class DashboardUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
     val name: String = "User",
-    val bill: Bill? = null,
+    val bill: String = "",
     val waterUsage: List<WaterUsage> = emptyList(),
     val waterUsageAverage: Double = 0.0,
     val waterUsageMaximum: Int = 0,
