@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.ui.screens.operator.subsribers
 
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.ui.screens.operator.subsribers.SubscribersEvent.*
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -14,10 +15,10 @@ class SubscribersViewModel(
             when (action) {
                 SubscribersAction.Load -> load()
                 SubscribersAction.Refresh -> refresh()
-                is SubscribersAction.Search -> search(action.query)
                 is SubscribersAction.ShowDetails -> {
-                    sendEvent(SubscribersEvent.GoToSubscriberDetails(action.subscriber))
+                    sendEvent(GoToSubscriberDetails(action.subscriber))
                 }
+
             }
         }
     }

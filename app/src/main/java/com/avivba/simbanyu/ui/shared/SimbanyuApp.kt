@@ -12,6 +12,8 @@ import com.avivba.simbanyu.ui.screens.login.LoginScreen
 import com.avivba.simbanyu.ui.screens.main.MainScreen
 import com.avivba.simbanyu.ui.screens.operator.announcement.AnnouncementScreen
 import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
+import com.avivba.simbanyu.ui.screens.operator.subscriberdetail.SubscriberDetailsScreen
+import com.avivba.simbanyu.ui.screens.operator.subsribers.SubscribersScreen
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 
 @Composable
@@ -86,8 +88,19 @@ fun SimbanyuApp(
             )
         }
 
-        composable<Screen.OperatorAnnouncementScreen> {
+        composable<Screen.AnnouncementScreen> {
             AnnouncementScreen(
+                onNavigate = { dest ->
+                    navHostController.navigate(dest)
+                },
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+
+        composable<Screen.SubscriberDetails> {
+            SubscriberDetailsScreen(
                 onNavigate = { dest ->
                     navHostController.navigate(dest)
                 },

@@ -13,7 +13,6 @@ sealed interface Screen {
     @Serializable
     data object OperatorMain : Screen
 
-
     @Serializable
     data class Invoice(val ids: List<String>) : Screen
 
@@ -22,6 +21,12 @@ sealed interface Screen {
 
     @Serializable
     data class BillDetails(val id: String) : Screen
+
+    @Serializable
+    data class SubscriberDetails(val id: String) : Screen
+
+    @Serializable
+    data object AnnouncementScreen : Screen
 
     @Serializable
     sealed interface MainScreen : Screen {
@@ -44,9 +49,6 @@ sealed interface Screen {
     }
 
     @Serializable
-    data object OperatorAnnouncementScreen : Screen
-
-    @Serializable
     sealed interface OperatorMainScreen : Screen {
         @Serializable
         data object Home : OperatorMainScreen
@@ -58,10 +60,10 @@ sealed interface Screen {
         data object Map : OperatorMainScreen
 
         @Serializable
-        data object Profile : OperatorMainScreen
+        data object Report : OperatorMainScreen
 
         @Serializable
-        data object Report : OperatorMainScreen
+        data object Profile : OperatorMainScreen
     }
 
 }

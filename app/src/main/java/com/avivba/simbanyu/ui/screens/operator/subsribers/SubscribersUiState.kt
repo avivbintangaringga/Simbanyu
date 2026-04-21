@@ -25,7 +25,6 @@ data class SubscribersUiState(
 sealed interface SubscribersAction {
     data object Load : SubscribersAction
     data object Refresh : SubscribersAction
-    data class Search(val query: String) : SubscribersAction
     data class ShowDetails(val subscriber: Subscriber) : SubscribersAction
 }
 
