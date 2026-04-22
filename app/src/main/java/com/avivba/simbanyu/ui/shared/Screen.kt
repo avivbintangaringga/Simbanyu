@@ -29,6 +29,9 @@ sealed interface Screen {
     data object AnnouncementScreen : Screen
 
     @Serializable
+    data object OperatorAnnouncementScreen : Screen
+
+    @Serializable
     sealed interface MainScreen : Screen {
 
         @Serializable

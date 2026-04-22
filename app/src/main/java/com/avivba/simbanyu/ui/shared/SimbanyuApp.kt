@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.avivba.simbanyu.ui.components.background.Background
+import com.avivba.simbanyu.ui.screens.announcement.AnnouncementScreen
 import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceScreen
 import com.avivba.simbanyu.ui.screens.login.LoginScreen
@@ -88,6 +89,18 @@ fun SimbanyuApp(
         }
 
         composable<Screen.AnnouncementScreen> {
+            AnnouncementScreen(
+                onNavigate = { dest ->
+                    navHostController.navigate(dest)
+                },
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+
+
+        composable<Screen.OperatorAnnouncementScreen> {
             OperatorAnnouncementScreen(
                 onNavigate = { dest ->
                     navHostController.navigate(dest)

@@ -57,7 +57,9 @@ fun DashboardScreen(
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
-            DashboardEvent.ViewAllAnnouncements -> {}
+            DashboardEvent.ViewAllAnnouncements -> {
+                onNavigate(Screen.AnnouncementScreen)
+            }
         }
     }
 
@@ -446,7 +448,6 @@ fun DashboardContent(
                     )
                 }
             ) {
-                // TODO: View All Announcements (SUBSCRIBER)
                 onAction(DashboardAction.ViewAllAnnouncements)
             }
         }
