@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
@@ -148,12 +149,14 @@ fun SubscriberItem(
                 modifier = Modifier
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.small
+                    SimbanyuTheme.spacing.extraSmall
                 )
             ) {
                 SimbanyuText(
                     text = "CATAT TERAKHIR",
-                    style = SimbanyuTheme.typography.labelOverline
+                    style = SimbanyuTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight(900)
+                    )
                 )
 
                 SimbanyuText(
