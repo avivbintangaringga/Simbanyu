@@ -2,6 +2,7 @@ package com.avivba.simbanyu.ui.screens.operator.subsribers
 
 import androidx.compose.foundation.text.input.TextFieldState
 import com.avivba.simbanyu.ui.shared.model.Coordinate
+import com.avivba.simbanyu.ui.shared.model.Subscriber
 
 enum class FilterRecordState(
     val title: String
@@ -10,19 +11,6 @@ enum class FilterRecordState(
     NOT_RECORDED("Belum Dicatat"),
     RECORDED("Selesai"),
 }
-
-data class Subscriber(
-    val id: String,
-    val name: String,
-    val address: String,
-    val phone: String,
-    val coordinate: Coordinate,
-    val category: String,
-    val meterId: String,
-    val lastReading: String,
-    val isRecorded: Boolean,
-    val imageUrl: String,
-)
 
 data class SubscribersUiState(
     val isLoading: Boolean = false,
