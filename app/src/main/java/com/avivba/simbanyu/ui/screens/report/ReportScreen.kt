@@ -219,7 +219,7 @@ private fun CreateReport(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_location),
+                    painter = painterResource(R.drawable.ic_lock_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -258,7 +258,7 @@ private fun CreateReport(
             ) {
                 Icon(
                     modifier = Modifier.height(16.dp),
-                    painter = painterResource(R.drawable.ic_my_location),
+                    painter = painterResource(R.drawable.ic_my_location_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -288,7 +288,7 @@ private fun CreateReport(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_description),
+                    painter = painterResource(R.drawable.ic_description_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -331,7 +331,7 @@ private fun CreateReport(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_camera),
+                    painter = painterResource(R.drawable.ic_photo_camera_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -378,7 +378,7 @@ private fun CreateReport(
                 Icon(
                     modifier = Modifier
                         .requiredSize(40.dp),
-                    painter = painterResource(R.drawable.ic_camera),
+                    painter = painterResource(R.drawable.ic_photo_camera_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.statusNeutral
                 )

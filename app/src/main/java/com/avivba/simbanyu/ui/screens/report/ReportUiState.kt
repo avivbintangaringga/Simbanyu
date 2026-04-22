@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.report
 import androidx.compose.foundation.text.input.TextFieldState
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
+import com.avivba.simbanyu.ui.shared.model.ReportStatus
 import com.avivba.simbanyu.ui.shared.model.User
 
 enum class ReportType(val value: String) {
@@ -61,7 +62,7 @@ val fakeReports = listOf(
         title = "Kebocoran Pipa Utama",
         type = ReportType.LEAK,
         user = fakeUser,
-        status = "Dalam Proses",
+        status = ReportStatus.IN_PROGRESS,
         location = "Jl. Merdeka No. 10, Jakarta",
         locationCoordinate = Coordinate(-6.1754, 106.8272),
         description = "Pipa air depan rumah pecah, air meluap ke jalanan.",
@@ -73,7 +74,7 @@ val fakeReports = listOf(
         title = "Air Keruh dan Berpasir",
         type = ReportType.MUDDY,
         user = fakeUser,
-        status = "Selesai",
+        status = ReportStatus.COMPLETED,
         location = "Perumahan Indah, Blok C2",
         locationCoordinate = Coordinate(-6.2000, 106.8166),
         description = "Sudah 2 hari air keluar berwarna coklat dan ada endapan pasir.",
@@ -85,7 +86,7 @@ val fakeReports = listOf(
         title = "Aliran Air Mati Total",
         type = ReportType.OUTAGE,
         user = fakeUser,
-        status = "Menunggu",
+        status = ReportStatus.WAITING,
         location = "Kp. Melayu RT 05/RW 02",
         locationCoordinate = Coordinate(-6.2333, 106.8500),
         description = "Air tidak mengalir sama sekali sejak tadi pagi pukul 06.00.",
@@ -97,7 +98,7 @@ val fakeReports = listOf(
         title = "Pipa Bocor Kecil",
         type = ReportType.LEAK,
         user = fakeUser,
-        status = "Selesai",
+        status = ReportStatus.REJECTED,
         location = "Jl. Sudirman Gg. 5",
         locationCoordinate = Coordinate(-6.2146, 106.8202),
         description = "Ada rembesan di sambungan meteran air.",

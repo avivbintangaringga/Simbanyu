@@ -40,6 +40,10 @@ class OperatorReportViewModel(
                         )
                     }
                 }
+
+                OperatorReportAction.PickImage -> {
+                    // TODO: Pick Image
+                }
             }
         }
     }

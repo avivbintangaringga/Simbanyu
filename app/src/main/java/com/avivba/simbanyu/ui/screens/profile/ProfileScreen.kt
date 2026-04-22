@@ -101,7 +101,7 @@ fun ProfileContent(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_person),
+                    painter = painterResource(R.drawable.ic_person_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand,
                     modifier = Modifier
@@ -150,7 +150,7 @@ fun ProfileContent(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_speed),
+                    painter = painterResource(R.drawable.ic_speed_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -183,7 +183,7 @@ fun ProfileContent(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_call),
+                    painter = painterResource(R.drawable.ic_call_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -216,7 +216,7 @@ fun ProfileContent(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_location),
+                    painter = painterResource(R.drawable.ic_location_on_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )

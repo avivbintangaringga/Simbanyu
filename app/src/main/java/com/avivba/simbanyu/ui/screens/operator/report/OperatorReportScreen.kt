@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,12 +14,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -27,12 +31,16 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,13 +49,17 @@ import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.item.ReportItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
+import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryAction
 import com.avivba.simbanyu.ui.screens.operator.announcement.Fields
 import com.avivba.simbanyu.ui.screens.operator.announcement.OperatorAnnouncementAction
+import com.avivba.simbanyu.ui.screens.report.ReportAction
 import com.avivba.simbanyu.ui.screens.report.fakeReports
 import com.avivba.simbanyu.ui.shared.Screen
+import com.avivba.simbanyu.ui.shared.model.ReportStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.conditional
+import com.avivba.simbanyu.ui.utils.dashedBorder
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -91,7 +103,11 @@ private fun OperatorReportContent(
     )
 
     PullToRefreshBox(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(
+                SimbanyuTheme.padding.large
+            ),
         isRefreshing = state.isRefreshing,
         onRefresh = {
             onAction(OperatorReportAction.Refresh)
@@ -150,7 +166,7 @@ private fun OperatorReportContent(
                         shouldDismissOnBackPress = !state.currentReport.isSending,
                         shouldDismissOnClickOutside = !state.currentReport.isSending,
 
-                    )
+                        )
                 ) {
                     Column(
                         modifier = Modifier
@@ -161,6 +177,8 @@ private fun OperatorReportContent(
                             SimbanyuTheme.spacing.medium
                         )
                     ) {
+                        var isExpanded by remember { mutableStateOf(false) }
+
                         SimbanyuText(
                             text = "Update Laporan",
                             style = SimbanyuTheme.typography.displayMedium
@@ -175,7 +193,7 @@ private fun OperatorReportContent(
                                 modifier = Modifier
                                     .height(16.dp)
                                     .padding(end = SimbanyuTheme.padding.medium),
-                                painter = painterResource(R.drawable.ic_description),
+                                painter = painterResource(R.drawable.ic_description_filled),
                                 contentDescription = null,
                                 tint = SimbanyuTheme.colors.brand
                             )
@@ -185,7 +203,57 @@ private fun OperatorReportContent(
                             )
                         }
 
-                        // Status Dropdown
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .background(
+                                        color = SimbanyuTheme.colors.surfaceCardAlternate,
+                                        shape = SimbanyuTheme.shapes.medium
+                                    )
+                                    .clickable {
+                                        isExpanded = true
+                                    }
+                                    .padding(SimbanyuTheme.padding.medium),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                SimbanyuText(
+                                    modifier = Modifier.padding(end = SimbanyuTheme.padding.small),
+                                    text = state.currentReport.report.status.status,
+                                    style = SimbanyuTheme.typography.bodyProminent
+                                )
+                                Icon(
+                                    painter = painterResource(if (isExpanded) R.drawable.ic_arrow_dropdown_up else R.drawable.ic_arrow_dropdown_down),
+                                    contentDescription = null,
+                                )
+                            }
+
+                            DropdownMenu(
+                                modifier = Modifier,
+                                expanded = isExpanded,
+                                onDismissRequest = {
+                                    isExpanded = false
+                                },
+                                containerColor = SimbanyuTheme.colors.surfaceCard,
+                            ) {
+                                ReportStatus.entries.forEach { status ->
+                                    DropdownMenuItem(
+                                        text = {
+                                            SimbanyuText(
+                                                text = status.status,
+                                                style = SimbanyuTheme.typography.bodyStandard
+                                            )
+                                        },
+                                        onClick = {
+                                            // TODO: Handle on status selected
+                                            isExpanded = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -194,7 +262,7 @@ private fun OperatorReportContent(
                                 modifier = Modifier
                                     .height(16.dp)
                                     .padding(end = SimbanyuTheme.padding.medium),
-                                painter = painterResource(R.drawable.ic_description),
+                                painter = painterResource(R.drawable.ic_description_filled),
                                 contentDescription = null,
                                 tint = SimbanyuTheme.colors.brand
                             )
@@ -208,7 +276,7 @@ private fun OperatorReportContent(
                             modifier = Modifier,
                             state = state.notesState,
                             lineLimits = TextFieldLineLimits.MultiLine(3, 3),
-                            hint = "Masukkan isi pemberitahuan...",
+                            hint = "Masukkan catatan petugas jika diperlukan...",
                         )
 
                         Row(
@@ -218,7 +286,7 @@ private fun OperatorReportContent(
                                 modifier = Modifier
                                     .height(16.dp)
                                     .padding(end = SimbanyuTheme.padding.medium),
-                                painter = painterResource(R.drawable.ic_camera),
+                                painter = painterResource(R.drawable.ic_photo_camera_filled),
                                 contentDescription = null,
                                 tint = SimbanyuTheme.colors.brand
                             )
@@ -228,15 +296,52 @@ private fun OperatorReportContent(
                             )
                         }
 
-                        Box(
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(150.dp)
                                 .clip(SimbanyuTheme.shapes.large)
-                                .background(
-                                    SimbanyuTheme.colors.statusNeutral
-                                )
-                        )
+                                .clickable {
+                                    onAction(OperatorReportAction.PickImage)
+                                }
+                                .conditional(
+                                    state.imageUri.isEmpty()
+                                ) {
+                                    dashedBorder(
+                                        strokeWidth = 4.dp,
+                                        gapLength = 6.dp,
+                                        dashLength = 8.dp,
+                                        color = SimbanyuTheme.colors.statusNegativeText,
+                                        shape = SimbanyuTheme.shapes.large
+                                    )
+                                }
+                                .dashedBorder(
+                                    strokeWidth = 4.dp,
+                                    gapLength = 6.dp,
+                                    dashLength = 8.dp,
+                                    color = SimbanyuTheme.colors.borderCardAlternate,
+                                    shape = SimbanyuTheme.shapes.large
+                                ),
+                            verticalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.medium,
+                                alignment = Alignment.CenterVertically
+                            ),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .requiredSize(40.dp),
+                                painter = painterResource(R.drawable.ic_photo_camera_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.statusNeutral
+                            )
+
+                            SimbanyuText(
+                                text = "Unggah foto (maks 5MB)",
+                                style = SimbanyuTheme.typography.bodySmall,
+                                color = SimbanyuTheme.colors.statusNeutral
+                            )
+                        }
 
                         Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
 

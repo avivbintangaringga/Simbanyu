@@ -56,6 +56,7 @@ fun LoginScreen(
             is LoginEvent.GoToSubscriberDashboard -> {
                 onNavigate(Screen.Main)
             }
+
             is LoginEvent.GoToOperatorDashboard -> {
                 onNavigate(Screen.OperatorMain)
             }
@@ -202,7 +203,7 @@ fun LoginContent(
                     hint = "Masukkan identitas anda",
                     prefix = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_person),
+                            painter = painterResource(R.drawable.ic_person_filled),
                             contentDescription = "Username",
                             tint = SimbanyuTheme.colors.textInputDisabled
                         )
@@ -227,7 +228,7 @@ fun LoginContent(
                     isPasswordVisible = state.isPasswordVisible,
                     prefix = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_lock),
+                            painter = painterResource(R.drawable.ic_lock_filled),
                             contentDescription = "Login",
                             tint = SimbanyuTheme.colors.textInputDisabled
                         )
@@ -235,14 +236,23 @@ fun LoginContent(
                     suffix = {
                         if (state.isPasswordVisible) {
                             Icon(
-                                painter = painterResource(R.drawable.ic_visibility_off),
+                                painter = painterResource(R.drawable.ic_visibility_off_filled),
                                 contentDescription = "Hide password",
-                                modifier = Modifier.clickable { onAction(LoginAction.TogglePasswordVisibility) })
+                                tint = SimbanyuTheme.colors.textInputDisabled,
+                                modifier = Modifier
+                                    .clickable {
+                                        onAction(LoginAction.TogglePasswordVisibility)
+                                    }
+                            )
                         } else {
                             Icon(
-                                painter = painterResource(R.drawable.ic_visibility_on),
+                                painter = painterResource(R.drawable.ic_visibility_filled),
                                 contentDescription = "Show password",
-                                modifier = Modifier.clickable { onAction(LoginAction.TogglePasswordVisibility) })
+                                tint = SimbanyuTheme.colors.textInputDisabled,
+                                modifier = Modifier
+                                    .clickable {
+                                        onAction(LoginAction.TogglePasswordVisibility)
+                                    })
                         }
                     },
                     imeAction = ImeAction.Go,

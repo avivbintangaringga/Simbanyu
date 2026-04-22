@@ -220,7 +220,7 @@ fun DashboardContent(
                     textColor = SimbanyuTheme.colors.actionBrand,
                     iconLeft = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_payment),
+                            painter = painterResource(R.drawable.ic_payments_filled),
                             contentDescription = null,
                             tint = SimbanyuTheme.colors.actionBrand
                         )

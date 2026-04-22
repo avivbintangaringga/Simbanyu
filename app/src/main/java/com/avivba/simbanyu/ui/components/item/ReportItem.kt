@@ -29,6 +29,7 @@ import com.avivba.simbanyu.ui.screens.report.fakeReports
 import com.avivba.simbanyu.ui.screens.report.fakeUser
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
+import com.avivba.simbanyu.ui.shared.model.ReportStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
@@ -57,7 +58,7 @@ fun ReportItem(
             SimbanyuTheme.spacing.medium
         )
     ) {
-        val iconId = R.drawable.ic_water_droplet
+        val iconId = R.drawable.ic_feedback_filled
         val iconTint = SimbanyuTheme.colors.brand
         val iconBackgroundColor = SimbanyuTheme.colors.brand.copy(alpha = 0.2f)
         val statusBackgroundColor = SimbanyuTheme.colors.brand
@@ -110,7 +111,7 @@ fun ReportItem(
                             vertical = SimbanyuTheme.padding.extraSmall,
                             horizontal = SimbanyuTheme.padding.medium
                         ),
-                    text = report.status,
+                    text = report.status.status,
                     style = SimbanyuTheme.typography.labelUnit,
                     color = statusColor
                 )
@@ -131,7 +132,7 @@ fun ReportItem(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_person),
+                    painter = painterResource(R.drawable.ic_person_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -155,7 +156,7 @@ fun ReportItem(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_location),
+                    painter = painterResource(R.drawable.ic_location_on_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -177,7 +178,7 @@ fun ReportItem(
                     modifier = Modifier
                         .height(16.dp)
                         .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_camera),
+                    painter = painterResource(R.drawable.ic_photo_camera_filled),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brand
                 )
@@ -206,7 +207,7 @@ fun ReportItem(
                         modifier = Modifier
                             .height(16.dp)
                             .padding(end = SimbanyuTheme.padding.medium),
-                        painter = painterResource(R.drawable.ic_description),
+                        painter = painterResource(R.drawable.ic_description_filled),
                         contentDescription = null,
                         tint = SimbanyuTheme.colors.brand
                     )
@@ -230,7 +231,7 @@ fun ReportItem(
                         modifier = Modifier
                             .height(16.dp)
                             .padding(end = SimbanyuTheme.padding.medium),
-                        painter = painterResource(R.drawable.ic_camera),
+                        painter = painterResource(R.drawable.ic_photo_camera_filled),
                         contentDescription = null,
                         tint = SimbanyuTheme.colors.brand
                     )
@@ -309,7 +310,7 @@ private fun ReportPreview() {
             id = "REP-001",
             title = "Kebocoran Pipa Utama",
             type = ReportType.LEAK,
-            status = "Dalam Proses",
+            status = ReportStatus.WAITING,
             location = "Jl. Merdeka No. 10, Jakarta",
             locationCoordinate = Coordinate(-6.1754, 106.8272),
             description = "Pipa air depan rumah pecah, air meluap ke jalanan.",
