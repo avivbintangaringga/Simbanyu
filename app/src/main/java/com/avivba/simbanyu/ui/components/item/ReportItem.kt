@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,8 +22,12 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
+import com.avivba.simbanyu.ui.screens.report.ReportType
 import com.avivba.simbanyu.ui.screens.report.fakeReports
+import com.avivba.simbanyu.ui.screens.report.fakeUser
+import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
@@ -30,7 +35,10 @@ import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 fun ReportItem(
     modifier: Modifier = Modifier,
     report: Report,
-    onClickExpand: () -> Unit = {}
+    showHandleReport: Boolean = false,
+    showUser: Boolean = false,
+    onClickExpand: () -> Unit = {},
+    onClickHandleReport: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -41,7 +49,8 @@ fun ReportItem(
             )
             .clickable {
                 onClickExpand()
-            }.padding(
+            }
+            .padding(
                 SimbanyuTheme.padding.large
             ),
         verticalArrangement = Arrangement.spacedBy(
@@ -112,8 +121,32 @@ fun ReportItem(
             text = report.description
         )
 
-        if (report.isExpanded) {
+        if (showUser) {
 
+            Row(
+                modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .height(16.dp)
+                        .padding(end = SimbanyuTheme.padding.medium),
+                    painter = painterResource(R.drawable.ic_person),
+                    contentDescription = null,
+                    tint = SimbanyuTheme.colors.brand
+                )
+                SimbanyuText(
+                    text = "PELAPOR",
+                    style = SimbanyuTheme.typography.labelOverline
+                )
+            }
+
+            SimbanyuText(
+                text = "${report.user.name} (${report.user.meterId})"
+            )
+        }
+
+        if (report.isExpanded) {
             Row(
                 modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
                 verticalAlignment = Alignment.CenterVertically,
@@ -164,6 +197,71 @@ fun ReportItem(
                     )
             )
 
+            if (report.operatorNotes.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .height(16.dp)
+                            .padding(end = SimbanyuTheme.padding.medium),
+                        painter = painterResource(R.drawable.ic_description),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brand
+                    )
+                    SimbanyuText(
+                        text = "CATATAN PETUGAS",
+                        style = SimbanyuTheme.typography.labelOverline
+                    )
+                }
+
+                SimbanyuText(
+                    text = report.operatorNotes
+                )
+            }
+
+            if (report.operatorEvidenceImage.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .height(16.dp)
+                            .padding(end = SimbanyuTheme.padding.medium),
+                        painter = painterResource(R.drawable.ic_camera),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brand
+                    )
+                    SimbanyuText(
+                        text = "BUKTI PENANGANAN",
+                        style = SimbanyuTheme.typography.labelOverline
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(SimbanyuTheme.shapes.large)
+                        .background(
+                            SimbanyuTheme.colors.statusNeutral
+                        )
+                )
+            }
+
+            if (showHandleReport) {
+                SimbanyuButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush = SimbanyuTheme.colors.brush.brandVertical
+                        ),
+                    text = "Update Penanganan",
+                    onClick = onClickHandleReport
+                )
+            }
         }
 
         Row(
@@ -176,7 +274,7 @@ fun ReportItem(
             )
         ) {
             SimbanyuText(
-                text = if(report.isExpanded) {
+                text = if (report.isExpanded) {
                     "Sembunyikan detail"
                 } else {
                     "Tampilkan detail"
@@ -205,6 +303,20 @@ fun ReportItem(
 private fun ReportPreview() {
     ReportItem(
         modifier = Modifier,
-        report = fakeReports[0]
+        showHandleReport = true,
+        showUser = true,
+        report = Report(
+            id = "REP-001",
+            title = "Kebocoran Pipa Utama",
+            type = ReportType.LEAK,
+            status = "Dalam Proses",
+            location = "Jl. Merdeka No. 10, Jakarta",
+            locationCoordinate = Coordinate(-6.1754, 106.8272),
+            description = "Pipa air depan rumah pecah, air meluap ke jalanan.",
+            image = "https://example.com/leak1.jpg",
+            date = "24 Mei 2024",
+            isExpanded = true,
+            user = fakeUser,
+        ),
     )
 }
