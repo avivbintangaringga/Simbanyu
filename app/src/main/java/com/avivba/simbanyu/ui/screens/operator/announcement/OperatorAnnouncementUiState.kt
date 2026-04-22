@@ -1,12 +1,22 @@
 package com.avivba.simbanyu.ui.screens.operator.announcement
 
+import androidx.compose.foundation.text.input.TextFieldState
 import com.avivba.simbanyu.ui.shared.model.Announcement
+
+enum class Fields {
+    TITLE,
+    DESCRIPTION
+}
 
 data class OperatorAnnouncementUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
     val announcements: List<Announcement> = emptyList(),
-    val isShowCreateDialog: Boolean = false
+    val isShowCreateDialog: Boolean = false,
+    val isCreatingAnnouncement: Boolean = false,
+    val titleState: TextFieldState = TextFieldState(),
+    val descriptionState: TextFieldState = TextFieldState(),
+    val errorFields: List<Fields> = emptyList()
 )
 
 sealed interface OperatorAnnouncementAction {
@@ -20,6 +30,7 @@ sealed interface OperatorAnnouncementAction {
 }
 
 sealed interface OperatorAnnouncementEvent {
+    data object AnnouncementCreated : OperatorAnnouncementEvent
     data object NavigateBack : OperatorAnnouncementEvent
 }
 
