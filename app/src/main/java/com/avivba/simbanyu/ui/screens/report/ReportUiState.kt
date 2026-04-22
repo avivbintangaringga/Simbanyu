@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.report
 import androidx.compose.foundation.text.input.TextFieldState
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
+import com.avivba.simbanyu.ui.shared.model.User
 
 enum class ReportType(val value: String) {
     OUTAGE("outage"),
@@ -46,22 +47,32 @@ sealed interface ReportEvent {
     data object ReportSent : ReportEvent
 }
 
+val fakeUser = User(
+    id = "1",
+    name = "Budi Budiman",
+    meterId = "MTR1234432",
+    role = "subscriber",
+    imageUrl = ""
+)
+
 val fakeReports = listOf(
     Report(
         id = "REP-001",
         title = "Kebocoran Pipa Utama",
         type = ReportType.LEAK,
+        user = fakeUser,
         status = "Dalam Proses",
         location = "Jl. Merdeka No. 10, Jakarta",
         locationCoordinate = Coordinate(-6.1754, 106.8272),
         description = "Pipa air depan rumah pecah, air meluap ke jalanan.",
         image = "https://example.com/leak1.jpg",
-        date = "24 Mei 2024"
+        date = "24 Mei 2024",
     ),
     Report(
         id = "REP-002",
         title = "Air Keruh dan Berpasir",
         type = ReportType.MUDDY,
+        user = fakeUser,
         status = "Selesai",
         location = "Perumahan Indah, Blok C2",
         locationCoordinate = Coordinate(-6.2000, 106.8166),
@@ -73,6 +84,7 @@ val fakeReports = listOf(
         id = "REP-003",
         title = "Aliran Air Mati Total",
         type = ReportType.OUTAGE,
+        user = fakeUser,
         status = "Menunggu",
         location = "Kp. Melayu RT 05/RW 02",
         locationCoordinate = Coordinate(-6.2333, 106.8500),
@@ -84,6 +96,7 @@ val fakeReports = listOf(
         id = "REP-004",
         title = "Pipa Bocor Kecil",
         type = ReportType.LEAK,
+        user = fakeUser,
         status = "Selesai",
         location = "Jl. Sudirman Gg. 5",
         locationCoordinate = Coordinate(-6.2146, 106.8202),

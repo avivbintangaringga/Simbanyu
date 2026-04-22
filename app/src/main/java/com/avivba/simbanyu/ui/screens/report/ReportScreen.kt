@@ -202,13 +202,6 @@ private fun CreateReport(
             .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            // TODO: Kategori aduan
-        }
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -248,7 +241,7 @@ private fun CreateReport(
                     },
                 state = state.locationState,
                 lineLimits = TextFieldLineLimits.MultiLine(3, 6),
-                hint = "Masukkan lokasi terjadinya gangguan...",
+                hint = "Masukkan lokasi / patokan terjadinya gangguan...",
             )
 
             Row(

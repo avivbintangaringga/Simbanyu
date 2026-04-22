@@ -342,7 +342,7 @@ private fun OperatorAnnouncementPreview() {
         state = OperatorAnnouncementUiState(
             announcements = fakeAnnouncements,
             isRefreshing = false,
-            isShowCreateDialog = true
+            isShowCreateDialog = false
         )
     )
 }
