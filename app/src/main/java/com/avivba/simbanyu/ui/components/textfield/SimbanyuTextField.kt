@@ -45,9 +45,7 @@ fun SimbanyuTextField(
             .background(SimbanyuTheme.colors.surfaceInput)
             .padding(
                 horizontal = SimbanyuTheme.padding.large,
-                vertical = SimbanyuTheme.padding.medium.plus(
-                    SimbanyuTheme.padding.small
-                )
+                vertical = SimbanyuTheme.padding.medium
             ),
         horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.large),
         verticalAlignment = Alignment.CenterVertically

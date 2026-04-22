@@ -1,7 +1,9 @@
 package com.avivba.simbanyu.ui.components.buttons
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,20 +34,18 @@ fun SimbanyuButton(
     textColor: Color = SimbanyuTheme.colors.actionBrandText,
     onClick: () -> Unit = {}
 ) {
-    Surface(
-        onClick = onClick,
+    Box(
         modifier = Modifier
+            .clip(SimbanyuTheme.shapes.extraLarge)
+            .then(modifier)
+            .clickable {
+                onClick()
+            }
             .defaultMinSize(
                 minWidth = ButtonDefaults.MinWidth,
                 minHeight = ButtonDefaults.MinHeight
-            )
-            .heightIn(
-                min = 48.dp
-            )
-            .clip(SimbanyuTheme.shapes.extraLarge)
-            .then(modifier),
-        shape = SimbanyuTheme.shapes.extraLarge,
-        color = Color.Transparent
+            ),
+        contentAlignment = Alignment.Center
     ) {
         Row(
             modifier = Modifier
