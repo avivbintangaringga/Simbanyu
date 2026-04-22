@@ -5,6 +5,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -101,6 +103,7 @@ private fun OperatorReportContent(
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+    val filterScrollState = rememberScrollState()
 
     PullToRefreshBox(
         modifier = modifier
@@ -130,6 +133,54 @@ private fun OperatorReportContent(
                 style = SimbanyuTheme.typography.bodySmall,
                 color = SimbanyuTheme.colors.brand
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(filterScrollState),
+                horizontalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                )
+            ) {
+                ReportStatusFilter.entries.forEach {
+                    val selected = state.filterStatus == it
+                    SimbanyuText(
+                        modifier = Modifier
+                            .clip(
+                                SimbanyuTheme.shapes.large
+                            )
+                            .clickable {
+                                onAction(OperatorReportAction.SetStatusFilter(it))
+                            }
+                            .background(
+                                color = SimbanyuTheme.colors.surfaceCard,
+                            )
+                            .conditional(selected) {
+                                background(
+                                    color = SimbanyuTheme.colors.brand
+                                )
+                            }
+                            .conditional(!selected) {
+                                border(
+                                    width = 1.dp,
+                                    color = SimbanyuTheme.colors.brand,
+                                    shape = SimbanyuTheme.shapes.large
+                                )
+                            }
+                            .padding(
+                                vertical = SimbanyuTheme.padding.small,
+                                horizontal = SimbanyuTheme.padding.large
+                            ),
+                        text = it.title,
+                        style = SimbanyuTheme.typography.labelUnit,
+                        color = if (selected) {
+                            SimbanyuTheme.colors.brandText
+                        } else {
+                            SimbanyuTheme.colors.brand
+                        }
+                    )
+                }
+            }
 
             LazyColumn(
                 modifier = modifier

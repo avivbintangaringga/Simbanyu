@@ -1,10 +1,18 @@
 package com.avivba.simbanyu.ui.screens.operator.report
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.ui.screens.billhistory.BillingStatus
 import com.avivba.simbanyu.ui.screens.report.fakeReports
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class OperatorReportViewModel(
@@ -12,8 +20,11 @@ class OperatorReportViewModel(
 ) : BaseViewModel<OperatorReportUiState, OperatorReportAction, OperatorReportEvent>(
     OperatorReportUiState()
 ) {
+    private val _reports = MutableStateFlow<List<OperatorReport>>(emptyList())
+
     init {
         viewModelScope.launch {
+            observeDataChanges()
             load()
         }
     }
@@ -44,6 +55,14 @@ class OperatorReportViewModel(
                 OperatorReportAction.PickImage -> {
                     // TODO: Pick Image
                 }
+
+                is OperatorReportAction.SetStatusFilter -> {
+                    updateState {
+                        it.copy(
+                            filterStatus = action.filter
+                        )
+                    }
+                }
             }
         }
     }
@@ -56,15 +75,13 @@ class OperatorReportViewModel(
                 )
             }
 
-            updateState {
-                it.copy(
-                    reports = fakeReports.map { report ->
-                        OperatorReport(
-                            report = report,
-                            false
-                        )
-                    }
-                )
+            _reports.update {
+                fakeReports.map { report ->
+                    OperatorReport(
+                        report = report,
+                        false
+                    )
+                }
             }
 
             updateState {
@@ -115,6 +132,28 @@ class OperatorReportViewModel(
                     }
                 }
             )
+        }
+    }
+
+
+    private fun observeDataChanges() {
+        viewModelScope.launch {
+            combine(
+                _reports,
+                state.map { it.filterStatus }.distinctUntilChanged()
+            ) { reports, filter ->
+                if (filter.status == null) {
+                    return@combine reports
+                } else {
+                    reports.filter { it.report.status == filter.status}
+                }
+            }.collect { filtered ->
+                updateState {
+                    it.copy(
+                        reports = filtered
+                    )
+                }
+            }
         }
     }
 }
