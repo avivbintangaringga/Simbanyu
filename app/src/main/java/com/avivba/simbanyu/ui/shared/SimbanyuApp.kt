@@ -1,5 +1,8 @@
 package com.avivba.simbanyu.ui.shared
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -22,9 +25,23 @@ fun SimbanyuApp(
 ) {
     Background()
 
+    val fadeDuration = 250
+
     NavHost(
         navController = navHostController,
-        startDestination = Screen.Login
+        startDestination = Screen.Login,
+        enterTransition = {
+            fadeIn(animationSpec = tween(fadeDuration))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(fadeDuration))
+        },
+        popEnterTransition = {
+            fadeIn(animationSpec = tween(fadeDuration))
+        },
+        popExitTransition = {
+            fadeOut(animationSpec = tween(fadeDuration))
+        }
     ) {
         composable<Screen.Login> {
             LoginScreen(onNavigate = { dest ->
@@ -120,6 +137,10 @@ fun SimbanyuApp(
                     navHostController.popBackStack()
                 }
             )
+        }
+
+        composable<Screen.RecordMeter> {
+
         }
     }
 }

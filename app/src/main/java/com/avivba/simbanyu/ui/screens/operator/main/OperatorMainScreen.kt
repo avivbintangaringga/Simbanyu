@@ -1,5 +1,8 @@
 package com.avivba.simbanyu.ui.screens.operator.main
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -240,12 +243,25 @@ fun OperatorMainScreenContent(
             )
         }
     ) { paddingValues ->
+        val fadeDuration = 250
         NavHost(
             modifier = Modifier.padding(
                 paddingValues
             ),
             navController = navController,
-            startDestination = Screen.OperatorMainScreen.Home
+            startDestination = Screen.OperatorMainScreen.Home,
+            enterTransition = {
+                fadeIn(animationSpec = tween(fadeDuration))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(fadeDuration))
+            },
+            popEnterTransition = {
+                fadeIn(animationSpec = tween(fadeDuration))
+            },
+            popExitTransition = {
+                fadeOut(animationSpec = tween(fadeDuration))
+            }
         ) {
             composable<Screen.OperatorMainScreen.Home> {
                 OperatorDashboardScreen(
