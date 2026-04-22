@@ -47,8 +47,8 @@ class ReportViewModel : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
                     refresh()
                 }
 
-                is ReportAction.ExpandItem -> {
-                    setItemExpanded(action.report)
+                is ReportAction.ToggleExpandItem -> {
+                    toggleReportExpand(action.report)
                 }
             }
         }
@@ -139,7 +139,7 @@ class ReportViewModel : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
         // TODO: Implement refresh
     }
 
-    private fun setItemExpanded(report: Report) {
+    private fun toggleReportExpand(report: Report) {
         updateState {
             it.copy(
                 reports = it.reports.map { item ->

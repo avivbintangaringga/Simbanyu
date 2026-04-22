@@ -454,7 +454,7 @@ private fun ReportList(
                         modifier = Modifier,
                         report = report,
                         onClickExpand = {
-                            onAction(ReportAction.ExpandItem(report))
+                            onAction(ReportAction.ToggleExpandItem(report))
                         }
                     )
                 }

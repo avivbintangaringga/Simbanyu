@@ -39,7 +39,7 @@ sealed interface ReportAction {
     data object GetMyLocation : ReportAction
     data object SendReport : ReportAction
     data class ChangeTab(val index: Int) : ReportAction
-    data class ExpandItem(val report: Report) : ReportAction
+    data class ToggleExpandItem(val report: Report) : ReportAction
 }
 
 sealed interface ReportEvent {

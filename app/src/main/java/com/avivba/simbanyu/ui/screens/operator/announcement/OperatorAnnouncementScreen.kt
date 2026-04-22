@@ -220,8 +220,7 @@ fun OperatorAnnouncementContent(
                 sheetState = bottomSheetState,
                 onDismissRequest = {
                     onAction(OperatorAnnouncementAction.HideCreateDialog)
-                },
-
+                }
             ) {
                 Column(
                     modifier = Modifier
