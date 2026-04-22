@@ -19,6 +19,17 @@ class SubscribersViewModel(
                     sendEvent(GoToSubscriberDetails(action.subscriber))
                 }
 
+                is SubscribersAction.SetRecordStateFilter -> {
+                    updateState {
+                        it.copy(
+                            filterRecordState = action.filter
+                        )
+                    }
+                }
+
+                SubscribersAction.Search -> {
+                    search()
+                }
             }
         }
     }
@@ -32,6 +43,6 @@ private fun refresh() {
     // TODO: Implement
 }
 
-private fun search(query: String) {
+private fun search() {
     // TODO: Implement
 }

@@ -138,7 +138,6 @@ fun ReportItem(
         )
 
         if (showUser) {
-
             Row(
                 modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
                 verticalAlignment = Alignment.CenterVertically,
