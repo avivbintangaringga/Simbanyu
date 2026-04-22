@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.item.SubscriberItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.shared.Screen
@@ -43,6 +44,10 @@ fun SubscribersScreen(
         when (it) {
             is SubscribersEvent.GoToSubscriberDetails -> {
                 onNavigate(Screen.SubscriberDetails(it.subscriber.id))
+            }
+
+            is SubscribersEvent.GoToRecordMeter -> {
+                onNavigate(Screen.RecordMeter(it.subscriber.id))
             }
         }
     }
@@ -155,8 +160,16 @@ fun SubscribersContent(
             items(
                 items = state.filteredSubscribers,
                 key = { it.id }
-            ) { subsriber ->
-
+            ) { subscriber ->
+                SubscriberItem(
+                    subscriber = subscriber,
+                    onClick = {
+                        onAction(SubscribersAction.ShowDetails(subscriber))
+                    },
+                    onClickRecordMeter = {
+                        onAction(SubscribersAction.RecordMeter(subscriber))
+                    }
+                )
             }
         }
     }
@@ -166,6 +179,8 @@ fun SubscribersContent(
 @Composable
 private fun SubscribersContentPreview() {
     SubscribersContent(
-        state = SubscribersUiState()
+        state = SubscribersUiState(
+            filteredSubscribers = fakeSubscribers
+        )
     )
 }

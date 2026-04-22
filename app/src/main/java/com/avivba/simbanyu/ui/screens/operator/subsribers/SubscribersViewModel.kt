@@ -1,22 +1,28 @@
 package com.avivba.simbanyu.ui.screens.operator.subsribers
 
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.screens.operator.subsribers.SubscribersEvent.*
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.launch
+import kotlin.collections.copy
 
 class SubscribersViewModel(
 
 ) : BaseViewModel<SubscribersUiState, SubscribersAction, SubscribersEvent>(
     SubscribersUiState()
 ) {
+    init {
+        viewModelScope.launch {
+            load()
+        }
+    }
+
     override fun onAction(action: SubscribersAction) {
         viewModelScope.launch {
             when (action) {
                 SubscribersAction.Load -> load()
                 SubscribersAction.Refresh -> refresh()
                 is SubscribersAction.ShowDetails -> {
-                    sendEvent(GoToSubscriberDetails(action.subscriber))
+                    sendEvent(SubscribersEvent.GoToSubscriberDetails(action.subscriber))
                 }
 
                 is SubscribersAction.SetRecordStateFilter -> {
@@ -30,19 +36,29 @@ class SubscribersViewModel(
                 SubscribersAction.Search -> {
                     search()
                 }
+
+                is SubscribersAction.RecordMeter -> {
+                    sendEvent(SubscribersEvent.GoToRecordMeter(action.subscriber))
+                }
             }
         }
     }
-}
 
-private fun load() {
-    // TODO: Implement
-}
+    private fun load() {
+        // TODO: Implement
 
-private fun refresh() {
-    // TODO: Implement
-}
+        updateState {
+            it.copy(
+                filteredSubscribers = fakeSubscribers
+            )
+        }
+    }
 
-private fun search() {
-    // TODO: Implement
+    private fun refresh() {
+        // TODO: Implement
+    }
+
+    private fun search() {
+        // TODO: Implement
+    }
 }

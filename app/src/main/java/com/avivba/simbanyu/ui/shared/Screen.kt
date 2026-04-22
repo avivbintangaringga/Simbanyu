@@ -26,6 +26,9 @@ sealed interface Screen {
     data class SubscriberDetails(val id: String) : Screen
 
     @Serializable
+    data class RecordMeter(val id: String) : Screen
+
+    @Serializable
     data object AnnouncementScreen : Screen
 
     @Serializable

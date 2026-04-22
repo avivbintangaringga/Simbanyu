@@ -62,7 +62,6 @@ fun ActivityItem(
             tint = SimbanyuTheme.colors.brand
         )
 
-
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
