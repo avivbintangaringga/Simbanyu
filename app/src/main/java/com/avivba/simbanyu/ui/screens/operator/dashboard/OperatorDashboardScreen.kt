@@ -37,7 +37,7 @@ fun OperatorDashboardScreen(
     ObserveAsEvent(viewModel.event) {
         when (it) {
             OperatorDashboardEvent.GoToAnnouncementsPage -> {
-                onNavigate(Screen.AnnouncementScreen)
+                onNavigate(Screen.OperatorAnnouncementScreen)
             }
         }
     }

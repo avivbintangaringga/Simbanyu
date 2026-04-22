@@ -120,12 +120,22 @@ fun OperatorAnnouncementContent(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SimbanyuText(
-                        modifier = Modifier,
-                        text = "Pemberitahuan",
-                        style = SimbanyuTheme.typography.displayMedium
-                    )
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        SimbanyuText(
+                            modifier = Modifier,
+                            text = "Pemberitahuan",
+                            style = SimbanyuTheme.typography.displayMedium
+                        )
 
+                        SimbanyuText(
+                            text = "Sampaikan pemberitahuan kepada pelanggan",
+                            style = SimbanyuTheme.typography.bodySmall,
+                            color = SimbanyuTheme.colors.brand
+                        )
+                    }
                     SimbanyuButton(
                         text = "Tambah",
                         textColor = SimbanyuTheme.colors.actionBrand,
@@ -145,11 +155,6 @@ fun OperatorAnnouncementContent(
                         onAction(OperatorAnnouncementAction.ShowCreateDialog)
                     }
                 }
-//                SimbanyuText(
-//                    text = "Sampaikan pemberitahuan kepada pelanggan",
-//                    style = SimbanyuTheme.typography.bodySmall,
-//                    color = SimbanyuTheme.colors.brand
-//                )
 //
 //                Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
 
@@ -165,13 +170,20 @@ fun OperatorAnnouncementContent(
                     items(
                         items = state.announcements.sortedByDescending { it.id },
                         key = { it.id }
-                    ) { usage ->
+                    ) { announcement ->
                         AnnouncementItem(
-                            title = usage.title,
-                            content = usage.content,
-                            time = usage.time,
+                            title = announcement.title,
+                            content = announcement.content,
+                            time = announcement.time,
                             iconId = R.drawable.ic_campaign_filled,
-                            canDelete = true
+                            canDelete = true,
+                            onDelete = {
+                                onAction(
+                                    OperatorAnnouncementAction.DeleteAnnouncement(
+                                        announcement
+                                    )
+                                )
+                            }
                         )
                     }
                 }

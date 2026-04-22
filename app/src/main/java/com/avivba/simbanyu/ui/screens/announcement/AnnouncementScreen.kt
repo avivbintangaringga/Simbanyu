@@ -73,7 +73,7 @@ fun AnnouncementContent(
         containerColor = Color.Transparent,
         topBar = {
             TopBar(
-                text = "Simbanyu Operator",
+                text = "Simbanyu",
                 navigationIcon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_arrow_backward),
@@ -135,11 +135,11 @@ fun AnnouncementContent(
                     items(
                         items = state.announcements.sortedByDescending { it.id },
                         key = { it.id }
-                    ) { usage ->
+                    ) { announcement ->
                         AnnouncementItem(
-                            title = usage.title,
-                            content = usage.content,
-                            time = usage.time,
+                            title = announcement.title,
+                            content = announcement.content,
+                            time = announcement.time,
                             iconId = R.drawable.ic_campaign_filled,
                         )
                     }
