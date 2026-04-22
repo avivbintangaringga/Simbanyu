@@ -120,6 +120,16 @@ private fun OperatorReportContent(
                 SimbanyuTheme.spacing.medium
             )
         ) {
+            SimbanyuText(
+                text = "Laporan Pelanggan",
+                style = SimbanyuTheme.typography.displayMedium
+            )
+
+            SimbanyuText(
+                text = "Aduan dari pelanggan terkait layanan air",
+                style = SimbanyuTheme.typography.bodySmall,
+                color = SimbanyuTheme.colors.brand
+            )
 
             LazyColumn(
                 modifier = modifier

@@ -10,13 +10,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,7 +24,6 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.report.ReportType
-import com.avivba.simbanyu.ui.screens.report.fakeReports
 import com.avivba.simbanyu.ui.screens.report.fakeUser
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
@@ -61,8 +59,25 @@ fun ReportItem(
         val iconId = R.drawable.ic_feedback_filled
         val iconTint = SimbanyuTheme.colors.brand
         val iconBackgroundColor = SimbanyuTheme.colors.brand.copy(alpha = 0.2f)
-        val statusBackgroundColor = SimbanyuTheme.colors.brand
-        val statusColor = SimbanyuTheme.colors.brandText
+
+        var statusBackgroundColor: Color
+        when (report.status) {
+            ReportStatus.WAITING -> {
+                statusBackgroundColor = SimbanyuTheme.colors.statusNeutral
+            }
+
+            ReportStatus.IN_PROGRESS -> {
+                statusBackgroundColor = SimbanyuTheme.colors.statusWarningText
+            }
+
+            ReportStatus.COMPLETED -> {
+                statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
+            }
+
+            ReportStatus.REJECTED -> {
+                statusBackgroundColor = SimbanyuTheme.colors.statusNegativeText
+            }
+        }
 
         Row(
             modifier = modifier
@@ -113,7 +128,7 @@ fun ReportItem(
                         ),
                     text = report.status.status,
                     style = SimbanyuTheme.typography.labelUnit,
-                    color = statusColor
+                    color = SimbanyuTheme.colors.brandText
                 )
             }
         }
