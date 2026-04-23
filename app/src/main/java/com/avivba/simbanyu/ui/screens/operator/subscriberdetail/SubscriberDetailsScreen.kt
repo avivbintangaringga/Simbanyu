@@ -43,6 +43,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -118,6 +121,12 @@ fun SubscriberDetailsContent(
         tabs.size
     }
     val scope = rememberCoroutineScope()
+
+    val containerHeightPx = LocalWindowInfo.current.containerSize.height
+    val containerHeightDp = with(LocalDensity.current) {
+        containerHeightPx.toDp()
+    }
+    val dynamicPagerHeight = containerHeightDp * 0.7f
 
     Scaffold(
         modifier = modifier,
@@ -386,13 +395,14 @@ fun SubscriberDetailsContent(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
-                    .weight(1f)
+                    .height(dynamicPagerHeight)
+                    .fillMaxWidth()
             ) { page ->
                 when (page) {
                     0 -> {
                         BillHistory(
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxSize(),
                             state = state,
                             onAction = onAction
                         )
@@ -401,7 +411,7 @@ fun SubscriberDetailsContent(
                     1 -> {
                         UsageHistory(
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxSize(),
                             state = state,
                             onAction = onAction
                         )
@@ -447,7 +457,8 @@ private fun UsageHistory(
     }
 
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
         horizontalAlignment = Alignment.End
     ) {
