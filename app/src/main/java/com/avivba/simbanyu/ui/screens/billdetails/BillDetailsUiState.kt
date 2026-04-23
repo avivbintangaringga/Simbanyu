@@ -1,15 +1,7 @@
 package com.avivba.simbanyu.ui.screens.billdetails
 
-data class Cost(
-    val name: String,
-    val amount: String,
-)
-
-enum class BillingStatus(val status: String) {
-    PAID("LUNAS"),
-    PENDING("MENUNGGU PEMBAYARAN"),
-    UNPAID("BELUM DIBAYAR")
-}
+import com.avivba.simbanyu.ui.shared.model.BillingStatus
+import com.avivba.simbanyu.ui.shared.model.Cost
 
 data class BillDetailsUiState(
     val isLoading: Boolean = false,

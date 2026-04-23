@@ -3,7 +3,6 @@ package com.avivba.simbanyu.ui.screens.operator.report
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.screens.billhistory.BillingStatus
 import com.avivba.simbanyu.ui.screens.report.fakeReports
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.delay

@@ -54,60 +54,6 @@ fun SubscriberItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            SimbanyuText(
-                text = "METER ID: ${subscriber.meterId}",
-                style = SimbanyuTheme.typography.bodySmall
-            )
-
-            var status = "BELUM DICATAT"
-            var iconId = R.drawable.ic_warning_filled
-            var color = SimbanyuTheme.colors.statusWarningText
-
-            if (subscriber.isRecorded) {
-                status = "SELESAI"
-                iconId = R.drawable.ic_check
-                color = SimbanyuTheme.colors.statusPositiveText
-            }
-
-            Row(
-                modifier = Modifier
-                    .background(
-                        color = color,
-                        shape = SimbanyuTheme.shapes.large
-                    )
-                    .padding(
-                        vertical = SimbanyuTheme.padding.small,
-                        horizontal = SimbanyuTheme.padding.medium
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.small
-                )
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .size(16.dp),
-                    painter = painterResource(iconId),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brandText,
-                )
-
-                SimbanyuText(
-                    text = status,
-                    style = SimbanyuTheme.typography.bodySmall,
-                    color = SimbanyuTheme.colors.brandText,
-                )
-            }
-        }
-
-        Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
             ),
@@ -135,10 +81,58 @@ fun SubscriberItem(
                     SimbanyuTheme.spacing.small
                 )
             ) {
-                SimbanyuText(
-                    text = subscriber.name,
-                    style = SimbanyuTheme.typography.displaySmall
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    SimbanyuText(
+                        text = subscriber.name,
+                        style = SimbanyuTheme.typography.displaySmall
+                    )
+
+                    var status = "BELUM DICATAT"
+                    var iconId = R.drawable.ic_warning_filled
+                    var color = SimbanyuTheme.colors.statusWarningText
+
+                    if (subscriber.isRecorded) {
+                        status = "SELESAI"
+                        iconId = R.drawable.ic_check
+                        color = SimbanyuTheme.colors.statusPositiveText
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .background(
+                                color = color,
+                                shape = SimbanyuTheme.shapes.large
+                            )
+                            .padding(
+                                vertical = SimbanyuTheme.padding.extraSmall,
+                                horizontal = SimbanyuTheme.padding.medium
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.small
+                        )
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .size(12.dp),
+                            painter = painterResource(iconId),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.brandText,
+                        )
+
+                        SimbanyuText(
+                            text = status,
+                            style = SimbanyuTheme.typography.bodySmall,
+                            color = SimbanyuTheme.colors.brandText,
+                        )
+                    }
+                }
 
                 SimbanyuText(
                     text = subscriber.address,
@@ -147,8 +141,28 @@ fun SubscriberItem(
             }
         }
 
-        Spacer(Modifier.height(SimbanyuTheme.spacing.large))
+        Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
 
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.spacedBy(
+                SimbanyuTheme.spacing.small
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier
+                    .height(16.dp),
+                painter = painterResource(R.drawable.ic_speed_filled),
+                contentDescription = null,
+                tint = SimbanyuTheme.colors.brand
+            )
+
+            SimbanyuText(
+                text = subscriber.meterId,
+                style = SimbanyuTheme.typography.labelOverline
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -162,13 +176,29 @@ fun SubscriberItem(
                     SimbanyuTheme.spacing.extraSmall
                 )
             ) {
-                SimbanyuText(
-                    text = "CATAT TERAKHIR",
-                    style = SimbanyuTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight(900)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        SimbanyuTheme.spacing.small
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .height(16.dp),
+                        painter = painterResource(R.drawable.ic_calendar_clock_filled),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brand
                     )
-                )
 
+                    SimbanyuText(
+                        text = "CATAT TERAKHIR",
+                        style = SimbanyuTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight(900)
+                        )
+                    )
+                }
                 SimbanyuText(
                     text = subscriber.lastMeterRecordDate,
                     style = SimbanyuTheme.typography.bodySmall
@@ -191,7 +221,7 @@ fun SubscriberItem(
                         ),
                     iconLeft = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_edit_filled),
+                            painter = painterResource(R.drawable.ic_speed_filled),
                             contentDescription = null,
                             tint = SimbanyuTheme.colors.actionBrandText
                         )
@@ -202,7 +232,7 @@ fun SubscriberItem(
                 )
             } else {
                 SimbanyuButton(
-                    text = "Catat Meter",
+                    text = "Catat",
                     modifier = Modifier
                         .background(
                             brush = SimbanyuTheme.colors.brush.brandVertical,

@@ -58,6 +58,7 @@ import com.avivba.simbanyu.ui.components.topbar.TopBar
 import com.avivba.simbanyu.ui.screens.operator.meterrecord.MeterRecordAction
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryAction
 import com.avivba.simbanyu.ui.shared.Screen
+import com.avivba.simbanyu.ui.shared.Screen.*
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import ir.ehsannarmani.compose_charts.LineChart
@@ -94,7 +95,11 @@ fun SubscriberDetailsScreen(
             }
 
             is SubscriberDetailsEvent.GoToRecordMeter -> {
-                onNavigate(Screen.RecordMeter(it.subscriberId))
+                onNavigate(RecordMeter(viewModel.subscriberId))
+            }
+
+            is SubscriberDetailsEvent.GoToWhatsApp -> {
+                // TODO: Implement go to WhatsApp
             }
         }
     }
@@ -283,42 +288,21 @@ fun SubscriberDetailsContent(
                 )
             }
 
-            SimbanyuButton(
-                text = "Hubungi via WhatsApp",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                SimbanyuTheme.colors.statusPositiveText,
-                                SimbanyuTheme.colors.statusPositiveText.copy(
-                                    alpha = 0.6f
-                                )
-                            )
-                        ),
-                    ),
-                iconLeft = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_call_filled),
-                        contentDescription = null,
-                        tint = SimbanyuTheme.colors.actionBrandText
-                    )
-                },
-                onClick = {
-                    onAction(SubscriberDetailsAction.RecordMeter)
-                }
-            )
-
-            if (state.isRecorded) {
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                )
+            ) {
                 SimbanyuButton(
-                    text = "Perbarui Meter",
+                    text = "WhatsApp",
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .weight(1f)
                         .background(
                             brush = Brush.verticalGradient(
                                 colors = listOf(
-                                    SimbanyuTheme.colors.statusNeutral,
-                                    SimbanyuTheme.colors.statusNeutral.copy(
+                                    SimbanyuTheme.colors.statusPositiveText,
+                                    SimbanyuTheme.colors.statusPositiveText.copy(
                                         alpha = 0.6f
                                     )
                                 )
@@ -326,34 +310,62 @@ fun SubscriberDetailsContent(
                         ),
                     iconLeft = {
                         Icon(
-                            painter = painterResource(R.drawable.ic_edit_filled),
+                            painter = painterResource(R.drawable.ic_call_filled),
                             contentDescription = null,
                             tint = SimbanyuTheme.colors.actionBrandText
                         )
                     },
                     onClick = {
-                        onAction(SubscriberDetailsAction.RecordMeter)
+                        onAction(SubscriberDetailsAction.ContactViaWhatsApp)
                     }
                 )
-            } else {
-                SimbanyuButton(
-                    text = "Catat Meter",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            brush = SimbanyuTheme.colors.brush.brandVertical,
-                        ),
-                    iconLeft = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_speed_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.actionBrandText
-                        )
-                    },
-                    onClick = {
-                        onAction(SubscriberDetailsAction.RecordMeter)
-                    }
-                )
+
+                if (state.isRecorded) {
+                    SimbanyuButton(
+                        text = "Perbarui",
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        SimbanyuTheme.colors.statusNeutral,
+                                        SimbanyuTheme.colors.statusNeutral.copy(
+                                            alpha = 0.6f
+                                        )
+                                    )
+                                ),
+                            ),
+                        iconLeft = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_speed_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.actionBrandText
+                            )
+                        },
+                        onClick = {
+                            onAction(SubscriberDetailsAction.RecordMeter)
+                        }
+                    )
+                } else {
+                    SimbanyuButton(
+                        text = "Catat",
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(
+                                brush = SimbanyuTheme.colors.brush.brandVertical,
+                            ),
+                        iconLeft = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_speed_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.actionBrandText
+                            )
+                        },
+                        onClick = {
+                            onAction(SubscriberDetailsAction.RecordMeter)
+                        }
+                    )
+                }
             }
 
             SecondaryTabRow(
@@ -422,247 +434,13 @@ fun SubscriberDetailsContent(
     }
 }
 
-@Composable
-private fun BillHistory(
-    modifier: Modifier = Modifier,
-    state: SubscriberDetailsUiState,
-    onAction: (SubscriberDetailsAction) -> Unit = {}
-) {
-
-}
-
-@Composable
-private fun UsageHistory(
-    modifier: Modifier = Modifier,
-    state: SubscriberDetailsUiState,
-    onAction: (SubscriberDetailsAction) -> Unit = {}
-) {
-    var isExpanded by remember { mutableStateOf(false) }
-    val listState = rememberLazyListState()
-    val chartColor = SolidColor(SimbanyuTheme.colors.brand)
-    val chartGradientColor = SimbanyuTheme.colors.brandLighter
-    val usageData = remember(state.usages, chartColor, chartGradientColor) {
-        listOf(
-            Line(
-                label = "Penggunaan",
-                values = state.usages.map { it.amount.toDouble() },
-                color = chartColor,
-                firstGradientFillColor = chartGradientColor,
-                secondGradientFillColor = Color.Transparent,
-                strokeAnimationSpec = tween(2000, easing = EaseInOutCubic),
-                gradientAnimationDelay = 1000,
-                drawStyle = DrawStyle.Stroke(width = 2.dp),
-            )
-        )
-    }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
-        horizontalAlignment = Alignment.End
-    ) {
-        Box(
-            modifier = Modifier
-        ) {
-            Row(
-                modifier = Modifier
-                    .background(
-                        color = SimbanyuTheme.colors.surfaceCardAlternate,
-                        shape = SimbanyuTheme.shapes.medium
-                    )
-                    .clickable {
-                        isExpanded = true
-                    }
-                    .padding(SimbanyuTheme.padding.medium),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SimbanyuText(
-                    modifier = Modifier.padding(end = SimbanyuTheme.padding.small),
-                    text = if (state.usageSelectedYear > 0) state.usageSelectedYear.toString() else "Tahun",
-                    style = SimbanyuTheme.typography.labelAction
-                )
-                Icon(
-                    painter = painterResource(if (isExpanded) R.drawable.ic_arrow_dropdown_up else R.drawable.ic_arrow_dropdown_down),
-                    contentDescription = null,
-                )
-            }
-
-            DropdownMenu(
-                expanded = isExpanded,
-                onDismissRequest = {
-                    isExpanded = false
-                },
-                containerColor = SimbanyuTheme.colors.surfaceCard,
-            ) {
-                state.usageYears.forEach { year ->
-                    DropdownMenuItem(
-                        text = {
-                            SimbanyuText(
-                                text = year.toString(),
-                                style = SimbanyuTheme.typography.bodyStandard
-                            )
-                        },
-                        onClick = {
-                            onAction(SubscriberDetailsAction.FilterUsage(year))
-                            isExpanded = false
-                        }
-                    )
-                }
-            }
-        }
-
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize(),
-            state = listState,
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            )
-        ) {
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(
-                            1.dp,
-                            SimbanyuTheme.colors.borderCard,
-                            shape = SimbanyuTheme.shapes.extraLarge
-                        )
-                        .background(
-                            color = SimbanyuTheme.colors.surfaceCard,
-                            shape = SimbanyuTheme.shapes.extraLarge
-                        )
-                        .padding(SimbanyuTheme.padding.large)
-                ) {
-                    LineChart(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(150.dp),
-                        data = usageData,
-                        dotsProperties = DotProperties(
-                            enabled = true,
-                            color = SolidColor(SimbanyuTheme.colors.brandText),
-                            strokeColor = SolidColor(SimbanyuTheme.colors.brand),
-                            strokeWidth = 2.dp,
-                            radius = 3.dp
-                        ),
-                        gridProperties = GridProperties(
-                            enabled = true,
-                            yAxisProperties = GridProperties.AxisProperties(
-                                enabled = false
-                            ),
-                            xAxisProperties = GridProperties.AxisProperties(
-                                enabled = true,
-                                lineCount = 3
-                            )
-                        ),
-                        labelHelperProperties = LabelHelperProperties(
-                            enabled = false
-                        ),
-                        indicatorProperties = HorizontalIndicatorProperties(
-                            count = IndicatorCount.CountBased(3)
-                        ),
-                        dividerProperties = DividerProperties(
-                            yAxisProperties = LineProperties(
-                                enabled = false
-                            )
-                        ),
-                        labelProperties = LabelProperties(
-                            enabled = false,
-                        )
-                    )
-                }
-            }
-            item {
-                Row(
-                    modifier = Modifier
-                        .height(IntrinsicSize.Max)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    listOf(
-                                        SimbanyuTheme.colors.brand,
-                                        SimbanyuTheme.colors.brandLighter
-                                    )
-                                ),
-                                shape = SimbanyuTheme.shapes.large
-                            )
-                            .padding(
-                                SimbanyuTheme.padding.large
-                            ),
-                    ) {
-                        SimbanyuText(
-                            text = "TOTAL PENGGUNAAN",
-                            style = SimbanyuTheme.typography.labelBadge,
-                            color = SimbanyuTheme.colors.brandText
-                        )
-
-                        SimbanyuText(
-                            text = "${state.usageTotal} m³",
-                            style = SimbanyuTheme.typography.displayMedium,
-                            color = SimbanyuTheme.colors.brandText
-                        )
-                    }
-
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    listOf(
-                                        SimbanyuTheme.colors.brand,
-                                        SimbanyuTheme.colors.brandLighter
-                                    )
-                                ),
-                                shape = SimbanyuTheme.shapes.large
-                            )
-                            .padding(
-                                SimbanyuTheme.padding.large
-                            ),
-                    ) {
-                        SimbanyuText(
-                            text = "RATA-RATA BULANAN",
-                            style = SimbanyuTheme.typography.labelBadge,
-                            color = SimbanyuTheme.colors.brandText
-                        )
-
-                        SimbanyuText(
-                            text = "%.1f m³".format(state.usageAverage),
-                            style = SimbanyuTheme.typography.displayMedium,
-                            color = SimbanyuTheme.colors.brandText
-                        )
-                    }
-                }
-            }
-
-            items(
-                items = state.usages.sortedByDescending { it.id },
-                key = { it.id }
-            ) { usage ->
-                UsageHistoryItem(
-                    period = "${usage.periodMonth} ${usage.periodYear}",
-                    amount = usage.amount.toString(),
-                    iconId = R.drawable.ic_water_droplet,
-                    meterStart = usage.meterStart.toString(),
-                    meterEnd = usage.meterEnd.toString()
-                )
-            }
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun SubscriberDetailsContentPreview() {
     SubscriberDetailsContent(
         state = fakeSubscriberDetailsUiState.copy(
-            selectedTabIndex = 1
+            selectedTabIndex = 1,
+            isRecorded = true
         )
     )
 }

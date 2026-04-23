@@ -16,7 +16,7 @@ class SubscriberDetailsViewModel(
 ) : BaseViewModel<SubscriberDetailsUiState, SubscriberDetailsAction, SubscriberDetailsEvent>(
     SubscriberDetailsUiState()
 ) {
-    private val subscriberId = savedStateHandle.toRoute<Screen.SubscriberDetails>().id
+    val subscriberId = savedStateHandle.toRoute<Screen.SubscriberDetails>().id
     private val _usages = MutableStateFlow<List<Bill>>(emptyList())
     private val _bills = MutableStateFlow<List<Usage>>(emptyList())
 
@@ -50,7 +50,11 @@ class SubscriberDetailsViewModel(
                 }
 
                 SubscriberDetailsAction.RecordMeter -> {
-                    sendEvent(SubscriberDetailsEvent.GoToRecordMeter(subscriberId))
+                    sendEvent(SubscriberDetailsEvent.GoToRecordMeter)
+                }
+
+                SubscriberDetailsAction.ContactViaWhatsApp -> {
+                    sendEvent(SubscriberDetailsEvent.GoToWhatsApp)
                 }
             }
         }

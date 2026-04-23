@@ -1,7 +1,7 @@
 package com.avivba.simbanyu.ui.screens.invoice
 
-import com.avivba.simbanyu.ui.screens.billhistory.BillingStatus
 import com.avivba.simbanyu.ui.shared.model.Bill
+import com.avivba.simbanyu.ui.shared.model.BillingStatus
 import com.avivba.simbanyu.ui.shared.model.Cost
 
 

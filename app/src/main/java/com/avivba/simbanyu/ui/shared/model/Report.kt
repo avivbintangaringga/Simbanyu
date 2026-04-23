@@ -1,7 +1,5 @@
 package com.avivba.simbanyu.ui.shared.model
 
-import com.avivba.simbanyu.ui.screens.report.ReportType
-
 enum class ReportStatus(
     val id: String,
     val status: String,
@@ -15,7 +13,6 @@ enum class ReportStatus(
 data class Report(
     val id: String,
     val title: String,
-    val type: ReportType,
     val user: User,
     val status: ReportStatus,
     val location: String,

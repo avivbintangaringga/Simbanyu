@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.*
 import com.avivba.simbanyu.ui.shared.model.Bill
+import com.avivba.simbanyu.ui.shared.model.BillingStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine

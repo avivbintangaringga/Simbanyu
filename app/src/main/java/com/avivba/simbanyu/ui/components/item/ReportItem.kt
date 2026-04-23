@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.screens.report.ReportType
 import com.avivba.simbanyu.ui.screens.report.fakeUser
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
@@ -323,7 +322,6 @@ private fun ReportPreview() {
         report = Report(
             id = "REP-001",
             title = "Kebocoran Pipa Utama",
-            type = ReportType.LEAK,
             status = ReportStatus.WAITING,
             location = "Jl. Merdeka No. 10, Jakarta",
             locationCoordinate = Coordinate(-6.1754, 106.8272),

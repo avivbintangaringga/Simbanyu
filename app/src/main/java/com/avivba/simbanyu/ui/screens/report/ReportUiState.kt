@@ -6,13 +6,6 @@ import com.avivba.simbanyu.ui.shared.model.Report
 import com.avivba.simbanyu.ui.shared.model.ReportStatus
 import com.avivba.simbanyu.ui.shared.model.User
 
-enum class ReportType(val value: String) {
-    OUTAGE("outage"),
-    LEAK("leak"),
-    MUDDY("muddy"),
-    MISC("misc"),
-}
-
 enum class Fields() {
     LOCATION,
     DESCRIPTION,
@@ -60,7 +53,6 @@ val fakeReports = listOf(
     Report(
         id = "REP-001",
         title = "Kebocoran Pipa Utama",
-        type = ReportType.LEAK,
         user = fakeUser,
         status = ReportStatus.IN_PROGRESS,
         location = "Jl. Merdeka No. 10, Jakarta",
@@ -72,7 +64,6 @@ val fakeReports = listOf(
     Report(
         id = "REP-002",
         title = "Air Keruh dan Berpasir",
-        type = ReportType.MUDDY,
         user = fakeUser,
         status = ReportStatus.COMPLETED,
         location = "Perumahan Indah, Blok C2",
@@ -84,7 +75,6 @@ val fakeReports = listOf(
     Report(
         id = "REP-003",
         title = "Aliran Air Mati Total",
-        type = ReportType.OUTAGE,
         user = fakeUser,
         status = ReportStatus.WAITING,
         location = "Kp. Melayu RT 05/RW 02",
@@ -96,7 +86,6 @@ val fakeReports = listOf(
     Report(
         id = "REP-004",
         title = "Pipa Bocor Kecil",
-        type = ReportType.LEAK,
         user = fakeUser,
         status = ReportStatus.REJECTED,
         location = "Jl. Sudirman Gg. 5",
