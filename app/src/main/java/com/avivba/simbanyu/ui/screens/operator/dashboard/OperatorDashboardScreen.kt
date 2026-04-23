@@ -132,7 +132,7 @@ fun OperatorDashboardContent(
             modifier = Modifier.padding(
                 SimbanyuTheme.padding.small
             ),
-            text = "Menu Utama",
+            text = "Akses Cepat",
             style = SimbanyuTheme.typography.titleSection,
         )
 
@@ -148,9 +148,12 @@ fun OperatorDashboardContent(
         ) {
             SimbanyuCardButton(
                 modifier = Modifier.weight(1f),
-                iconId = R.drawable.ic_speed_filled,
-                title = "Catat Meter",
-                subTitle = "Catat meter pelanggan"
+                iconId = R.drawable.ic_group_filled,
+                title = "Pelanggan",
+                subTitle = "Catat meter pelanggan",
+                onClick = {
+                    onChangeTab(Screen.OperatorMainScreen.Subscribers)
+                }
             )
 
             SimbanyuCardButton(
@@ -166,12 +169,12 @@ fun OperatorDashboardContent(
 
             SimbanyuCardButton(
                 modifier = Modifier.weight(1f),
-                iconId = R.drawable.ic_group_filled,
+                iconId = R.drawable.ic_map_filled,
                 iconTint = SimbanyuTheme.colors.statusWarningText,
-                title = "Pelanggan",
-                subTitle = "Daftar pelanggan aktif",
+                title = "Peta",
+                subTitle = "Lihat sebaran pelanggan",
                 onClick = {
-                    onChangeTab(Screen.OperatorMainScreen.Subscribers)
+                    onChangeTab(Screen.OperatorMainScreen.Map)
                 }
             )
 

@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.item.SubscriberItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
+import com.avivba.simbanyu.ui.screens.operator.report.OperatorReportAction
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
@@ -52,12 +54,21 @@ fun SubscribersScreen(
         }
     }
 
-    SubscribersContent(
-        modifier = modifier,
-        state = state,
-        onAction = viewModel::onAction,
-        onNavigate = onNavigate
-    )
+    PullToRefreshBox(
+        modifier = modifier
+            .fillMaxSize(),
+        isRefreshing = state.isRefreshing,
+        onRefresh = {
+            viewModel.onAction(SubscribersAction.Refresh)
+        }
+    ) {
+        SubscribersContent(
+            modifier = modifier,
+            state = state,
+            onAction = viewModel::onAction,
+            onNavigate = onNavigate
+        )
+    }
 }
 
 @Composable
