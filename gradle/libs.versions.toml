@@ -16,6 +16,7 @@ koin-bom = "4.2.1"
 koin-plugin = "1.0.0-RC1"
 google-maps = "8.3.0"
 maps-secrets = "2.0.1"
+accompanist-permission = "0.37.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +45,7 @@ koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-bom" }
 google-maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "google-maps" }
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permission" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

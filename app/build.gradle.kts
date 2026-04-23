@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.annotations)
     implementation(libs.google.maps.compose)
+    implementation(libs.accompanist.permissions)
 
     testImplementation(libs.junit)
 
