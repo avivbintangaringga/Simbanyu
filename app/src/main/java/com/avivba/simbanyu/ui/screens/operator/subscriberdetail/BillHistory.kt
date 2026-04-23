@@ -159,8 +159,10 @@ internal fun BillHistory(
                     iconTint = iconTint,
                     iconBackgroundColor = iconBackgroundColor,
                     statusBackgroundColor = statusBackgroundColor,
-                    onClick = {
-                    },
+                    canPayByCash = bill.status == BillingStatus.UNPAID,
+                    onClickPayByCash = {
+                        onAction(SubscriberDetailsAction.PayByCash(bill))
+                    }
                 )
             }
         }

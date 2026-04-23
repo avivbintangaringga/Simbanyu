@@ -225,13 +225,6 @@ fun DashboardContent(
                             tint = SimbanyuTheme.colors.actionBrand
                         )
                     },
-//                    iconRight = {
-//                        Icon(
-//                            painter = painterResource(R.drawable.ic_arrow_forward),
-//                            contentDescription = null,
-//                            tint = SimbanyuTheme.colors.actionBrand
-//                        )
-//                    }
                 ) {
                     onAction(DashboardAction.PayBill)
                 }

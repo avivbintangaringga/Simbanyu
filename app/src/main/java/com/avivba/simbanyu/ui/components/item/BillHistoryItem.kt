@@ -27,7 +27,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
+import com.avivba.simbanyu.ui.screens.dashboard.DashboardAction
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.conditional
 
@@ -43,9 +45,11 @@ fun BillHistoryItem(
     @DrawableRes iconId: Int,
     iconTint: Color = SimbanyuTheme.colors.brand,
     iconBackgroundColor: Color = SimbanyuTheme.colors.surfaceCard,
+    canPayByCash: Boolean = false,
     onClick: () -> Unit = {},
     onLongClick: () -> Unit = {},
     isDisabled: Boolean = false,
+    onClickPayByCash: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -65,62 +69,94 @@ fun BillHistoryItem(
                 )
             }
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .padding(SimbanyuTheme.padding.large),
-            horizontalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.large
-            ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(iconId),
-                contentDescription = null,
-                tint = iconTint,
-                modifier = Modifier
-                    .background(
-                        color = iconBackgroundColor,
-                        shape = CircleShape
-                    )
-                    .padding(SimbanyuTheme.padding.medium)
+                .padding(SimbanyuTheme.padding.large)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(
+                SimbanyuTheme.spacing.medium
             )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-            ) {
-                SimbanyuText(
-                    text = period,
-                    style = SimbanyuTheme.typography.bodyProminent
-                )
-                Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-                SimbanyuText(
-                    text = "ID: $id",
-                    style = SimbanyuTheme.typography.bodySmall
-                )
-            }
-            Column(
+        ) {
+            Row(
                 modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.large
+                ),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                SimbanyuText(
-                    text = "Rp. $amount",
-                    style = SimbanyuTheme.typography.titleCard
-                )
-                Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-                SimbanyuText(
+                Icon(
+                    painter = painterResource(iconId),
+                    contentDescription = null,
+                    tint = iconTint,
                     modifier = Modifier
                         .background(
-                            color = statusBackgroundColor,
-                            shape = SimbanyuTheme.shapes.large
+                            color = iconBackgroundColor,
+                            shape = CircleShape
                         )
-                        .padding(
-                            vertical = SimbanyuTheme.padding.extraSmall,
-                            horizontal = SimbanyuTheme.padding.medium
-                        ),
-                    text = status,
-                    style = SimbanyuTheme.typography.bodySmall,
-                    color = statusColor
+                        .padding(SimbanyuTheme.padding.medium)
                 )
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                ) {
+                    SimbanyuText(
+                        text = period,
+                        style = SimbanyuTheme.typography.bodyProminent
+                    )
+                    Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
+                    SimbanyuText(
+                        text = "ID: $id",
+                        style = SimbanyuTheme.typography.bodySmall
+                    )
+                }
+                Column(
+                    modifier = Modifier,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    SimbanyuText(
+                        text = "Rp. $amount",
+                        style = SimbanyuTheme.typography.titleCard
+                    )
+                    Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
+                    SimbanyuText(
+                        modifier = Modifier
+                            .background(
+                                color = statusBackgroundColor,
+                                shape = SimbanyuTheme.shapes.large
+                            )
+                            .padding(
+                                vertical = SimbanyuTheme.padding.extraSmall,
+                                horizontal = SimbanyuTheme.padding.medium
+                            ),
+                        text = status,
+                        style = SimbanyuTheme.typography.bodySmall,
+                        color = statusColor
+                    )
+                }
+
+            }
+
+            if (canPayByCash) {
+                SimbanyuButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush = SimbanyuTheme.colors.brush.brandVertical,
+                            shape = SimbanyuTheme.shapes.extraLarge
+                        ),
+                    text = "Bayar Tunai",
+                    textColor = SimbanyuTheme.colors.brandText,
+                    iconLeft = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_payments_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.brandText
+                        )
+                    },
+                ) {
+                    onClickPayByCash()
+                }
             }
         }
 
@@ -143,5 +179,6 @@ private fun BillHistoryItemPreview() {
         iconId = R.drawable.ic_history,
         amount = "150.000",
         status = "LUNAS",
+        canPayByCash = true,
     )
 }

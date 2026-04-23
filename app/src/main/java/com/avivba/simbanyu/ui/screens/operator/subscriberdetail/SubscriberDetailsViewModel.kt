@@ -21,7 +21,9 @@ class SubscriberDetailsViewModel(
     private val _bills = MutableStateFlow<List<Usage>>(emptyList())
 
     init {
-        load()
+        viewModelScope.launch {
+            load()
+        }
     }
 
     override fun onAction(action: SubscriberDetailsAction) {
@@ -55,6 +57,10 @@ class SubscriberDetailsViewModel(
 
                 SubscriberDetailsAction.ContactViaWhatsApp -> {
                     sendEvent(SubscriberDetailsEvent.GoToWhatsApp)
+                }
+
+                is SubscriberDetailsAction.PayByCash -> {
+                    // TODO: Handle pay by cash
                 }
             }
         }
