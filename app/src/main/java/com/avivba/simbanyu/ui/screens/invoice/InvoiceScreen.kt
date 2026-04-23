@@ -322,7 +322,7 @@ fun InvoiceContent(
                         )
                     }
 
-                    bill.details.forEach { detail ->
+                    bill.costs.forEach { detail ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -362,7 +362,7 @@ fun InvoiceContent(
                             fontWeight = FontWeight.Bold
                         )
                         SimbanyuText(
-                            text = bill.subtotal,
+                            text = bill.amount,
                             style = SimbanyuTheme.typography.bodyProminent,
                             color = SimbanyuTheme.colors.brand
                         )

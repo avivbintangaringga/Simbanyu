@@ -1,20 +1,9 @@
 package com.avivba.simbanyu.ui.screens.invoice
 
 import com.avivba.simbanyu.ui.screens.billhistory.BillingStatus
+import com.avivba.simbanyu.ui.shared.model.Bill
+import com.avivba.simbanyu.ui.shared.model.Cost
 
-
-data class Cost(
-    val name: String,
-    val amount: String,
-)
-
-data class Bill(
-    val id: String,
-    val periodMonth: String,
-    val periodYear: Int,
-    val details: List<Cost>,
-    val subtotal: String
-)
 
 data class InvoiceUiState(
     val name: String = "",
@@ -48,12 +37,13 @@ val fakeInvoiceState = InvoiceUiState(
             id = "INV-2023-10-001",
             periodMonth = "Oktober",
             periodYear = 2023,
-            details = listOf(
+            costs = listOf(
                 Cost("Biaya Pemakaian Air", "Rp 120.000"),
                 Cost("Biaya Administrasi", "Rp 10.000"),
                 Cost("Biaya Pemeliharaan Meter", "Rp 5.000")
             ),
-            subtotal = "Rp 135.000"
+            status = BillingStatus.UNPAID,
+            amount = "Rp. 135.000"
         ),
 //        Bill(
 //            id = "INV-2023-11-001",

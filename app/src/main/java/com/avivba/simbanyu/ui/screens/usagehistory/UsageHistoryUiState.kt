@@ -1,13 +1,6 @@
 package com.avivba.simbanyu.ui.screens.usagehistory
 
-data class Usage(
-    val id: String,
-    val meterStart: Int,
-    val meterEnd: Int,
-    val amount: Int,
-    val periodMonth: String,
-    val periodYear: Int,
-)
+import com.avivba.simbanyu.ui.shared.model.Usage
 
 data class UsageHistoryUiState(
     val isLoading: Boolean = false,

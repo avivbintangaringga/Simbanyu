@@ -322,7 +322,6 @@ fun MeterRecordContent(
                         SimbanyuText(
                             text = "Pastikan angka lebih besar dari catatan sebelumnya",
                             style = SimbanyuTheme.typography.bodySmall,
-                            color = SimbanyuTheme.colors.brand
                         )
                     }
                 }
@@ -447,7 +446,7 @@ fun MeterRecordContent(
                     .background(
                         brush = SimbanyuTheme.colors.brush.brandVertical
                     ),
-                text = "Kirim Laporan",
+                text = "Catat Meter",
                 iconRight = {
                     if (state.isSendingRecord) {
                         CircularProgressIndicator(

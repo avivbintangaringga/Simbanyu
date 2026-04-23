@@ -1,19 +1,12 @@
 package com.avivba.simbanyu.ui.screens.billhistory
 
+import com.avivba.simbanyu.ui.shared.model.Bill
+
 enum class BillingStatus(val status: String) {
     PAID("LUNAS"),
     PENDING("MENUNGGU PEMBAYARAN"),
     UNPAID("BELUM DIBAYAR")
 }
-
-data class Bill(
-    val id: String,
-    val amount: String,
-    val periodMonth: String,
-    val periodYear: Int,
-    val status: BillingStatus,
-    val isSelected: Boolean = false
-)
 
 data class BillHistoryUiState(
     val isLoading: Boolean = false,
