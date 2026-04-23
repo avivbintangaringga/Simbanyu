@@ -14,6 +14,12 @@ class MeterRecordViewModel (
 ) {
     private val subscriberId = savedStateHandle.toRoute<Screen.RecordMeter>().id
 
+    init {
+        viewModelScope.launch {
+            load()
+        }
+    }
+
     override fun onAction(action: MeterRecordAction) {
         viewModelScope.launch {
             when (action) {
@@ -29,6 +35,12 @@ class MeterRecordViewModel (
                     sendEvent(MeterRecordEvents.NavigateBack)
                 }
             }
+        }
+    }
+
+    private fun load() {
+        updateState {
+            fakeMeterRecordState
         }
     }
 }

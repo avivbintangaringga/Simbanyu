@@ -33,3 +33,12 @@ sealed interface MeterRecordEvents {
     data object PickImage : MeterRecordEvents
     data object RecordSent : MeterRecordEvents
 }
+
+val fakeMeterRecordState = MeterRecordUiState(
+    name = "Budi Santoso",
+    address = "Jl. Merdeka No. 10, Jakarta",
+    meterId = "MTR001",
+    category = "Rumah Tangga A",
+    lastMeterRecordDate = "10 Januari 2026 13:33",
+    lastMeterValue = 1032,
+)

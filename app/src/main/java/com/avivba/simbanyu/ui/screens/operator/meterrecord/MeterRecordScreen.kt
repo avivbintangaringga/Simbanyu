@@ -475,11 +475,6 @@ fun MeterRecordContent(
 @Composable
 fun MeterRecordContentPreview() {
     MeterRecordContent(
-        state = MeterRecordUiState(
-            name = "Budi Santoso",
-            address = "Jl. Merdeka No. 10, Jakarta",
-            meterId = "MTR001",
-            category = "Rumah Tangga A",
-        )
+        state = fakeMeterRecordState
     )
 }
