@@ -98,9 +98,6 @@ fun SubscribersContent(
                 )
             },
             imeAction = ImeAction.Search,
-            onKeyboardAction = {
-                onAction(SubscribersAction.Search)
-            }
         )
 
         Row(

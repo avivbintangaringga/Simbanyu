@@ -62,10 +62,20 @@ fun SubscriberItem(
                 style = SimbanyuTheme.typography.bodySmall
             )
 
+            var status = "BELUM DICATAT"
+            var iconId = R.drawable.ic_warning_filled
+            var color = SimbanyuTheme.colors.statusWarningText
+
+            if (subscriber.isRecorded) {
+                status = "SELESAI"
+                iconId = R.drawable.ic_check
+                color = SimbanyuTheme.colors.statusPositiveText
+            }
+
             Row(
                 modifier = Modifier
                     .background(
-                        color = SimbanyuTheme.colors.statusWarningText,
+                        color = color,
                         shape = SimbanyuTheme.shapes.large
                     )
                     .padding(
@@ -80,13 +90,13 @@ fun SubscriberItem(
                 Icon(
                     modifier = Modifier
                         .size(16.dp),
-                    painter = painterResource(R.drawable.ic_error),
+                    painter = painterResource(iconId),
                     contentDescription = null,
                     tint = SimbanyuTheme.colors.brandText,
                 )
 
                 SimbanyuText(
-                    text = "BELUM DICATAT",
+                    text = status,
                     style = SimbanyuTheme.typography.bodySmall,
                     color = SimbanyuTheme.colors.brandText,
                 )

@@ -135,7 +135,6 @@ class OperatorReportViewModel(
         }
     }
 
-
     private fun observeDataChanges() {
         viewModelScope.launch {
             combine(
