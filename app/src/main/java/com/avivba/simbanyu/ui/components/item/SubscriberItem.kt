@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -175,23 +176,50 @@ fun SubscriberItem(
                 )
             }
 
-            SimbanyuButton(
-                text = "Catat Meter",
-                modifier = Modifier
-                    .background(
-                        brush = SimbanyuTheme.colors.brush.brandVertical,
-                    ),
-                iconLeft = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_speed_filled),
-                        contentDescription = null,
-                        tint = SimbanyuTheme.colors.actionBrandText
-                    )
-                },
-                onClick = {
-                    onClickRecordMeter()
-                }
-            )
+            if (subscriber.isRecorded) {
+                SimbanyuButton(
+                    text = "Perbarui",
+                    modifier = Modifier
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    SimbanyuTheme.colors.statusNeutral,
+                                    SimbanyuTheme.colors.statusNeutral.copy(
+                                        alpha = 0.6f
+                                    )
+                                )
+                            ),
+                        ),
+                    iconLeft = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_edit_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.actionBrandText
+                        )
+                    },
+                    onClick = {
+                        onClickRecordMeter()
+                    }
+                )
+            } else {
+                SimbanyuButton(
+                    text = "Catat Meter",
+                    modifier = Modifier
+                        .background(
+                            brush = SimbanyuTheme.colors.brush.brandVertical,
+                        ),
+                    iconLeft = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_speed_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.actionBrandText
+                        )
+                    },
+                    onClick = {
+                        onClickRecordMeter()
+                    }
+                )
+            }
         }
     }
 }
