@@ -12,6 +12,14 @@ class MapViewModel(
             is MapUiAction.SelectPoint -> {
                 // TODO: Select Point
             }
+
+            is MapUiAction.SetLocationPermission -> {
+                updateState {
+                    it.copy(
+                        hasLocationPermission = action.isGranted
+                    )
+                }
+            }
         }
     }
 }
