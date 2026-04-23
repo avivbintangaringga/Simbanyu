@@ -43,6 +43,7 @@ import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.screens.operator.dashboard.OperatorDashboardScreen
+import com.avivba.simbanyu.ui.screens.operator.map.MapScreen
 import com.avivba.simbanyu.ui.screens.operator.report.OperatorReportScreen
 import com.avivba.simbanyu.ui.screens.operator.subsribers.SubscribersScreen
 import com.avivba.simbanyu.ui.screens.profile.ProfileScreen
@@ -278,7 +279,9 @@ fun OperatorMainScreenContent(
             }
 
             composable<Screen.OperatorMainScreen.Map> {
-
+                MapScreen(
+                    onNavigate = onNavigate
+                )
             }
 
             composable<Screen.OperatorMainScreen.Report> {
