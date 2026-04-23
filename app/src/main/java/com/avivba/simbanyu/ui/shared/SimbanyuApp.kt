@@ -16,6 +16,7 @@ import com.avivba.simbanyu.ui.screens.login.LoginScreen
 import com.avivba.simbanyu.ui.screens.main.MainScreen
 import com.avivba.simbanyu.ui.screens.operator.announcement.OperatorAnnouncementScreen
 import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
+import com.avivba.simbanyu.ui.screens.operator.meterrecord.MeterRecordScreen
 import com.avivba.simbanyu.ui.screens.operator.subscriberdetail.SubscriberDetailsScreen
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 
@@ -140,7 +141,14 @@ fun SimbanyuApp(
         }
 
         composable<Screen.RecordMeter> {
-
+            MeterRecordScreen(
+                onNavigate = { dest ->
+                    navHostController.navigate(dest)
+                },
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
+            )
         }
     }
 }

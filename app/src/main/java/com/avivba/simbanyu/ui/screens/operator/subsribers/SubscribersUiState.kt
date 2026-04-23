@@ -41,7 +41,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-6.1751, 106.8272),
         category = "Rumah Tangga A",
         meterId = "MTR001",
-        lastReading = "2024-03-20 09:15",
+        lastMeterRecordDate = "2024-03-20 09:15",
         isRecorded = true,
         imageUrl = "https://picsum.photos/seed/sb1/200"
     ),
@@ -53,7 +53,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-6.9175, 107.6191),
         category = "Rumah Tangga B",
         meterId = "MTR002",
-        lastReading = "2024-02-15 14:30",
+        lastMeterRecordDate = "2024-02-15 14:30",
         isRecorded = false,
         imageUrl = "https://picsum.photos/seed/sb2/200"
     ),
@@ -65,7 +65,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-7.2575, 112.7521),
         category = "Niaga",
         meterId = "MTR003",
-        lastReading = "2024-03-18 10:00",
+        lastMeterRecordDate = "2024-03-18 10:00",
         isRecorded = true,
         imageUrl = "https://picsum.photos/seed/sb3/200"
     ),
@@ -77,7 +77,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-7.7956, 110.3695),
         category = "Rumah Tangga A",
         meterId = "MTR004",
-        lastReading = "2024-02-28 16:45",
+        lastMeterRecordDate = "2024-02-28 16:45",
         isRecorded = false,
         imageUrl = "https://picsum.photos/seed/sb4/200"
     ),
@@ -89,7 +89,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-6.9667, 110.4167),
         category = "Sosial",
         meterId = "MTR005",
-        lastReading = "2024-03-21 08:20",
+        lastMeterRecordDate = "2024-03-21 08:20",
         isRecorded = true,
         imageUrl = "https://picsum.photos/seed/sb5/200"
     ),
@@ -101,7 +101,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-7.9839, 112.6214),
         category = "Rumah Tangga B",
         meterId = "MTR006",
-        lastReading = "2024-02-10 11:30",
+        lastMeterRecordDate = "2024-02-10 11:30",
         isRecorded = false,
         imageUrl = "https://picsum.photos/seed/sb6/200"
     ),
@@ -113,7 +113,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(3.5952, 98.6722),
         category = "Industri",
         meterId = "MTR007",
-        lastReading = "2024-03-19 13:00",
+        lastMeterRecordDate = "2024-03-19 13:00",
         isRecorded = true,
         imageUrl = "https://picsum.photos/seed/sb7/200"
     ),
@@ -125,7 +125,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-5.1476, 119.4327),
         category = "Rumah Tangga A",
         meterId = "MTR008",
-        lastReading = "2024-02-25 09:50",
+        lastMeterRecordDate = "2024-02-25 09:50",
         isRecorded = false,
         imageUrl = "https://picsum.photos/seed/sb8/200"
     ),
@@ -137,7 +137,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-2.9761, 104.7754),
         category = "Rumah Tangga B",
         meterId = "MTR009",
-        lastReading = "2024-03-15 15:10",
+        lastMeterRecordDate = "2024-03-15 15:10",
         isRecorded = true,
         imageUrl = "https://picsum.photos/seed/sb9/200"
     ),
@@ -149,7 +149,7 @@ val fakeSubscribers = listOf(
         coordinate = Coordinate(-8.6705, 115.2126),
         category = "Niaga",
         meterId = "MTR010",
-        lastReading = "2024-02-20 17:25",
+        lastMeterRecordDate = "2024-02-20 17:25",
         isRecorded = false,
         imageUrl = "https://picsum.photos/seed/sb10/200"
     )

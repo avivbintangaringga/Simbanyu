@@ -8,7 +8,7 @@ data class Subscriber(
     val coordinate: Coordinate,
     val category: String,
     val meterId: String,
-    val lastReading: String,
+    val lastMeterRecordDate: String,
     val isRecorded: Boolean,
     val imageUrl: String,
 )
