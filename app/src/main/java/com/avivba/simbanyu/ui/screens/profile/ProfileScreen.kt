@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,8 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
+import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.viewmodel.koinViewModel
@@ -232,6 +235,13 @@ fun ProfileContent(
             )
         }
 
+        if (state.coordinate != null) {
+            MiniMap(
+                modifier = Modifier,
+                location = state.coordinate
+            )
+        }
+
         Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.extraLarge))
 
         SimbanyuButton(
@@ -264,7 +274,8 @@ private fun ProfilePreview() {
             meterId = "DX920130",
             phone = "08123412312",
             address = "Jl. Raya No. 123",
-            category = "Rumah Tangga"
+            category = "Rumah Tangga",
+            coordinate = Coordinate(-6.9667, 110.4167),
         )
     )
 }

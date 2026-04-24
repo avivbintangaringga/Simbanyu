@@ -1,5 +1,7 @@
 package com.avivba.simbanyu.ui.screens.profile
 
+import com.avivba.simbanyu.ui.shared.model.Coordinate
+
 data class ProfileUiState(
     val name: String = "",
     val meterId: String = "",
@@ -7,6 +9,7 @@ data class ProfileUiState(
     val address: String = "",
     val imageUrl: String = "",
     val category: String = "",
+    val coordinate: Coordinate? = null,
 )
 
 sealed interface ProfileAction {

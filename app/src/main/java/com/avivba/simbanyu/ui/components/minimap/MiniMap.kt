@@ -64,7 +64,12 @@ fun MiniMap(
 
     val uiSettings = remember {
         MapUiSettings(
-            zoomControlsEnabled = false
+            zoomControlsEnabled = false,
+            myLocationButtonEnabled = false,
+            tiltGesturesEnabled = false,
+            zoomGesturesEnabled = true,
+            scrollGesturesEnabled = false,
+            rotationGesturesEnabled = false
         )
     }
 
