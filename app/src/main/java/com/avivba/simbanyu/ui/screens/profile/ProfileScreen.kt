@@ -165,7 +165,7 @@ fun ProfileContent(
 
             SimbanyuText(
                 text = state.meterId,
-                style = SimbanyuTheme.typography.titleSection
+                style = SimbanyuTheme.typography.bodyStandard
             )
         }
 
@@ -198,7 +198,7 @@ fun ProfileContent(
 
             SimbanyuText(
                 text = state.phone,
-                style = SimbanyuTheme.typography.titleSection
+                style = SimbanyuTheme.typography.bodyStandard
             )
         }
 
@@ -231,7 +231,7 @@ fun ProfileContent(
 
             SimbanyuText(
                 text = state.address,
-                style = SimbanyuTheme.typography.titleSection
+                style = SimbanyuTheme.typography.bodyStandard
             )
         }
 
@@ -242,7 +242,7 @@ fun ProfileContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.extraLarge))
+        Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.medium))
 
         SimbanyuButton(
             modifier = Modifier
