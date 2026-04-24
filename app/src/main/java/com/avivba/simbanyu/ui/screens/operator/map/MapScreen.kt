@@ -1,33 +1,47 @@
 package com.avivba.simbanyu.ui.screens.operator.map
 
 import android.Manifest
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
+import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
@@ -37,15 +51,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.compose.ComposeMapColorScheme
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
-import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerComposable
-import com.google.maps.android.compose.MarkerInfoWindow
-import com.google.maps.android.compose.MarkerInfoWindowComposable
-import com.google.maps.android.compose.currentCameraPositionState
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.google.maps.android.compose.rememberUpdatedMarkerState
 import kotlinx.coroutines.launch
@@ -61,8 +70,8 @@ fun MapScreen(
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
-            is MapUiEvent.GoToSubscriberDetails -> {
-                onNavigate(Screen.SubscriberDetails(it.subscriberId))
+            is MapUiEvent.GoToRecordMeter -> {
+                onNavigate(Screen.RecordMeter(it.subscriberId))
             }
         }
     }
@@ -74,7 +83,7 @@ fun MapScreen(
     )
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun MapContent(
     modifier: Modifier = Modifier,
@@ -88,92 +97,375 @@ private fun MapContent(
         )
     )
 
+    LaunchedEffect(locationPermissionState.allPermissionsGranted) {
+        onAction(MapUiAction.SetLocationPermission(locationPermissionState.allPermissionsGranted))
+    }
+
+    LaunchedEffect(Unit) {
+        if (!locationPermissionState.allPermissionsGranted) {
+            locationPermissionState.launchMultiplePermissionRequest()
+        }
+    }
+
     val jatiayu = LatLng(-7.911178168148756, 110.69031351790268)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(jatiayu, 15f)
     }
 
-    LaunchedEffect(state.subscribers) {
-        if (state.subscribers.isEmpty()) return@LaunchedEffect
+    var isMapLoaded by remember { mutableStateOf(false) }
 
-        val builder = LatLngBounds.Builder()
-        state.subscribers.forEach { subscriber ->
-            builder.include(LatLng(subscriber.coordinate.lat, subscriber.coordinate.lng))
+    LaunchedEffect(state.subscribers, isMapLoaded) {
+        if (isMapLoaded && state.subscribers.isNotEmpty() && !state.hasInitialZoomed) {
+            val bounds = LatLngBounds.Builder().apply {
+                state.subscribers.forEach {
+                    include(
+                        LatLng(
+                            it.coordinate.lat,
+                            it.coordinate.lng
+                        )
+                    )
+                }
+            }.build()
+
+            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(
+                bounds,
+                100
+            )
+
+            cameraPositionState.animate(
+                update = cameraUpdate,
+                durationMs = 1000
+            )
+
+            onAction(MapUiAction.HasInitialZoomed)
         }
-        val bounds = builder.build()
-        val center = bounds.center
+    }
 
-        cameraPositionState.animate(
-            update = CameraUpdateFactory.newCameraPosition(
-                CameraPosition.fromLatLngZoom(center, 15f)
+    val mapsProperties by remember(state.hasLocationPermission) {
+        mutableStateOf(
+            MapProperties(
+                isMyLocationEnabled = state.hasLocationPermission,
+                mapType = MapType.HYBRID
             )
         )
+    }
 
-        cameraPositionState.animate(
-            update = CameraUpdateFactory.newLatLngBounds(bounds, 100),
-            durationMs = 1000
+    val scope = rememberCoroutineScope()
+
+    val density = LocalDensity.current
+    var bottomPaddingPx by remember { mutableIntStateOf(0) }
+    val mapPadding = remember(bottomPaddingPx) {
+        PaddingValues(
+            bottom = with(density) {
+                bottomPaddingPx.toDp()
+            }
         )
     }
 
-    val mapsProperties = remember(state.hasLocationPermission) {
-        MapProperties(
-            isMyLocationEnabled = locationPermissionState.allPermissionsGranted,
-            mapType = MapType.HYBRID
-        )
-    }
-
-    val context = LocalContext.current
-
-    GoogleMap(
-        modifier = Modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState,
-        properties = mapsProperties
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
     ) {
-        state.subscribers.forEach { subscriber ->
-            MarkerInfoWindowComposable(
-                keys = arrayOf(subscriber.id),
-                state = rememberUpdatedMarkerState(
-                    position = LatLng(
-                        subscriber.coordinate.lat,
-                        subscriber.coordinate.lng
-                    )
-                ),
-                onClick = { marker ->
-//                    onAction(MapUiAction.SelectPoint(subscriber.coordinate))
-//                    marker.showInfoWindow()
-//                    marker.showInfoWindow()
-                    false
-                },
-                infoContent = {
-                    Box(
-                        modifier = Modifier
-                            .height(32.dp)
-                            .width(100.dp)
-                            .background(Color.Red)
-                    ) { }
-                },
-                content = {
-                    val tint = if (subscriber.isRecorded) {
-                        SimbanyuTheme.colors.brand
-                    } else {
-                        SimbanyuTheme.colors.statusWarningText
+        GoogleMap(
+            modifier = Modifier.matchParentSize(),
+            cameraPositionState = cameraPositionState,
+            properties = mapsProperties,
+            onMapClick = {
+                onAction(MapUiAction.UnselectSubscriber)
+            },
+            onMapLoaded = {
+                isMapLoaded = true
+            },
+            contentPadding = mapPadding
+        ) {
+            state.subscribers.forEach { subscriber ->
+                MarkerComposable(
+                    state = rememberUpdatedMarkerState(
+                        position = LatLng(
+                            subscriber.coordinate.lat,
+                            subscriber.coordinate.lng
+                        )
+                    ),
+                    title = subscriber.name,
+                    onClick = {
+                        onAction(MapUiAction.SelectSubscriber(subscriber))
+                        scope.launch {
+                            cameraPositionState.animate(
+                                update = CameraUpdateFactory.newLatLng(
+                                    LatLng(
+                                        subscriber.coordinate.lat,
+                                        subscriber.coordinate.lng
+                                    )
+                                ),
+                                durationMs = 500
+                            )
+                        }
+                        true
+                    },
+                    content = {
+                        val tint = if (subscriber.isRecorded) {
+                            SimbanyuTheme.colors.brand
+                        } else {
+                            SimbanyuTheme.colors.statusWarningText
+                        }
+                        Icon(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .background(
+                                    color = SimbanyuTheme.colors.brandText,
+                                    shape = CircleShape
+                                )
+                                .padding(
+                                    SimbanyuTheme.padding.small
+                                ),
+                            painter = painterResource(R.drawable.ic_person_filled),
+                            contentDescription = null,
+                            tint = tint
+                        )
                     }
+                )
+            }
+        }
+
+        LaunchedEffect(state.selectedSubscriber) {
+            if (state.selectedSubscriber == null) {
+                bottomPaddingPx = 0
+            }
+        }
+
+        AnimatedVisibility(
+            visible = state.selectedSubscriber != null,
+            enter = slideInVertically(
+                initialOffsetY = { it }
+            ),
+            exit = slideOutVertically(
+                targetOffsetY = { it }
+            )
+        ) {
+            var lastSubscriber by remember { mutableStateOf(fakeSubscribers[0]) }
+            val subscriber = remember(state.selectedSubscriber) {
+                if (state.selectedSubscriber != null) {
+                    lastSubscriber = state.selectedSubscriber
+                }
+                lastSubscriber
+            }
+
+            Column(
+                modifier = modifier
+                    .onGloballyPositioned { coordinates ->
+                        bottomPaddingPx = coordinates.size.height
+                    }
+                    .clip(
+                        SimbanyuTheme.shapes.bottomBar
+                    )
+                    .background(
+                        SimbanyuTheme.colors.surfaceCardAlternate
+                    )
+                    .fillMaxWidth()
+                    .padding(
+                        SimbanyuTheme.padding.large
+                    ),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        SimbanyuTheme.spacing.medium
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(40.dp)
                             .background(
                                 color = SimbanyuTheme.colors.brandText,
                                 shape = CircleShape
                             )
                             .padding(
-                                SimbanyuTheme.padding.small
+                                SimbanyuTheme.padding.medium
                             ),
                         painter = painterResource(R.drawable.ic_person_filled),
                         contentDescription = null,
-                        tint = tint
+                        tint = SimbanyuTheme.colors.brand
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.small
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            SimbanyuText(
+                                text = subscriber.name,
+                                style = SimbanyuTheme.typography.displaySmall
+                            )
+
+                            var status = "BELUM DICATAT"
+                            var iconId = R.drawable.ic_warning_filled
+                            var color = SimbanyuTheme.colors.statusWarningText
+
+                            if (subscriber.isRecorded) {
+                                status = "SELESAI"
+                                iconId = R.drawable.ic_check
+                                color = SimbanyuTheme.colors.statusPositiveText
+                            }
+
+                            Row(
+                                modifier = Modifier
+                                    .background(
+                                        color = color,
+                                        shape = SimbanyuTheme.shapes.large
+                                    )
+                                    .padding(
+                                        vertical = SimbanyuTheme.padding.extraSmall,
+                                        horizontal = SimbanyuTheme.padding.medium
+                                    ),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    SimbanyuTheme.spacing.small
+                                )
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .size(12.dp),
+                                    painter = painterResource(iconId),
+                                    contentDescription = null,
+                                    tint = SimbanyuTheme.colors.brandText,
+                                )
+
+                                SimbanyuText(
+                                    text = status,
+                                    style = SimbanyuTheme.typography.bodySmall,
+                                    color = SimbanyuTheme.colors.brandText,
+                                )
+                            }
+                        }
+
+                        SimbanyuText(
+                            text = subscriber.address,
+                            style = SimbanyuTheme.typography.bodySmall
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
+
+                Row(
+                    modifier = Modifier,
+                    horizontalArrangement = Arrangement.spacedBy(
+                        SimbanyuTheme.spacing.small
+                    ),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .height(16.dp),
+                        painter = painterResource(R.drawable.ic_speed_filled),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brand
+                    )
+
+                    SimbanyuText(
+                        text = subscriber.meterId,
+                        style = SimbanyuTheme.typography.labelOverline
                     )
                 }
-            )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.extraSmall
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.small
+                            ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .height(16.dp),
+                                painter = painterResource(R.drawable.ic_calendar_clock_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.brand
+                            )
+
+                            SimbanyuText(
+                                text = "CATAT TERAKHIR",
+                                style = SimbanyuTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight(900)
+                                )
+                            )
+                        }
+                        SimbanyuText(
+                            text = subscriber.lastMeterRecordDate,
+                            style = SimbanyuTheme.typography.bodySmall
+                        )
+                    }
+
+                    if (subscriber.isRecorded) {
+                        SimbanyuButton(
+                            text = "Perbarui",
+                            modifier = Modifier
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            SimbanyuTheme.colors.statusNeutral,
+                                            SimbanyuTheme.colors.statusNeutral.copy(
+                                                alpha = 0.6f
+                                            )
+                                        )
+                                    ),
+                                ),
+                            iconLeft = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_speed_filled),
+                                    contentDescription = null,
+                                    tint = SimbanyuTheme.colors.actionBrandText
+                                )
+                            },
+                            onClick = {
+                                onAction(MapUiAction.GoToRecordMeter(subscriber))
+                            }
+                        )
+                    } else {
+                        SimbanyuButton(
+                            text = "Catat",
+                            modifier = Modifier
+                                .background(
+                                    brush = SimbanyuTheme.colors.brush.brandVertical,
+                                ),
+                            iconLeft = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_speed_filled),
+                                    contentDescription = null,
+                                    tint = SimbanyuTheme.colors.actionBrandText
+                                )
+                            },
+                            onClick = {
+                                onAction(MapUiAction.GoToRecordMeter(subscriber))
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -182,6 +474,8 @@ private fun MapContent(
 @Composable
 private fun MapContentPreview() {
     MapContent(
-        state = fakeMapUiState
+        state = fakeMapUiState.copy(
+            selectedSubscriber = fakeSubscribers[0]
+        )
     )
 }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,19 +41,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.item.ReportItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
-import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryAction
-import com.avivba.simbanyu.ui.screens.operator.announcement.Fields
-import com.avivba.simbanyu.ui.screens.operator.announcement.OperatorAnnouncementAction
-import com.avivba.simbanyu.ui.screens.report.ReportAction
 import com.avivba.simbanyu.ui.screens.report.fakeReports
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.model.ReportStatus
@@ -226,9 +219,8 @@ private fun OperatorReportContent(
                 },
                 properties = ModalBottomSheetProperties(
                     shouldDismissOnBackPress = !state.currentReport.isSending,
-                    shouldDismissOnClickOutside = !state.currentReport.isSending,
-
-                    )
+                    shouldDismissOnClickOutside = !state.currentReport.isSending
+                )
             ) {
                 Column(
                     modifier = Modifier

@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.ui.screens.operator.map
 
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.ui.screens.operator.map.MapUiEvent.*
 import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.delay
@@ -17,17 +18,44 @@ class MapViewModel(
             load()
         }
     }
-    override fun onAction(action: MapUiAction) {
-        when (action) {
-            is MapUiAction.SelectPoint -> {
-                // TODO: Select Point
-            }
 
-            is MapUiAction.SetLocationPermission -> {
-                updateState {
-                    it.copy(
-                        hasLocationPermission = action.isGranted
-                    )
+    override fun onAction(action: MapUiAction) {
+        viewModelScope.launch {
+            when (action) {
+                is MapUiAction.SelectSubscriber -> {
+                    updateState {
+                        it.copy(
+                            selectedSubscriber = action.subscriber
+                        )
+                    }
+                }
+
+                is MapUiAction.SetLocationPermission -> {
+                    updateState {
+                        it.copy(
+                            hasLocationPermission = action.isGranted
+                        )
+                    }
+                }
+
+                MapUiAction.UnselectSubscriber -> {
+                    updateState {
+                        it.copy(
+                            selectedSubscriber = null,
+                        )
+                    }
+                }
+
+                is MapUiAction.GoToRecordMeter -> {
+                    sendEvent(GoToRecordMeter(action.subscriber.id))
+                }
+
+                MapUiAction.HasInitialZoomed -> {
+                    updateState {
+                        it.copy(
+                            hasInitialZoomed = true
+                        )
+                    }
                 }
             }
         }
