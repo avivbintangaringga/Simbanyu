@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.components.item
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -160,58 +161,15 @@ fun ReportItem(
             )
         }
 
-        if (report.isExpanded) {
-            Row(
-                modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
-                verticalAlignment = Alignment.CenterVertically,
+        AnimatedVisibility(
+            visible = report.isExpanded
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                )
             ) {
-                Icon(
-                    modifier = Modifier
-                        .height(16.dp)
-                        .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_location_on_filled),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brand
-                )
-                SimbanyuText(
-                    text = "LOKASI",
-                    style = SimbanyuTheme.typography.labelOverline
-                )
-            }
-
-            SimbanyuText(
-                text = report.location
-            )
-
-            Row(
-                modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .height(16.dp)
-                        .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_photo_camera_filled),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brand
-                )
-                SimbanyuText(
-                    text = "BUKTI FOTO",
-                    style = SimbanyuTheme.typography.labelOverline
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-                    .clip(SimbanyuTheme.shapes.large)
-                    .background(
-                        SimbanyuTheme.colors.statusNeutral
-                    )
-            )
-
-            if (report.operatorNotes.isNotEmpty()) {
                 Row(
                     modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
                     verticalAlignment = Alignment.CenterVertically,
@@ -220,22 +178,20 @@ fun ReportItem(
                         modifier = Modifier
                             .height(16.dp)
                             .padding(end = SimbanyuTheme.padding.medium),
-                        painter = painterResource(R.drawable.ic_description_filled),
+                        painter = painterResource(R.drawable.ic_location_on_filled),
                         contentDescription = null,
                         tint = SimbanyuTheme.colors.brand
                     )
                     SimbanyuText(
-                        text = "CATATAN PETUGAS",
+                        text = "LOKASI",
                         style = SimbanyuTheme.typography.labelOverline
                     )
                 }
 
                 SimbanyuText(
-                    text = report.operatorNotes
+                    text = report.location
                 )
-            }
 
-            if (report.operatorEvidenceImage.isNotEmpty()) {
                 Row(
                     modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
                     verticalAlignment = Alignment.CenterVertically,
@@ -249,7 +205,7 @@ fun ReportItem(
                         tint = SimbanyuTheme.colors.brand
                     )
                     SimbanyuText(
-                        text = "BUKTI PENANGANAN",
+                        text = "BUKTI FOTO",
                         style = SimbanyuTheme.typography.labelOverline
                     )
                 }
@@ -263,18 +219,72 @@ fun ReportItem(
                             SimbanyuTheme.colors.statusNeutral
                         )
                 )
-            }
 
-            if (showHandleReport) {
-                SimbanyuButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            brush = SimbanyuTheme.colors.brush.brandVertical
-                        ),
-                    text = "Update Penanganan",
-                    onClick = onClickHandleReport
-                )
+                if (report.operatorNotes.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .height(16.dp)
+                                .padding(end = SimbanyuTheme.padding.medium),
+                            painter = painterResource(R.drawable.ic_description_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.brand
+                        )
+                        SimbanyuText(
+                            text = "CATATAN PETUGAS",
+                            style = SimbanyuTheme.typography.labelOverline
+                        )
+                    }
+
+                    SimbanyuText(
+                        text = report.operatorNotes
+                    )
+                }
+
+                if (report.operatorEvidenceImage.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .height(16.dp)
+                                .padding(end = SimbanyuTheme.padding.medium),
+                            painter = painterResource(R.drawable.ic_photo_camera_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.brand
+                        )
+                        SimbanyuText(
+                            text = "BUKTI PENANGANAN",
+                            style = SimbanyuTheme.typography.labelOverline
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp)
+                            .clip(SimbanyuTheme.shapes.large)
+                            .background(
+                                SimbanyuTheme.colors.statusNeutral
+                            )
+                    )
+                }
+
+                if (showHandleReport) {
+                    SimbanyuButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                brush = SimbanyuTheme.colors.brush.brandVertical
+                            ),
+                        text = "Update Penanganan",
+                        onClick = onClickHandleReport
+                    )
+                }
             }
         }
 
