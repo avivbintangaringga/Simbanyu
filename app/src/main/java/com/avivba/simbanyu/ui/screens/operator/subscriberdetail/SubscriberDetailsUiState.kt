@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.operator.subscriberdetail
 import com.avivba.simbanyu.ui.screens.billhistory.fakeBills
 import com.avivba.simbanyu.ui.screens.usagehistory.fakeUsages
 import com.avivba.simbanyu.ui.shared.model.Bill
+import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Usage
 
 data class SubscriberDetailsUiState(
@@ -13,6 +14,7 @@ data class SubscriberDetailsUiState(
     val meterId: String = "",
     val phone: String = "",
     val category: String = "",
+    val location: Coordinate? = null,
     val isRecorded: Boolean = false,
 
     val selectedTabIndex: Int = 0,
@@ -35,7 +37,7 @@ sealed interface SubscriberDetailsAction {
     data class ChangeTab(val index: Int) : SubscriberDetailsAction
     data class FilterUsage(val year: Int) : SubscriberDetailsAction
     data object RecordMeter : SubscriberDetailsAction
-    data object ContactViaWhatsApp: SubscriberDetailsAction
+    data object ContactViaWhatsApp : SubscriberDetailsAction
     data class PayByCash(val bill: Bill) : SubscriberDetailsAction
     data class ClickUsage(val usage: Usage) : SubscriberDetailsAction
 }
@@ -43,7 +45,7 @@ sealed interface SubscriberDetailsAction {
 sealed interface SubscriberDetailsEvent {
     data object NavigateBack : SubscriberDetailsEvent
     data object GoToRecordMeter : SubscriberDetailsEvent
-    data object GoToWhatsApp: SubscriberDetailsEvent
+    data object GoToWhatsApp : SubscriberDetailsEvent
 }
 
 val fakeSubscriberDetailsUiState = SubscriberDetailsUiState(
@@ -52,6 +54,10 @@ val fakeSubscriberDetailsUiState = SubscriberDetailsUiState(
     meterId = "MTR001",
     category = "Rumah Tangga A",
     phone = "082212232131",
+    location = Coordinate(
+        -7.911178168148756,
+        110.69031351790268
+    ),
 
     usageSelectedYear = 2024,
     usageYears = listOf(2023, 2024, 2025, 2026),
