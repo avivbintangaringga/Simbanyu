@@ -154,10 +154,15 @@ private fun MapContent(
 
     val density = LocalDensity.current
     var bottomPaddingPx by remember { mutableIntStateOf(0) }
-    val mapPadding = remember(bottomPaddingPx) {
+    val animatedBottomPadding by androidx.compose.animation.core.animateIntAsState(
+        targetValue = bottomPaddingPx,
+        label = "MapBottomPadding"
+    )
+
+    val mapPadding = remember(animatedBottomPadding) {
         PaddingValues(
             bottom = with(density) {
-                bottomPaddingPx.toDp()
+                animatedBottomPadding.toDp()
             }
         )
     }
@@ -253,7 +258,9 @@ private fun MapContent(
             Column(
                 modifier = modifier
                     .onGloballyPositioned { coordinates ->
-                        bottomPaddingPx = coordinates.size.height
+                        if (state.selectedSubscriber != null) {
+                            bottomPaddingPx = coordinates.size.height
+                        }
                     }
                     .clip(
                         SimbanyuTheme.shapes.bottomBar
