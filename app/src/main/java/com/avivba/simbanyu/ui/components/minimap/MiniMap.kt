@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -75,7 +76,7 @@ fun MiniMap(
 
     val properties = remember {
         MapProperties(
-            mapType = MapType.HYBRID
+            mapType = MapType.HYBRID,
         )
     }
 
@@ -83,7 +84,7 @@ fun MiniMap(
         modifier = modifier
             .fillMaxWidth()
             .height(
-                120.dp
+                140.dp
             )
             .clip(
                 SimbanyuTheme.shapes.large
@@ -93,7 +94,11 @@ fun MiniMap(
             ),
         cameraPositionState = cameraPositionState,
         uiSettings = uiSettings,
-        properties = properties
+        properties = properties,
+        googleMapOptionsFactory = {
+            GoogleMapOptions().liteMode(true)
+        }
+
     ) {
         MarkerComposable(
             state = rememberUpdatedMarkerState(
