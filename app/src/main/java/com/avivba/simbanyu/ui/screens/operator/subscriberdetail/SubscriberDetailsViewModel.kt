@@ -62,7 +62,27 @@ class SubscriberDetailsViewModel(
                 is SubscriberDetailsAction.PayByCash -> {
                     // TODO: Handle pay by cash
                 }
+
+                is SubscriberDetailsAction.ClickUsage -> {
+                    toggleUsageExpanded(action.usage)
+                }
             }
+        }
+    }
+
+    private fun toggleUsageExpanded(usage: Usage) {
+        updateState {
+            it.copy(
+                usages = it.usages.map { item ->
+                    if (item.id == usage.id) {
+                        item.copy(
+                            isExpanded = !item.isExpanded
+                        )
+                    } else {
+                        item
+                    }
+                }
+            )
         }
     }
 

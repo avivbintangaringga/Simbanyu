@@ -276,11 +276,10 @@ internal fun UsageHistory(
                 key = { it.id }
             ) { usage ->
                 UsageHistoryItem(
-                    period = "${usage.periodMonth} ${usage.periodYear}",
-                    amount = usage.amount.toString(),
-                    iconId = R.drawable.ic_water_droplet,
-                    meterStart = usage.meterStart.toString(),
-                    meterEnd = usage.meterEnd.toString()
+                    usage = usage,
+                    onClick = {
+                        onAction(SubscriberDetailsAction.ClickUsage(usage))
+                    }
                 )
             }
         }

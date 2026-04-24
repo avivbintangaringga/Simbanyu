@@ -7,5 +7,8 @@ data class Usage(
     val amount: Int,
     val periodMonth: String,
     val periodYear: Int,
+    val imageUrl: String = "",
+    val operatorNotes: String = "",
+    val isExpanded: Boolean = false,
 )
 

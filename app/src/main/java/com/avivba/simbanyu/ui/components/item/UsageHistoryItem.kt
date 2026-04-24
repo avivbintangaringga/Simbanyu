@@ -1,43 +1,38 @@
 package com.avivba.simbanyu.ui.components.item
 
-import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
+import com.avivba.simbanyu.ui.screens.usagehistory.fakeUsages
+import com.avivba.simbanyu.ui.shared.model.Usage
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
 fun UsageHistoryItem(
     modifier: Modifier = Modifier,
-    period: String,
-    amount: String,
-    meterStart: String,
-    meterEnd: String,
-    @DrawableRes iconId: Int,
-    iconTint: Color = SimbanyuTheme.colors.brand,
-    iconBackgroundColor: Color = SimbanyuTheme.colors.surfaceCard,
+    usage: Usage,
     onClick: () -> Unit = {}
 ) {
-    Row(
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .background(
@@ -51,42 +46,176 @@ fun UsageHistoryItem(
                 onClick()
             }
             .padding(SimbanyuTheme.padding.large),
-        horizontalArrangement = Arrangement.spacedBy(
-            SimbanyuTheme.spacing.large
-        ),
-        verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            painter = painterResource(iconId),
-            contentDescription = null,
-            tint = iconTint,
+        Row(
             modifier = Modifier
-                .background(
-                    color = iconBackgroundColor,
-                    shape = CircleShape
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(
+                SimbanyuTheme.spacing.large
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(
+                    R.drawable.ic_water_droplet
+                ),
+                contentDescription = null,
+                tint = SimbanyuTheme.colors.brand,
+                modifier = Modifier
+                    .background(
+                        color = SimbanyuTheme.colors.brandText,
+                        shape = CircleShape
+                    )
+                    .padding(SimbanyuTheme.padding.medium)
+            )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+            ) {
+                SimbanyuText(
+                    text = "${usage.periodMonth} ${usage.periodYear}",
+                    style = SimbanyuTheme.typography.bodyProminent
                 )
-                .padding(SimbanyuTheme.padding.medium)
-        )
-        Column(
+                Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
+                SimbanyuText(
+                    text = "METER: ${usage.meterStart} - ${usage.meterEnd}",
+                    style = SimbanyuTheme.typography.bodySmall
+                )
+            }
+            SimbanyuText(
+                text = "${usage.amount} m³",
+                style = SimbanyuTheme.typography.displayMedium
+            )
+
+        }
+
+        AnimatedVisibility(
+            visible = usage.isExpanded
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                )
+            ) {
+                Row(
+                    modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .height(16.dp)
+                            .padding(end = SimbanyuTheme.padding.medium),
+                        painter = painterResource(R.drawable.ic_photo_camera_filled),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brand
+                    )
+                    SimbanyuText(
+                        text = "BUKTI FOTO",
+                        style = SimbanyuTheme.typography.labelOverline
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(SimbanyuTheme.shapes.large)
+                        .background(
+                            SimbanyuTheme.colors.statusNeutral
+                        )
+                )
+
+                if (usage.operatorNotes.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .height(16.dp)
+                                .padding(end = SimbanyuTheme.padding.medium),
+                            painter = painterResource(R.drawable.ic_description_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.brand
+                        )
+                        SimbanyuText(
+                            text = "CATATAN PETUGAS",
+                            style = SimbanyuTheme.typography.labelOverline
+                        )
+                    }
+
+                    SimbanyuText(
+                        text = usage.operatorNotes
+                    )
+                }
+
+                if (usage.imageUrl.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .height(16.dp)
+                                .padding(end = SimbanyuTheme.padding.medium),
+                            painter = painterResource(R.drawable.ic_photo_camera_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.brand
+                        )
+                        SimbanyuText(
+                            text = "BUKTI PENANGANAN",
+                            style = SimbanyuTheme.typography.labelOverline
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp)
+                            .clip(SimbanyuTheme.shapes.large)
+                            .background(
+                                SimbanyuTheme.colors.statusNeutral
+                            )
+                    )
+                }
+            }
+        }
+
+        Row(
             modifier = Modifier
-                .weight(1f)
+                .padding(
+                    top = SimbanyuTheme.spacing.medium
+                )
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                SimbanyuTheme.spacing.medium,
+                alignment = Alignment.CenterHorizontally
+            )
         ) {
             SimbanyuText(
-                text = period,
-                style = SimbanyuTheme.typography.bodyProminent
+                text = if (usage.isExpanded) {
+                    "Sembunyikan detail"
+                } else {
+                    "Tampilkan detail"
+                },
+                style = SimbanyuTheme.typography.labelUnit,
+                color = SimbanyuTheme.colors.brand
             )
-            Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-            SimbanyuText(
-                text = "METER: $meterStart - $meterEnd",
-                style = SimbanyuTheme.typography.bodySmall
+            Icon(
+                painter = painterResource(
+                    if (usage.isExpanded) {
+                        R.drawable.ic_keyboard_arrow_up
+                    } else {
+                        R.drawable.ic_keyboard_arrow_down
+                    }
+                ),
+                contentDescription = null,
+                tint = SimbanyuTheme.colors.brand,
+                modifier = Modifier.height(20.dp)
             )
         }
-        SimbanyuText(
-            text = "$amount m³",
-            style = SimbanyuTheme.typography.displayMedium
-        )
-
-        // TODO: Tambahkan fitur expand lihat detail
     }
 }
 
@@ -94,10 +223,9 @@ fun UsageHistoryItem(
 @Composable
 private fun UsageHistoryItemPreview() {
     UsageHistoryItem(
-        period = "Januari 2025",
-        iconId = R.drawable.ic_history,
-        amount = "15",
-        meterStart = "113",
-        meterEnd = "128",
+        usage = fakeUsages[0].copy(
+            isExpanded = true,
+            operatorNotes = "Meteran hilang"
+        )
     )
 }

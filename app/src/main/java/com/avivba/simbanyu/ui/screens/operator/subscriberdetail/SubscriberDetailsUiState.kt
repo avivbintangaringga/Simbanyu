@@ -37,6 +37,7 @@ sealed interface SubscriberDetailsAction {
     data object RecordMeter : SubscriberDetailsAction
     data object ContactViaWhatsApp: SubscriberDetailsAction
     data class PayByCash(val bill: Bill) : SubscriberDetailsAction
+    data class ClickUsage(val usage: Usage) : SubscriberDetailsAction
 }
 
 sealed interface SubscriberDetailsEvent {

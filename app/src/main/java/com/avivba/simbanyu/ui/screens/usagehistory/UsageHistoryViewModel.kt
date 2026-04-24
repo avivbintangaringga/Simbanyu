@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.collections.filter
 
 class UsageHistoryViewModel :
     BaseViewModel<UsageHistoryUiState, UsageHistoryAction, UsageHistoryEvent>(
@@ -32,9 +31,25 @@ class UsageHistoryViewModel :
                 UsageHistoryAction.Refresh -> refresh()
                 is UsageHistoryAction.Filter -> filter(action.year)
                 is UsageHistoryAction.ClickUsage -> {
-
+                    toggleItemExpanded(action.usage)
                 }
             }
+        }
+    }
+
+    private fun toggleItemExpanded(usage: Usage) {
+        updateState {
+            it.copy(
+                usages = it.usages.map { item ->
+                    if (item.id == usage.id) {
+                        item.copy(
+                            isExpanded = !item.isExpanded
+                        )
+                    } else {
+                        item
+                    }
+                }
+            )
         }
     }
 
