@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.koin.annotations)
     implementation(libs.google.maps.compose)
     implementation(libs.accompanist.permissions)
+    implementation(libs.retrofit)
 
     testImplementation(libs.junit)
 
