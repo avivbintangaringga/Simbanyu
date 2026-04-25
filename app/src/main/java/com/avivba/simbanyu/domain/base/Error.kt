@@ -1,4 +1,3 @@
 package com.avivba.simbanyu.domain.base
 
-class Error {
-}
+sealed interface Error
