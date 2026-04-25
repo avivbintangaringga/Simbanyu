@@ -1,7 +1,6 @@
 package com.avivba.simbanyu.ui.components.item
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,13 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.shared.model.ActivityData
+import com.avivba.simbanyu.ui.shared.model.Activity
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
 fun ActivityItem(
     modifier: Modifier = Modifier,
-    activity: ActivityData
+    activity: Activity
 ) {
     Row(
         modifier = modifier
@@ -93,7 +92,7 @@ fun ActivityItem(
 @Composable
 private fun ActivityItemPreview() {
     ActivityItem(
-        activity = ActivityData(
+        activity = Activity(
             id = "1",
             title = "Meter Dicatat #123123",
             body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",

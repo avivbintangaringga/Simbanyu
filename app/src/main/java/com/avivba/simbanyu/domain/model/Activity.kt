@@ -1,4 +1,10 @@
 package com.avivba.simbanyu.domain.model
 
-class Activity {
-}
+import java.time.Instant
+
+data class Activity(
+    val id: String,
+    val title: String,
+    val body: String,
+    val date: Instant
+)

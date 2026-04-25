@@ -198,7 +198,7 @@ fun OperatorAnnouncementContent(
                     ) { announcement ->
                         AnnouncementItem(
                             title = announcement.title,
-                            content = announcement.content,
+                            content = announcement.body,
                             time = announcement.time,
                             iconId = R.drawable.ic_campaign_filled,
                             canDelete = true,
