@@ -19,30 +19,30 @@ import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodViewModel
 import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryViewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import org.koin.plugin.module.dsl.viewModel
 
 val viewModelModule = module {
-    viewModel<LoginViewModel>()
-    viewModel<MainViewModel>()
+    viewModelOf(::LoginViewModel)
+    viewModelOf(::MainViewModel)
 
-    viewModel<DashboardViewModel>()
-    viewModel<BillHistoryViewModel>()
-    viewModel<UsageHistoryViewModel>()
-    viewModel<ReportViewModel>()
-    viewModel<ProfileViewModel>()
-    viewModel<InvoiceViewModel>()
-    viewModel<PaymentMethodViewModel>()
-    viewModel<BillDetailsViewModel>()
-    viewModel<AnnouncementViewModel>()
+    viewModelOf(::DashboardViewModel)
+    viewModelOf(::BillHistoryViewModel)
+    viewModelOf(::UsageHistoryViewModel)
+    viewModelOf(::ReportViewModel)
+    viewModelOf(::ProfileViewModel)
+    viewModelOf(::InvoiceViewModel)
+    viewModelOf(::PaymentMethodViewModel)
+    viewModelOf(::BillDetailsViewModel)
+    viewModelOf(::AnnouncementViewModel)
 
     // OPERATOR
-    viewModel<OperatorMainViewModel>()
-    viewModel<OperatorDashboardViewModel>()
-    viewModel<OperatorAnnouncementViewModel>()
-    viewModel<SubscribersViewModel>()
-    viewModel<SubscriberDetailsViewModel>()
-    viewModel<OperatorReportViewModel>()
-    viewModel<MeterRecordViewModel>()
-    viewModel<MapViewModel>()
+    viewModelOf(::OperatorMainViewModel)
+    viewModelOf(::OperatorDashboardViewModel)
+    viewModelOf(::OperatorAnnouncementViewModel)
+    viewModelOf(::SubscribersViewModel)
+    viewModelOf(::SubscriberDetailsViewModel)
+    viewModelOf(::OperatorReportViewModel)
+    viewModelOf(::MeterRecordViewModel)
+    viewModelOf(::MapViewModel)
 }
