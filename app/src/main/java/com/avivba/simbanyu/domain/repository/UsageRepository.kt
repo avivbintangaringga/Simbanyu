@@ -8,5 +8,6 @@ import com.avivba.simbanyu.domain.model.UsageSubmission
 interface UsageRepository {
     suspend fun getAll(subscriberId: String, limitLast: Int = 0): Result<Unit, DataError>
     suspend fun getLastUsage(subscriberId: String): Result<Usage, DataError>
-    suspend fun upsertUsage(subscriberId: String, usage: UsageSubmission): Result<Unit, DataError>
+    suspend fun recordUsage(usage: UsageSubmission): Result<Usage, DataError>
+    suspend fun updateUsage(usage: Usage): Result<Usage, DataError>
 }
