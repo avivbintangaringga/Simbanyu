@@ -5,13 +5,13 @@ sealed interface ApiResponse<T> {
         val status: String = "success",
         val message: String,
         val data: T
-    ) : com.avivba.simbanyu.data.remote.model.ApiResponse<T>
+    ) : ApiResponse<T>
 
     data class Error<T>(
         val status: String = "error",
         val message: String,
         val errors: List<String> = emptyList()
-    ) : com.avivba.simbanyu.data.remote.model.ApiResponse<T>
+    ) : ApiResponse<T>
 
     companion object {
         fun <T> success(message: String, data: T): Success<T> =
