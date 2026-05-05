@@ -1,7 +1,8 @@
 package com.avivba.simbanyu
 
 import android.app.Application
-import com.avivba.simbanyu.di.networkModule
+import com.avivba.simbanyu.data.di.networkModule
+import com.avivba.simbanyu.data.di.repositoryModule
 import com.avivba.simbanyu.di.appModule
 import com.avivba.simbanyu.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -18,7 +19,8 @@ class App : Application() {
                 listOf(
                     appModule,
                     viewModelModule,
-                    networkModule
+                    networkModule,
+                    repositoryModule
                 )
             )
         }

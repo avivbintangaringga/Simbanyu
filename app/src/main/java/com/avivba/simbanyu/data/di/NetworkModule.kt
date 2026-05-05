@@ -1,4 +1,4 @@
-package com.avivba.simbanyu.di
+package com.avivba.simbanyu.data.di
 
 import com.avivba.simbanyu.data.remote.api.*
 import okhttp3.OkHttpClient
