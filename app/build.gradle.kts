@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.google.maps.compose)
     implementation(libs.accompanist.permissions)
     implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
 
     testImplementation(libs.junit)
 
