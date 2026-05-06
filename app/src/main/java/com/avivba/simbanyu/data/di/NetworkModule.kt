@@ -17,7 +17,7 @@ val networkModule = module {
         Retrofit.Builder()
             .baseUrl("https://simbanyu.avivba.com/api/")
             .client(get())
-            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
+//            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

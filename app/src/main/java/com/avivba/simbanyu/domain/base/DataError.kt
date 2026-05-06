@@ -6,7 +6,8 @@ sealed interface DataError : Error {
         NOT_FOUND,
         SERVER_ERROR,
         UNAUTHORIZED,
-        TOO_LARGE
+        TOO_LARGE,
+        UNKNOWN
     }
 
     object AuthError : DataError
