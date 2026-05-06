@@ -14,12 +14,7 @@ class ActivityRepositoryImpl(
     override suspend fun getAll(): Result<List<Activity>, DataError> {
         return safeApiCall {
             activityService.getAll().data?.map {
-                Activity(
-                    id = it.id,
-                    title = it.title,
-                    body = it.body,
-                    date = Instant.now()
-                )
+                it.toDomain()
             } ?: emptyList()
         }
     }
