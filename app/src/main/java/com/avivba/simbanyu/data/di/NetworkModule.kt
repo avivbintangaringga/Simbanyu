@@ -1,7 +1,6 @@
 package com.avivba.simbanyu.data.di
 
 import com.avivba.simbanyu.data.remote.api.*
-import com.skydoves.sandwich.retrofit.adapters.ApiResponseCallAdapterFactory
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -23,7 +22,7 @@ val networkModule = module {
     }
 
     single { get<Retrofit>().create(ActivityService::class.java) }
-    single { get<Retrofit>().create(FcmService::class.java) }
+    single { get<Retrofit>().create(FcmTokenService::class.java) }
     single { get<Retrofit>().create(AuthService::class.java) }
     single { get<Retrofit>().create(BillService::class.java) }
     single { get<Retrofit>().create(UserService::class.java) }

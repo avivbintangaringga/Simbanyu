@@ -10,6 +10,7 @@ val repositoryModule = module {
     singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
     singleOf(::BillRepositoryImpl) { bind<BillRepository>() }
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
+    singleOf(::FcmTokenRepositoryImpl) { bind<FcmTokenRepository>() }
     singleOf(::UsageRepositoryImpl) { bind<UsageRepository>() }
     singleOf(::ReportRepositoryImpl) { bind<ReportRepository>() }
     singleOf(::ActivityRepositoryImpl) { bind<ActivityRepository>() }
