@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
@@ -415,33 +416,39 @@ fun DashboardContent(
             ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            state.announcements.forEach { announcement ->
-                AnnouncementItem(
-                    title = announcement.title,
-                    content = announcement.body,
-                    time = announcement.time,
-                    iconId = R.drawable.ic_campaign_filled,
-                    iconTint = SimbanyuTheme.colors.brand
-                )
-            }
-
-            SimbanyuButton(
-                text = "Lihat semua",
-                textColor = SimbanyuTheme.colors.actionBrand,
-                modifier = Modifier.border(
-                    1.dp,
-                    SimbanyuTheme.colors.actionBrand,
-                    shape = SimbanyuTheme.shapes.extraLarge
-                ),
-                iconRight = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_chevron_forward),
-                        contentDescription = null,
-                        tint = SimbanyuTheme.colors.actionBrand
+            if (state.announcements.size > 0) {
+                state.announcements.forEach { announcement ->
+                    AnnouncementItem(
+                        title = announcement.title,
+                        content = announcement.body,
+                        time = announcement.time,
+                        iconId = R.drawable.ic_campaign_filled,
+                        iconTint = SimbanyuTheme.colors.brand
                     )
                 }
-            ) {
-                onAction(DashboardAction.ViewAllAnnouncements)
+
+                SimbanyuButton(
+                    text = "Lihat semua",
+                    textColor = SimbanyuTheme.colors.actionBrand,
+                    modifier = Modifier.border(
+                        1.dp,
+                        SimbanyuTheme.colors.actionBrand,
+                        shape = SimbanyuTheme.shapes.extraLarge
+                    ),
+                    iconRight = {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_chevron_forward),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.actionBrand
+                        )
+                    }
+                ) {
+                    onAction(DashboardAction.ViewAllAnnouncements)
+                }
+            } else {
+                EmptyState(
+                    message = "Tidak ada pemberitahuan"
+                )
             }
         }
 
