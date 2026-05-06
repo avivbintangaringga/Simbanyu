@@ -8,6 +8,6 @@ data class Usage(
     val meterEnd: Int,
     val amount: Int,
     val evidenceImageUrl: String,
-    val operatorNotes: String,
+    val operatorNotes: String?,
     val date: Instant,
 )
