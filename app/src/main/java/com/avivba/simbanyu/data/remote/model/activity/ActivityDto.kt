@@ -1,5 +1,8 @@
 package com.avivba.simbanyu.data.remote.model.activity
 
+import com.avivba.simbanyu.domain.model.Activity
+import java.time.Instant
+
 data class ActivityDto(
     val id: String,
     val title: String,
@@ -7,6 +10,11 @@ data class ActivityDto(
     val createdAt: String,
     val updatedAt: String,
 ) {
-    companion object {
-    }
+    fun toDomain(): Activity =
+        Activity(
+            id = this.id,
+            title = this.title,
+            body = this.body,
+            date = Instant.parse(this.createdAt)
+        )
 }

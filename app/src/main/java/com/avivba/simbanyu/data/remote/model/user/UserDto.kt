@@ -1,5 +1,7 @@
 package com.avivba.simbanyu.data.remote.model.user
 
+import com.avivba.simbanyu.domain.model.User
+
 data class UserDto(
     val id: String,
     val username: String,
@@ -10,6 +12,12 @@ data class UserDto(
     val createdAt: String,
     val updatedAt: String,
 ) {
-    companion object {
-    }
+    fun toDomain() = User(
+        id = id,
+        username = username,
+        name = name,
+        role = User.UserRole.valueOf(role),
+        phoneNumber = phoneNumber,
+        photoImageUrl = photoImageUrl ?: "",
+    )
 }

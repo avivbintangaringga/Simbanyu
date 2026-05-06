@@ -6,7 +6,4 @@ data class PriceDto(
     val tierOrder: Int,
     val maxVolume: Int?,
     val pricePerMeter: Double
-) {
-    companion object {
-    }
-}
+)

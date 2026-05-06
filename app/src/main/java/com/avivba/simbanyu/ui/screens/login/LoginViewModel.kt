@@ -1,10 +1,15 @@
 package com.avivba.simbanyu.ui.screens.login
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.data.remote.api.ActivityService
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.ActivityRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class LoginViewModel : BaseViewModel<LoginUiState, LoginAction, LoginEvent>(
+class LoginViewModel(
+) : BaseViewModel<LoginUiState, LoginAction, LoginEvent>(
     LoginUiState()
 ) {
     override fun onAction(action: LoginAction) {

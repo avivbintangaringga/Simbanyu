@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.data.utils
 
+import android.util.Log
 import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,6 +25,11 @@ suspend fun <T> safeApiCall(
 
                 is HttpException -> {
                     val code = t.code()
+                    t.response()?.let {
+                        it.errorBody()?.let {
+                            Log.e("SDKSDK", it.string())
+                        }
+                    }
                     when (code) {
                         401 -> {
                             DataError.AuthError

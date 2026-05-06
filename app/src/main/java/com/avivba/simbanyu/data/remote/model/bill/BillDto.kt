@@ -1,14 +1,23 @@
-package com.avivba.simbanyu.api.features.bill.model
+package com.avivba.simbanyu.data.remote.model.bill
+
+import com.avivba.simbanyu.domain.model.Bill
+import java.time.Instant
 
 data class BillDto(
     val id: String,
     val title: String,
     val amount: Double,
     val status: String,
-    val items: List<com.avivba.simbanyu.data.remote.model.bill.BillItemDto>,
+    val items: List<BillItemDto>,
     val createdAt: String,
     val updatedAt: String,
 ) {
-    companion object {
-    }
+    fun toDomain(): Bill =
+        Bill(
+            id = id,
+            amount = amount,
+            date = Instant.parse(createdAt),
+            status = Bill.BillStatus.valueOf(status.uppercase()),
+            items = items.map { it.toDomain() }
+        )
 }

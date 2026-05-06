@@ -1,5 +1,9 @@
 package com.avivba.simbanyu.data.remote.model.report
 
+import com.avivba.simbanyu.data.remote.model.subscriber.SubscriberDto
+import com.avivba.simbanyu.domain.model.Report
+import java.time.Instant
+
 data class ReportDto(
     val id: String,
     val address: String,
@@ -8,9 +12,19 @@ data class ReportDto(
     val evidenceImageUrl: String,
     val operatorNotes: String? = null,
     val handlingEvidenceImageUrl: String? = null,
+    val subscriber: SubscriberDto,
     val createdAt: String,
     val updatedAt: String,
 ) {
-    companion object {
-    }
+    fun toDomain() = Report(
+        id = id,
+        address = address,
+        description = description,
+        status = Report.ReportStatus.valueOf(status),
+        evidenceImageUrl = evidenceImageUrl,
+        operatorNotes = operatorNotes ?: "",
+        handlingEvidenceImageUrl = handlingEvidenceImageUrl ?: "",
+        date = Instant.parse(createdAt),
+        subscriber = subscriber.toDomain()
+    )
 }

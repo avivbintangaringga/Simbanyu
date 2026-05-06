@@ -1,5 +1,8 @@
 package com.avivba.simbanyu.data.remote.model.usage
 
+import com.avivba.simbanyu.domain.model.Usage
+import java.time.Instant
+
 data class UsageDto(
     val id: String,
     val meterStart: Int,
@@ -10,6 +13,13 @@ data class UsageDto(
     val createdAt: String,
     val updatedAt: String,
 ) {
-    companion object {
-    }
+    fun toDomain() = Usage(
+        id = id,
+        meterStart = meterStart,
+        meterEnd = meterEnd,
+        amount = amount,
+        evidenceImageUrl = evidenceImageUrl,
+        operatorNotes = operatorNotes ?: "",
+        date = Instant.parse(createdAt),
+    )
 }

@@ -1,5 +1,8 @@
 package com.avivba.simbanyu.data.remote.model.announcement
 
+import com.avivba.simbanyu.domain.model.Announcement
+import java.time.Instant
+
 data class AnnouncementDto(
     val id: String,
     val title: String,
@@ -7,6 +10,10 @@ data class AnnouncementDto(
     val createdAt: String,
     val updatedAt: String,
 ) {
-    companion object {
-    }
+    fun toDomain(): Announcement = Announcement(
+        id = id,
+        title = title,
+        body = body,
+        date = Instant.parse(createdAt)
+    )
 }

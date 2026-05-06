@@ -10,6 +10,7 @@ data class User(
 ) {
     enum class UserRole {
         OPERATOR,
-        SUBSCRIBER
+        SUBSCRIBER,
+        ADMIN
     }
 }
