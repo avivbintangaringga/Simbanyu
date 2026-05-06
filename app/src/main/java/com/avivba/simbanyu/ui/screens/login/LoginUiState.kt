@@ -18,4 +18,6 @@ sealed interface LoginAction {
 sealed interface LoginEvent {
     data object GoToSubscriberDashboard : LoginEvent
     data object GoToOperatorDashboard : LoginEvent
+
+    data class ShowToast(val message: String) : LoginEvent
 }

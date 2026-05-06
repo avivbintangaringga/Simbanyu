@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.login
 
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -50,6 +52,7 @@ fun LoginScreen(
     onNavigate: (Screen) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
@@ -59,6 +62,10 @@ fun LoginScreen(
 
             is LoginEvent.GoToOperatorDashboard -> {
                 onNavigate(Screen.OperatorMain)
+            }
+
+            is LoginEvent.ShowToast -> {
+                Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
