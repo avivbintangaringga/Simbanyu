@@ -70,6 +70,8 @@ dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+    implementation(libs.sandwich)
+    implementation(libs.sandwich.retrofit)
 
     testImplementation(libs.junit)
 

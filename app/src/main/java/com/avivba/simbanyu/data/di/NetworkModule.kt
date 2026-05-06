@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.data.di
 
 import com.avivba.simbanyu.data.remote.api.*
+import com.skydoves.sandwich.retrofit.adapters.ApiResponseCallAdapterFactory
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -16,6 +17,7 @@ val networkModule = module {
         Retrofit.Builder()
             .baseUrl("https://simbanyu.avivba.com/api/")
             .client(get())
+            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
