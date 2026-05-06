@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.data.repository
 
 import com.avivba.simbanyu.data.remote.api.UserService
+import com.avivba.simbanyu.data.utils.safeApiCall
 import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.User
@@ -10,6 +11,8 @@ class UserRepositoryImpl(
     private val userService: UserService
 ) : UserRepository {
     override suspend fun getProfile(): Result<User, DataError> {
-        TODO("Not yet implemented")
+        return safeApiCall {
+            userService.getMe().data?.toDomain() ?: throw Exception("Invalid response")
+        }
     }
 }

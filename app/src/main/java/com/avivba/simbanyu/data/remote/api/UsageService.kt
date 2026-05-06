@@ -17,9 +17,10 @@ interface UsageService {
     @GET("usages")
     suspend fun getAll(): Envelope<List<UsageDto>>
 
-    @GET("usages?subscriberId={subscriberId}")
+    @GET("usages?subscriberId={subscriberId}&limit={limit}")
     suspend fun getForSubscriber(
-        @Path("subscriberId") subscriberId: String
+        @Path("subscriberId") subscriberId: String,
+        @Path("limit") limit: Int
     ): Envelope<List<UsageDto>>
 
     @Multipart

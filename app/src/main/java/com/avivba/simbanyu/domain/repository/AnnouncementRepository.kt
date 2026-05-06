@@ -9,5 +9,5 @@ interface AnnouncementRepository {
     suspend fun getAllAnnouncements(): Result<List<Announcement>, DataError>
     suspend fun deleteAnnouncement(announcement: Announcement): Result<Announcement, DataError>
     suspend fun addAnnouncement(announcement: AnnouncementSubmission): Result<Announcement, DataError>
-    suspend fun updateAnnouncement(announcement: Announcement): Result<Announcement, DataError>
+    suspend fun updateAnnouncement(id: String, announcement: AnnouncementSubmission): Result<Announcement, DataError>
 }

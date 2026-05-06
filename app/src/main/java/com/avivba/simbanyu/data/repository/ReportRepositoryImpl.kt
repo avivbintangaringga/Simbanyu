@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.data.repository
 
 import com.avivba.simbanyu.data.remote.api.ReportService
+import com.avivba.simbanyu.data.utils.safeApiCall
 import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.Report
@@ -12,11 +13,11 @@ class ReportRepositoryImpl(
     private val reportService: ReportService
 ) : ReportRepository {
     override suspend fun getAll(): Result<List<Report>, DataError> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getBySubscriberId(subscriberId: String): Result<List<Report>, DataError> {
-        TODO("Not yet implemented")
+        return safeApiCall {
+            reportService.getAll().data?.map {
+                it.toDomain()
+            } ?: emptyList()
+        }
     }
 
     override suspend fun submit(report: ReportSubmission): Result<Unit, DataError> {

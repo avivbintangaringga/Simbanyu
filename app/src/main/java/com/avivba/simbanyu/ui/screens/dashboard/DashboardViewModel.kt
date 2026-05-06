@@ -1,11 +1,20 @@
 package com.avivba.simbanyu.ui.screens.dashboard
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.AnnouncementRepository
+import com.avivba.simbanyu.domain.repository.BillRepository
+import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import kotlinx.coroutines.delay
+import com.avivba.simbanyu.ui.shared.model.Announcement
 import kotlinx.coroutines.launch
 
-class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, DashboardEvent>(
+class DashboardViewModel(
+    private val billRepository: BillRepository,
+    private val announcementRepository: AnnouncementRepository,
+    private val usageRepository: UsageRepository
+) : BaseViewModel<DashboardUiState, DashboardAction, DashboardEvent>(
     DashboardUiState()
 ) {
     init {
@@ -46,23 +55,75 @@ class DashboardViewModel : BaseViewModel<DashboardUiState, DashboardAction, Dash
             updateState {
                 it.copy(
                     isLoading = true,
-                    name = "Budiman Man"
                 )
+            }
+
+//            updateState {
+//                it.copy(
+//                    bill = "125.000",
+//                    waterUsage = fakeWaterUsage,
+//                    waterUsageAverage = 14.3,
+//                    waterUsageMaximum = 22,
+//                    waterUsageMaximumMonth = "FEB",
+//                    announcements = fakeAnnouncements,
+//                    isLoading = false
+//                )
+//            }
+
+            when (val activeBill = billRepository.getActive()) {
+                is Result.Success -> {
+                    updateState { it ->
+                        val totalActiveBill = activeBill.data.sumOf { it.amount }
+                        it.copy(
+                            bill = if (totalActiveBill > 0) totalActiveBill.toString() else "",
+                        )
+                    }
+                }
+
+                is Result.Error -> {
+                    Log.e("DashboardViewModel", "Error: ${activeBill.error}")
+                    // TODO: Handle error
+                }
+            }
+
+            when (val usage = usageRepository.getLastUsage("test")) {
+                is Result.Success -> {
+
+                }
+
+                is Result.Error -> {
+                    Log.e("DashboardViewModel", "Error: ${usage.error}")
+                    // TODO: Handle error
+                }
+            }
+
+            when (val announcements = announcementRepository.getAllAnnouncements()) {
+                is Result.Success -> {
+                    updateState {
+                        it.copy(
+                            announcements = announcements.data.map { announcement ->
+                                Announcement(
+                                    id = announcement.id,
+                                    title = announcement.title,
+                                    body = announcement.body,
+                                    time = "TODO" // TODO: Format time
+                                )
+                            }
+                        )
+                    }
+                }
+
+                is Result.Error -> {
+                    Log.e("DashboardViewModel", "Error: ${announcements.error}")
+                    // TODO: Handle error
+                }
             }
 
             updateState {
                 it.copy(
-                    bill = "125.000",
-                    waterUsage = fakeWaterUsage,
-                    waterUsageAverage = 14.3,
-                    waterUsageMaximum = 22,
-                    waterUsageMaximumMonth = "FEB",
-                    announcements = fakeAnnouncements,
                     isLoading = false
                 )
             }
-
-            delay(5000)
         }
     }
 }

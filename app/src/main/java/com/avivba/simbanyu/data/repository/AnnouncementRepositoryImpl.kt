@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.data.repository
 
 import com.avivba.simbanyu.data.remote.api.AnnouncementService
+import com.avivba.simbanyu.data.utils.safeApiCall
 import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.Announcement
@@ -11,18 +12,34 @@ class AnnouncementRepositoryImpl(
     private val announcementService: AnnouncementService
 ) : AnnouncementRepository {
     override suspend fun getAllAnnouncements(): Result<List<Announcement>, DataError> {
-        TODO("Not yet implemented")
+        return safeApiCall {
+            announcementService.getAll().data?.map {
+                it.toDomain()
+            } ?: emptyList()
+        }
     }
 
     override suspend fun deleteAnnouncement(announcement: Announcement): Result<Announcement, DataError> {
-        TODO("Not yet implemented")
+        return safeApiCall {
+            announcementService.delete(announcement.id)
+            announcement
+        }
     }
 
     override suspend fun addAnnouncement(announcement: AnnouncementSubmission): Result<Announcement, DataError> {
-        TODO("Not yet implemented")
+        return safeApiCall {
+            announcementService.add(announcement).data?.toDomain()
+                ?: throw Exception("Invalid response")
+        }
     }
 
-    override suspend fun updateAnnouncement(announcement: Announcement): Result<Announcement, DataError> {
-        TODO("Not yet implemented")
+    override suspend fun updateAnnouncement(
+        id: String,
+        announcement: AnnouncementSubmission
+    ): Result<Announcement, DataError> {
+        return safeApiCall {
+            announcementService.update(id, announcement).data?.toDomain()
+                ?: throw Exception("Invalid response")
+        }
     }
 }
