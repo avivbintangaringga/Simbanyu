@@ -66,7 +66,9 @@ class AnnouncementViewModel(
             is Result.Success -> {
                 updateState {
                     it.copy(
-                        announcements = announcements.data.map { Announcement.fromDomain(it) }
+                        announcements = announcements.data
+                            .sortedByDescending { it.date }
+                            .map { Announcement.fromDomain(it) }
                     )
                 }
             }

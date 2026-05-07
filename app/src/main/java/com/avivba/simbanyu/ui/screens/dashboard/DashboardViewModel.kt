@@ -32,45 +32,42 @@ class DashboardViewModel(
                 DashboardAction.PayBill -> {
                     // TODO: Handle pay bill
                 }
+
                 DashboardAction.ViewAllAnnouncements -> sendEvent(DashboardEvent.ViewAllAnnouncements)
                 DashboardAction.Refresh -> refresh()
             }
         }
     }
 
-    private fun refresh() {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    isRefreshing = true,
-                )
-            }
+    private suspend fun refresh() {
+        updateState {
+            it.copy(
+                isRefreshing = true,
+            )
+        }
 
-            fetchData()
+        fetchData()
 
-            updateState {
-                it.copy(
-                    isRefreshing = false,
-                )
-            }
+        updateState {
+            it.copy(
+                isRefreshing = false,
+            )
         }
     }
 
-    private fun load() {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    isLoading = true,
-                )
-            }
+    private suspend fun load() {
+        updateState {
+            it.copy(
+                isLoading = true,
+            )
+        }
 
-            fetchData()
+        fetchData()
 
-            updateState {
-                it.copy(
-                    isLoading = false
-                )
-            }
+        updateState {
+            it.copy(
+                isLoading = false
+            )
         }
     }
 
@@ -117,9 +114,11 @@ class DashboardViewModel(
             is Result.Success -> {
                 updateState {
                     it.copy(
-                        announcements = announcements.data.map { announcement ->
-                            Announcement.fromDomain(announcement)
-                        }
+                        announcements = announcements.data
+                            .sortedByDescending { it.date }
+                            .take(3).map { announcement ->
+                                Announcement.fromDomain(announcement)
+                            }
                     )
                 }
             }
