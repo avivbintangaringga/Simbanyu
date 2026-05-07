@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.SimbanyuApp
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -24,15 +25,15 @@ class MainActivity : ComponentActivity() {
 
             SimbanyuTheme {
                 if (isCheckingAuth) {
-                    // TODO: Splash?
+                    // TODO: Splash / loading?
                     return@SimbanyuTheme
                 }
 
                 val startScreen = when {
                     isLoggedIn && profile != null -> {
                         when (profile?.role) {
-                            "OPERATOR" -> Screen.OperatorMain
-                            "SUBSCRIBER" -> Screen.Main
+                            User.UserRole.OPERATOR.name -> Screen.OperatorMain
+                            User.UserRole.SUBSCRIBER.name -> Screen.Main
                             else -> Screen.Login
                         }
                     }

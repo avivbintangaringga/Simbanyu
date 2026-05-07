@@ -9,6 +9,8 @@ import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Announcement
+import com.avivba.simbanyu.ui.utils.toDottedString
+import com.avivba.simbanyu.ui.utils.toMonthShort
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
@@ -27,7 +29,9 @@ class DashboardViewModel(
         viewModelScope.launch {
             when (action) {
                 DashboardAction.Load -> load()
-                DashboardAction.PayBill -> {}
+                DashboardAction.PayBill -> {
+                    // TODO: Handle pay bill
+                }
                 DashboardAction.ViewAllAnnouncements -> sendEvent(DashboardEvent.ViewAllAnnouncements)
                 DashboardAction.Refresh -> refresh()
             }
@@ -39,14 +43,14 @@ class DashboardViewModel(
             updateState {
                 it.copy(
                     isRefreshing = true,
-                    isLoading = true
                 )
             }
+
+            fetchData()
 
             updateState {
                 it.copy(
                     isRefreshing = false,
-                    isLoading = false
                 )
             }
         }
@@ -60,59 +64,7 @@ class DashboardViewModel(
                 )
             }
 
-            when (val activeBill = billRepository.getActive()) {
-                is Result.Success -> {
-                    updateState { it ->
-                        val totalActiveBill = activeBill.data.sumOf { it.amount }
-                        it.copy(
-                            bill = if (totalActiveBill > 0) totalActiveBill.toString() else "",
-                        )
-                    }
-                }
-
-                is Result.Error -> {
-                    Log.e("DashboardViewModel", "Error: ${activeBill.error}")
-                    // TODO: Handle error
-                }
-            }
-
-            when (val profile = userRepository.getLocalProfile()) {
-                is Result.Success -> {
-                    val subscriberId = profile.data.subscriberId
-                    if (subscriberId != null) {
-                        loadUsages(subscriberId)
-                    } else {
-                        // TODO: Handle error
-                    }
-                }
-
-                is Result.Error -> {
-                    // TODO: Handle error
-                }
-            }
-
-
-            when (val announcements = announcementRepository.getAllAnnouncements()) {
-                is Result.Success -> {
-                    updateState {
-                        it.copy(
-                            announcements = announcements.data.map { announcement ->
-                                Announcement(
-                                    id = announcement.id,
-                                    title = announcement.title,
-                                    body = announcement.body,
-                                    time = "TODO" // TODO: Format time
-                                )
-                            }
-                        )
-                    }
-                }
-
-                is Result.Error -> {
-                    Log.e("DashboardViewModel", "Error: ${announcements.error}")
-                    // TODO: Handle error
-                }
-            }
+            fetchData()
 
             updateState {
                 it.copy(
@@ -122,11 +74,68 @@ class DashboardViewModel(
         }
     }
 
+    private suspend fun fetchData() {
+        when (val activeBill = billRepository.getActive()) {
+            is Result.Success -> {
+                updateState { it ->
+                    val totalActiveBill = activeBill.data.sumOf { it.amount }
+                    it.copy(
+                        bill = if (totalActiveBill > 0) totalActiveBill.toDottedString() else "",
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                Log.e("DashboardViewModel", "Error: ${activeBill.error}")
+                // TODO: Handle error
+            }
+        }
+
+        when (val profile = userRepository.getLocalProfile()) {
+            is Result.Success -> {
+                updateState {
+                    it.copy(
+                        name = profile.data.name
+                    )
+                }
+
+                val subscriberId = profile.data.subscriberId
+                if (subscriberId != null) {
+                    loadUsages(subscriberId)
+                } else {
+                    // TODO: Handle error
+                }
+            }
+
+            is Result.Error -> {
+                // TODO: Handle error
+            }
+        }
+
+
+        when (val announcements = announcementRepository.getAllAnnouncements()) {
+            is Result.Success -> {
+                updateState {
+                    it.copy(
+                        announcements = announcements.data.map { announcement ->
+                            Announcement.fromDomain(announcement)
+                        }
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                Log.e("DashboardViewModel", "Error: ${announcements.error}")
+                // TODO: Handle error
+            }
+        }
+    }
+
     private suspend fun loadUsages(subscriberId: String) {
         when (val usage = usageRepository.getAll(subscriberId, 6)) {
             is Result.Success -> {
                 val usage = usage.data
-                val average = usage.map { it.amount }.average()
+                val average = usage.map { it.amount }.average().takeIf { !it.isNaN() } ?: 0.0
                 val max = usage.maxByOrNull { it.amount }
 
                 // TODO: Load properly
@@ -135,10 +144,13 @@ class DashboardViewModel(
                         usage = usage.map {
                             WaterUsage(
                                 usage = it.amount,
-                                month = "X",
+                                month = it.date.toMonthShort(),
                                 isMaximum = it.id == max?.id
                             )
-                        }
+                        },
+                        usageAverage = average,
+                        usageMaximum = max?.amount ?: 0,
+                        usageMaximumMonth = max?.date?.toMonthShort() ?: "-"
                     )
                 }
             }
