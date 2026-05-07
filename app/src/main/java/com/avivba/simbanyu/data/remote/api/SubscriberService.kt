@@ -9,13 +9,12 @@ interface SubscriberService {
     @GET("subscribers")
     suspend fun getAll(): Envelope<List<SubscriberDto>>
 
+    @GET("subscribers/me")
+    suspend fun getMe(): Envelope<SubscriberDto>
+
     @GET("subscribers/{id}")
     suspend fun getById(
         @Path("id") id: String
     ): Envelope<SubscriberDto>
 
-    @GET("subscribers?userId={userId}")
-    suspend fun getByUserId(
-        @Path("userId") userId: String
-    ): Envelope<SubscriberDto>
 }

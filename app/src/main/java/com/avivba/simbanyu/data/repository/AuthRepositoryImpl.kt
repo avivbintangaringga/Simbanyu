@@ -47,7 +47,7 @@ class AuthRepositoryImpl(
 
                 if (user.role == User.UserRole.SUBSCRIBER) {
                     val subscriberResponse = safeApiCall {
-                        subscriberService.getByUserId(user.id)
+                        subscriberService.getMe()
                             .data ?: throw Exception("Invalid response")
                     }
 
