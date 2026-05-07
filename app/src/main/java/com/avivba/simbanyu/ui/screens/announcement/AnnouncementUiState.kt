@@ -23,19 +23,19 @@ val fakeAnnouncements = listOf(
         id = "1",
         title = "Pipa Bocor",
         body = "Terjadi kebocoran pipa di area pusat kota.",
-        time = "10:00 AM"
+        date = "10:00 AM"
     ),
     Announcement(
         id = "2",
         title = "Pemeliharaan Rutin",
         body = "Pemeliharaan berkala untuk wilayah utara.",
-        time = "09:00 AM"
+        date = "09:00 AM"
     ),
     Announcement(
         id = "3",
         title = "Himbauan Hemat Air",
         body = "Gunakan air secukupnya selama musim kemarau.",
-        time = "Yesterday"
+        date = "Yesterday"
     )
 )
 

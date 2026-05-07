@@ -421,7 +421,7 @@ fun DashboardContent(
                     AnnouncementItem(
                         title = announcement.title,
                         content = announcement.body,
-                        time = announcement.time,
+                        time = announcement.date,
                         iconId = R.drawable.ic_campaign_filled,
                         iconTint = SimbanyuTheme.colors.brand
                     )

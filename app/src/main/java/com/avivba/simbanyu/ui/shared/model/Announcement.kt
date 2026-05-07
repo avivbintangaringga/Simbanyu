@@ -6,7 +6,7 @@ data class Announcement(
     val id: String,
     val title: String,
     val body: String,
-    val time: String,
+    val date: String,
 ) {
     companion object {
         fun fromDomain(announcement: com.avivba.simbanyu.domain.model.Announcement): Announcement {
@@ -14,7 +14,7 @@ data class Announcement(
                 id = announcement.id,
                 title = announcement.title,
                 body = announcement.body,
-                time = announcement.date.toRelativeTime(),
+                date = announcement.date.toRelativeTime(),
             )
         }
     }

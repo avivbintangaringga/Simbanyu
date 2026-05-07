@@ -45,18 +45,18 @@ val fakeAnnouncements = listOf(
         id = "1",
         title = "Gangguan Distribusi",
         body = "Terjadi kebocoran pipa utama di Jl. Sudirman. Distribusi air akan terhenti sementara selama perbaikan.",
-        time = "5 menit lalu"
+        date = "5 menit lalu"
     ),
     Announcement(
         id = "2",
         title = "Pemeliharaan Rutin",
         body = "Pembersihan reservoir pusat sedang berlangsung. Tekanan air mungkin akan menurun di wilayah Utara.",
-        time = "1 hari lalu"
+        date = "1 hari lalu"
     ),
     Announcement(
         id = "3",
         title = "Layanan Normal",
         body = "Perbaikan di area Jl. Merdeka telah selesai. Pasokan air kini kembali normal di seluruh wilayah.",
-        time = "3 hari lalu"
+        date = "3 hari lalu"
     )
 )

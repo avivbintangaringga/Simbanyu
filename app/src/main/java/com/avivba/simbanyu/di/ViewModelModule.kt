@@ -27,7 +27,7 @@ val viewModelModule = module {
     viewModel { MainActivityViewModel(get(), get()) }
 
     viewModel { LoginViewModel(get()) }
-    viewModel { MainViewModel() }
+    viewModel { MainViewModel(get()) }
 
     viewModel { DashboardViewModel(get(), get(), get(), get()) }
     viewModel { BillHistoryViewModel() }

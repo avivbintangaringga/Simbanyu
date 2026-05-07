@@ -303,7 +303,6 @@ private fun MainScreenPreview() {
         }
     ) {
         MainScreen(
-            viewModel = MainViewModel(),
             onLogout = {}
         )
     }

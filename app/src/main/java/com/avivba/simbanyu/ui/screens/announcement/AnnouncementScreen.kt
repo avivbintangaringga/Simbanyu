@@ -139,7 +139,7 @@ fun AnnouncementContent(
                         AnnouncementItem(
                             title = announcement.title,
                             content = announcement.body,
-                            time = announcement.time,
+                            time = announcement.date,
                             iconId = R.drawable.ic_campaign_filled,
                         )
                     }
