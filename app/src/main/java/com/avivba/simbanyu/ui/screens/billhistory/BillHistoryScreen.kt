@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
@@ -153,201 +154,117 @@ fun BillHistoryContent(
             }
         }
 
-//        Row(
-//            modifier = Modifier
-//                .height(IntrinsicSize.Max)
-//                .fillMaxWidth(),
-//            horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
-//        ) {
-//            Column(
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .background(
-//                        brush = Brush.horizontalGradient(
-//                            listOf(
-//                                SimbanyuTheme.colors.brand,
-//                                SimbanyuTheme.colors.statusPositiveText
-//                            )
-//                        ),
-//                        shape = SimbanyuTheme.shapes.large
-//                    )
-//                    .padding(
-//                        SimbanyuTheme.padding.large
-//                    ),
-//            ) {
-//                SimbanyuText(
-//                    text = "TELAH DIBAYAR",
-//                    style = SimbanyuTheme.typography.labelBadge,
-//                    color = SimbanyuTheme.colors.brandText
-//                )
-//
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.Start,
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    SimbanyuText(
-//                        modifier = Modifier,
-//                        text = "Rp.",
-//                        color = SimbanyuTheme.colors.brandText,
-//                        style = SimbanyuTheme.typography.titleSection
-//                    )
-//
-//                    SimbanyuText(
-//                        text = state.totalPaid,
-//                        style = SimbanyuTheme.typography.displayMedium,
-//                        color = SimbanyuTheme.colors.brandText
-//                    )
-//                }
-//            }
-//
-//            Column(
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .background(
-//                        brush = Brush.horizontalGradient(
-//                            listOf(
-//                                SimbanyuTheme.colors.brand,
-//                                SimbanyuTheme.colors.statusNegativeText
-//                            )
-//                        ),
-//                        shape = SimbanyuTheme.shapes.large
-//                    )
-//                    .padding(
-//                        SimbanyuTheme.padding.large
-//                    ),
-//            ) {
-//                SimbanyuText(
-//                    text = "BELUM DIBAYAR",
-//                    style = SimbanyuTheme.typography.labelBadge,
-//                    color = SimbanyuTheme.colors.brandText
-//                )
-//
-//                Row(
-//                    modifier = Modifier.fillMaxWidth(),
-//                    horizontalArrangement = Arrangement.Start,
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    SimbanyuText(
-//                        modifier = Modifier,
-//                        text = "Rp.",
-//                        color = SimbanyuTheme.colors.brandText,
-//                        style = SimbanyuTheme.typography.titleSection
-//                    )
-//
-//                    SimbanyuText(
-//                        text = state.totalUnpaid,
-//                        style = SimbanyuTheme.typography.displayMedium,
-//                        color = SimbanyuTheme.colors.brandText
-//                    )
-//                }
-//            }
-//        }
-
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            ),
-            state = listState,
-        ) {
-            items(
-                items = state.bills.sortedByDescending { it.id },
-                key = { it.id }
-            ) { bill ->
-                var iconId = R.drawable.ic_history
-                var iconTint = SimbanyuTheme.colors.brand
-                var iconBackgroundColor = SimbanyuTheme.colors.surfaceCardAlternate
-                var statusBackgroundColor = SimbanyuTheme.colors.brand
-
-                if (bill.status == BillingStatus.PAID) {
-                    iconId = R.drawable.ic_done_all
-                    iconTint = SimbanyuTheme.colors.statusPositiveText
-                    iconBackgroundColor = SimbanyuTheme.colors.statusPositive
-                    statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
-                } else if (bill.status == BillingStatus.PENDING) {
-                    iconId = R.drawable.ic_pending
-                    iconTint = SimbanyuTheme.colors.statusWarningText
-                    iconBackgroundColor = SimbanyuTheme.colors.statusWarning
-                    statusBackgroundColor = SimbanyuTheme.colors.statusWarningText
-                } else {
-                    statusBackgroundColor = SimbanyuTheme.colors.statusNegativeText
-
-                    if (state.isMultipleSelectMode) {
-                        if (bill.isSelected) {
-                            iconId = R.drawable.ic_check_circle
-                            iconTint = SimbanyuTheme.colors.statusPositiveText
-                            iconBackgroundColor = SimbanyuTheme.colors.statusPositive
-                        } else {
-                            iconId = R.drawable.ic_circle
-                            iconTint = SimbanyuTheme.colors.statusNeutralText
-                            iconBackgroundColor = SimbanyuTheme.colors.statusNeutral
-                        }
-                    } else {
-                        iconId = R.drawable.ic_contract
-                        iconTint = SimbanyuTheme.colors.statusNegativeText
-                        iconBackgroundColor = SimbanyuTheme.colors.statusNegative
-                    }
-                }
-
-                val isDisabled = if(state.isMultipleSelectMode) {
-                    bill.status == BillingStatus.PAID || bill.status == BillingStatus.PENDING
-                } else {
-                    false
-                }
-
-                BillHistoryItem(
-                    period = "${bill.periodMonth} ${bill.periodYear}",
-                    id = bill.id,
-                    amount = bill.amount,
-                    status = bill.status.status,
-                    iconId = iconId,
-                    iconTint = iconTint,
-                    iconBackgroundColor = iconBackgroundColor,
-                    statusBackgroundColor = statusBackgroundColor,
-                    isDisabled = isDisabled,
-                    onClick = {
-                        onAction(BillHistoryAction.ClickBill(bill))
-                    },
-                    onLongClick = {
-                        onAction(BillHistoryAction.LongClickBill(bill))
-                    }
-                )
-            }
-        }
-
-        if (state.isMultipleSelectMode) {
-            Row(
+        if (state.bills.isNotEmpty()) {
+            LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                    .weight(1f)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                ),
+                state = listState,
             ) {
-                SimbanyuText(
-                    modifier = Modifier.weight(1f),
-                    text = "Rp. ${state.totalSelectedBills}",
-                    style = SimbanyuTheme.typography.displaySmall,
-                    color = SimbanyuTheme.colors.brand
-                )
-                SimbanyuButton(
-                    text = "Bayar tagihan",
-                    modifier = Modifier
-                        .background(
-                            brush = SimbanyuTheme.colors.brush.brandVertical,
-                        ),
-                    iconRight = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_forward),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.actionBrandText
-                        )
-                    },
-                    onClick = {
-                        onAction(BillHistoryAction.PayMultipleBills)
+                items(
+                    items = state.bills.sortedByDescending { it.id },
+                    key = { it.id }
+                ) { bill ->
+                    var iconId = R.drawable.ic_history
+                    var iconTint = SimbanyuTheme.colors.brand
+                    var iconBackgroundColor = SimbanyuTheme.colors.surfaceCardAlternate
+                    var statusBackgroundColor = SimbanyuTheme.colors.brand
+
+                    if (bill.status == BillingStatus.PAID) {
+                        iconId = R.drawable.ic_done_all
+                        iconTint = SimbanyuTheme.colors.statusPositiveText
+                        iconBackgroundColor = SimbanyuTheme.colors.statusPositive
+                        statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
+                    } else if (bill.status == BillingStatus.PENDING) {
+                        iconId = R.drawable.ic_pending
+                        iconTint = SimbanyuTheme.colors.statusWarningText
+                        iconBackgroundColor = SimbanyuTheme.colors.statusWarning
+                        statusBackgroundColor = SimbanyuTheme.colors.statusWarningText
+                    } else {
+                        statusBackgroundColor = SimbanyuTheme.colors.statusNegativeText
+
+                        if (state.isMultipleSelectMode) {
+                            if (bill.isSelected) {
+                                iconId = R.drawable.ic_check_circle
+                                iconTint = SimbanyuTheme.colors.statusPositiveText
+                                iconBackgroundColor = SimbanyuTheme.colors.statusPositive
+                            } else {
+                                iconId = R.drawable.ic_circle
+                                iconTint = SimbanyuTheme.colors.statusNeutralText
+                                iconBackgroundColor = SimbanyuTheme.colors.statusNeutral
+                            }
+                        } else {
+                            iconId = R.drawable.ic_contract
+                            iconTint = SimbanyuTheme.colors.statusNegativeText
+                            iconBackgroundColor = SimbanyuTheme.colors.statusNegative
+                        }
                     }
-                )
+
+                    val isDisabled = if (state.isMultipleSelectMode) {
+                        bill.status == BillingStatus.PAID || bill.status == BillingStatus.PENDING
+                    } else {
+                        false
+                    }
+
+                    BillHistoryItem(
+                        period = "${bill.periodMonth} ${bill.periodYear}",
+                        id = bill.id,
+                        amount = bill.amount,
+                        status = bill.status.status,
+                        iconId = iconId,
+                        iconTint = iconTint,
+                        iconBackgroundColor = iconBackgroundColor,
+                        statusBackgroundColor = statusBackgroundColor,
+                        isDisabled = isDisabled,
+                        onClick = {
+                            onAction(BillHistoryAction.ClickBill(bill))
+                        },
+                        onLongClick = {
+                            onAction(BillHistoryAction.LongClickBill(bill))
+                        }
+                    )
+                }
             }
+
+            if (state.isMultipleSelectMode) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SimbanyuText(
+                        modifier = Modifier.weight(1f),
+                        text = "Rp. ${state.totalSelectedBills}",
+                        style = SimbanyuTheme.typography.displaySmall,
+                        color = SimbanyuTheme.colors.brand
+                    )
+                    SimbanyuButton(
+                        text = "Bayar tagihan",
+                        modifier = Modifier
+                            .background(
+                                brush = SimbanyuTheme.colors.brush.brandVertical,
+                            ),
+                        iconRight = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_arrow_forward),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.actionBrandText
+                            )
+                        },
+                        onClick = {
+                            onAction(BillHistoryAction.PayMultipleBills)
+                        }
+                    )
+                }
+            }
+        } else {
+            EmptyState(
+                modifier = Modifier.fillMaxSize(),
+                message = "Anda belum memiliki riwayat tagihan"
+            )
         }
     }
 }

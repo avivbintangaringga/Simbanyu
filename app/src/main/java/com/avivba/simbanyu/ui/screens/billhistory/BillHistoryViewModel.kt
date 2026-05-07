@@ -1,8 +1,11 @@
 package com.avivba.simbanyu.ui.screens.billhistory
 
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.BillRepository
+import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.PayBill
+import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.ShowBill
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.*
 import com.avivba.simbanyu.ui.shared.model.Bill
 import com.avivba.simbanyu.ui.shared.model.BillingStatus
 import kotlinx.coroutines.delay
@@ -12,16 +15,19 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.collections.filter
 
-class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction, BillHistoryEvent>(
+class BillHistoryViewModel(
+    private val billRepository: BillRepository,
+) : BaseViewModel<BillHistoryUiState, BillHistoryAction, BillHistoryEvent>(
     BillHistoryUiState()
 ) {
     private val _bills = MutableStateFlow<List<Bill>>(emptyList())
 
     init {
-        observeDataChanges()
-        load()
+        viewModelScope.launch {
+            observeDataChanges()
+            load()
+        }
     }
 
     override fun onAction(action: BillHistoryAction) {
@@ -95,13 +101,11 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
         }
     }
 
-    private fun payMultipleBills() {
-        viewModelScope.launch {
-            val selectedBillIds = _bills.value.filter { it.isSelected }.map { it.id }
-            sendEvent(PayBill(selectedBillIds))
-            delay(500)
-            dismissMultipleSelectMode()
-        }
+    private suspend fun payMultipleBills() {
+        val selectedBillIds = _bills.value.filter { it.isSelected }.map { it.id }
+        sendEvent(PayBill(selectedBillIds))
+        delay(500)
+        dismissMultipleSelectMode()
     }
 
     private fun longClickBill(bill: Bill) {
@@ -114,42 +118,24 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
         }
     }
 
-    private fun observeDataChanges() {
-        viewModelScope.launch {
-            combine(
-                _bills,
-                state.map { it.selectedYear }.distinctUntilChanged()
-            ) { bills, year ->
-                bills.filter { it.periodYear == year }
-            }.collect { filtered ->
-                // TODO: Implement real total bill calculation
-                val totalPaid = filtered.filter { it.status == BillingStatus.PAID }
-                    .sumOf { it.amount.toDouble() }
-                val totalUnpaid = filtered.filter { it.status == BillingStatus.UNPAID }
-                    .sumOf { it.amount.toDouble() }
+    private suspend fun observeDataChanges() {
+        combine(
+            _bills,
+            state.map { it.selectedYear }.distinctUntilChanged()
+        ) { bills, year ->
+            bills.filter { it.periodYear == year }
+        }.collect { filtered ->
+            // TODO: Implement real total bill calculation
+            val totalPaid = filtered.filter { it.status == BillingStatus.PAID }
+                .sumOf { it.amount.toDouble() }
+            val totalUnpaid = filtered.filter { it.status == BillingStatus.UNPAID }
+                .sumOf { it.amount.toDouble() }
 
-                updateState {
-                    it.copy(
-                        bills = filtered,
-                        totalPaid = totalPaid.toString(),
-                        totalUnpaid = totalUnpaid.toString()
-                    )
-                }
-            }
-        }
-    }
-
-    private fun refresh() {
-        viewModelScope.launch {
             updateState {
                 it.copy(
-                    isRefreshing = true
-                )
-            }
-            // TODO: Reload data
-            updateState {
-                it.copy(
-                    isRefreshing = false
+                    bills = filtered,
+                    totalPaid = totalPaid.toString(),
+                    totalUnpaid = totalUnpaid.toString()
                 )
             }
         }
@@ -163,27 +149,60 @@ class BillHistoryViewModel : BaseViewModel<BillHistoryUiState, BillHistoryAction
         }
     }
 
-    private fun load() {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    isLoading = true
-                )
+    private suspend fun refresh() {
+        updateState {
+            it.copy(
+                isRefreshing = true
+            )
+        }
+
+        fetchData()
+
+        updateState {
+            it.copy(
+                isRefreshing = false
+            )
+        }
+    }
+
+
+    private suspend fun load() {
+        updateState {
+            it.copy(
+                isLoading = true
+            )
+        }
+
+        fetchData()
+
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+    }
+
+    private suspend fun fetchData() {
+        when (val bills = billRepository.getAll()) {
+            is Result.Success -> {
+                val bills = bills.data.map {
+                    Bill.fromDomain(it)
+                }
+
+                val years = bills.map { it.periodYear }.distinct().sortedDescending()
+                val selectedYear = years.firstOrNull() ?: 0
+
+                updateState {
+                    it.copy(
+                        bills = bills,
+                        years = years,
+                        selectedYear = selectedYear,
+                    )
+                }
             }
 
-            // TODO: Implement load data
-            val newData = fakeBills
-            _bills.update { newData }
-
-            val years = newData.map { it.periodYear }.distinct().sortedDescending()
-            val selectedYear = years.firstOrNull() ?: 0
-
-            updateState {
-                it.copy(
-                    years = years,
-                    selectedYear = selectedYear,
-                    isLoading = false
-                )
+            is Result.Error -> {
+                // TODO: Handle error
             }
         }
     }
