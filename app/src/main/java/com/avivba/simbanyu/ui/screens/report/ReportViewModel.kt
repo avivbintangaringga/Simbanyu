@@ -2,12 +2,17 @@ package com.avivba.simbanyu.ui.screens.report
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.model.ReportSubmission
+import com.avivba.simbanyu.domain.repository.ReportRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Report
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 
-class ReportViewModel : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
+class ReportViewModel(
+    private val reportRepository: ReportRepository
+) : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
     ReportUiState()
 ) {
     init {
@@ -90,7 +95,7 @@ class ReportViewModel : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
         return isValid
     }
 
-    private fun sendReport() {
+    private suspend fun sendReport() {
         if (!state.value.isSendingReport) {
             updateState {
                 it.copy(
@@ -102,27 +107,39 @@ class ReportViewModel : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
                 return
             }
 
-            viewModelScope.launch {
-                updateState {
-                    it.copy(
-                        isSendingReport = true
-                    )
+            updateState {
+                it.copy(
+                    isSendingReport = true
+                )
+            }
+
+            val submitResult = reportRepository.submit(
+                ReportSubmission(
+                    address = state.value.locationState.text.toString(),
+                    coordinate = null, // TODO: Get my location
+                    description = state.value.descriptionState.text.toString(),
+                    evidenceImage = File("") // TODO: Get image file
+                )
+            )
+
+            when (submitResult) {
+                is Result.Success -> {
+                    sendEvent(ReportEvent.ReportSent)
                 }
 
-                delay(2000)
-
-                // TODO: Implement send report
-
-                updateState {
-                    it.copy(
-                        locationState = TextFieldState(),
-                        descriptionState = TextFieldState(),
-                        locationCoordinate = null,
-                        imageUri = null,
-                        isSendingReport = false
-                    )
+                is Result.Error -> {
+                    // TODO: Handle error
                 }
-                sendEvent(ReportEvent.ReportSent)
+            }
+
+            updateState {
+                it.copy(
+                    locationState = TextFieldState(),
+                    descriptionState = TextFieldState(),
+                    locationCoordinate = null,
+                    imageUri = null,
+                    isSendingReport = false
+                )
             }
         }
     }
@@ -133,10 +150,6 @@ class ReportViewModel : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
                 selectedTabIndex = index
             )
         }
-    }
-
-    private fun refresh() {
-        // TODO: Implement refresh
     }
 
     private fun toggleReportExpand(report: Report) {
@@ -155,13 +168,39 @@ class ReportViewModel : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
         }
     }
 
-    private fun load() {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    reports = fakeReports
-                )
-            }
+    private suspend fun refresh() {
+        updateState {
+            it.copy(
+                isRefreshing = true
+            )
         }
+
+        fetchData()
+
+        updateState {
+            it.copy(
+                isRefreshing = true
+            )
+        }
+    }
+
+    private suspend fun load() {
+        updateState {
+            it.copy(
+                isLoading = true
+            )
+        }
+
+        fetchData()
+
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+    }
+
+    private suspend fun fetchData() {
+
     }
 }

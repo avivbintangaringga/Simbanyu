@@ -20,7 +20,8 @@ fun EmptyState(
         modifier = modifier
             .fillMaxWidth()
             .padding(
-                vertical = SimbanyuTheme.padding.extraExtraLarge
+                vertical = SimbanyuTheme.padding.extraExtraLarge,
+                horizontal = SimbanyuTheme.padding.large
             ),
         contentAlignment = Alignment.Center
     ) {

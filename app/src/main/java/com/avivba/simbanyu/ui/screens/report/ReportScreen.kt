@@ -45,6 +45,7 @@ import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.ReportItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
@@ -433,31 +434,37 @@ private fun ReportList(
             onAction(ReportAction.Refresh)
         }
     ) {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            ),
-            state = listState
-        ) {
-            items(
-                items = state.reports,
-                key = { it.id }
-            ) { report ->
-                Column(
-                    modifier = Modifier
-                        .animateContentSize()
-                ) {
-                    ReportItem(
-                        modifier = Modifier,
-                        report = report,
-                        onClickExpand = {
-                            onAction(ReportAction.ToggleExpandItem(report))
-                        }
-                    )
+        if (state.reports.isNotEmpty()) {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                ),
+                state = listState
+            ) {
+                items(
+                    items = state.reports,
+                    key = { it.id }
+                ) { report ->
+                    Column(
+                        modifier = Modifier
+                            .animateContentSize()
+                    ) {
+                        ReportItem(
+                            modifier = Modifier,
+                            report = report,
+                            onClickExpand = {
+                                onAction(ReportAction.ToggleExpandItem(report))
+                            }
+                        )
+                    }
                 }
             }
+        } else {
+            EmptyState(
+                message = "Anda belum memiliki riwayat laporan"
+            )
         }
     }
 }

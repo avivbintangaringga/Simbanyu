@@ -5,6 +5,7 @@ import java.time.Instant
 
 data class ReportSubmission(
     val address: String,
+    val coordinate: Coordinate?,
     val description: String,
     val evidenceImage: File,
 )
