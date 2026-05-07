@@ -11,6 +11,11 @@ class AuthInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val token = runBlocking { tokenManager.getAccessToken() }
+        val path = request.url.encodedPath
+
+        if (path.contains("/auth/login") || path.contains("/auth/refresh")) {
+            return chain.proceed(request)
+        }
 
         if (!token.isNullOrEmpty()) {
             val newRequest = request.newBuilder()
