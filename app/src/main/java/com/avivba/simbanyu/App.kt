@@ -1,6 +1,7 @@
 package com.avivba.simbanyu
 
 import android.app.Application
+import com.avivba.simbanyu.data.di.localModule
 import com.avivba.simbanyu.data.di.networkModule
 import com.avivba.simbanyu.data.di.repositoryModule
 import com.avivba.simbanyu.di.appModule
@@ -20,6 +21,7 @@ class App : Application() {
                     appModule,
                     viewModelModule,
                     networkModule,
+                    localModule,
                     repositoryModule
                 )
             )
