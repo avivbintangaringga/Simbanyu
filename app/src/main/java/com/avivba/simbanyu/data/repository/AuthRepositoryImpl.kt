@@ -48,7 +48,7 @@ class AuthRepositoryImpl(
                     name = user.name,
                     username = user.username,
                     phoneNumber = user.phoneNumber,
-                    role = user.name,
+                    role = user.role.name,
                     photoImageUrl = user.photoImageUrl,
                 )
 

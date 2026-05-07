@@ -18,20 +18,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val isCheckingAuth by viewModel.isCheckingAuth.collectAsStateWithLifecycle()
             val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
             val profile by viewModel.profile.collectAsStateWithLifecycle()
 
             SimbanyuTheme {
-                val dest = if (isLoggedIn && profile != null) {
-                    when (profile!!.role) {
-                        "OPERATOR" -> Screen.OperatorMain
-                        "SUBSCRIBER" -> Screen.Main
-                        else -> Screen.Login
+                if (isCheckingAuth) {
+                    // TODO: Splash?
+                    return@SimbanyuTheme
+                }
+
+                val startScreen = when {
+                    isLoggedIn && profile != null -> {
+                        when (profile?.role) {
+                            "OPERATOR" -> Screen.OperatorMain
+                            "SUBSCRIBER" -> Screen.Main
+                            else -> Screen.Login
+                        }
                     }
-                } else Screen.Login
+
+                    else -> Screen.Login
+                }
 
                 SimbanyuApp(
-                    startScreen = dest
+                    startScreen = startScreen
                 )
             }
         }

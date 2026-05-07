@@ -9,36 +9,48 @@ import com.avivba.simbanyu.domain.repository.AuthRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
+    private val _isCheckingAuth = MutableStateFlow(true)
+    val isCheckingAuth = _isCheckingAuth.asStateFlow()
+
     private val _isLoggedIn = MutableStateFlow(false)
-    private val _profile = MutableStateFlow<Profile?>(null)
     val isLoggedIn = _isLoggedIn.asStateFlow()
+
+    private val _profile = MutableStateFlow<Profile?>(null)
     val profile = _profile.asStateFlow()
 
     init {
         viewModelScope.launch {
-            val loggedIn = authRepository.isLoggedIn()
-            Log.d("SDKSDK", "isLoggedIn: ${isLoggedIn.value}")
+            try {
+                _isCheckingAuth.value = true
+                val loggedIn = authRepository.isLoggedIn()
+                Log.d("SDKSDK", "IsLoggedIn: ${loggedIn}")
 
-            if (loggedIn) {
-                when (val profileResult = userRepository.getLocalProfile()) {
-                    is Result.Success -> {
-                        _isLoggedIn.update { true }
-                        _profile.update { profileResult.data }
-                    }
+                if (loggedIn) {
+                    when (val profileResult = userRepository.getLocalProfile()) {
+                        is Result.Success -> {
+                            Log.d("SDKSDK", profileResult.data.toString())
+                            _profile.value = profileResult.data
+                            _isLoggedIn.value = true
+                        }
 
-                    is Result.Error -> {
-                        _isLoggedIn.update { false }
+                        is Result.Error -> {
+                            Log.d("SDKSDK", profileResult.error.toString())
+                            // TODO: If local profile is missing despite token, force logout or relogin
+                            _isLoggedIn.value = false
+                        }
                     }
+                } else {
+                    _isLoggedIn.value = false
                 }
+            } finally {
+                _isCheckingAuth.value = false
             }
-
         }
     }
 }

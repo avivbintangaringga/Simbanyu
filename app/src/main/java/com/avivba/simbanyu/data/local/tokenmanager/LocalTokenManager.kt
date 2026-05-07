@@ -1,9 +1,9 @@
 package com.avivba.simbanyu.data.local.tokenmanager
 
 interface LocalTokenManager {
-    fun getAccessToken(): String?
-    fun getRefreshToken(): String?
-    fun saveAccessToken(token: String)
-    fun saveRefreshToken(token: String)
-    fun clearToken()
+    suspend fun getAccessToken(): String?
+    suspend fun getRefreshToken(): String?
+    suspend fun saveAccessToken(token: String)
+    suspend fun saveRefreshToken(token: String)
+    suspend fun clearToken()
 }
