@@ -72,6 +72,9 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.sandwich)
     implementation(libs.sandwich.retrofit)
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.preferences)
+
 
     testImplementation(libs.junit)
 
