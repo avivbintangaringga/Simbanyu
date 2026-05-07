@@ -1,11 +1,18 @@
 package com.avivba.simbanyu.ui.screens.profile
 
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.model.User
+import com.avivba.simbanyu.domain.repository.AuthRepository
+import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import kotlinx.coroutines.launch
 
-class ProfileViewModel : BaseViewModel<ProfileUiState, ProfileAction, ProfileEvent>(
+class ProfileViewModel(
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
+) : BaseViewModel<ProfileUiState, ProfileAction, ProfileEvent>(
     ProfileUiState()
 ) {
     init {
@@ -18,27 +25,36 @@ class ProfileViewModel : BaseViewModel<ProfileUiState, ProfileAction, ProfileEve
         viewModelScope.launch {
             when (action) {
                 ProfileAction.Logout -> {
-                    // TODO: Implement logout logic
-
+                    authRepository.logout()
                     sendEvent(ProfileEvent.GoToLogin)
                 }
             }
         }
     }
 
-    private fun getProfile() {
-        updateState {
-            it.copy(
-                name = "John Doe",
-                meterId = "DX920130",
-                phone = "08123412312",
-                address = "Jl. Raya No. 123",
-                category = "Rumah Tangga",
-                coordinate = Coordinate(
-                    -7.911178168148756,
-                    110.69031351790268
-                )
-            )
+    private suspend fun getProfile() {
+        when (val profile = userRepository.getLocalProfile()) {
+            is Result.Success -> {
+                val data = profile.data
+                updateState {
+                    it.copy(
+                        name = data.name,
+                        meterId = data.meterId,
+                        phone = data.phoneNumber,
+                        address = data.address,
+                        category = if (data.role == User.UserRole.SUBSCRIBER.name)
+                            (data.plan ?: "SUBSCRIBER") else "OPERATOR",
+                        coordinate = if (data.latitude != null && data.longitude != null) Coordinate(
+                            data.latitude,
+                            data.longitude
+                        ) else null
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                // TODO: Handle error
+            }
         }
     }
 }

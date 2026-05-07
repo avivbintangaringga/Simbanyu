@@ -7,5 +7,5 @@ import com.avivba.simbanyu.domain.model.User
 interface AuthRepository {
     suspend fun isLoggedIn(): Boolean
     suspend fun login(username: String, password: String): Result<User, DataError>
-    suspend fun logout(username: String, password: String): Result<Unit, DataError>
+    suspend fun logout(): Result<Unit, DataError>
 }

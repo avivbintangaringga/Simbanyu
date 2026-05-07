@@ -10,10 +10,14 @@ data class LocalUser(
     val username: String = "",
     val phoneNumber: String = "",
     val role: String = "",
+    val photoImageUrl: String = "",
+    
     val subscriberId: String? = null,
     val meterId: String? = null,
     val plan: String? = null,
-    val photoImageUrl: String = "",
+    val address: String? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 ) {
     fun toDomain() = Profile(
         id = id,
@@ -21,9 +25,12 @@ data class LocalUser(
         username = username,
         phoneNumber = phoneNumber,
         role = role,
+        photoImageUrl = photoImageUrl,
         subscriberId = subscriberId,
         meterId = meterId,
         plan = plan,
-        photoImageUrl = photoImageUrl,
+        address = address,
+        latitude = latitude,
+        longitude = longitude,
     )
 }

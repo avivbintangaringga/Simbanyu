@@ -33,7 +33,7 @@ val viewModelModule = module {
     viewModel { BillHistoryViewModel() }
     viewModel { UsageHistoryViewModel() }
     viewModel { ReportViewModel() }
-    viewModel { ProfileViewModel() }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { InvoiceViewModel(get()) }
     viewModel { PaymentMethodViewModel() }
     viewModel { BillDetailsViewModel(get()) }

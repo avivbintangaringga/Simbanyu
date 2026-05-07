@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.shadow.Shadow
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -103,6 +102,7 @@ fun ProfileContent(
                     ),
                 contentAlignment = Alignment.Center
             ) {
+                // TODO: Load image
                 Icon(
                     painter = painterResource(R.drawable.ic_person_filled),
                     contentDescription = null,
@@ -136,37 +136,39 @@ fun ProfileContent(
 
         Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.extraExtraLarge))
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = SimbanyuTheme.colors.surfaceCardAlternate,
-                    shape = SimbanyuTheme.shapes.large
-                )
-                .padding(SimbanyuTheme.padding.large),
-            verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+        if (state.meterId != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = SimbanyuTheme.colors.surfaceCardAlternate,
+                        shape = SimbanyuTheme.shapes.large
+                    )
+                    .padding(SimbanyuTheme.padding.large),
+                verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
             ) {
-                Icon(
-                    modifier = Modifier
-                        .height(16.dp)
-                        .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_speed_filled),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brand
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .height(16.dp)
+                            .padding(end = SimbanyuTheme.padding.medium),
+                        painter = painterResource(R.drawable.ic_speed_filled),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brand
+                    )
+                    SimbanyuText(
+                        text = "NOMOR METER",
+                        style = SimbanyuTheme.typography.labelOverline
+                    )
+                }
+
                 SimbanyuText(
-                    text = "NOMOR METER",
-                    style = SimbanyuTheme.typography.labelOverline
+                    text = state.meterId,
+                    style = SimbanyuTheme.typography.bodyStandard
                 )
             }
-
-            SimbanyuText(
-                text = state.meterId,
-                style = SimbanyuTheme.typography.bodyStandard
-            )
         }
 
         Column(
@@ -202,37 +204,39 @@ fun ProfileContent(
             )
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = SimbanyuTheme.colors.surfaceCardAlternate,
-                    shape = SimbanyuTheme.shapes.large
-                )
-                .padding(SimbanyuTheme.padding.large),
-            verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+        if (state.address != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = SimbanyuTheme.colors.surfaceCardAlternate,
+                        shape = SimbanyuTheme.shapes.large
+                    )
+                    .padding(SimbanyuTheme.padding.large),
+                verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
             ) {
-                Icon(
-                    modifier = Modifier
-                        .height(16.dp)
-                        .padding(end = SimbanyuTheme.padding.medium),
-                    painter = painterResource(R.drawable.ic_location_on_filled),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brand
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .height(16.dp)
+                            .padding(end = SimbanyuTheme.padding.medium),
+                        painter = painterResource(R.drawable.ic_location_on_filled),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brand
+                    )
+                    SimbanyuText(
+                        text = "ALAMAT",
+                        style = SimbanyuTheme.typography.labelOverline
+                    )
+                }
+
                 SimbanyuText(
-                    text = "ALAMAT",
-                    style = SimbanyuTheme.typography.labelOverline
+                    text = state.address,
+                    style = SimbanyuTheme.typography.bodyStandard
                 )
             }
-
-            SimbanyuText(
-                text = state.address,
-                style = SimbanyuTheme.typography.bodyStandard
-            )
         }
 
         if (state.coordinate != null) {

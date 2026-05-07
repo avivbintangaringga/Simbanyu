@@ -63,7 +63,10 @@ class AuthRepositoryImpl(
                         localUser = localUser.copy(
                             subscriberId = subsData.id,
                             meterId = subsData.meterId,
-                            plan = subsData.plan.name
+                            plan = subsData.plan.name,
+                            address = subsData.address,
+                            latitude = subsData.latitude,
+                            longitude = subsData.longitude
                         )
                     } else {
                         localUserService.clearUser()
@@ -82,7 +85,7 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun logout(username: String, password: String): Result<Unit, DataError> {
+    override suspend fun logout(): Result<Unit, DataError> {
         localTokenManager.clearToken()
         localUserService.clearUser()
 

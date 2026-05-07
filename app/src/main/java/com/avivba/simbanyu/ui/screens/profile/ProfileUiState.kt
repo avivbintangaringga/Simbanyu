@@ -4,9 +4,9 @@ import com.avivba.simbanyu.ui.shared.model.Coordinate
 
 data class ProfileUiState(
     val name: String = "",
-    val meterId: String = "",
+    val meterId: String? = null,
     val phone: String = "",
-    val address: String = "",
+    val address: String? = null,
     val imageUrl: String = "",
     val category: String = "",
     val coordinate: Coordinate? = null,

@@ -6,8 +6,12 @@ data class Profile(
     val username: String,
     val phoneNumber: String,
     val role: String,
+    val photoImageUrl: String,
+
     val subscriberId: String?,
     val meterId: String?,
     val plan: String?,
-    val photoImageUrl: String,
+    val address: String?,
+    val latitude: Double?,
+    val longitude: Double?,
 )
