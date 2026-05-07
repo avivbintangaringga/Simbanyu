@@ -1,14 +1,29 @@
 package com.avivba.simbanyu.data.di
 
-import com.avivba.simbanyu.data.remote.api.*
+import com.avivba.simbanyu.data.remote.api.ActivityService
+import com.avivba.simbanyu.data.remote.api.AnnouncementService
+import com.avivba.simbanyu.data.remote.api.AuthService
+import com.avivba.simbanyu.data.remote.api.BillService
+import com.avivba.simbanyu.data.remote.api.FcmTokenService
+import com.avivba.simbanyu.data.remote.api.NotificationService
+import com.avivba.simbanyu.data.remote.api.PaymentService
+import com.avivba.simbanyu.data.remote.api.ReportService
+import com.avivba.simbanyu.data.remote.api.SubscriberService
+import com.avivba.simbanyu.data.remote.api.UsageService
+import com.avivba.simbanyu.data.remote.api.UserService
+import com.avivba.simbanyu.data.remote.interceptor.AuthInterceptor
 import okhttp3.OkHttpClient
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
+    singleOf(::AuthInterceptor)
+
     single {
         OkHttpClient.Builder()
+            .addInterceptor(get<AuthInterceptor>())
             .build()
     }
 
@@ -16,7 +31,6 @@ val networkModule = module {
         Retrofit.Builder()
             .baseUrl("https://simbanyu.avivba.com/api/")
             .client(get())
-//            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

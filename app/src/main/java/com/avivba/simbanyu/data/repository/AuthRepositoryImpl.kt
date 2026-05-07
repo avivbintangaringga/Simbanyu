@@ -36,6 +36,9 @@ class AuthRepositoryImpl(
                 val refreshToken = loginData.data.refreshToken
                 val user = loginData.data.user.toDomain()
 
+                localTokenManager.saveAccessToken(accessToken)
+                localTokenManager.saveRefreshToken(refreshToken)
+
                 var localUser = LocalUser(
                     id = user.id,
                     name = user.name,
@@ -59,14 +62,13 @@ class AuthRepositoryImpl(
                             plan = subsData.plan.name
                         )
                     } else {
+                        localUserService.clearUser()
+                        localTokenManager.clearToken()
                         return Result.Error(DataError.NetworkError.UNKNOWN)
                     }
                 }
 
                 localUserService.saveUser(localUser)
-                localTokenManager.saveAccessToken(accessToken)
-                localTokenManager.saveRefreshToken(refreshToken)
-
                 return Result.Success(user)
             }
 

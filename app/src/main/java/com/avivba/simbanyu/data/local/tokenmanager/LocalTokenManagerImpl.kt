@@ -1,13 +1,19 @@
 package com.avivba.simbanyu.data.local.tokenmanager
 
-import androidx.datastore.core.DataStore
+import android.content.Context
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStore
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 
 
+val Context.tokenStore by dataStore("token", TokenDataSerializer)
+
 class LocalTokenManagerImpl(
-    private val store: DataStore<TokenData>
+    context: Context,
 ) : LocalTokenManager {
+    val store = context.tokenStore
+
     override fun getAccessToken(): String? {
         return runBlocking { store.data.firstOrNull() }?.accessToken
     }

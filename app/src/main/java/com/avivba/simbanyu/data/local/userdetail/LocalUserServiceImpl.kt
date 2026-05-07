@@ -1,12 +1,17 @@
 package com.avivba.simbanyu.data.local.userdetail
 
-import androidx.datastore.core.DataStore
+import android.content.Context
+import androidx.datastore.dataStore
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 
+val Context.userStore by dataStore("user", LocalUserSerializer)
+
 class LocalUserServiceImpl(
-    private val store: DataStore<LocalUser>
+    context: Context,
 ) : LocalUserService {
+    val store = context.userStore
+
     override fun saveUser(user: LocalUser) {
         runBlocking {
             store.updateData { user }
