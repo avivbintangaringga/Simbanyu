@@ -19,6 +19,30 @@ fun Instant.toMonthShort(zoneId: ZoneId = ZoneId.systemDefault()): String {
 }
 
 /**
+ * Returns the full Indonesian month name for this Instant.
+ * @param zoneId The time zone to use (defaults to system default)
+ */
+fun Instant.toMonthFull(zoneId: ZoneId = ZoneId.systemDefault()): String {
+    val localeId = Locale("id", "ID")
+    val formatter = DateTimeFormatter.ofPattern("MMMM")
+        .withLocale(localeId)
+        .withZone(zoneId)
+
+    return this.formatWith(formatter)
+}
+
+/**
+ * Returns the year for this Instant.
+ * @param zoneId The time zone to use (defaults to system default)
+ */
+fun Instant.toYear(zoneId: ZoneId = ZoneId.systemDefault()): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy")
+        .withZone(zoneId)
+
+    return this.formatWith(formatter)
+}
+
+/**
  * Returns a relative time string in Indonesian (e.g., "Baru saja", "5 mnt lalu").
  */
 fun Instant.toRelativeTime(): String {

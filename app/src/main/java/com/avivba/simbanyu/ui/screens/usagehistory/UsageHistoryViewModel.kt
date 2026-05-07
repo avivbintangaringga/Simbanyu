@@ -1,20 +1,23 @@
 package com.avivba.simbanyu.ui.screens.usagehistory
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.UsageRepository
+import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Usage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class UsageHistoryViewModel :
-    BaseViewModel<UsageHistoryUiState, UsageHistoryAction, UsageHistoryEvent>(
-        UsageHistoryUiState()
-    ) {
+class UsageHistoryViewModel(
+    private val usageRepository: UsageRepository,
+    private val userRepository: UserRepository
+) : BaseViewModel<UsageHistoryUiState, UsageHistoryAction, UsageHistoryEvent>(
+    UsageHistoryUiState()
+) {
     private val _usages = MutableStateFlow<List<Usage>>(emptyList())
 
     init {
@@ -53,48 +56,25 @@ class UsageHistoryViewModel :
         }
     }
 
-    private fun observeDataChanges() {
-        viewModelScope.launch {
-            combine(
-                _usages,
-                state.map { it.selectedYear }.distinctUntilChanged()
-            ) { usages, year ->
-                usages.filter { it.periodYear == year }
-            }.collect { filtered ->
-                val usageTotal = filtered.sumOf { it.amount }
-                val usageAverage = filtered.map {
-                    it.amount
-                }.average().takeUnless {
-                    it.isNaN()
-                } ?: 0.0
+    private suspend fun observeDataChanges() {
+        combine(
+            _usages,
+            state.map { it.selectedYear }.distinctUntilChanged()
+        ) { usages, year ->
+            usages.filter { it.periodYear == year }
+        }.collect { filtered ->
+            val usageTotal = filtered.sumOf { it.amount }
+            val usageAverage = filtered.map {
+                it.amount
+            }.average().takeUnless {
+                it.isNaN()
+            } ?: 0.0
 
-                Log.d("UsageHistoryViewModel", "observeDataChanges: $filtered")
-                Log.d("UsageHistoryViewModel", "observeDataChanges: $usageTotal")
-                Log.d("UsageHistoryViewModel", "observeDataChanges: $usageAverage")
-
-
-                updateState {
-                    it.copy(
-                        usages = filtered,
-                        usageTotal = usageTotal,
-                        usageAverage = usageAverage
-                    )
-                }
-            }
-        }
-    }
-
-    private fun refresh() {
-        viewModelScope.launch {
             updateState {
                 it.copy(
-                    isRefreshing = true
-                )
-            }
-            // TODO: Reload data
-            updateState {
-                it.copy(
-                    isRefreshing = false
+                    usages = filtered,
+                    usageTotal = usageTotal,
+                    usageAverage = usageAverage
                 )
             }
         }
@@ -108,7 +88,23 @@ class UsageHistoryViewModel :
         }
     }
 
-    private fun load() {
+    private suspend fun refresh() {
+        updateState {
+            it.copy(
+                isRefreshing = true
+            )
+        }
+
+        fetchData()
+
+        updateState {
+            it.copy(
+                isRefreshing = false
+            )
+        }
+    }
+
+    private suspend fun load() {
         viewModelScope.launch {
             updateState {
                 it.copy(
@@ -116,19 +112,45 @@ class UsageHistoryViewModel :
                 )
             }
 
-            // TODO: Implement load data
-            val newData = fakeUsages
-            _usages.update { newData }
-
-            val years = newData.map { it.periodYear }.distinct().sortedDescending()
-            val selectedYear = years.firstOrNull() ?: 0
+            fetchData()
 
             updateState {
                 it.copy(
-                    years = years,
-                    selectedYear = selectedYear,
                     isLoading = false
                 )
+            }
+        }
+    }
+
+    private suspend fun fetchData() {
+        when (val profile = userRepository.getLocalProfile()) {
+            is Result.Success -> {
+                when (val usage = usageRepository.getAll(profile.data.subscriberId!!)) {
+                    is Result.Success -> {
+                        val usages = usage.data.map {
+                            Usage.fromDomain(it)
+                        }
+
+                        val years = usages.map { it.periodYear }.distinct().sortedDescending()
+                        val selectedYear = years.firstOrNull() ?: 0
+
+                        updateState {
+                            it.copy(
+                                usages = usages,
+                                years = years,
+                                selectedYear = selectedYear,
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
+                }
+            }
+
+            is Result.Error -> {
+                // TODO: Handle error
             }
         }
     }
