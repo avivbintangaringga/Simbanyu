@@ -13,4 +13,9 @@ interface SubscriberService {
     suspend fun getById(
         @Path("id") id: String
     ): Envelope<SubscriberDto>
+
+    @GET("subscribers?userId={userId}")
+    suspend fun getByUserId(
+        @Path("userId") userId: String
+    ): Envelope<SubscriberDto>
 }

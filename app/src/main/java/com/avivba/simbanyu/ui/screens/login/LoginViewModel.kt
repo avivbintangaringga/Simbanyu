@@ -59,23 +59,13 @@ class LoginViewModel(
                 }
 
                 is Result.Error -> {
-                    when (result.error) {
-                        is DataError.NetworkError -> {
-                            sendEvent(LoginEvent.ShowToast("Terjadi kesalahan jaringan"))
-                        }
-                        is DataError.AuthError -> {
-                            updateState { it.copy(errorMessage = "Username atau password salah") }
-                        }
+                    if (result.error == DataError.NetworkError.UNAUTHORIZED) {
+                        updateState { it.copy(errorMessage = "Username atau password salah") }
+                    } else {
+                        sendEvent(LoginEvent.ShowToast("Terjadi kesalahan, mohon periksa koneksi internet dan coba lagi"))
                     }
                 }
             }
-
-
-//            if (state.value.username.text.toString() != "a") {
-//                sendEvent(LoginEvent.GoToSubscriberDashboard)
-//            } else {
-//                sendEvent(LoginEvent.GoToOperatorDashboard)
-//            }
         }
     }
 }

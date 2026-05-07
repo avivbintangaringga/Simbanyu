@@ -32,7 +32,7 @@ suspend fun <T> safeApiCall(
                     }
                     when (code) {
                         401 -> {
-                            DataError.AuthError
+                            DataError.NetworkError.UNAUTHORIZED
                         }
 
                         // TODO: Handle more error codes

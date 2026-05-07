@@ -1,5 +1,7 @@
 package com.avivba.simbanyu.data.remote.model.subscriber
 
+import com.avivba.simbanyu.data.remote.model.plan.PlanDto
+import com.avivba.simbanyu.data.remote.model.user.UserDto
 import com.avivba.simbanyu.domain.model.Coordinate
 import com.avivba.simbanyu.domain.model.Subscriber
 import java.time.Instant
@@ -12,8 +14,8 @@ data class SubscriberDto(
     val latitude: Double,
     val isRecorded: Boolean = false,
     val lastRecordedAt: String? = null,
-    val plan: com.avivba.simbanyu.data.remote.model.plan.PlanDto,
-    val user: com.avivba.simbanyu.data.remote.model.user.UserDto,
+    val plan: PlanDto,
+    val user: UserDto,
     val createdAt: String,
     val updatedAt: String,
 ) {

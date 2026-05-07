@@ -2,8 +2,10 @@ package com.avivba.simbanyu.domain.repository
 
 import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.model.Profile
 import com.avivba.simbanyu.domain.model.User
 
 interface UserRepository {
-    suspend fun getProfile(): Result<User, DataError>
+    suspend fun getCurrentUser(): Result<User, DataError>
+    suspend fun getLocalProfile(): Result<Profile, DataError>
 }

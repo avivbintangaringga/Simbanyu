@@ -10,5 +10,5 @@ sealed interface DataError : Error {
         UNKNOWN
     }
 
-    object AuthError : DataError
+    object NotFound : DataError
 }
