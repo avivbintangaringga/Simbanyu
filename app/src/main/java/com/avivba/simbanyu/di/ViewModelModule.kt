@@ -20,32 +20,32 @@ import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodViewModel
 import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryViewModel
-import org.koin.core.module.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModelOf(::MainActivityViewModel)
+    viewModel { MainActivityViewModel(get(), get()) }
 
-    viewModelOf(::LoginViewModel)
-    viewModelOf(::MainViewModel)
+    viewModel { LoginViewModel(get()) }
+    viewModel { MainViewModel() }
 
-    viewModelOf(::DashboardViewModel)
-    viewModelOf(::BillHistoryViewModel)
-    viewModelOf(::UsageHistoryViewModel)
-    viewModelOf(::ReportViewModel)
-    viewModelOf(::ProfileViewModel)
-    viewModelOf(::InvoiceViewModel)
-    viewModelOf(::PaymentMethodViewModel)
-    viewModelOf(::BillDetailsViewModel)
-    viewModelOf(::AnnouncementViewModel)
+    viewModel { DashboardViewModel(get(), get(), get(), get()) }
+    viewModel { BillHistoryViewModel() }
+    viewModel { UsageHistoryViewModel() }
+    viewModel { ReportViewModel() }
+    viewModel { ProfileViewModel() }
+    viewModel { InvoiceViewModel(get()) }
+    viewModel { PaymentMethodViewModel() }
+    viewModel { BillDetailsViewModel(get()) }
+    viewModel { AnnouncementViewModel(get()) }
 
     // OPERATOR
-    viewModelOf(::OperatorMainViewModel)
-    viewModelOf(::OperatorDashboardViewModel)
-    viewModelOf(::OperatorAnnouncementViewModel)
-    viewModelOf(::SubscribersViewModel)
-    viewModelOf(::SubscriberDetailsViewModel)
-    viewModelOf(::OperatorReportViewModel)
-    viewModelOf(::MeterRecordViewModel)
-    viewModelOf(::MapViewModel)
+    viewModel { OperatorMainViewModel() }
+    viewModel { OperatorDashboardViewModel() }
+    viewModel { OperatorAnnouncementViewModel() }
+    viewModel { SubscribersViewModel() }
+    viewModel { SubscriberDetailsViewModel(get()) }
+    viewModel { OperatorReportViewModel() }
+    viewModel { MeterRecordViewModel(get()) }
+    viewModel { MapViewModel() }
 }

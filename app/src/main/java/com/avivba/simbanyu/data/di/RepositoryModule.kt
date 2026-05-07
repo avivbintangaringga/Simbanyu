@@ -7,14 +7,14 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    singleOf(::AuthRepositoryImpl) { bind<AuthRepository>() }
-    singleOf(::BillRepositoryImpl) { bind<BillRepository>() }
-    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
-    singleOf(::FcmTokenRepositoryImpl) { bind<FcmTokenRepository>() }
-    singleOf(::UsageRepositoryImpl) { bind<UsageRepository>() }
-    singleOf(::ReportRepositoryImpl) { bind<ReportRepository>() }
-    singleOf(::ActivityRepositoryImpl) { bind<ActivityRepository>() }
-    singleOf(::SubscriberRepositoryImpl) { bind<SubscriberRepository>() }
-    singleOf(::AnnouncementRepositoryImpl) { bind<AnnouncementRepository>() }
-    singleOf(::NotificationRepositoryImpl) { bind<NotificationRepository>() }
+    single<AuthRepository> { AuthRepositoryImpl(get(), get(), get(), get()) }
+    single<BillRepository> { BillRepositoryImpl(get(), get()) }
+    single<UserRepository> { UserRepositoryImpl(get(), get()) }
+    single<FcmTokenRepository> { FcmTokenRepositoryImpl(get()) }
+    single<UsageRepository> { UsageRepositoryImpl(get()) }
+    single<ReportRepository> { ReportRepositoryImpl(get()) }
+    single<ActivityRepository> { ActivityRepositoryImpl(get()) }
+    single<SubscriberRepository> { SubscriberRepositoryImpl(get()) }
+    single<AnnouncementRepository> { AnnouncementRepositoryImpl(get()) }
+    single<NotificationRepository> { NotificationRepositoryImpl(get()) }
 }

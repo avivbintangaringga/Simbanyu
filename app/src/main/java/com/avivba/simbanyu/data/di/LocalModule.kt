@@ -9,6 +9,6 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val localModule = module {
-    singleOf(::LocalTokenManagerImpl) { bind<LocalTokenManager>() }
-    singleOf(::LocalUserServiceImpl) { bind<LocalUserService>() }
+    single<LocalTokenManager> { LocalTokenManagerImpl(get()) }
+    single<LocalUserService> { LocalUserServiceImpl(get()) }
 }
