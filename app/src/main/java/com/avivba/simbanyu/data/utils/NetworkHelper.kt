@@ -27,7 +27,7 @@ suspend fun <T> safeApiCall(
                     val code = t.code()
                     t.response()?.let {
                         it.errorBody()?.let {
-                            Log.e("SDKSDK", it.string())
+                            Log.e("SDKSDK", "HTTP Exception: " + it.string())
                         }
                     }
                     when (code) {
@@ -44,6 +44,7 @@ suspend fun <T> safeApiCall(
                 }
 
                 else -> {
+                    Log.e("SDKSDK", "Misc API Exception: " + t.message)
                     DataError.NetworkError.UNKNOWN
                 }
             }

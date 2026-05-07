@@ -18,6 +18,10 @@ class AuthRepositoryImpl(
     private val localUserService: LocalUserService,
     private val localTokenManager: LocalTokenManager
 ) : AuthRepository {
+    override suspend fun isLoggedIn(): Boolean {
+        return !localTokenManager.getAccessToken().isNullOrEmpty()
+    }
+
     override suspend fun login(username: String, password: String): Result<User, DataError> {
         val loginData =
             safeApiCall {

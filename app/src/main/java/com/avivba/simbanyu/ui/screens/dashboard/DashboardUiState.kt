@@ -13,10 +13,10 @@ data class DashboardUiState(
     val isRefreshing: Boolean = false,
     val name: String = "User",
     val bill: String = "",
-    val waterUsage: List<WaterUsage> = emptyList(),
-    val waterUsageAverage: Double = 0.0,
-    val waterUsageMaximum: Int = 0,
-    val waterUsageMaximumMonth: String = "-",
+    val usage: List<WaterUsage> = emptyList(),
+    val usageAverage: Double = 0.0,
+    val usageMaximum: Int = 0,
+    val usageMaximumMonth: String = "-",
     val announcements: List<Announcement> = emptyList()
 )
 

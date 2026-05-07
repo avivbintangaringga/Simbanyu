@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.di
 
+import com.avivba.simbanyu.ui.activities.MainActivityViewModel
 import com.avivba.simbanyu.ui.screens.announcement.AnnouncementViewModel
 import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsViewModel
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryViewModel
@@ -23,6 +24,8 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
+    viewModelOf(::MainActivityViewModel)
+
     viewModelOf(::LoginViewModel)
     viewModelOf(::MainViewModel)
 

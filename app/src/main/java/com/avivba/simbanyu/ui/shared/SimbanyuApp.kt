@@ -23,6 +23,7 @@ import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 @Composable
 fun SimbanyuApp(
     navHostController: NavHostController = rememberNavController(),
+    startScreen: Screen
 ) {
     Background()
 
@@ -30,7 +31,7 @@ fun SimbanyuApp(
 
     NavHost(
         navController = navHostController,
-        startDestination = Screen.Login,
+        startDestination = startScreen,
         enterTransition = {
             fadeIn(animationSpec = tween(fadeDuration))
         },

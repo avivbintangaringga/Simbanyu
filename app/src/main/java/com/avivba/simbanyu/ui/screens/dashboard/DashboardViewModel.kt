@@ -6,6 +6,7 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.AnnouncementRepository
 import com.avivba.simbanyu.domain.repository.BillRepository
 import com.avivba.simbanyu.domain.repository.UsageRepository
+import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Announcement
 import kotlinx.coroutines.launch
@@ -13,7 +14,8 @@ import kotlinx.coroutines.launch
 class DashboardViewModel(
     private val billRepository: BillRepository,
     private val announcementRepository: AnnouncementRepository,
-    private val usageRepository: UsageRepository
+    private val usageRepository: UsageRepository,
+    private val userRepository: UserRepository
 ) : BaseViewModel<DashboardUiState, DashboardAction, DashboardEvent>(
     DashboardUiState()
 ) {
@@ -58,18 +60,6 @@ class DashboardViewModel(
                 )
             }
 
-//            updateState {
-//                it.copy(
-//                    bill = "125.000",
-//                    waterUsage = fakeWaterUsage,
-//                    waterUsageAverage = 14.3,
-//                    waterUsageMaximum = 22,
-//                    waterUsageMaximumMonth = "FEB",
-//                    announcements = fakeAnnouncements,
-//                    isLoading = false
-//                )
-//            }
-
             when (val activeBill = billRepository.getActive()) {
                 is Result.Success -> {
                     updateState { it ->
@@ -86,16 +76,21 @@ class DashboardViewModel(
                 }
             }
 
-            when (val usage = usageRepository.getLastUsage("test")) {
+            when (val profile = userRepository.getLocalProfile()) {
                 is Result.Success -> {
-
+                    val subscriberId = profile.data.subscriberId
+                    if (subscriberId != null) {
+                        loadUsages(subscriberId)
+                    } else {
+                        // TODO: Handle error
+                    }
                 }
 
                 is Result.Error -> {
-                    Log.e("DashboardViewModel", "Error: ${usage.error}")
                     // TODO: Handle error
                 }
             }
+
 
             when (val announcements = announcementRepository.getAllAnnouncements()) {
                 is Result.Success -> {
@@ -123,6 +118,34 @@ class DashboardViewModel(
                 it.copy(
                     isLoading = false
                 )
+            }
+        }
+    }
+
+    private suspend fun loadUsages(subscriberId: String) {
+        when (val usage = usageRepository.getAll(subscriberId, 6)) {
+            is Result.Success -> {
+                val usage = usage.data
+                val average = usage.map { it.amount }.average()
+                val max = usage.maxByOrNull { it.amount }
+
+                // TODO: Load properly
+                updateState {
+                    it.copy(
+                        usage = usage.map {
+                            WaterUsage(
+                                usage = it.amount,
+                                month = "X",
+                                isMaximum = it.id == max?.id
+                            )
+                        }
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                Log.e("DashboardViewModel", "Error: ${usage.error}")
+                // TODO: Handle error
             }
         }
     }

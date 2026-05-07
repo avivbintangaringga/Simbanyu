@@ -96,8 +96,8 @@ fun DashboardContent(
         )
     )
 
-    val usageData = remember(state.waterUsage, barColor, barColorMax) {
-        state.waterUsage.map { usage ->
+    val usageData = remember(state.usage, barColor, barColorMax) {
+        state.usage.map { usage ->
             Bars(
                 label = usage.month,
                 values = listOf(
@@ -347,7 +347,7 @@ fun DashboardContent(
                 )
 
                 SimbanyuText(
-                    text = "PUNCAK (${state.waterUsageMaximumMonth})",
+                    text = "PUNCAK (${state.usageMaximumMonth})",
                     style = SimbanyuTheme.typography.labelBadge,
                 )
             }
@@ -358,13 +358,13 @@ fun DashboardContent(
             ) {
                 SimbanyuText(
                     modifier = Modifier.weight(1f),
-                    text = "%.1f m³".format(state.waterUsageAverage),
+                    text = "%.1f m³".format(state.usageAverage),
                     style = SimbanyuTheme.typography.displayMedium,
                     color = SimbanyuTheme.colors.brand
                 )
 
                 SimbanyuText(
-                    text = "${state.waterUsageMaximum} m³",
+                    text = "${state.usageMaximum} m³",
                     style = SimbanyuTheme.typography.displayMedium,
                     color = SimbanyuTheme.colors.statusWarningText
                 )
@@ -461,7 +461,7 @@ private fun DashboardPreview() {
     SimbanyuTheme {
         DashboardContent(
             state = DashboardUiState(
-                waterUsage = fakeWaterUsage,
+                usage = fakeWaterUsage,
                 announcements = fakeAnnouncements,
                 bill = "125.000"
             )
