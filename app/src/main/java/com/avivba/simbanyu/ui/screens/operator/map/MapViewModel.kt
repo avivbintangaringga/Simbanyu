@@ -1,20 +1,20 @@
 package com.avivba.simbanyu.ui.screens.operator.map
 
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.screens.operator.map.MapUiEvent.*
-import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.SubscriberRepository
+import com.avivba.simbanyu.ui.screens.operator.map.MapUiEvent.GoToRecordMeter
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import kotlinx.coroutines.delay
+import com.avivba.simbanyu.ui.shared.model.Subscriber
 import kotlinx.coroutines.launch
 
 class MapViewModel(
-
+    private val subscriberRepository: SubscriberRepository
 ) : BaseViewModel<MapUiState, MapUiAction, MapUiEvent>(
     MapUiState()
 ) {
     init {
         viewModelScope.launch {
-            delay(3000)
             load()
         }
     }
@@ -61,20 +61,38 @@ class MapViewModel(
         }
     }
 
-    private fun load() {
+    private suspend fun load() {
         updateState {
             it.copy(
                 isLoading = true
             )
         }
 
-        // TODO: Load Subscriber
+        fetchData()
 
         updateState {
             it.copy(
                 isLoading = false,
-                subscribers = fakeSubscribers
             )
         }
     }
+
+    private suspend fun fetchData() {
+        when (val subscribers = subscriberRepository.getAll()) {
+            is Result.Success -> {
+                updateState {
+                    it.copy(
+                        subscribers = subscribers.data.map {
+                            Subscriber.fromDomain(it)
+                        }
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                // TODO: Handle error
+            }
+        }
+    }
+
 }

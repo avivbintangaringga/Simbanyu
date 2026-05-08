@@ -85,10 +85,8 @@ class SubscribersViewModel(
     }
 
     private suspend fun fetchData() {
-        Log.d("SDKSDK", "fetchData")
         when (val subscribers = subscriberRepository.getAll()) {
             is Result.Success -> {
-                Log.d("SDKSDK", "fetchData: Success")
                 _subscribers.update {
                     subscribers.data.map {
                         Subscriber.fromDomain(it)
@@ -97,7 +95,6 @@ class SubscribersViewModel(
             }
 
             is Result.Error -> {
-                Log.d("SDKSDK", "fetchData: Error")
                 // TODO: Handle error
             }
         }
