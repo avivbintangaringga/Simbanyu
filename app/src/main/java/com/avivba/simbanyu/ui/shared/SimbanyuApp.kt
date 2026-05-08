@@ -70,8 +70,9 @@ fun SimbanyuApp(
                     navHostController.navigate(dest)
                 },
                 onLogout = {
-                    navHostController.popBackStack()
-                    navHostController.navigate(Screen.Login)
+                    navHostController.navigate(Screen.Login) {
+                        popUpTo(navHostController.graph.id) { inclusive = true }
+                    }
                 })
         }
 
@@ -113,8 +114,9 @@ fun SimbanyuApp(
                     navHostController.navigate(dest)
                 },
                 onLogout = {
-                    navHostController.popBackStack()
-                    navHostController.navigate(Screen.Login)
+                    navHostController.navigate(Screen.Login) {
+                        popUpTo(navHostController.graph.id) { inclusive = true }
+                    }
                 }
             )
         }

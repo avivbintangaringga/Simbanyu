@@ -51,7 +51,7 @@ import com.avivba.simbanyu.ui.screens.profile.ProfileScreen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.KoinApplication
-import org.koin.compose.viewmodel.koinActivityViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.dsl.KoinConfiguration
 
 @Composable
@@ -60,7 +60,7 @@ fun OperatorMainScreen(
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {},
     onLogout: () -> Unit,
-    viewModel: OperatorMainViewModel = koinActivityViewModel()
+    viewModel: OperatorMainViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val navController = rememberNavController()

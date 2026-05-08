@@ -51,7 +51,7 @@ import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.KoinApplication
-import org.koin.compose.viewmodel.koinActivityViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import org.koin.dsl.KoinConfiguration
 
 @Composable
@@ -60,7 +60,7 @@ fun MainScreen(
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {},
     onLogout: () -> Unit,
-    viewModel: MainViewModel = koinActivityViewModel()
+    viewModel: MainViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val navController = rememberNavController()
