@@ -25,7 +25,7 @@ interface UsageService {
     @POST("usages")
     suspend fun recordUsage(
         @Part("data") data: RequestBody,
-        @Part("image") image: MultipartBody.Part
+        @Part image: MultipartBody.Part
     ): Envelope<UsageDto>
 
     @Multipart
@@ -33,6 +33,6 @@ interface UsageService {
     suspend fun updateUsage(
         @Path("id") id: String,
         @Part("data") data: RequestBody,
-        @Part("image") image: MultipartBody.Part?
+        @Part image: MultipartBody.Part?
     ): Envelope<UsageDto>
 }

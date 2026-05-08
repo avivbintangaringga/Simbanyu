@@ -5,13 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.ReportSubmission
 import com.avivba.simbanyu.domain.repository.ReportRepository
-import com.avivba.simbanyu.ui.screens.camera.CameraResult
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Report
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.io.File
 
 class ReportViewModel(
     private val reportRepository: ReportRepository
@@ -88,7 +84,7 @@ class ReportViewModel(
             isValid = false
         }
 
-        if (state.value.image == null) {
+        if (state.value.image == null || !state.value.image!!.isFile) {
             updateState {
                 it.copy(
                     errorFields = it.errorFields + Fields.IMAGE
@@ -124,7 +120,7 @@ class ReportViewModel(
                     address = state.value.locationState.text.toString(),
                     coordinate = null, // TODO: Get my location
                     description = state.value.descriptionState.text.toString(),
-                    evidenceImage = File("") // TODO: Get image file
+                    evidenceImage = state.value.image!!
                 )
             )
 
@@ -207,6 +203,20 @@ class ReportViewModel(
     }
 
     private suspend fun fetchData() {
+        when (val reports = reportRepository.getAll()) {
+            is Result.Success -> {
+                updateState {
+                    it.copy(
+                        reports = reports.data.map {
+                            Report.fromDomain(it)
+                        }
+                    )
+                }
+            }
 
+            is Result.Error -> {
+                // TODO: Handle error
+            }
+        }
     }
 }

@@ -50,7 +50,11 @@ class UsageRepositoryImpl(
         val data = jsonData.toRequestBody(
             "application/json; charset=utf-8".toMediaTypeOrNull()
         )
-        val imagePart = MultipartBody.Part.create(usage.evidenceImage.asRequestBody())
+        val imagePart = MultipartBody.Part.createFormData(
+            "image",
+            usage.evidenceImage.name,
+            usage.evidenceImage.asRequestBody()
+        )
 
         return safeApiCall {
             usageService.recordUsage(
@@ -71,7 +75,13 @@ class UsageRepositoryImpl(
         val data = jsonData.toRequestBody(
             "application/json; charset=utf-8".toMediaTypeOrNull()
         )
-        val imagePart = usage.evidenceImage?.asRequestBody()?.let { MultipartBody.Part.create(it) }
+        val imagePart = usage.evidenceImage?.let {
+            MultipartBody.Part.createFormData(
+                "image",
+                it.name,
+                it.asRequestBody()
+            )
+        }
 
         return safeApiCall {
             usageService.updateUsage(

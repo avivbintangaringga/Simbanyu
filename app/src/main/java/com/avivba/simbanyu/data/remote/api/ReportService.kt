@@ -21,7 +21,7 @@ interface ReportService {
     @POST("reports")
     suspend fun add(
         @Part("data") data: RequestBody,
-        @Part("image") image: MultipartBody.Part
+        @Part image: MultipartBody.Part
     ): Envelope<ReportDto>
 
     @Multipart
@@ -29,6 +29,6 @@ interface ReportService {
     suspend fun handleReport(
         @Path("id") id: String,
         @Part("data") data: RequestBody,
-        @Part("image") image: MultipartBody.Part
+        @Part image: MultipartBody.Part
     ): Envelope<ReportDto>
 }

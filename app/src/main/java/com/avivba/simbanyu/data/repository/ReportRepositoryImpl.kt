@@ -41,7 +41,11 @@ class ReportRepositoryImpl(
         val data = jsonData.toRequestBody(
             "application/json; charset=utf-8".toMediaTypeOrNull()
         )
-        val imagePart = MultipartBody.Part.create(report.evidenceImage.asRequestBody())
+        val imagePart = MultipartBody.Part.createFormData(
+            "image",
+            report.evidenceImage.name,
+            report.evidenceImage.asRequestBody()
+        )
 
         return safeApiCall {
             reportService.add(
@@ -65,7 +69,11 @@ class ReportRepositoryImpl(
         val data = jsonData.toRequestBody(
             "application/json; charset=utf-8".toMediaTypeOrNull()
         )
-        val imagePart = MultipartBody.Part.create(report.handlingEvidenceImage.asRequestBody())
+        val imagePart = MultipartBody.Part.createFormData(
+            "image",
+            report.handlingEvidenceImage.name,
+            report.handlingEvidenceImage.asRequestBody()
+        )
 
         return safeApiCall {
             reportService.handleReport(
