@@ -4,6 +4,8 @@ import androidx.annotation.Keep
 import com.avivba.simbanyu.data.local.tokenmanager.LocalTokenManager
 import com.avivba.simbanyu.data.local.userdetail.LocalUserService
 import com.avivba.simbanyu.data.remote.api.AuthService
+import com.avivba.simbanyu.domain.repository.AuthEvent
+import com.avivba.simbanyu.domain.repository.AuthEventBus
 import com.avivba.simbanyu.data.remote.model.auth.RefreshTokenRequest
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -15,6 +17,7 @@ import okhttp3.Route
 class TokenAuthenticator(
     private val localTokenManager: LocalTokenManager,
     private val localUserService: LocalUserService,
+    private val authEventBus: AuthEventBus,
     private val authServiceProvider: () -> AuthService
 ) : Authenticator {
     private val authService by lazy { authServiceProvider() }
@@ -68,6 +71,7 @@ class TokenAuthenticator(
         runBlocking {
             localTokenManager.clearToken()
             localUserService.clearUser()
+            authEventBus.sendEvent(AuthEvent.SESSION_EXPIRED)
         }
     }
 

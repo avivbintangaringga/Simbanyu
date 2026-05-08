@@ -1,15 +1,20 @@
 package com.avivba.simbanyu.ui.activities
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.domain.model.User
+import com.avivba.simbanyu.domain.repository.AuthEvent
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.SimbanyuApp
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
@@ -19,9 +24,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val context = LocalContext.current
             val isCheckingAuth by viewModel.isCheckingAuth.collectAsStateWithLifecycle()
             val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
             val profile by viewModel.profile.collectAsStateWithLifecycle()
+
+            ObserveAsEvent(viewModel.authEvents) { event ->
+                when (event) {
+                    AuthEvent.SESSION_EXPIRED -> {
+                        Toast.makeText(
+                            context,
+                            "Sesi telah berakhir, silahkan login kembali",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
 
             SimbanyuTheme {
                 if (isCheckingAuth) {
@@ -39,9 +57,11 @@ class MainActivity : ComponentActivity() {
                         else -> Screen.Login
                     }
 
-                    SimbanyuApp(
-                        startScreen = startScreen
-                    )
+                    key(isLoggedIn) {
+                        SimbanyuApp(
+                            startScreen = startScreen
+                        )
+                    }
                 }
             }
         }

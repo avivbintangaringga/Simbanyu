@@ -11,6 +11,8 @@ import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.domain.repository.AuthRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class AuthRepositoryImpl(
     private val authService: AuthService,
@@ -18,6 +20,10 @@ class AuthRepositoryImpl(
     private val localUserService: LocalUserService,
     private val localTokenManager: LocalTokenManager
 ) : AuthRepository {
+    override fun isLoggedInFlow(): Flow<Boolean> {
+        return localTokenManager.getAccessTokenFlow().map { !it.isNullOrEmpty() }
+    }
+
     override suspend fun isLoggedIn(): Boolean {
         return !localTokenManager.getAccessToken().isNullOrEmpty()
     }

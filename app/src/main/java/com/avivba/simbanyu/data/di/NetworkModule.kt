@@ -15,6 +15,7 @@ import com.avivba.simbanyu.data.remote.api.UsageService
 import com.avivba.simbanyu.data.remote.api.UserService
 import com.avivba.simbanyu.data.remote.authenticator.TokenAuthenticator
 import com.avivba.simbanyu.data.remote.interceptor.AuthInterceptor
+import com.avivba.simbanyu.domain.repository.AuthEventBus
 import okhttp3.OkHttpClient
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -32,6 +33,7 @@ val networkModule = module {
                 TokenAuthenticator(
                     get<LocalTokenManager>(),
                     get<LocalUserService>(),
+                    get<AuthEventBus>(),
                     { get<AuthService>() }
                 )
             )
