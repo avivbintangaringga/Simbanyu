@@ -3,6 +3,7 @@ package com.avivba.simbanyu.data.remote.model.report
 import androidx.annotation.Keep
 import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.data.remote.model.subscriber.SubscriberDto
+import com.avivba.simbanyu.domain.model.Coordinate
 import com.avivba.simbanyu.domain.model.Report
 import java.time.Instant
 
@@ -10,6 +11,8 @@ import java.time.Instant
 data class ReportDto(
     val id: String,
     val address: String,
+    val latitude: Double?,
+    val longitude: Double?,
     val description: String,
     val status: String,
     val evidenceImageUrl: String,
@@ -28,6 +31,11 @@ data class ReportDto(
         operatorNotes = operatorNotes ?: "",
         handlingEvidenceImageUrl = handlingEvidenceImageUrl.let { "$BASE_URL$it" },
         date = Instant.parse(createdAt),
-        subscriber = subscriber.toDomain()
+        subscriber = subscriber.toDomain(),
+        coordinate = if (latitude != null && longitude != null) {
+            Coordinate(latitude, longitude)
+        } else {
+            null
+        }
     )
 }

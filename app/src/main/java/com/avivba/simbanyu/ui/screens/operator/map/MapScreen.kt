@@ -120,8 +120,8 @@ private fun MapContent(
                 state.subscribers.forEach {
                     include(
                         LatLng(
-                            it.coordinate.lat,
-                            it.coordinate.lng
+                            it.coordinate.latitude,
+                            it.coordinate.longitude
                         )
                     )
                 }
@@ -188,8 +188,8 @@ private fun MapContent(
                 MarkerComposable(
                     state = rememberUpdatedMarkerState(
                         position = LatLng(
-                            subscriber.coordinate.lat,
-                            subscriber.coordinate.lng
+                            subscriber.coordinate.latitude,
+                            subscriber.coordinate.longitude
                         )
                     ),
                     title = subscriber.name,
@@ -199,8 +199,8 @@ private fun MapContent(
                             cameraPositionState.animate(
                                 update = CameraUpdateFactory.newLatLng(
                                     LatLng(
-                                        subscriber.coordinate.lat,
-                                        subscriber.coordinate.lng
+                                        subscriber.coordinate.latitude,
+                                        subscriber.coordinate.longitude
                                     )
                                 ),
                                 durationMs = 500

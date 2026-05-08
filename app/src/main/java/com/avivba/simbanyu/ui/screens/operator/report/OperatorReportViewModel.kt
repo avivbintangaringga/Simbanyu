@@ -1,17 +1,19 @@
 package com.avivba.simbanyu.ui.screens.operator.report
 
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.screens.report.fakeReports
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.ReportRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import kotlinx.coroutines.delay
+import com.avivba.simbanyu.ui.shared.model.Report
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class OperatorReportViewModel : BaseViewModel<OperatorReportUiState, OperatorReportAction, OperatorReportEvent>(
+class OperatorReportViewModel(
+   private val reportRepository: ReportRepository
+) : BaseViewModel<OperatorReportUiState, OperatorReportAction, OperatorReportEvent>(
     OperatorReportUiState()
 ) {
     private val _reports = MutableStateFlow<List<OperatorReport>>(emptyList())
@@ -46,8 +48,8 @@ class OperatorReportViewModel : BaseViewModel<OperatorReportUiState, OperatorRep
                     }
                 }
 
-                OperatorReportAction.PickImage -> {
-                    // TODO: Pick Image
+                OperatorReportAction.OpenCamera -> {
+                    sendEvent(OperatorReportEvent.OpenCamera)
                 }
 
                 is OperatorReportAction.SetStatusFilter -> {
@@ -57,56 +59,85 @@ class OperatorReportViewModel : BaseViewModel<OperatorReportUiState, OperatorRep
                         )
                     }
                 }
+
+                is OperatorReportAction.SetImage -> {
+                    updateState {
+                        it.copy(
+                            image = action.image
+                        )
+                    }
+                }
             }
         }
     }
 
-    private fun load() {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    isLoading = true,
-                )
-            }
+    private suspend fun refresh() {
+        updateState {
+            it.copy(
+                isRefreshing = true,
+            )
+        }
 
-            _reports.update {
-                fakeReports.map { report ->
-                    OperatorReport(
-                        report = report,
-                        false
+        fetchData()
+
+        updateState {
+            it.copy(
+                isRefreshing = false
+            )
+        }
+    }
+
+    private suspend fun load() {
+        updateState {
+            it.copy(
+                isLoading = true,
+            )
+        }
+
+        fetchData()
+
+        updateState {
+            it.copy(
+                isLoading = false
+            )
+        }
+    }
+
+    private suspend fun fetchData() {
+        when (val reports = reportRepository.getAll()) {
+            is Result.Success -> {
+                updateState {
+                    it.copy(
+                        reports = reports.data.map { report ->
+                            OperatorReport(
+                                report = Report.fromDomain(report)
+                            )
+                        }
                     )
                 }
             }
 
-            updateState {
-                it.copy(
-                    isLoading = false
-                )
+            is Result.Error -> {
+                // TODO: Handle error
             }
         }
     }
 
-    private fun refresh() {
-
-    }
-
-    private fun send() {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    currentReport = it.currentReport?.copy(
-                        isSending = true
-                    )
+    private suspend fun send() {
+        updateState {
+            it.copy(
+                currentReport = it.currentReport?.copy(
+                    isSending = true
                 )
-            }
+            )
+        }
 
-            delay(2000)
+        // TODO: Send
 
-            updateState {
-                it.copy(
-                    currentReport = null
-                )
-            }
+        updateState {
+            it.copy(
+                currentReport = null
+            )
         }
     }
 
@@ -129,23 +160,21 @@ class OperatorReportViewModel : BaseViewModel<OperatorReportUiState, OperatorRep
         }
     }
 
-    private fun observeDataChanges() {
-        viewModelScope.launch {
-            combine(
-                _reports,
-                state.map { it.filterStatus }.distinctUntilChanged()
-            ) { reports, filter ->
-                if (filter.status == null) {
-                    return@combine reports
-                } else {
-                    reports.filter { it.report.status == filter.status}
-                }
-            }.collect { filtered ->
-                updateState {
-                    it.copy(
-                        reports = filtered
-                    )
-                }
+    private suspend fun observeDataChanges() {
+        combine(
+            _reports,
+            state.map { it.filterStatus }.distinctUntilChanged()
+        ) { reports, filter ->
+            if (filter.status == null) {
+                return@combine reports
+            } else {
+                reports.filter { it.report.status == filter.status }
+            }
+        }.collect { filtered ->
+            updateState {
+                it.copy(
+                    reports = filtered
+                )
             }
         }
     }

@@ -22,8 +22,8 @@ data class Subscriber(
                 address = domain.address,
                 phone = domain.user.phoneNumber,
                 coordinate = Coordinate(
-                    lat = domain.location.latitude,
-                    lng = domain.location.longitude
+                    latitude = domain.location.latitude,
+                    longitude = domain.location.longitude
                 ),
                 plan = domain.plan,
                 meterId = domain.meterId,

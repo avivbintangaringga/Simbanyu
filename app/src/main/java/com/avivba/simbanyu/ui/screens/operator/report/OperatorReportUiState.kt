@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.operator.report
 import androidx.compose.foundation.text.input.TextFieldState
 import com.avivba.simbanyu.ui.shared.model.Report
 import com.avivba.simbanyu.ui.shared.model.ReportStatus
+import java.io.File
 
 enum class ReportStatusFilter(
     val status: ReportStatus?,
@@ -28,7 +29,7 @@ data class OperatorReportUiState(
     val filterStatus: ReportStatusFilter = ReportStatusFilter.ALL,
     val currentReport: OperatorReport? = null,
     val notesState: TextFieldState = TextFieldState(),
-    val imageUri: String = "",
+    val image: File? = null,
 )
 
 sealed interface OperatorReportAction {
@@ -39,9 +40,11 @@ sealed interface OperatorReportAction {
     data class UpdateReport(val report: OperatorReport) : OperatorReportAction
     data class ToggleItemExpand(val report: OperatorReport) : OperatorReportAction
     data object SendUpdatedReport : OperatorReportAction
-    data object PickImage : OperatorReportAction
+    data object OpenCamera : OperatorReportAction
+    data class SetImage(val image: File) : OperatorReportAction
 }
 
 sealed interface OperatorReportEvent {
     object OnSent : OperatorReportEvent
+    object OpenCamera : OperatorReportEvent
 }

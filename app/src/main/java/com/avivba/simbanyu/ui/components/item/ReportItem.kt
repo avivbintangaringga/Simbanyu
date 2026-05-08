@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.screens.report.fakeUser
+import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
 import com.avivba.simbanyu.ui.shared.model.ReportStatus
@@ -103,7 +103,7 @@ fun ReportItem(
                     .weight(1f)
             ) {
                 SimbanyuText(
-                    text = report.title,
+                    text = "Pengaduan layanan", // TODO: Do something about the title
                     style = SimbanyuTheme.typography.bodyProminent
                 )
                 Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
@@ -157,7 +157,7 @@ fun ReportItem(
             }
 
             SimbanyuText(
-                text = "${report.user.name} (${report.user.meterId})"
+                text = "${report.subscriber.name} (${report.subscriber.meterId})"
             )
         }
 
@@ -189,7 +189,7 @@ fun ReportItem(
                 }
 
                 SimbanyuText(
-                    text = report.location
+                    text = report.address
                 )
 
                 Row(
@@ -244,7 +244,7 @@ fun ReportItem(
                     )
                 }
 
-                if (report.operatorEvidenceImage.isNotEmpty()) {
+                if (report.handlingEvidenceImageUrl.isNotEmpty()) {
                     Row(
                         modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
                         verticalAlignment = Alignment.CenterVertically,
@@ -331,15 +331,16 @@ private fun ReportPreview() {
         showUser = true,
         report = Report(
             id = "REP-001",
-            title = "Kebocoran Pipa Utama",
             status = ReportStatus.WAITING,
-            location = "Jl. Merdeka No. 10, Jakarta",
-            locationCoordinate = Coordinate(-6.1754, 106.8272),
+            address = "Jl. Merdeka No. 10, Jakarta",
+            coordinate = Coordinate(-6.1754, 106.8272),
             description = "Pipa air depan rumah pecah, air meluap ke jalanan.",
-            image = "https://example.com/leak1.jpg",
+            evidenceImageUrl = "https://example.com/leak1.jpg",
             date = "24 Mei 2024",
             isExpanded = true,
-            user = fakeUser,
+            subscriber = fakeSubscribers[0],
+            operatorNotes = "",
+            handlingEvidenceImageUrl = "",
         ),
     )
 }

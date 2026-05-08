@@ -506,7 +506,6 @@ private fun ReportPreview() {
     ReportContent(
         state = ReportUiState(
             selectedTabIndex = 0,
-            reports = fakeReports
         )
     )
 }

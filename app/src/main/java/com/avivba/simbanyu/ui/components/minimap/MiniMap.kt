@@ -53,8 +53,8 @@ fun MiniMap(
     zoom: Float = 17f
 ) {
     val loc = LatLng(
-        location.lat,
-        location.lng
+        location.latitude,
+        location.longitude
     )
 
     val cameraPositionState = rememberCameraPositionState {

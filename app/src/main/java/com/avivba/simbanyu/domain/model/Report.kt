@@ -6,6 +6,7 @@ data class Report(
     val id: String,
     val date: Instant,
     val address: String,
+    val coordinate: Coordinate?,
     val description: String,
     val evidenceImageUrl: String,
     val operatorNotes: String,

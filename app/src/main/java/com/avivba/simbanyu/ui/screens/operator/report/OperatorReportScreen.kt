@@ -48,21 +48,24 @@ import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.item.ReportItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
-import com.avivba.simbanyu.ui.screens.report.fakeReports
+import com.avivba.simbanyu.ui.screens.camera.CameraViewModel
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.model.ReportStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.conditional
 import com.avivba.simbanyu.ui.utils.dashedBorder
+import org.koin.compose.viewmodel.koinActivityViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun OperatorReportScreen(
     modifier: Modifier = Modifier,
     viewModel: OperatorReportViewModel = koinViewModel(),
+    cameraViewModel: CameraViewModel = koinActivityViewModel(),
     onNavigate: (Screen) -> Unit = {},
 ) {
+    val cameraToken = "OPERATOR_REPORT"
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
@@ -75,6 +78,17 @@ fun OperatorReportScreen(
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
+            OperatorReportEvent.OpenCamera -> {
+                cameraViewModel.setToken(cameraToken)
+                onNavigate(Screen.Camera)
+            }
+        }
+    }
+
+    ObserveAsEvent(cameraViewModel.cameraResult) {
+        if (it != null && it.token == cameraToken && it.image.exists()) {
+            viewModel.onAction(OperatorReportAction.SetImage(it.image))
         }
     }
 
@@ -356,10 +370,10 @@ private fun OperatorReportContent(
                             .height(150.dp)
                             .clip(SimbanyuTheme.shapes.large)
                             .clickable {
-                                onAction(OperatorReportAction.PickImage)
+                                onAction(OperatorReportAction.OpenCamera)
                             }
                             .conditional(
-                                state.imageUri.isEmpty()
+                                state.image == null
                             ) {
                                 dashedBorder(
                                     strokeWidth = 4.dp,
@@ -437,14 +451,7 @@ private fun OperatorReportContent(
 fun OperatorReportScreenPreview() {
     SimbanyuTheme {
         OperatorReportContent(
-            state = OperatorReportUiState(
-                reports = fakeReports.map { report ->
-                    OperatorReport(
-                        report = report,
-                        false
-                    )
-                }
-            ),
+            state = OperatorReportUiState(),
         )
     }
 }

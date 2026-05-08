@@ -1,5 +1,7 @@
 package com.avivba.simbanyu.ui.shared.model
 
+import com.avivba.simbanyu.ui.utils.toFullDateTime
+
 enum class ReportStatus(
     val id: String,
     val status: String,
@@ -12,15 +14,31 @@ enum class ReportStatus(
 
 data class Report(
     val id: String,
-    val title: String,
-    val user: User,
+    val subscriber: Subscriber,
     val status: ReportStatus,
-    val location: String,
-    val locationCoordinate: Coordinate,
+    val address: String,
+    val coordinate: Coordinate?,
     val description: String,
-    val image: String,
+    val evidenceImageUrl: String,
     val date: String,
     val operatorNotes: String = "",
-    val operatorEvidenceImage: String = "",
+    val handlingEvidenceImageUrl: String = "",
     val isExpanded: Boolean = false,
-)
+) {
+    companion object {
+        fun fromDomain(report: com.avivba.simbanyu.domain.model.Report): Report {
+            return Report(
+                id = report.id,
+                subscriber = Subscriber.fromDomain(report.subscriber),
+                status = ReportStatus.valueOf(report.status.name),
+                address = report.address,
+                coordinate = report.coordinate?.let { Coordinate.fromDomain(it) },
+                description = report.description,
+                evidenceImageUrl = report.evidenceImageUrl,
+                date = report.date.toFullDateTime(),
+                operatorNotes = report.operatorNotes,
+                handlingEvidenceImageUrl = report.handlingEvidenceImageUrl,
+            )
+        }
+    }
+}
