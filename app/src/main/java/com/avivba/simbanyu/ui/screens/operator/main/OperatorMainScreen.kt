@@ -38,6 +38,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.di.viewModelModule
 import com.avivba.simbanyu.ui.components.bottombar.BottomBar
 import com.avivba.simbanyu.ui.components.bottombar.BottomBarMenuItem
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.NotificationItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
@@ -224,20 +225,26 @@ fun OperatorMainScreenContent(
                                 .background(SimbanyuTheme.colors.borderCard)
                         )
 
-                        Column(
-                            modifier = Modifier
-                                .padding(
-                                    vertical = SimbanyuTheme.padding.small
-                                ),
-                        ) {
-                            state.notifications.forEach { notification ->
-                                NotificationItem(
-                                    notification = notification,
-                                    onClick = {
-                                        onAction(OperatorMainAction.MarkAsRead(notification))
-                                    }
-                                )
+                        if (state.notifications.isNotEmpty()) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(
+                                        vertical = SimbanyuTheme.padding.small
+                                    ),
+                            ) {
+                                state.notifications.forEach { notification ->
+                                    NotificationItem(
+                                        notification = notification,
+                                        onClick = {
+                                            onAction(OperatorMainAction.MarkAsRead(notification))
+                                        }
+                                    )
+                                }
                             }
+                        } else {
+                            EmptyState(
+                                message = "Tidak ada notifikasi"
+                            )
                         }
                     }
                 }

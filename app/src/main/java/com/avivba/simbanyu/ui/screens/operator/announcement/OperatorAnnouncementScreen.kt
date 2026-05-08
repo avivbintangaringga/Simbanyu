@@ -41,6 +41,7 @@ import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
@@ -180,42 +181,46 @@ fun OperatorAnnouncementContent(
                         onAction(OperatorAnnouncementAction.ShowCreateDialog)
                     }
                 }
-//
-//                Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
 
-
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    state = listState,
-                    verticalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.medium
-                    )
-                ) {
-                    items(
-                        items = state.announcements,
-                        key = { it.id }
-                    ) { announcement ->
-                        AnnouncementItem(
-                            title = announcement.title,
-                            content = announcement.body,
-                            time = announcement.date,
-                            iconId = R.drawable.ic_campaign_filled,
-                            canDelete = true,
-                            onDelete = {
-                                onAction(
-                                    OperatorAnnouncementAction.DeleteAnnouncement(
-                                        announcement
-                                    )
-                                )
-                            }
+                if (state.announcements.isNotEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        state = listState,
+                        verticalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.medium
                         )
+                    ) {
+                        items(
+                            items = state.announcements,
+                            key = { it.id }
+                        ) { announcement ->
+                            AnnouncementItem(
+                                title = announcement.title,
+                                content = announcement.body,
+                                time = announcement.date,
+                                iconId = R.drawable.ic_campaign_filled,
+                                canDelete = true,
+                                onDelete = {
+                                    onAction(
+                                        OperatorAnnouncementAction.DeleteAnnouncement(
+                                            announcement
+                                        )
+                                    )
+                                }
+                            )
+                        }
                     }
+                } else {
+                    EmptyState(
+                        modifier = Modifier.fillMaxSize(),
+                        message = "Belum ada pemberitahuan"
+                    )
                 }
             }
         }
 
-        if(state.isShowCreateDialog) {
+        if (state.isShowCreateDialog) {
             ModalBottomSheet(
                 sheetState = bottomSheetState,
                 onDismissRequest = {
@@ -297,7 +302,7 @@ fun OperatorAnnouncementContent(
                                 )
                             },
                         state = state.descriptionState,
-                        lineLimits = TextFieldLineLimits.MultiLine(3,3),
+                        lineLimits = TextFieldLineLimits.MultiLine(3, 3),
                         hint = "Masukkan isi pemberitahuan...",
                     )
                     Spacer(Modifier.height(SimbanyuTheme.spacing.medium))

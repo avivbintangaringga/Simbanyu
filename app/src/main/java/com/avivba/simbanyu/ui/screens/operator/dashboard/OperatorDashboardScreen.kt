@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuCardButton
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.ActivityItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
@@ -198,18 +199,24 @@ fun OperatorDashboardContent(
             style = SimbanyuTheme.typography.titleSection,
         )
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            )
-        ) {
-            state.activities.forEach { activity ->
-                ActivityItem(
-                    activity = activity
+        if (state.activities.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
                 )
+            ) {
+                state.activities.forEach { activity ->
+                    ActivityItem(
+                        activity = activity
+                    )
+                }
             }
+        } else {
+            EmptyState(
+                message = "Belum ada aktivitas"
+            )
         }
     }
 }
