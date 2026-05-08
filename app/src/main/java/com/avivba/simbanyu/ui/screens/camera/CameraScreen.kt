@@ -9,7 +9,6 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.camera.compose.CameraXViewfinder
-import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -49,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -64,6 +64,19 @@ fun CameraScreen(
 ) {
     val activity = LocalActivity.current as ComponentActivity
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    ObserveAsEvent(viewModel.event) {
+        when (it) {
+            is CameraEvent.ImageCaptured -> {
+                Toast.makeText(
+                    context,
+                    "Foto berhasil diambil: ${it.file.name}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
     DisposableEffect(Unit) {
         activity.enableEdgeToEdge(
@@ -92,7 +105,8 @@ fun CameraScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center
         ) {
             if (cameraPermissionState.status.isGranted) {
                 CameraContent(
@@ -244,11 +258,7 @@ fun CameraContent(
                                 context,
                                 imageCapture,
                                 onSuccess = { file ->
-                                    Toast.makeText(
-                                        context,
-                                        "Foto berhasil diambil: ${file.name}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    onAction(CameraAction.ImageCaptured(file))
                                 },
                                 onError = {
                                     Toast.makeText(

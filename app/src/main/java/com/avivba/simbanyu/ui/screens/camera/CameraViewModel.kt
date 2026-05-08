@@ -25,6 +25,10 @@ class CameraViewModel : BaseViewModel<CameraUiState, CameraAction, CameraEvent>(
                         )
                     }
                 }
+
+                is CameraAction.ImageCaptured -> {
+                    sendEvent(CameraEvent.ImageCaptured(action.file))
+                }
             }
         }
     }
