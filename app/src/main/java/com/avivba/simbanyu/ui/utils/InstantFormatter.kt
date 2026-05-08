@@ -10,7 +10,7 @@ import java.util.Locale
  * @param zoneId The time zone to use (defaults to system default)
  */
 fun Instant.toMonthShort(zoneId: ZoneId = ZoneId.systemDefault()): String {
-    val localeId = Locale("id", "ID")
+    val localeId = Locale.forLanguageTag("id-ID")
     val formatter = DateTimeFormatter.ofPattern("MMM")
         .withLocale(localeId)
         .withZone(zoneId)
@@ -23,7 +23,7 @@ fun Instant.toMonthShort(zoneId: ZoneId = ZoneId.systemDefault()): String {
  * @param zoneId The time zone to use (defaults to system default)
  */
 fun Instant.toMonthFull(zoneId: ZoneId = ZoneId.systemDefault()): String {
-    val localeId = Locale("id", "ID")
+    val localeId = Locale.forLanguageTag("id-ID")
     val formatter = DateTimeFormatter.ofPattern("MMMM")
         .withLocale(localeId)
         .withZone(zoneId)
@@ -43,6 +43,19 @@ fun Instant.toYear(zoneId: ZoneId = ZoneId.systemDefault()): String {
 }
 
 /**
+ * Returns the date and time in format "d MMMM yyyy HH:mm" (e.g., 12 Agustus 2026 23:22)
+ * @param zoneId The time zone to use (defaults to system default)
+ */
+fun Instant.toFullDateTime(zoneId: ZoneId = ZoneId.systemDefault()): String {
+    val localeId = Locale.forLanguageTag("id-ID")
+    val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm")
+        .withLocale(localeId)
+        .withZone(zoneId)
+
+    return this.formatWith(formatter)
+}
+
+/**
  * Returns a relative time string in Indonesian (e.g., "Baru saja", "5 mnt lalu").
  */
 fun Instant.toRelativeTime(): String {
@@ -55,7 +68,7 @@ fun Instant.toRelativeTime(): String {
         diffSeconds < 86400 -> "${diffSeconds / 3600} jam lalu"
         diffSeconds < 604800 -> "${diffSeconds / 86400} hr lalu"
         else -> {
-            val localeId = Locale("id", "ID")
+            val localeId = Locale.forLanguageTag("id-ID")
             val formatter = DateTimeFormatter.ofPattern("d MMM yyyy")
                 .withLocale(localeId)
                 .withZone(ZoneId.systemDefault())

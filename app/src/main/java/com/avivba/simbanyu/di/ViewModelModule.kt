@@ -43,7 +43,7 @@ val viewModelModule = module {
     viewModel { OperatorMainViewModel(get()) }
     viewModel { OperatorDashboardViewModel(get(), get()) }
     viewModel { OperatorAnnouncementViewModel(get()) }
-    viewModel { SubscribersViewModel() }
+    viewModel { SubscribersViewModel(get()) }
     viewModel { SubscriberDetailsViewModel(get()) }
     viewModel { OperatorReportViewModel() }
     viewModel { MeterRecordViewModel(get()) }

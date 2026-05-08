@@ -9,6 +9,6 @@ data class Subscriber(
     val address: String,
     val location: Coordinate,
     val isRecorded: Boolean,
-    val lastRecordedAt: Instant,
+    val lastRecordedAt: Instant?,
     val user: User,
 )

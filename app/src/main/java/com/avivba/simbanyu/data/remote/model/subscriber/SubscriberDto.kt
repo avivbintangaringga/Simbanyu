@@ -25,7 +25,7 @@ data class SubscriberDto(
         address = address,
         location = Coordinate(latitude, longitude),
         isRecorded = isRecorded,
-        lastRecordedAt = Instant.parse(lastRecordedAt),
+        lastRecordedAt = lastRecordedAt?.let { Instant.parse(it) },
         plan = plan.name,
         user = user.toDomain()
     )
