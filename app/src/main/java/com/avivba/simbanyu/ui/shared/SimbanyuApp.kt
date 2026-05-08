@@ -55,21 +55,17 @@ fun SimbanyuApp(
 
         composable<Screen.Camera> {
             CameraScreen(
-                onImageCaptured = { file ->
-                    navHostController.previousBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("camera_result", file.absolutePath)
-                    navHostController.popBackStack()
-                },
-                onNavigateBack = {
-                    navHostController.popBackStack()
-                }
+//                onNavigate = { dest ->
+//                    navHostController.navigate(dest)
+//                },
+//                onNavigateBack = {
+//                    navHostController.popBackStack()
+//                }
             )
         }
 
         composable<Screen.Main> {
             MainScreen(
-                rootNavController = navHostController,
                 onNavigate = { dest ->
                     navHostController.navigate(dest)
                 },
@@ -114,7 +110,6 @@ fun SimbanyuApp(
 
         composable<Screen.OperatorMain> {
             OperatorMainScreen(
-                rootNavController = navHostController,
                 onNavigate = { dest ->
                     navHostController.navigate(dest)
                 },

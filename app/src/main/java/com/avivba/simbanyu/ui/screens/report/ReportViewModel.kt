@@ -1,8 +1,6 @@
 package com.avivba.simbanyu.ui.screens.report
 
-import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.ReportSubmission
@@ -13,41 +11,19 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 class ReportViewModel(
-    private val reportRepository: ReportRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val reportRepository: ReportRepository
 ) : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
     ReportUiState()
 ) {
     init {
         viewModelScope.launch {
             load()
-            savedStateHandle.getStateFlow<String?>("camera_result", null)
-                .collect { path ->
-                    Log.d("SDKSDK", "CAMERA PATH: $path")
-                    path?.let {
-                        updateState {
-                            it.copy(
-                                image = File(path)
-                            )
-                        }
-
-                        savedStateHandle["camera_result"] = null
-                    }
-                }
         }
     }
 
     override fun onAction(action: ReportAction) {
         viewModelScope.launch {
             when (action) {
-                is ReportAction.CapturedImage -> {
-                    updateState {
-                        it.copy(
-                            image = action.file
-                        )
-                    }
-                }
-
                 is ReportAction.PickImage -> {
                     sendEvent(ReportEvent.OpenCamera)
                 }
@@ -101,7 +77,7 @@ class ReportViewModel(
             isValid = false
         }
 
-        if (state.value.image == null) {
+        if (state.value.imageUri == null) {
             updateState {
                 it.copy(
                     errorFields = it.errorFields + Fields.IMAGE
@@ -156,7 +132,7 @@ class ReportViewModel(
                     locationState = TextFieldState(),
                     descriptionState = TextFieldState(),
                     locationCoordinate = null,
-                    image = null,
+                    imageUri = null,
                     isSendingReport = false
                 )
             }
