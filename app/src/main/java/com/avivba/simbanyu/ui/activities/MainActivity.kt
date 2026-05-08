@@ -24,22 +24,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val context = LocalContext.current
             val isCheckingAuth by viewModel.isCheckingAuth.collectAsStateWithLifecycle()
             val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
             val profile by viewModel.profile.collectAsStateWithLifecycle()
-
-            ObserveAsEvent(viewModel.authEvents) { event ->
-                when (event) {
-                    AuthEvent.SESSION_EXPIRED -> {
-                        Toast.makeText(
-                            context,
-                            "Sesi telah berakhir, silahkan login kembali",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
 
             SimbanyuTheme {
                 if (isCheckingAuth) {
@@ -59,7 +46,8 @@ class MainActivity : ComponentActivity() {
 
                     key(isLoggedIn) {
                         SimbanyuApp(
-                            startScreen = startScreen
+                            startScreen = startScreen,
+                            authEventFlow = viewModel.authEvents
                         )
                     }
                 }

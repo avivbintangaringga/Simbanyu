@@ -9,9 +9,8 @@ import com.avivba.simbanyu.domain.repository.AuthEventBus
 import com.avivba.simbanyu.domain.repository.AuthRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -24,8 +23,9 @@ class MainActivityViewModel(
 
     val authEvents = authEventBus.events
 
-    val isLoggedIn = authRepository.isLoggedInFlow()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+    private val _isLoggedIn = MutableStateFlow(false)
+    val isLoggedIn = _isLoggedIn.asStateFlow()
+
 
     private val _profile = MutableStateFlow<Profile?>(null)
     val profile = _profile.asStateFlow()
@@ -35,7 +35,9 @@ class MainActivityViewModel(
             try {
                 _isCheckingAuth.value = true
                 val loggedIn = authRepository.isLoggedIn()
-                Log.d("SDKSDK", "IsLoggedIn: ${loggedIn}")
+                Log.d("SDKSDK", "loggedIn: $loggedIn")
+
+                _isLoggedIn.update { loggedIn }
 
                 if (loggedIn) {
                     refreshProfile()

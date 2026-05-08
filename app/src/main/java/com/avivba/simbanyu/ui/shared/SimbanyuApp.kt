@@ -1,13 +1,16 @@
 package com.avivba.simbanyu.ui.shared
 
+import android.widget.Toast
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.avivba.simbanyu.domain.repository.AuthEvent
 import com.avivba.simbanyu.ui.components.background.Background
 import com.avivba.simbanyu.ui.screens.announcement.AnnouncementScreen
 import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
@@ -20,12 +23,30 @@ import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
 import com.avivba.simbanyu.ui.screens.operator.meterrecord.MeterRecordScreen
 import com.avivba.simbanyu.ui.screens.operator.subscriberdetail.SubscriberDetailsScreen
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
+import com.avivba.simbanyu.ui.utils.ObserveAsEvent
+import kotlinx.coroutines.flow.SharedFlow
 
 @Composable
 fun SimbanyuApp(
     navHostController: NavHostController = rememberNavController(),
-    startScreen: Screen
+    startScreen: Screen,
+    authEventFlow: SharedFlow<AuthEvent>
 ) {
+    val context = LocalContext.current
+
+    ObserveAsEvent(authEventFlow) { event ->
+        when (event) {
+            AuthEvent.SESSION_EXPIRED -> {
+                Toast.makeText(
+                    context,
+                    "Sesi telah berakhir, silahkan login kembali",
+                    Toast.LENGTH_LONG
+                ).show()
+                navHostController.navigate(Screen.Login)
+            }
+        }
+    }
+
     Background()
 
     val fadeDuration = 250
@@ -48,7 +69,6 @@ fun SimbanyuApp(
     ) {
         composable<Screen.Login> {
             LoginScreen(onNavigate = { dest ->
-                navHostController.popBackStack()
                 navHostController.navigate(dest)
             })
         }
