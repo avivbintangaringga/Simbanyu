@@ -37,7 +37,6 @@ import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.components.topbar.TopBar
-import com.avivba.simbanyu.ui.screens.report.ReportAction
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent

@@ -19,7 +19,7 @@ sealed interface UsageHistoryAction {
     data class ClickUsage(val usage: Usage) : UsageHistoryAction
 }
 
-sealed interface UsageHistoryEvent {}
+sealed interface UsageHistoryEvent
 
 val fakeUsages = listOf(
     // 2024

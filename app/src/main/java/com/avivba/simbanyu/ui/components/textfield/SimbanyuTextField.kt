@@ -22,9 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.sp
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.theme.Grey90
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable

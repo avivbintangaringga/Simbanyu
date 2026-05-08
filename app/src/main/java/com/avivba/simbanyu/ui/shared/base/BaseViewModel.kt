@@ -15,7 +15,7 @@ abstract class BaseViewModel<State, Action, Event>(
     private val _state = MutableStateFlow(initialState)
     val state = _state.asStateFlow()
 
-    private val _event = Channel<Event>(capacity = Channel.Factory.BUFFERED)
+    private val _event = Channel<Event>(capacity = Channel.BUFFERED)
     val event = _event.receiveAsFlow()
 
     protected fun sendEvent(event: Event) {

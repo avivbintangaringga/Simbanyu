@@ -4,9 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.launch
 
-class PaymentMethodViewModel(
-
-) : BaseViewModel<PaymentMethodUiState, PaymentMethodUiAction, PaymentMethodUiEvent>(
+class PaymentMethodViewModel : BaseViewModel<PaymentMethodUiState, PaymentMethodUiAction, PaymentMethodUiEvent>(
     PaymentMethodUiState()
 ) {
 

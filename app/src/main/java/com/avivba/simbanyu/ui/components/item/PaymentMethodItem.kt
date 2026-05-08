@@ -20,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethod
-import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodUiAction
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable

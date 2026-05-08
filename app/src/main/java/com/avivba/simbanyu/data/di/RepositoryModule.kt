@@ -1,9 +1,25 @@
 package com.avivba.simbanyu.data.di
 
-import com.avivba.simbanyu.data.repository.*
-import com.avivba.simbanyu.domain.repository.*
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
+import com.avivba.simbanyu.data.repository.ActivityRepositoryImpl
+import com.avivba.simbanyu.data.repository.AnnouncementRepositoryImpl
+import com.avivba.simbanyu.data.repository.AuthRepositoryImpl
+import com.avivba.simbanyu.data.repository.BillRepositoryImpl
+import com.avivba.simbanyu.data.repository.FcmTokenRepositoryImpl
+import com.avivba.simbanyu.data.repository.NotificationRepositoryImpl
+import com.avivba.simbanyu.data.repository.ReportRepositoryImpl
+import com.avivba.simbanyu.data.repository.SubscriberRepositoryImpl
+import com.avivba.simbanyu.data.repository.UsageRepositoryImpl
+import com.avivba.simbanyu.data.repository.UserRepositoryImpl
+import com.avivba.simbanyu.domain.repository.ActivityRepository
+import com.avivba.simbanyu.domain.repository.AnnouncementRepository
+import com.avivba.simbanyu.domain.repository.AuthRepository
+import com.avivba.simbanyu.domain.repository.BillRepository
+import com.avivba.simbanyu.domain.repository.FcmTokenRepository
+import com.avivba.simbanyu.domain.repository.NotificationRepository
+import com.avivba.simbanyu.domain.repository.ReportRepository
+import com.avivba.simbanyu.domain.repository.SubscriberRepository
+import com.avivba.simbanyu.domain.repository.UsageRepository
+import com.avivba.simbanyu.domain.repository.UserRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {

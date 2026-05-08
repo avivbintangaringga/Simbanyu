@@ -6,7 +6,7 @@ import com.avivba.simbanyu.ui.shared.model.Report
 import com.avivba.simbanyu.ui.shared.model.ReportStatus
 import com.avivba.simbanyu.ui.shared.model.User
 
-enum class Fields() {
+enum class Fields {
     LOCATION,
     DESCRIPTION,
     IMAGE,

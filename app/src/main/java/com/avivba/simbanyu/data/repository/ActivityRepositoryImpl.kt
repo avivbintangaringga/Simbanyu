@@ -6,7 +6,6 @@ import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.Activity
 import com.avivba.simbanyu.domain.repository.ActivityRepository
-import java.time.Instant
 
 class ActivityRepositoryImpl(
     private val activityService: ActivityService

@@ -53,7 +53,7 @@ fun BillDetailsScreen(
             }
 
             is BillDetailsEvent.OpenPaymentPage -> {
-                val url = it.url
+                it.url
                 // TODO: Handle open payment URL
             }
         }

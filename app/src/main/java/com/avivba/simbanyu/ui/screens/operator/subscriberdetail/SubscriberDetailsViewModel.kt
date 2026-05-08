@@ -7,7 +7,6 @@ import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Bill
 import com.avivba.simbanyu.ui.shared.model.Usage
-import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 

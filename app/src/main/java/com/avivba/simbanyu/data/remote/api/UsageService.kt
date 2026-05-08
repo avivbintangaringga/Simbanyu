@@ -3,10 +3,8 @@ package com.avivba.simbanyu.data.remote.api
 import androidx.annotation.Keep
 import com.avivba.simbanyu.data.remote.model.Envelope
 import com.avivba.simbanyu.data.remote.model.usage.UsageDto
-import com.avivba.simbanyu.domain.model.UsageSubmission
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST

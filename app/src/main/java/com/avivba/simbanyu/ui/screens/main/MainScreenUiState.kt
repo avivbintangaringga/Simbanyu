@@ -1,6 +1,5 @@
 package com.avivba.simbanyu.ui.screens.main
 
-import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainEvent
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.model.Notification
 
