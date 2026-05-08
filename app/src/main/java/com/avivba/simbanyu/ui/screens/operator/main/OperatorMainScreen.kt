@@ -316,7 +316,6 @@ private fun OperatorMainScreenPreview() {
         }
     ) {
         OperatorMainScreen(
-            viewModel = OperatorMainViewModel(),
             onLogout = {}
         )
     }

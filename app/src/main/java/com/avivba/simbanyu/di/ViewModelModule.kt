@@ -40,7 +40,7 @@ val viewModelModule = module {
     viewModel { AnnouncementViewModel(get()) }
 
     // OPERATOR
-    viewModel { OperatorMainViewModel() }
+    viewModel { OperatorMainViewModel(get()) }
     viewModel { OperatorDashboardViewModel(get(), get()) }
     viewModel { OperatorAnnouncementViewModel(get()) }
     viewModel { SubscribersViewModel() }

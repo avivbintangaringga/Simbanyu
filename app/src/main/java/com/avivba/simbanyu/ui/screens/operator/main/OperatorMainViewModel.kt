@@ -1,16 +1,21 @@
 package com.avivba.simbanyu.ui.screens.operator.main
 
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.NotificationRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Notification
 import kotlinx.coroutines.launch
 
-class OperatorMainViewModel :
-    BaseViewModel<OperatorMainUiState, OperatorMainAction, OperatorMainEvent>(
-        OperatorMainUiState()
-    ) {
+class OperatorMainViewModel(
+    private val notificationRepository: NotificationRepository
+) : BaseViewModel<OperatorMainUiState, OperatorMainAction, OperatorMainEvent>(
+    OperatorMainUiState()
+) {
     init {
         viewModelScope.launch {
+            loadNotifications()
+
             state.collect { currentState ->
                 val hasUnread = currentState.notifications.any { !it.isRead }
                 if (currentState.isShowNotificationDot != hasUnread) {
@@ -22,8 +27,6 @@ class OperatorMainViewModel :
                 }
             }
         }
-
-        loadNotifications()
     }
 
     override fun onAction(action: OperatorMainAction) {
@@ -75,26 +78,28 @@ class OperatorMainViewModel :
                 }
             )
         }
+
+        // TODO: Store marked id
     }
 
     private fun markAllAsRead() {
-        updateState {
-            it.copy(
-                notifications = it.notifications.map { notification ->
-                    notification.copy(
-                        isRead = true
-                    )
-                }
-            )
+        state.value.notifications.filter { !it.isRead }.forEach {
+            markAsRead(it)
         }
     }
 
-    private fun loadNotifications() {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    notifications = fakeNotifications
-                )
+    private suspend fun loadNotifications() {
+        when (val notifications = notificationRepository.getAll()) {
+            is Result.Success -> {
+                updateState {
+                    it.copy(
+                        notifications = notifications.data.map { Notification.fromDomain(it) }
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                // TODO: Handle error
             }
         }
     }
