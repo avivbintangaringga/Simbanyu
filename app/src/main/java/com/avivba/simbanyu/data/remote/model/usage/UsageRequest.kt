@@ -1,7 +1,9 @@
 package com.avivba.simbanyu.data.remote.model.usage
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.domain.model.UsageSubmission
 
+@Keep
 data class UsageRequest(
     val subscriberId: String,
     val currentMeter: Int,

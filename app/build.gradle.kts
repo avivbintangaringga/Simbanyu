@@ -7,6 +7,15 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile =
+                file("/home/r7fx/Programming/Github-Clones/backup-files/keystore/keystore-pkcs12.jks")
+            storePassword = "dbstfdbstf"
+            keyAlias = "key0"
+            keyPassword = "dbstfdbstf"
+        }
+    }
     namespace = "com.avivba.simbanyu"
     compileSdk {
         version = release(36) {
@@ -32,6 +41,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

@@ -1,10 +1,12 @@
 package com.avivba.simbanyu.data.remote.model.report
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.data.remote.model.subscriber.SubscriberDto
 import com.avivba.simbanyu.domain.model.Report
 import java.time.Instant
 
+@Keep
 data class ReportDto(
     val id: String,
     val address: String,

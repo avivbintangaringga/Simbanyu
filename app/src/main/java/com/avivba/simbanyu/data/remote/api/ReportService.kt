@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.data.remote.api
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.data.remote.model.Envelope
 import com.avivba.simbanyu.data.remote.model.report.ReportDto
 import okhttp3.MultipartBody
@@ -11,6 +12,7 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
+@Keep
 interface ReportService {
     @GET("reports")
     suspend fun getAll(): Envelope<List<ReportDto>>

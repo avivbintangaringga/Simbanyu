@@ -22,15 +22,15 @@ const val BASE_URL = "https://simbanyu.avivba.com"
 const val API_URL = "$BASE_URL/api/"
 
 val networkModule = module {
-    single { AuthInterceptor(get()) }
+    single<AuthInterceptor> { AuthInterceptor(get()) }
 
-    single {
+    single<OkHttpClient> {
         OkHttpClient.Builder()
             .addInterceptor(get<AuthInterceptor>())
             .build()
     }
 
-    single {
+    single<Retrofit> {
         Retrofit.Builder()
             .baseUrl(API_URL)
             .client(get())
@@ -38,15 +38,15 @@ val networkModule = module {
             .build()
     }
 
-    single { get<Retrofit>().create(ActivityService::class.java) }
-    single { get<Retrofit>().create(FcmTokenService::class.java) }
-    single { get<Retrofit>().create(AuthService::class.java) }
-    single { get<Retrofit>().create(BillService::class.java) }
-    single { get<Retrofit>().create(UserService::class.java) }
-    single { get<Retrofit>().create(UsageService::class.java) }
-    single { get<Retrofit>().create(ReportService::class.java) }
-    single { get<Retrofit>().create(PaymentService::class.java) }
-    single { get<Retrofit>().create(SubscriberService::class.java) }
-    single { get<Retrofit>().create(AnnouncementService::class.java) }
-    single { get<Retrofit>().create(NotificationService::class.java) }
+    single<ActivityService> { get<Retrofit>().create(ActivityService::class.java) }
+    single<FcmTokenService> { get<Retrofit>().create(FcmTokenService::class.java) }
+    single<AuthService> { get<Retrofit>().create(AuthService::class.java) }
+    single<BillService> { get<Retrofit>().create(BillService::class.java) }
+    single<UserService> { get<Retrofit>().create(UserService::class.java) }
+    single<UsageService> { get<Retrofit>().create(UsageService::class.java) }
+    single<ReportService> { get<Retrofit>().create(ReportService::class.java) }
+    single<PaymentService> { get<Retrofit>().create(PaymentService::class.java) }
+    single<SubscriberService> { get<Retrofit>().create(SubscriberService::class.java) }
+    single<AnnouncementService> { get<Retrofit>().create(AnnouncementService::class.java) }
+    single<NotificationService> { get<Retrofit>().create(NotificationService::class.java) }
 }

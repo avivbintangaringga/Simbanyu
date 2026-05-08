@@ -1,10 +1,12 @@
 package com.avivba.simbanyu.data.remote.api
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.data.remote.model.Envelope
 import com.avivba.simbanyu.data.remote.model.bill.BillDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 
+@Keep
 interface BillService {
     @GET("bills")
     suspend fun getAll(): Envelope<List<BillDto>>

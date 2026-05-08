@@ -1,8 +1,10 @@
 package com.avivba.simbanyu.data.remote.model.announcement
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.domain.model.Announcement
 import java.time.Instant
 
+@Keep
 data class AnnouncementDto(
     val id: String,
     val title: String,

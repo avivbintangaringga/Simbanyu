@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.data.remote.api
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.data.remote.model.Envelope
 import com.avivba.simbanyu.data.remote.model.usage.UsageDto
 import com.avivba.simbanyu.domain.model.UsageSubmission
@@ -14,6 +15,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+@Keep
 interface UsageService {
     @GET("usages")
     suspend fun getBySubscriber(

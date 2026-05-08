@@ -1,8 +1,10 @@
 package com.avivba.simbanyu.data.remote.model.bill
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.domain.model.Bill
 import java.time.Instant
 
+@Keep
 data class BillDto(
     val id: String,
     val title: String,

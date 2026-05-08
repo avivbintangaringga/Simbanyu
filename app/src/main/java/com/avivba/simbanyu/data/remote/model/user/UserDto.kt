@@ -1,8 +1,10 @@
 package com.avivba.simbanyu.data.remote.model.user
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.domain.model.User
 
+@Keep
 data class UserDto(
     val id: String,
     val username: String,

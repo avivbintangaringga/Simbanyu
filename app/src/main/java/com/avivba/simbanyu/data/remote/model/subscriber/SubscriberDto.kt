@@ -1,11 +1,13 @@
 package com.avivba.simbanyu.data.remote.model.subscriber
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.data.remote.model.plan.PlanDto
 import com.avivba.simbanyu.data.remote.model.user.UserDto
 import com.avivba.simbanyu.domain.model.Coordinate
 import com.avivba.simbanyu.domain.model.Subscriber
 import java.time.Instant
 
+@Keep
 data class SubscriberDto(
     val id: String,
     val meterId: String,

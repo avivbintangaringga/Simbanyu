@@ -19,7 +19,8 @@ suspend fun <T> safeApiCall(
             Log.d("SDKSDK", "Executing api call: $apiCall")
             Result.Success(apiCall())
         } catch (t: Throwable) {
-            Log.e("SDKSDK", "API Call Exception: " + t.message)
+            Log.e("SDKSDK", "API Call Exception: $t")
+            Log.e("SDKSDK", "API Call Exception Message: " + t.message)
             val errorCode = when (t) {
                 is IOException -> {
                     DataError.NetworkError.NO_INTERNET

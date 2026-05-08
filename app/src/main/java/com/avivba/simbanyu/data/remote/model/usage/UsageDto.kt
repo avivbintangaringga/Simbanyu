@@ -1,9 +1,11 @@
 package com.avivba.simbanyu.data.remote.model.usage
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.domain.model.Usage
 import java.time.Instant
 
+@Keep
 data class UsageDto(
     val id: String,
     val meterStart: Int,

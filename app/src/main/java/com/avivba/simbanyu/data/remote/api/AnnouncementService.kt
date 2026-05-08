@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.data.remote.api
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.data.remote.model.Envelope
 import com.avivba.simbanyu.data.remote.model.announcement.AnnouncementDto
 import com.avivba.simbanyu.domain.model.AnnouncementSubmission
@@ -10,6 +11,7 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
+@Keep
 interface AnnouncementService {
     @GET("announcements")
     suspend fun getAll(): Envelope<List<AnnouncementDto>>
