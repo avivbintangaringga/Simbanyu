@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.ui.shared.model
 
 import com.avivba.simbanyu.domain.model.Activity
+import com.avivba.simbanyu.ui.utils.toRelativeTime
 import java.time.Instant
 
 data class Activity(
@@ -17,13 +18,15 @@ data class Activity(
             date = Instant.parse(this.date)
         )
     }
-}
 
-fun Activity.toUi(): com.avivba.simbanyu.ui.shared.model.Activity {
-    return Activity(
-        id = this.id,
-        title = this.title,
-        body = this.body,
-        date = this.date.toString()
-    )
+    companion object {
+        fun fromDomain(activity: Activity): com.avivba.simbanyu.ui.shared.model.Activity {
+            return Activity(
+                id = activity.id,
+                title = activity.title,
+                body = activity.body,
+                date = activity.date.toRelativeTime()
+            )
+        }
+    }
 }
