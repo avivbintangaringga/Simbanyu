@@ -57,7 +57,6 @@ import org.koin.dsl.KoinConfiguration
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    rootNavController: NavHostController,
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {},
     onLogout: () -> Unit,
@@ -85,7 +84,6 @@ fun MainScreen(
         modifier = modifier,
         onNavigate = onNavigate,
         onAction = viewModel::onAction,
-        rootNavController = rootNavController,
         navController = navController,
         state = state,
         onLogout = onLogout
@@ -123,7 +121,6 @@ private val menus = listOf(
 @Composable
 fun MainScreenContent(
     modifier: Modifier = Modifier,
-    rootNavController: NavHostController,
     navController: NavHostController = rememberNavController(),
     state: MainUiState,
     onAction: (MainAction) -> Unit = {},
@@ -291,7 +288,6 @@ fun MainScreenContent(
             }
             composable<Screen.MainScreen.Report> {
                 ReportScreen(
-                    rootNavController = rootNavController,
                     onNavigate = onNavigate
                 )
             }
@@ -314,7 +310,6 @@ private fun MainScreenPreview() {
         }
     ) {
         MainScreen(
-            rootNavController = rememberNavController(),
             onLogout = {}
         )
     }

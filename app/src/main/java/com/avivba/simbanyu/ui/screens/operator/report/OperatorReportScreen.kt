@@ -42,7 +42,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
@@ -57,29 +56,15 @@ import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.conditional
 import com.avivba.simbanyu.ui.utils.dashedBorder
 import org.koin.compose.viewmodel.koinViewModel
-import androidx.compose.runtime.*
-import coil3.compose.AsyncImage
 
 @Composable
 fun OperatorReportScreen(
     modifier: Modifier = Modifier,
-    rootNavController: NavHostController,
     viewModel: OperatorReportViewModel = koinViewModel(),
     onNavigate: (Screen) -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
-    val rootEntry = rootNavController.currentBackStackEntry
-    val cameraResultState = rootEntry?.savedStateHandle?.getStateFlow<String?>("camera_result", null)
-    val cameraResult by cameraResultState?.collectAsStateWithLifecycle() ?: remember { mutableStateOf(null) }
-
-    LaunchedEffect(cameraResult) {
-        cameraResult?.let { path ->
-            viewModel.onAction(OperatorReportAction.CapturedImage(java.io.File(path)))
-            rootEntry?.savedStateHandle?.remove<String>("camera_result")
-        }
-    }
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
@@ -107,8 +92,7 @@ fun OperatorReportScreen(
         OperatorReportContent(
             modifier = modifier,
             state = state,
-            onAction = viewModel::onAction,
-            onNavigate = onNavigate
+            onAction = viewModel::onAction
         )
     }
 }
@@ -118,7 +102,6 @@ fun OperatorReportScreen(
 private fun OperatorReportContent(
     modifier: Modifier = Modifier,
     state: OperatorReportUiState,
-    onNavigate: (Screen) -> Unit = {},
     onAction: (OperatorReportAction) -> Unit = {}
 ) {
     val listState = rememberLazyListState()
@@ -367,54 +350,50 @@ private fun OperatorReportContent(
                         )
                     }
 
-                    if (state.imageUri.isEmpty()) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .clip(SimbanyuTheme.shapes.large)
-                                .clickable {
-                                    onNavigate(Screen.Camera)
-                                }
-                                .dashedBorder(
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp)
+                            .clip(SimbanyuTheme.shapes.large)
+                            .clickable {
+                                onAction(OperatorReportAction.PickImage)
+                            }
+                            .conditional(
+                                state.imageUri.isEmpty()
+                            ) {
+                                dashedBorder(
                                     strokeWidth = 4.dp,
                                     gapLength = 6.dp,
                                     dashLength = 8.dp,
-                                    color = SimbanyuTheme.colors.borderCardAlternate,
+                                    color = SimbanyuTheme.colors.statusNegativeText,
                                     shape = SimbanyuTheme.shapes.large
-                                ),
-                            verticalArrangement = Arrangement.spacedBy(
-                                SimbanyuTheme.spacing.medium,
-                                alignment = Alignment.CenterVertically
+                                )
+                            }
+                            .dashedBorder(
+                                strokeWidth = 4.dp,
+                                gapLength = 6.dp,
+                                dashLength = 8.dp,
+                                color = SimbanyuTheme.colors.borderCardAlternate,
+                                shape = SimbanyuTheme.shapes.large
                             ),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Icon(
-                                modifier = Modifier
-                                    .requiredSize(40.dp),
-                                painter = painterResource(R.drawable.ic_photo_camera_filled),
-                                contentDescription = null,
-                                tint = SimbanyuTheme.colors.statusNeutral
-                            )
-
-                            SimbanyuText(
-                                text = "Unggah foto (maks 5MB)",
-                                style = SimbanyuTheme.typography.bodySmall,
-                                color = SimbanyuTheme.colors.statusNeutral
-                            )
-                        }
-                    } else {
-                        AsyncImage(
+                        verticalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.medium,
+                            alignment = Alignment.CenterVertically
+                        ),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .clip(SimbanyuTheme.shapes.large)
-                                .clickable {
-                                    onNavigate(Screen.Camera)
-                                },
-                            model = state.imageUri,
+                                .requiredSize(40.dp),
+                            painter = painterResource(R.drawable.ic_photo_camera_filled),
                             contentDescription = null,
-                            contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                            tint = SimbanyuTheme.colors.statusNeutral
+                        )
+
+                        SimbanyuText(
+                            text = "Unggah foto (maks 5MB)",
+                            style = SimbanyuTheme.typography.bodySmall,
+                            color = SimbanyuTheme.colors.statusNeutral
                         )
                     }
 

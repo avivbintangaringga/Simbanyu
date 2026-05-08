@@ -32,7 +32,6 @@ data class OperatorReportUiState(
 )
 
 sealed interface OperatorReportAction {
-    data class CapturedImage(val file: java.io.File) : OperatorReportAction
     data object Load : OperatorReportAction
     data object Refresh : OperatorReportAction
     data object HideUpdateReport : OperatorReportAction
