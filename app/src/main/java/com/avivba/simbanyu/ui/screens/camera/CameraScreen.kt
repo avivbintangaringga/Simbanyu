@@ -60,7 +60,9 @@ import java.io.File
 @Composable
 fun CameraScreen(
     modifier: Modifier = Modifier,
-    viewModel: CameraViewModel = koinViewModel()
+    viewModel: CameraViewModel = koinViewModel(),
+    onImageCaptured: (File) -> Unit = {},
+    onNavigateBack: () -> Unit = {}
 ) {
     val activity = LocalActivity.current as ComponentActivity
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -74,6 +76,7 @@ fun CameraScreen(
                     "Foto berhasil diambil: ${it.file.name}",
                     Toast.LENGTH_SHORT
                 ).show()
+                onImageCaptured(it.file)
             }
         }
     }

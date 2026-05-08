@@ -26,6 +26,14 @@ class OperatorReportViewModel : BaseViewModel<OperatorReportUiState, OperatorRep
     override fun onAction(action: OperatorReportAction) {
         viewModelScope.launch {
             when (action) {
+                is OperatorReportAction.CapturedImage -> {
+                    updateState {
+                        it.copy(
+                            imageUri = action.file.absolutePath
+                        )
+                    }
+                }
+
                 OperatorReportAction.Load -> load()
                 OperatorReportAction.Refresh -> refresh()
                 is OperatorReportAction.SendUpdatedReport -> send()
