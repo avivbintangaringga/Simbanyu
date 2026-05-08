@@ -18,6 +18,9 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+const val BASE_URL = "https://simbanyu.avivba.com"
+const val API_URL = "$BASE_URL/api/"
+
 val networkModule = module {
     single { AuthInterceptor(get()) }
 
@@ -29,7 +32,7 @@ val networkModule = module {
 
     single {
         Retrofit.Builder()
-            .baseUrl("https://simbanyu.avivba.com/api/")
+            .baseUrl(API_URL)
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

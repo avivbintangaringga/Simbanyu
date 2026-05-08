@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.data.repository
 
+import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.data.remote.api.BillService
 import com.avivba.simbanyu.data.remote.api.PaymentService
 import com.avivba.simbanyu.data.remote.model.payment.RequestPaymentRequest
@@ -40,7 +41,7 @@ class BillRepositoryImpl(
             paymentService.requestPayment(
                 RequestPaymentRequest(
                     billIds = bills.map { it.id },
-                    callbackUrl = "https://simbanyu.avivba.com/payment-success" // TODO: Change to real URL
+                    callbackUrl = "$BASE_URL/payment-success" // TODO: Change to real URL
                 )
             ).data?.paymentUrl ?: throw Exception("Invalid response")
         }

@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.data.remote.model.usage
 
+import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.domain.model.Usage
 import java.time.Instant
 
@@ -18,7 +19,7 @@ data class UsageDto(
         meterStart = meterStart,
         meterEnd = meterEnd,
         amount = amount,
-        evidenceImageUrl = evidenceImageUrl,
+        evidenceImageUrl = "$BASE_URL$evidenceImageUrl",
         operatorNotes = operatorNotes ?: "",
         date = Instant.parse(createdAt),
     )

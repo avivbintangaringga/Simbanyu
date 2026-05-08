@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.data.remote.model.report
 
+import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.data.remote.model.subscriber.SubscriberDto
 import com.avivba.simbanyu.domain.model.Report
 import java.time.Instant
@@ -21,9 +22,9 @@ data class ReportDto(
         address = address,
         description = description,
         status = Report.ReportStatus.valueOf(status),
-        evidenceImageUrl = evidenceImageUrl,
+        evidenceImageUrl = "$BASE_URL$evidenceImageUrl",
         operatorNotes = operatorNotes ?: "",
-        handlingEvidenceImageUrl = handlingEvidenceImageUrl ?: "",
+        handlingEvidenceImageUrl = handlingEvidenceImageUrl.let { "$BASE_URL$it" },
         date = Instant.parse(createdAt),
         subscriber = subscriber.toDomain()
     )

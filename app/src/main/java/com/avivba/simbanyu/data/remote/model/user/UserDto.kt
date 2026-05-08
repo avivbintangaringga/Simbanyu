@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.data.remote.model.user
 
+import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.domain.model.User
 
 data class UserDto(
@@ -18,6 +19,6 @@ data class UserDto(
         name = name,
         role = User.UserRole.valueOf(role),
         phoneNumber = phoneNumber,
-        photoImageUrl = photoImageUrl ?: "",
+        photoImageUrl = photoImageUrl.let { "$BASE_URL$it" },
     )
 }
