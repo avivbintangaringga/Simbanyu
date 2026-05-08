@@ -28,7 +28,7 @@ class ReportRepositoryImpl(
         }
     }
 
-    override suspend fun submit(report: ReportSubmission): Result<Unit, DataError> {
+    override suspend fun submit(report: ReportSubmission): Result<Report, DataError> {
         val jsonData = Gson().toJson(
             ReportSubmissionDto(
                 address = report.address,
@@ -47,14 +47,14 @@ class ReportRepositoryImpl(
             reportService.add(
                 data = data,
                 image = imagePart
-            )
+            ).data?.toDomain() ?: throw Exception("Invalid response")
         }
     }
 
     override suspend fun handle(
         id: String,
         report: ReportUpdateSubmission
-    ): Result<Unit, DataError> {
+    ): Result<Report, DataError> {
         val jsonData = Gson().toJson(
             ReportUpdateSubmissionDto(
                 status = ReportStatus.valueOf(report.status.name),
@@ -72,7 +72,7 @@ class ReportRepositoryImpl(
                 id = id,
                 data = data,
                 image = imagePart
-            )
+            ).data?.toDomain() ?: throw Exception("Invalid response")
         }
     }
 }

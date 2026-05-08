@@ -8,6 +8,6 @@ import com.avivba.simbanyu.domain.model.ReportUpdateSubmission
 
 interface ReportRepository {
     suspend fun getAll(): Result<List<Report>, DataError>
-    suspend fun submit(report: ReportSubmission): Result<Unit, DataError>
-    suspend fun handle(id: String, report: ReportUpdateSubmission): Result<Unit, DataError>
+    suspend fun submit(report: ReportSubmission): Result<Report, DataError>
+    suspend fun handle(id: String, report: ReportUpdateSubmission): Result<Report, DataError>
 }
