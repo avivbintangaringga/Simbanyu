@@ -1,8 +1,10 @@
 package com.avivba.simbanyu.data.local.userdetail
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.domain.model.Profile
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 data class LocalUser(
     val id: String = "",

@@ -1,5 +1,7 @@
 package com.avivba.simbanyu.data.di
 
+import com.avivba.simbanyu.data.local.tokenmanager.LocalTokenManager
+import com.avivba.simbanyu.data.local.userdetail.LocalUserService
 import com.avivba.simbanyu.data.remote.api.ActivityService
 import com.avivba.simbanyu.data.remote.api.AnnouncementService
 import com.avivba.simbanyu.data.remote.api.AuthService
@@ -11,9 +13,9 @@ import com.avivba.simbanyu.data.remote.api.ReportService
 import com.avivba.simbanyu.data.remote.api.SubscriberService
 import com.avivba.simbanyu.data.remote.api.UsageService
 import com.avivba.simbanyu.data.remote.api.UserService
+import com.avivba.simbanyu.data.remote.authenticator.TokenAuthenticator
 import com.avivba.simbanyu.data.remote.interceptor.AuthInterceptor
 import okhttp3.OkHttpClient
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,6 +28,13 @@ val networkModule = module {
 
     single<OkHttpClient> {
         OkHttpClient.Builder()
+            .authenticator(
+                TokenAuthenticator(
+                    get<LocalTokenManager>(),
+                    get<LocalUserService>(),
+                    { get<AuthService>() }
+                )
+            )
             .addInterceptor(get<AuthInterceptor>())
             .build()
     }

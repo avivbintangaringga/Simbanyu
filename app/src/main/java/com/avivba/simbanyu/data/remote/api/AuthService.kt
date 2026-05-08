@@ -11,11 +11,13 @@ import retrofit2.http.POST
 
 @Keep
 interface AuthService {
+    @retrofit2.http.Headers("No-Auth: true")
     @POST("auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
     ): Envelope<LoginResponseDto>
 
+    @retrofit2.http.Headers("No-Auth: true")
     @POST("auth/refresh")
     suspend fun refresh(
         @Body refreshTokenRequest: RefreshTokenRequest

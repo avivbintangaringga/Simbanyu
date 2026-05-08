@@ -1,5 +1,8 @@
 package com.avivba.simbanyu.data.local.tokenmanager
 
+import androidx.annotation.Keep
+
+@Keep
 interface LocalTokenManager {
     suspend fun getAccessToken(): String?
     suspend fun getRefreshToken(): String?

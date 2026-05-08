@@ -26,24 +26,23 @@ class MainActivity : ComponentActivity() {
             SimbanyuTheme {
                 if (isCheckingAuth) {
                     // TODO: Splash / loading?
-                    return@SimbanyuTheme
-                }
-
-                val startScreen = when {
-                    isLoggedIn && profile != null -> {
-                        when (profile?.role) {
-                            User.UserRole.OPERATOR.name -> Screen.OperatorMain
-                            User.UserRole.SUBSCRIBER.name -> Screen.Main
-                            else -> Screen.Login
+                } else {
+                    val startScreen = when {
+                        isLoggedIn && profile != null -> {
+                            when (profile?.role) {
+                                User.UserRole.OPERATOR.name -> Screen.OperatorMain
+                                User.UserRole.SUBSCRIBER.name -> Screen.Main
+                                else -> Screen.Login
+                            }
                         }
+
+                        else -> Screen.Login
                     }
 
-                    else -> Screen.Login
+                    SimbanyuApp(
+                        startScreen = startScreen
+                    )
                 }
-
-                SimbanyuApp(
-                    startScreen = startScreen
-                )
             }
         }
     }
