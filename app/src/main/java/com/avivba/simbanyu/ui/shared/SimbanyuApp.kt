@@ -75,12 +75,9 @@ fun SimbanyuApp(
 
         composable<Screen.Camera> {
             CameraScreen(
-//                onNavigate = { dest ->
-//                    navHostController.navigate(dest)
-//                },
-//                onNavigateBack = {
-//                    navHostController.popBackStack()
-//                }
+                onNavigateBack = {
+                    navHostController.popBackStack()
+                }
             )
         }
 

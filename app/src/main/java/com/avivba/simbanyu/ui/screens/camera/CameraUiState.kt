@@ -2,9 +2,15 @@ package com.avivba.simbanyu.ui.screens.camera
 
 import java.io.File
 
+data class CameraResult(
+    val token: String,
+    val image: File
+)
+
 data class CameraUiState(
     val isUsingFlash: Boolean = false,
     val isFrontCamera: Boolean = false,
+    val currentToken: String? = null,
 )
 
 sealed interface CameraAction {
@@ -14,5 +20,5 @@ sealed interface CameraAction {
 }
 
 sealed interface CameraEvent {
-    data class ImageCaptured(val file: File) : CameraEvent
+    data class ImageCaptured(val result: CameraResult) : CameraEvent
 }

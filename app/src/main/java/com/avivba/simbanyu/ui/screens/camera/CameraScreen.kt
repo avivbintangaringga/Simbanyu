@@ -53,27 +53,23 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.koin.compose.viewmodel.koinViewModel
+import org.koin.compose.viewmodel.koinActivityViewModel
 import java.io.File
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
     modifier: Modifier = Modifier,
-    viewModel: CameraViewModel = koinViewModel()
+    viewModel: CameraViewModel = koinActivityViewModel(),
+    onNavigateBack: () -> Unit = {}
 ) {
     val activity = LocalActivity.current as ComponentActivity
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
             is CameraEvent.ImageCaptured -> {
-                Toast.makeText(
-                    context,
-                    "Foto berhasil diambil: ${it.file.name}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                onNavigateBack()
             }
         }
     }

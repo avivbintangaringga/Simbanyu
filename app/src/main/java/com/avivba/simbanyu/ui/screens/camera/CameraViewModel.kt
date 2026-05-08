@@ -1,12 +1,19 @@
 package com.avivba.simbanyu.ui.screens.camera
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CameraViewModel : BaseViewModel<CameraUiState, CameraAction, CameraEvent>(
     CameraUiState()
 ) {
+    private val _cameraResult = MutableStateFlow<CameraResult?>(null)
+    val cameraResult = _cameraResult.asStateFlow()
+
     override fun onAction(action: CameraAction) {
         viewModelScope.launch {
             when (action) {
@@ -27,9 +34,36 @@ class CameraViewModel : BaseViewModel<CameraUiState, CameraAction, CameraEvent>(
                 }
 
                 is CameraAction.ImageCaptured -> {
-                    sendEvent(CameraEvent.ImageCaptured(action.file))
+                    if (!state.value.currentToken.isNullOrEmpty()) {
+                        val result = CameraResult(
+                            token = state.value.currentToken!!,
+                            image = action.file
+                        )
+
+                        _cameraResult.update { result }
+
+                        sendEvent(
+                            CameraEvent.ImageCaptured(result)
+                        )
+                    }
                 }
             }
+        }
+    }
+
+    fun setToken(token: String) {
+        updateState {
+            it.copy(
+                currentToken = token
+            )
+        }
+    }
+
+    fun clearToken() {
+        updateState {
+            it.copy(
+                currentToken = null
+            )
         }
     }
 }

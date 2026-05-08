@@ -5,6 +5,7 @@ import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
 import com.avivba.simbanyu.ui.shared.model.ReportStatus
 import com.avivba.simbanyu.ui.shared.model.User
+import java.io.File
 
 enum class Fields {
     LOCATION,
@@ -20,7 +21,7 @@ data class ReportUiState(
     val locationState: TextFieldState = TextFieldState(),
     val descriptionState: TextFieldState = TextFieldState(),
     val locationCoordinate: Coordinate? = null,
-    val imageUri: String? = null,
+    val image: File? = null,
     val selectedTabIndex: Int = 0,
     val reports: List<Report> = emptyList(),
     val errorFields: List<Fields> = emptyList(),
@@ -29,7 +30,8 @@ data class ReportUiState(
 sealed interface ReportAction {
     data object Load : ReportAction
     data object Refresh : ReportAction
-    data object PickImage : ReportAction
+    data object OpenCamera : ReportAction
+    data class SetImage(val file: File) : ReportAction
     data object GetMyLocation : ReportAction
     data object SendReport : ReportAction
     data class ChangeTab(val index: Int) : ReportAction
@@ -37,7 +39,6 @@ sealed interface ReportAction {
 }
 
 sealed interface ReportEvent {
-    data class ImagePicked(val uri: String) : ReportEvent
     data object ReportSent : ReportEvent
     data object OpenCamera : ReportEvent
 }

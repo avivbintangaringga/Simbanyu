@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.ReportSubmission
 import com.avivba.simbanyu.domain.repository.ReportRepository
+import com.avivba.simbanyu.ui.screens.camera.CameraResult
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Report
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -24,7 +27,7 @@ class ReportViewModel(
     override fun onAction(action: ReportAction) {
         viewModelScope.launch {
             when (action) {
-                is ReportAction.PickImage -> {
+                is ReportAction.OpenCamera -> {
                     sendEvent(ReportEvent.OpenCamera)
                 }
 
@@ -49,6 +52,14 @@ class ReportViewModel(
 
                 is ReportAction.ToggleExpandItem -> {
                     toggleReportExpand(action.report)
+                }
+
+                is ReportAction.SetImage -> {
+                    updateState {
+                        it.copy(
+                            image = action.file
+                        )
+                    }
                 }
             }
         }
@@ -77,7 +88,7 @@ class ReportViewModel(
             isValid = false
         }
 
-        if (state.value.imageUri == null) {
+        if (state.value.image == null) {
             updateState {
                 it.copy(
                     errorFields = it.errorFields + Fields.IMAGE
@@ -132,7 +143,7 @@ class ReportViewModel(
                     locationState = TextFieldState(),
                     descriptionState = TextFieldState(),
                     locationCoordinate = null,
-                    imageUri = null,
+                    image = null,
                     isSendingReport = false
                 )
             }
