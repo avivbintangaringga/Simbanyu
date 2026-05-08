@@ -23,8 +23,8 @@ class SubscribersViewModel(
 
     init {
         viewModelScope.launch {
-            observeDataChanges()
             load()
+            observeDataChanges()
         }
     }
 
@@ -85,8 +85,10 @@ class SubscribersViewModel(
     }
 
     private suspend fun fetchData() {
+        Log.d("SDKSDK", "fetchData")
         when (val subscribers = subscriberRepository.getAll()) {
             is Result.Success -> {
+                Log.d("SDKSDK", "fetchData: Success")
                 _subscribers.update {
                     subscribers.data.map {
                         Subscriber.fromDomain(it)
@@ -95,6 +97,7 @@ class SubscribersViewModel(
             }
 
             is Result.Error -> {
+                Log.d("SDKSDK", "fetchData: Error")
                 // TODO: Handle error
             }
         }
@@ -108,7 +111,7 @@ class SubscribersViewModel(
                 state.value.searchBarState.text.toString()
             }.distinctUntilChanged()
         ) { subscribers, status, query ->
-            Log.d("SubscribersViewModel", "observeDataChanges: $subscribers")
+            Log.d("SDKSDK", "observeDataChanges: $subscribers")
 
             val filteredByState = subscribers.filter {
                 if (status == FilterRecordState.ALL) {

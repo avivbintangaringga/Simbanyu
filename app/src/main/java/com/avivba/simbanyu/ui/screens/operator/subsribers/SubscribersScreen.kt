@@ -24,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.SubscriberItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
-import com.avivba.simbanyu.ui.screens.operator.report.OperatorReportAction
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
@@ -157,28 +157,35 @@ fun SubscribersContent(
             }
         }
 
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            ),
-            state = listState
-        ) {
-            items(
-                items = state.filteredSubscribers,
-                key = { it.id }
-            ) { subscriber ->
-                SubscriberItem(
-                    subscriber = subscriber,
-                    onClick = {
-                        onAction(SubscribersAction.ShowDetails(subscriber))
-                    },
-                    onClickRecordMeter = {
-                        onAction(SubscribersAction.RecordMeter(subscriber))
-                    }
-                )
+        if (state.filteredSubscribers.isNotEmpty()) {
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                ),
+                state = listState
+            ) {
+                items(
+                    items = state.filteredSubscribers,
+                    key = { it.id }
+                ) { subscriber ->
+                    SubscriberItem(
+                        subscriber = subscriber,
+                        onClick = {
+                            onAction(SubscribersAction.ShowDetails(subscriber))
+                        },
+                        onClickRecordMeter = {
+                            onAction(SubscribersAction.RecordMeter(subscriber))
+                        }
+                    )
+                }
             }
+        } else {
+            EmptyState(
+                modifier = Modifier.fillMaxSize(),
+                message = "Tidak ada data pelanggan"
+            )
         }
     }
 }
