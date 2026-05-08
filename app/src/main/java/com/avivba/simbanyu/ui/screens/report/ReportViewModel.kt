@@ -25,12 +25,7 @@ class ReportViewModel(
         viewModelScope.launch {
             when (action) {
                 is ReportAction.PickImage -> {
-                    // TODO: Implement pick image
-                    updateState {
-                        it.copy(
-                            imageUri = "https://example.com/image.jpg"
-                        )
-                    }
+                    sendEvent(ReportEvent.OpenCamera)
                 }
 
                 is ReportAction.GetMyLocation -> {

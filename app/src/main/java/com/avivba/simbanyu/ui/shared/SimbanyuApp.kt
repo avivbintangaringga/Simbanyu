@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.avivba.simbanyu.ui.components.background.Background
 import com.avivba.simbanyu.ui.screens.announcement.AnnouncementScreen
 import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
+import com.avivba.simbanyu.ui.screens.camera.CameraScreen
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceScreen
 import com.avivba.simbanyu.ui.screens.login.LoginScreen
 import com.avivba.simbanyu.ui.screens.main.MainScreen
@@ -50,6 +51,17 @@ fun SimbanyuApp(
                 navHostController.popBackStack()
                 navHostController.navigate(dest)
             })
+        }
+
+        composable<Screen.Camera> {
+            CameraScreen(
+//                onNavigate = { dest ->
+//                    navHostController.navigate(dest)
+//                },
+//                onNavigateBack = {
+//                    navHostController.popBackStack()
+//                }
+            )
         }
 
         composable<Screen.Main> {

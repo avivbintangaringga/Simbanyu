@@ -39,6 +39,7 @@ sealed interface ReportAction {
 sealed interface ReportEvent {
     data class ImagePicked(val uri: String) : ReportEvent
     data object ReportSent : ReportEvent
+    data object OpenCamera : ReportEvent
 }
 
 val fakeUser = User(

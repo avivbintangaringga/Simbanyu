@@ -8,6 +8,9 @@ sealed interface Screen {
     data object Login : Screen
 
     @Serializable
+    data object Camera : Screen
+
+    @Serializable
     data object Main : Screen
 
     @Serializable

@@ -4,6 +4,7 @@ import com.avivba.simbanyu.ui.activities.MainActivityViewModel
 import com.avivba.simbanyu.ui.screens.announcement.AnnouncementViewModel
 import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsViewModel
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryViewModel
+import com.avivba.simbanyu.ui.screens.camera.CameraViewModel
 import com.avivba.simbanyu.ui.screens.dashboard.DashboardViewModel
 import com.avivba.simbanyu.ui.screens.invoice.InvoiceViewModel
 import com.avivba.simbanyu.ui.screens.login.LoginViewModel
@@ -28,6 +29,7 @@ val viewModelModule = module {
 
     viewModel { LoginViewModel(get()) }
     viewModel { MainViewModel(get()) }
+    viewModel { CameraViewModel() }
 
     viewModel { DashboardViewModel(get(), get(), get(), get()) }
     viewModel { BillHistoryViewModel(get()) }

@@ -68,6 +68,9 @@ fun ReportScreen(
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
+            is ReportEvent.OpenCamera -> {
+                onNavigate(Screen.Camera)
+            }
             is ReportEvent.ImagePicked -> {}
             is ReportEvent.ReportSent -> {
                 Toast.makeText(
