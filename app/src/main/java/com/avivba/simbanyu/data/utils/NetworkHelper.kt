@@ -16,8 +16,10 @@ suspend fun <T> safeApiCall(
 ): Result<T, DataError> {
     return withContext(dispatcher) {
         try {
+            Log.d("SDKSDK", "Executing api call: $apiCall")
             Result.Success(apiCall())
         } catch (t: Throwable) {
+            Log.e("SDKSDK", "API Call Exception: " + t.message)
             val errorCode = when (t) {
                 is IOException -> {
                     DataError.NetworkError.NO_INTERNET
@@ -44,7 +46,6 @@ suspend fun <T> safeApiCall(
                 }
 
                 else -> {
-                    Log.e("SDKSDK", "Misc API Exception: " + t.message)
                     DataError.NetworkError.UNKNOWN
                 }
             }

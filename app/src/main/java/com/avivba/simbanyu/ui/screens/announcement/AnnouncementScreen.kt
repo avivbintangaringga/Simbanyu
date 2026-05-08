@@ -133,7 +133,7 @@ fun AnnouncementContent(
                     )
                 ) {
                     items(
-                        items = state.announcements.sortedByDescending { it.id },
+                        items = state.announcements,
                         key = { it.id }
                     ) { announcement ->
                         AnnouncementItem(

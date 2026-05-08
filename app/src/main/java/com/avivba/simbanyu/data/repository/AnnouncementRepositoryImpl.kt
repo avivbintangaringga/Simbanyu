@@ -19,10 +19,9 @@ class AnnouncementRepositoryImpl(
         }
     }
 
-    override suspend fun deleteAnnouncement(announcement: Announcement): Result<Announcement, DataError> {
+    override suspend fun deleteAnnouncement(id: String): Result<Unit, DataError> {
         return safeApiCall {
-            announcementService.delete(announcement.id)
-            announcement
+            announcementService.delete(id)
         }
     }
 

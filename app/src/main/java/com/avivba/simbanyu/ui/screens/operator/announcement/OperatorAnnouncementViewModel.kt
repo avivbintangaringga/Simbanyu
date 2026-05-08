@@ -2,15 +2,18 @@ package com.avivba.simbanyu.ui.screens.operator.announcement
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.model.AnnouncementSubmission
+import com.avivba.simbanyu.domain.repository.AnnouncementRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Announcement
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class OperatorAnnouncementViewModel :
-    BaseViewModel<OperatorAnnouncementUiState, OperatorAnnouncementAction, OperatorAnnouncementEvent>(
-        OperatorAnnouncementUiState()
-    ) {
+class OperatorAnnouncementViewModel(
+    private val announcementRepository: AnnouncementRepository
+) : BaseViewModel<OperatorAnnouncementUiState, OperatorAnnouncementAction, OperatorAnnouncementEvent>(
+    OperatorAnnouncementUiState()
+) {
 
     init {
         viewModelScope.launch {
@@ -33,6 +36,7 @@ class OperatorAnnouncementViewModel :
                         )
                     }
                 }
+
                 OperatorAnnouncementAction.HideCreateDialog -> {
                     updateState {
                         it.copy(
@@ -44,17 +48,59 @@ class OperatorAnnouncementViewModel :
         }
     }
 
-    private fun load() {
+    private suspend fun load() {
         updateState {
-            fakeOperatorAnnouncementUiState
+            it.copy(
+                isLoading = true
+            )
+        }
+
+        fetchData()
+
+        updateState {
+            it.copy(
+                isLoading = true
+            )
         }
     }
 
-    private fun refresh() {
+    private suspend fun refresh() {
+        updateState {
+            it.copy(
+                isRefreshing = true
+            )
+        }
 
+        fetchData()
+
+        updateState {
+            it.copy(
+                isRefreshing = true
+            )
+        }
     }
 
-    private fun createAnnouncement() {
+    private suspend fun fetchData() {
+        when (val announcements = announcementRepository.getAllAnnouncements()) {
+            is Result.Success -> {
+                updateState {
+                    it.copy(
+                        announcements = announcements.data
+                            .sortedByDescending { it.date }
+                            .map { item ->
+                                Announcement.fromDomain(item)
+                            }
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                // TODO: Handle error
+            }
+        }
+    }
+
+    private suspend fun createAnnouncement() {
         if (!state.value.isCreatingAnnouncement) {
             updateState {
                 it.copy(
@@ -66,32 +112,60 @@ class OperatorAnnouncementViewModel :
                 return
             }
 
-            viewModelScope.launch {
-                updateState {
-                    it.copy(
-                        isCreatingAnnouncement = true
-                    )
+            updateState {
+                it.copy(
+                    isCreatingAnnouncement = true
+                )
+            }
+
+            val submission = AnnouncementSubmission(
+                title = state.value.titleState.text.toString(),
+                body = state.value.descriptionState.text.toString()
+            )
+
+            when (announcementRepository.addAnnouncement(submission)) {
+                is Result.Success -> {
+                    sendEvent(OperatorAnnouncementEvent.AnnouncementCreated)
+                    load()
+
+                    updateState {
+                        it.copy(
+                            titleState = TextFieldState(),
+                            descriptionState = TextFieldState(),
+                            isShowCreateDialog = false
+                        )
+                    }
                 }
 
-                delay(2000)
-
-                // TODO: Implement create announcement
-
-                updateState {
-                    it.copy(
-                        titleState = TextFieldState(),
-                        descriptionState = TextFieldState(),
-                        isCreatingAnnouncement = false
-                    )
+                is Result.Error -> {
+                    // TODO: Handle error
                 }
-                sendEvent(OperatorAnnouncementEvent.AnnouncementCreated)
-                load()
+            }
+
+            updateState {
+                it.copy(
+                    isCreatingAnnouncement = false
+                )
             }
         }
     }
 
-    private fun deleteAnnouncement(announcement: Announcement) {
+    private suspend fun deleteAnnouncement(announcement: Announcement) {
+        when (announcementRepository.deleteAnnouncement(announcement.id)) {
+            is Result.Success -> {
+                updateState {
+                    it.copy(
+                        announcements = it.announcements.filter { item ->
+                            item.id != announcement.id
+                        }
+                    )
+                }
+            }
 
+            is Result.Error -> {
+                // TODO: Handle error
+            }
+        }
     }
 
     private fun validateFields(): Boolean {
