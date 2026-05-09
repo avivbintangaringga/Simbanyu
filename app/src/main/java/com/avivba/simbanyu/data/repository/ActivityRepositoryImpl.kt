@@ -10,9 +10,9 @@ import com.avivba.simbanyu.domain.repository.ActivityRepository
 class ActivityRepositoryImpl(
     private val activityService: ActivityService
 ) : ActivityRepository {
-    override suspend fun getAll(): Result<List<Activity>, DataError> {
+    override suspend fun getAll(limit: Int?): Result<List<Activity>, DataError> {
         return safeApiCall {
-            activityService.getAll().data?.map {
+            activityService.getAll(limit).data?.map {
                 it.toDomain()
             } ?: emptyList()
         }

@@ -79,13 +79,12 @@ class OperatorDashboardViewModel(
             }
         }
 
-        when (val activities = activityRepository.getAll()) {
+        when (val activities = activityRepository.getAll(limit = 3)) {
             is Result.Success -> {
                 updateState {
                     it.copy(
                         activities = activities.data
                             .sortedByDescending { it.date }
-                            .take(3)
                             .map {
                                 Activity.fromDomain(it)
                             }

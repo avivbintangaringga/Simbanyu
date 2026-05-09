@@ -5,5 +5,5 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.Activity
 
 interface ActivityRepository {
-    suspend fun getAll(): Result<List<Activity>, DataError>
+    suspend fun getAll(limit: Int? = null): Result<List<Activity>, DataError>
 }
