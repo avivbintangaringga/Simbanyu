@@ -26,6 +26,9 @@ class BillHistoryViewModel(
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
             observeDataChanges()
         }
     }
@@ -125,7 +128,6 @@ class BillHistoryViewModel(
         ) { bills, year ->
             bills.filter { it.periodYear == year }
         }.collect { filtered ->
-            // TODO: Implement real total bill calculation
             val totalPaid = filtered.filter { it.status == BillingStatus.PAID }
                 .sumOf { it.amount.toDouble() }
             val totalUnpaid = filtered.filter { it.status == BillingStatus.UNPAID }
@@ -198,7 +200,6 @@ class BillHistoryViewModel(
 
                 updateState {
                     it.copy(
-//                        bills = bills,
                         years = years,
                         selectedYear = selectedYear,
                     )

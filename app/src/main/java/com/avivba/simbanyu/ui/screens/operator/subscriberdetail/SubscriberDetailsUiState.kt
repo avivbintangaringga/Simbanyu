@@ -35,6 +35,7 @@ sealed interface SubscriberDetailsAction {
     data object Refresh : SubscriberDetailsAction
     data object NavigateBack : SubscriberDetailsAction
     data class ChangeTab(val index: Int) : SubscriberDetailsAction
+    data class FilterBill(val year: Int) : SubscriberDetailsAction
     data class FilterUsage(val year: Int) : SubscriberDetailsAction
     data object RecordMeter : SubscriberDetailsAction
     data object ContactViaWhatsApp : SubscriberDetailsAction

@@ -101,7 +101,7 @@ internal fun BillHistory(
                                 )
                             },
                             onClick = {
-                                onAction(SubscriberDetailsAction.FilterUsage(year))
+                                onAction(SubscriberDetailsAction.FilterBill(year))
                                 isExpanded = false
                             }
                         )

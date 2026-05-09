@@ -24,6 +24,9 @@ class UsageHistoryViewModel(
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
             observeDataChanges()
         }
     }
@@ -137,7 +140,6 @@ class UsageHistoryViewModel(
 
                 updateState {
                     it.copy(
-                        usages = usages,
                         years = years,
                         selectedYear = selectedYear,
                     )

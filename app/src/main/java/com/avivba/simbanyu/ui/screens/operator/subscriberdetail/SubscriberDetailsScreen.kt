@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -96,6 +97,11 @@ fun SubscriberDetailsContent(
     val pagerState = rememberPagerState {
         tabs.size
     }
+
+    LaunchedEffect(pagerState.currentPage) {
+        onAction(SubscriberDetailsAction.ChangeTab(pagerState.currentPage))
+    }
+
     val scope = rememberCoroutineScope()
 
     val containerHeightPx = LocalWindowInfo.current.containerSize.height
@@ -353,7 +359,7 @@ fun SubscriberDetailsContent(
                 indicator = {
                     Box(
                         modifier = Modifier
-                            .tabIndicatorOffset(state.selectedTabIndex)
+                            .tabIndicatorOffset(pagerState.currentPage)
                             .height(4.dp)
                             .background(
                                 color = SimbanyuTheme.colors.brand,
@@ -364,7 +370,7 @@ fun SubscriberDetailsContent(
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
-                        selected = state.selectedTabIndex == index,
+                        selected = pagerState.currentPage == index,
                         onClick = {
                             scope.launch {
                                 pagerState.animateScrollToPage(index)
