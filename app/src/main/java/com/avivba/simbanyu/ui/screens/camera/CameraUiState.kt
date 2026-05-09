@@ -10,6 +10,7 @@ data class CameraResult(
 data class CameraUiState(
     val isUsingFlash: Boolean = false,
     val isFrontCamera: Boolean = false,
+    val isCapturing: Boolean = false,
     val currentToken: String? = null,
 )
 
@@ -17,6 +18,7 @@ sealed interface CameraAction {
     object ToggleFlash : CameraAction
     object ToggleCamera : CameraAction
     data class ImageCaptured(val file: File) : CameraAction
+    data class SetCaptureState(val isCapturing: Boolean) : CameraAction
 }
 
 sealed interface CameraEvent {

@@ -207,9 +207,12 @@ class ReportViewModel(
             is Result.Success -> {
                 updateState {
                     it.copy(
-                        reports = reports.data.map {
-                            Report.fromDomain(it)
-                        }
+                        reports = reports.data
+                            .sortedByDescending { report ->
+                                report.date
+                            }.map {
+                                Report.fromDomain(it)
+                            }
                     )
                 }
             }

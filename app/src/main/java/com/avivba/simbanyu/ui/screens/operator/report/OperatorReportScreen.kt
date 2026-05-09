@@ -387,7 +387,10 @@ private fun OperatorReportContent(
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(SimbanyuTheme.shapes.large),
+                                .clip(SimbanyuTheme.shapes.large)
+                                .clickable {
+                                    onAction(OperatorReportAction.OpenCamera)
+                                },
                             contentScale = ContentScale.FillWidth
                         )
                     } else {

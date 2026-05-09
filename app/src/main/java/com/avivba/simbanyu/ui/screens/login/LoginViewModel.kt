@@ -28,6 +28,8 @@ class LoginViewModel(
 
     private fun tryLogin() {
         viewModelScope.launch {
+            if (state.value.isLoading) return@launch
+
             updateState {
                 it.copy(
                     isLoading = true,

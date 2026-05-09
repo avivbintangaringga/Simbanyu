@@ -2,6 +2,9 @@ package com.avivba.simbanyu.ui.screens.camera
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -12,6 +15,7 @@ import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
@@ -25,6 +29,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -70,6 +75,7 @@ fun CameraScreen(
         when (it) {
             is CameraEvent.ImageCaptured -> {
                 onNavigateBack()
+                viewModel.onAction(CameraAction.SetCaptureState(false))
             }
         }
     }
@@ -105,10 +111,16 @@ fun CameraScreen(
             contentAlignment = Alignment.Center
         ) {
             if (cameraPermissionState.status.isGranted) {
-                CameraContent(
-                    state = state,
-                    onAction = viewModel::onAction
-                )
+                if (!state.isCapturing) {
+                    CameraContent(
+                        state = state,
+                        onAction = viewModel::onAction
+                    )
+                } else {
+                    CircularProgressIndicator(
+                        color = Color.White
+                    )
+                }
             } else {
                 SimbanyuText(
                     modifier = Modifier
@@ -250,6 +262,7 @@ fun CameraContent(
                             shape = CircleShape
                         )
                         .clickable {
+                            onAction(CameraAction.SetCaptureState(true))
                             capturePhoto(
                                 context,
                                 imageCapture,
@@ -257,6 +270,7 @@ fun CameraContent(
                                     onAction(CameraAction.ImageCaptured(file))
                                 },
                                 onError = {
+                                    onAction(CameraAction.SetCaptureState(false))
                                     Toast.makeText(
                                         context,
                                         "Gagal mengambil foto",
@@ -307,14 +321,45 @@ private fun capturePhoto(
     val capture = imageCapture ?: return
 
     val timeStamp = System.currentTimeMillis()
-    val photoFile = File(context.cacheDir, "IMG_${timeStamp}.jpg")
-    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+    val photoFile = File(context.cacheDir, "IMG_${timeStamp}.webp")
 
     capture.takePicture(
-        outputOptions,
         ContextCompat.getMainExecutor(context),
-        object : ImageCapture.OnImageSavedCallback {
-            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+        object : ImageCapture.OnImageCapturedCallback() {
+            override fun onCaptureStarted() {
+                super.onCaptureStarted()
+            }
+
+            override fun onCaptureSuccess(image: ImageProxy) {
+                val rotation = image.imageInfo.rotationDegrees.toFloat()
+                val originalBitmap = image.toBitmap()
+                val matrix = Matrix().apply {
+                    postRotate(rotation)
+                }
+                val bitmap = Bitmap.createBitmap(
+                    originalBitmap,
+                    0,
+                    0,
+                    originalBitmap.width,
+                    originalBitmap.height,
+                    matrix,
+                    true
+                )
+
+                val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    Bitmap.CompressFormat.WEBP_LOSSY
+                } else {
+                    Bitmap.CompressFormat.WEBP
+                }
+
+                photoFile.outputStream().use { stream ->
+                    bitmap.compress(
+                        format,
+                        80,
+                        stream
+                    )
+                }
+
                 onSuccess(photoFile)
             }
 

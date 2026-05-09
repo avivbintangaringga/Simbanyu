@@ -2,7 +2,9 @@ package com.avivba.simbanyu.ui.screens.camera
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.avivba.simbanyu.ui.screens.camera.CameraEvent.*
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -40,10 +42,20 @@ class CameraViewModel : BaseViewModel<CameraUiState, CameraAction, CameraEvent>(
                             image = action.file
                         )
 
+                        delay(100)
+
                         _cameraResult.update { result }
 
                         sendEvent(
-                            CameraEvent.ImageCaptured(result)
+                            ImageCaptured(result)
+                        )
+                    }
+                }
+
+                is CameraAction.SetCaptureState -> {
+                    updateState {
+                        it.copy(
+                            isCapturing = action.isCapturing
                         )
                     }
                 }
