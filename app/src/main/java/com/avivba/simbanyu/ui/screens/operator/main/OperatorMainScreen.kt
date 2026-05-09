@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.requiredWidthIn
+import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
@@ -177,6 +178,8 @@ fun OperatorMainScreenContent(
                     }
 
                     DropdownMenu(
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f),
                         expanded = state.isShowNotification,
                         onDismissRequest = {
                             onAction(OperatorMainAction.HideNotifications)
@@ -185,9 +188,7 @@ fun OperatorMainScreenContent(
                     ) {
                         Row(
                             modifier = Modifier
-                                .requiredWidthIn(
-                                    min = 250.dp
-                                )
+                                .fillMaxWidth()
                                 .padding(
                                     horizontal = SimbanyuTheme.padding.medium,
                                     vertical = SimbanyuTheme.padding.small

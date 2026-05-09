@@ -3,8 +3,6 @@ package com.avivba.simbanyu.ui.screens.report
 import androidx.compose.foundation.text.input.TextFieldState
 import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.shared.model.Report
-import com.avivba.simbanyu.ui.shared.model.ReportStatus
-import com.avivba.simbanyu.ui.shared.model.User
 import java.io.File
 
 enum class Fields {
@@ -32,7 +30,7 @@ sealed interface ReportAction {
     data object Refresh : ReportAction
     data object OpenCamera : ReportAction
     data class SetImage(val file: File) : ReportAction
-    data object GetMyLocation : ReportAction
+    data class SetMyLocation(val coordinate: Coordinate) : ReportAction
     data object SendReport : ReportAction
     data class ChangeTab(val index: Int) : ReportAction
     data class ToggleExpandItem(val report: Report) : ReportAction

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
 import com.avivba.simbanyu.ui.shared.model.Coordinate
@@ -192,6 +193,13 @@ fun ReportItem(
                 SimbanyuText(
                     text = report.address
                 )
+
+                if (report.coordinate != null) {
+                    MiniMap(
+                        modifier = Modifier,
+                        location = report.coordinate
+                    )
+                }
 
                 Row(
                     modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),

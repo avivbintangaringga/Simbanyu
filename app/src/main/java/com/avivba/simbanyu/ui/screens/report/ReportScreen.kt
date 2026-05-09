@@ -1,6 +1,8 @@
 package com.avivba.simbanyu.ui.screens.report
 
+import android.Manifest
 import android.content.Context
+import android.location.LocationManager
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -49,14 +51,18 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.ReportItem
+import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.screens.camera.CameraViewModel
 import com.avivba.simbanyu.ui.shared.Screen
+import com.avivba.simbanyu.ui.shared.model.Coordinate
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.conditional
 import com.avivba.simbanyu.ui.utils.dashedBorder
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinActivityViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -86,6 +92,7 @@ fun ReportScreen(
                     "Laporan berhasil dikirim",
                     Toast.LENGTH_SHORT
                 ).show()
+                viewModel.onAction(ReportAction.Load)
             }
         }
     }
@@ -93,6 +100,7 @@ fun ReportScreen(
     ObserveAsEvent(cameraViewModel.cameraResult) {
         if (it != null && it.token == cameraToken && it.image.exists()) {
             viewModel.onAction(ReportAction.SetImage(it.image))
+            cameraViewModel.clearToken()
         }
     }
 
@@ -205,6 +213,7 @@ fun ReportContent(
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun CreateReport(
     modifier: Modifier,
@@ -261,11 +270,60 @@ private fun CreateReport(
                 hint = "Masukkan lokasi / patokan terjadinya gangguan...",
             )
 
+            val context = LocalContext.current
+            val locationPermissionState = rememberMultiplePermissionsState(
+                listOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+
+            fun getMyLocation() {
+                if (!locationPermissionState.allPermissionsGranted) {
+                    locationPermissionState.launchMultiplePermissionRequest()
+                }
+
+                if (locationPermissionState.allPermissionsGranted) {
+                    val locationManager =
+                        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                    try {
+                        val location =
+                            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                                ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+
+                        location?.let {
+                            onAction(
+                                ReportAction.SetMyLocation(
+                                    Coordinate(
+                                        it.latitude,
+                                        it.longitude
+                                    )
+                                )
+                            )
+                        } ?: run {
+                            Toast.makeText(
+                                context,
+                                "Gagal mendapatkan lokasi. Pastikan GPS aktif.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } catch (e: SecurityException) {
+                        Toast.makeText(context, "Izin lokasi diperlukan", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Izin lokasi dibutuhkan",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
             Row(
                 modifier = Modifier
                     .clip(SimbanyuTheme.shapes.large)
                     .clickable {
-                        onAction(ReportAction.GetMyLocation)
+                        getMyLocation()
                     }
                     .padding(SimbanyuTheme.padding.small),
                 horizontalArrangement = Arrangement.spacedBy(
@@ -283,7 +341,15 @@ private fun CreateReport(
                 SimbanyuText(
                     text = "Gunakan lokasi saya",
                     style = SimbanyuTheme.typography.bodyProminent,
-                    color = SimbanyuTheme.colors.brand
+                    color = SimbanyuTheme.colors.brand,
+                )
+            }
+
+            if (state.locationCoordinate != null) {
+                MiniMap(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    location = state.locationCoordinate
                 )
             }
         }

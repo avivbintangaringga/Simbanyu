@@ -69,6 +69,7 @@ fun SimbanyuApp(
     ) {
         composable<Screen.Login> {
             LoginScreen(onNavigate = { dest ->
+                navHostController.popBackStack()
                 navHostController.navigate(dest)
             })
         }

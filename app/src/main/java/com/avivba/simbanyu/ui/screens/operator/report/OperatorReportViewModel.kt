@@ -227,7 +227,11 @@ class OperatorReportViewModel(
                             )
                         )
                     } else {
-                        item
+                        item.copy(
+                            report = r.copy(
+                                isExpanded = false
+                            )
+                        )
                     }
                 }
             )

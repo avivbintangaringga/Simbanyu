@@ -27,7 +27,12 @@ class ReportViewModel(
                     sendEvent(ReportEvent.OpenCamera)
                 }
 
-                is ReportAction.GetMyLocation -> {
+                is ReportAction.SetMyLocation -> {
+                    updateState {
+                        it.copy(
+                            locationCoordinate = action.coordinate
+                        )
+                    }
                 }
 
                 is ReportAction.SendReport -> {
@@ -118,7 +123,7 @@ class ReportViewModel(
             val submitResult = reportRepository.submit(
                 ReportSubmission(
                     address = state.value.locationState.text.toString(),
-                    coordinate = null, // TODO: Get my location
+                    coordinate = state.value.locationCoordinate?.toDomain(),
                     description = state.value.descriptionState.text.toString(),
                     evidenceImage = state.value.image!!
                 )
@@ -163,7 +168,9 @@ class ReportViewModel(
                             isExpanded = !item.isExpanded
                         )
                     } else {
-                        item
+                        item.copy(
+                            isExpanded = false
+                        )
                     }
                 }
             )
