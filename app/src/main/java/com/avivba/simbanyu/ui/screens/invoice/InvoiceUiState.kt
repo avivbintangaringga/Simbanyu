@@ -6,17 +6,13 @@ import com.avivba.simbanyu.ui.shared.model.Cost
 
 
 data class InvoiceUiState(
+    val isLoading: Boolean = false,
     val name: String = "",
     val address: String = "",
     val meterId: String = "",
     val category: String = "",
-
     val totalAmount: String = "",
     val bills: List<Bill> = emptyList(),
-//    val paymentMethodId: String = "",
-//    val paymentMethodImage: String = "",
-//    val paymentMethodName: String = "",
-//    val paymentMethodFee: String = "",
 )
 
 sealed interface InvoiceAction {

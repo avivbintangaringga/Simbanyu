@@ -30,9 +30,8 @@ class DashboardViewModel(
             when (action) {
                 DashboardAction.Load -> load()
                 DashboardAction.PayBill -> {
-                    // TODO: Handle pay bill
+                    sendEvent(DashboardEvent.GoToInvoice)
                 }
-
                 DashboardAction.ViewAllAnnouncements -> sendEvent(DashboardEvent.ViewAllAnnouncements)
                 DashboardAction.Refresh -> refresh()
             }
@@ -78,6 +77,7 @@ class DashboardViewModel(
                     val totalActiveBill = activeBill.data.sumOf { it.amount }
                     it.copy(
                         bill = if (totalActiveBill > 0) totalActiveBill.toDottedString() else "",
+                        billIds = activeBill.data.map { it.id }
                     )
                 }
             }

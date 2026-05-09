@@ -61,6 +61,12 @@ fun DashboardScreen(
             DashboardEvent.ViewAllAnnouncements -> {
                 onNavigate(Screen.AnnouncementScreen)
             }
+
+            DashboardEvent.GoToInvoice -> {
+                if (state.billIds.isNotEmpty()) {
+                    onNavigate(Screen.Invoice(state.billIds))
+                }
+            }
         }
     }
 

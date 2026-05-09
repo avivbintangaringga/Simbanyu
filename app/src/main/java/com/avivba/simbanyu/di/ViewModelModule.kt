@@ -36,7 +36,7 @@ val viewModelModule = module {
     viewModel { UsageHistoryViewModel(get(), get()) }
     viewModel { ReportViewModel(get()) }
     viewModel { ProfileViewModel(get(), get()) }
-    viewModel { InvoiceViewModel(get()) }
+    viewModel { InvoiceViewModel(get(), get(), get()) }
     viewModel { PaymentMethodViewModel() }
     viewModel { BillDetailsViewModel(get(), get()) }
     viewModel { AnnouncementViewModel(get()) }
