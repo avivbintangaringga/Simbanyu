@@ -36,6 +36,7 @@ import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.model.BillingStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
+import com.avivba.simbanyu.ui.utils.toDottedString
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -233,7 +234,7 @@ fun BillHistoryContent(
                 ) {
                     SimbanyuText(
                         modifier = Modifier.weight(1f),
-                        text = "Rp. ${state.totalSelectedBills}",
+                        text = "Rp. ${state.totalSelectedBills.toDottedString()}",
                         style = SimbanyuTheme.typography.displaySmall,
                         color = SimbanyuTheme.colors.brand
                     )
@@ -271,8 +272,6 @@ private fun BillHistoryPreview() {
     BillHistoryContent(
         state = BillHistoryUiState(
             bills = fakeBills,
-            totalPaid = "100.000",
-            totalUnpaid = "150.000",
             isMultipleSelectMode = true
         )
     )

@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.data.remote.model.bill
 
 import androidx.annotation.Keep
+import com.avivba.simbanyu.data.remote.model.payment.PaymentDto
 import com.avivba.simbanyu.domain.model.Bill
 import java.time.Instant
 
@@ -11,6 +12,7 @@ data class BillDto(
     val amount: Double,
     val status: String,
     val items: List<BillItemDto>,
+    val payments: List<PaymentDto>,
     val createdAt: String,
     val updatedAt: String,
 ) {
@@ -20,6 +22,7 @@ data class BillDto(
             amount = amount,
             date = Instant.parse(createdAt),
             status = Bill.BillStatus.valueOf(status.uppercase()),
-            items = items.map { it.toDomain() }
+            items = items.map { it.toDomain() },
+            payments = payments.map { it.toDomain() }
         )
 }

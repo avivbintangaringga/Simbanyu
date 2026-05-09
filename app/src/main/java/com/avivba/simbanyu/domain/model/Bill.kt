@@ -7,7 +7,8 @@ data class Bill(
     val amount: Double,
     val date: Instant,
     val status: BillStatus,
-    val items: List<BillItem>
+    val items: List<BillItem>,
+    val payments: List<Payment>
 ) {
     enum class BillStatus {
         UNPAID,
@@ -15,7 +16,7 @@ data class Bill(
         PENDING
     }
 
-    data class BillItem (
+    data class BillItem(
         val id: String,
         val name: String,
         val amount: Double

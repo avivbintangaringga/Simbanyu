@@ -9,8 +9,6 @@ data class BillHistoryUiState(
     val isMultipleSelectMode: Boolean = false,
     val years: List<Int> = emptyList(),
     val selectedYear: Int = 0,
-    val totalPaid : String = "",
-    val totalUnpaid : String = "",
     val totalSelectedBills : Double = 0.0,
     val bills: List<Bill> = emptyList(),
 )

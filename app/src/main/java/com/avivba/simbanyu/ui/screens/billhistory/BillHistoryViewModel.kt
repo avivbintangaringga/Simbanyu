@@ -128,16 +128,9 @@ class BillHistoryViewModel(
         ) { bills, year ->
             bills.filter { it.periodYear == year }
         }.collect { filtered ->
-            val totalPaid = filtered.filter { it.status == BillingStatus.PAID }
-                .sumOf { it.amount.toDouble() }
-            val totalUnpaid = filtered.filter { it.status == BillingStatus.UNPAID }
-                .sumOf { it.amount.toDouble() }
-
             updateState {
                 it.copy(
                     bills = filtered,
-                    totalPaid = totalPaid.toString(),
-                    totalUnpaid = totalUnpaid.toString()
                 )
             }
         }

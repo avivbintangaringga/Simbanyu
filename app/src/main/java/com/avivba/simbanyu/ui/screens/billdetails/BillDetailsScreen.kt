@@ -338,74 +338,154 @@ fun BillDetailsContent(
                     }
                 }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = SimbanyuTheme.padding.large
-                        )
-                        .background(
-                            color = SimbanyuTheme.colors.surfaceCardAlternate,
-                            shape = SimbanyuTheme.shapes.large
-                        )
-                        .padding(
-                            SimbanyuTheme.padding.large
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.small
-                    )
-                ) {
-                    Row(
+                if (state.payments.isNotEmpty()) {
+                    SimbanyuText(
                         modifier = Modifier
-                            .fillMaxWidth()
                             .padding(
-                                bottom = SimbanyuTheme.padding.medium
-                            ),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            SimbanyuTheme.spacing.medium
-                        )
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_info_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.brand,
-                            modifier = Modifier.size(16.dp)
-                        )
-
-                        SimbanyuText(
-                            text = "Informasi Transaksi",
-                            style = SimbanyuTheme.typography.bodyProminent,
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-
-                    SimbanyuText(
-                        text = "WAKTU TRANSAKSI",
-                        style = SimbanyuTheme.typography.bodySmall,
-                        color = SimbanyuTheme.colors.statusNeutral
-                    )
-
-                    SimbanyuText(
-                        text = state.transactionDate,
-                        style = SimbanyuTheme.typography.bodySmall,
-                    )
-
-                    SimbanyuText(
-                        modifier = Modifier.padding(
-                            top = SimbanyuTheme.padding.medium
-                        ),
-                        text = "NOMOR REFERENSI",
-                        style = SimbanyuTheme.typography.bodySmall,
-                        color = SimbanyuTheme.colors.statusNeutral
-                    )
-
-                    SimbanyuText(
-                        text = state.referenceNumber,
-                        style = SimbanyuTheme.typography.bodySmall,
+                                top = SimbanyuTheme.padding.large
+                            )
+                            .fillMaxWidth(),
+                        text = "Transaksi",
+                        style = SimbanyuTheme.typography.titleSection,
                     )
                 }
 
+                state.payments.forEach { payment ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = SimbanyuTheme.colors.surfaceCardAlternate,
+                                shape = SimbanyuTheme.shapes.large
+                            )
+                            .padding(
+                                SimbanyuTheme.padding.large
+                            ),
+                        verticalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.small
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    bottom = SimbanyuTheme.padding.medium
+                                ),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.medium
+                            )
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_info_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.brand,
+                                modifier = Modifier.size(16.dp)
+                            )
+
+                            SimbanyuText(
+                                text = "ID #${payment.orderId}",
+                                style = SimbanyuTheme.typography.bodyProminent,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(
+                                    SimbanyuTheme.spacing.extraSmall
+                                )
+                            ) {
+                                SimbanyuText(
+                                    text = "WAKTU TRANSAKSI",
+                                    style = SimbanyuTheme.typography.bodySmall,
+                                    color = SimbanyuTheme.colors.statusNeutral
+                                )
+
+                                SimbanyuText(
+                                    text = payment.date,
+                                    style = SimbanyuTheme.typography.bodySmall,
+                                )
+                            }
+
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f),
+                                verticalArrangement = Arrangement.spacedBy(
+                                    SimbanyuTheme.spacing.extraSmall
+                                )
+                            ) {
+                                SimbanyuText(
+                                    modifier = Modifier.padding(
+                                        top = SimbanyuTheme.padding.medium
+                                    ),
+                                    text = "METODE PEMBAYARAN",
+                                    style = SimbanyuTheme.typography.bodySmall,
+                                    color = SimbanyuTheme.colors.statusNeutral
+                                )
+
+                                SimbanyuText(
+                                    text = payment.paymentType ?: "-",
+                                    style = SimbanyuTheme.typography.bodySmall,
+                                )
+                            }
+                        }
+
+                        if (payment.status == UiPaymentStatus.PENDING && payment.paymentUrl != null) {
+                            SimbanyuButton(
+                                modifier = Modifier
+                                    .padding(
+                                        bottom = SimbanyuTheme.padding.large,
+                                        top = SimbanyuTheme.padding.small
+                                    )
+                                    .fillMaxWidth()
+                                    .background(
+                                        brush = SimbanyuTheme.colors.brush.brandVertical,
+                                        shape = SimbanyuTheme.shapes.extraLarge
+                                    ),
+                                text = "Bayar sekarang",
+                                onClick = {
+                                    onAction(BillDetailsAction.OpenPaymentPage(payment.paymentUrl))
+                                },
+                                iconLeft = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_payment),
+                                        contentDescription = null,
+                                        tint = SimbanyuTheme.colors.brandText
+                                    )
+                                }
+                            )
+                        } else {
+                            Column(
+                                modifier = Modifier
+                                    .padding(
+                                        top = SimbanyuTheme.padding.medium
+                                    )
+                                    .fillMaxWidth(),
+                                verticalArrangement = Arrangement.spacedBy(
+                                    SimbanyuTheme.spacing.extraSmall
+                                )
+                            ) {
+                                SimbanyuText(
+                                    text = "STATUS TRANSAKSI",
+                                    style = SimbanyuTheme.typography.bodySmall,
+                                    color = SimbanyuTheme.colors.statusNeutral
+                                )
+
+                                SimbanyuText(
+                                    text = payment.status.status,
+                                    style = SimbanyuTheme.typography.bodySmall,
+                                )
+                            }
+                        }
+                    }
+                }
 
                 if (state.status == BillingStatus.PAID) {
                     SimbanyuButton(
@@ -444,7 +524,7 @@ fun BillDetailsContent(
                         text = "Periksa Pembayaran",
                         textColor = SimbanyuTheme.colors.brand,
                         onClick = {
-                            onAction(BillDetailsAction.OpenPaymentPage)
+                            onAction(BillDetailsAction.Load)
                         },
                         iconLeft = {
                             Icon(
@@ -455,29 +535,6 @@ fun BillDetailsContent(
                         }
                     )
 
-                    SimbanyuButton(
-                        modifier = Modifier
-                            .padding(
-                                bottom = SimbanyuTheme.padding.large,
-                                top = SimbanyuTheme.padding.small
-                            )
-                            .fillMaxWidth()
-                            .background(
-                                brush = SimbanyuTheme.colors.brush.brandVertical,
-                                shape = SimbanyuTheme.shapes.extraLarge
-                            ),
-                        text = "Buka Halaman Pembayaran",
-                        onClick = {
-                            onAction(BillDetailsAction.OpenPaymentPage)
-                        },
-                        iconLeft = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_payment),
-                                contentDescription = null,
-                                tint = SimbanyuTheme.colors.brandText
-                            )
-                        }
-                    )
                 }
             }
         }
