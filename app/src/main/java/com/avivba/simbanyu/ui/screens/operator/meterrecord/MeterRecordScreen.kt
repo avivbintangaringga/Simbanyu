@@ -1,5 +1,7 @@
 package com.avivba.simbanyu.ui.screens.operator.meterrecord
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,7 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,24 +38,30 @@ import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.components.topbar.TopBar
+import com.avivba.simbanyu.ui.screens.camera.CameraViewModel
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.conditional
 import com.avivba.simbanyu.ui.utils.dashedBorder
+import org.koin.compose.viewmodel.koinActivityViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MeterRecordScreen(
     modifier: Modifier = Modifier,
     viewModel: MeterRecordViewModel = koinViewModel(),
+    cameraViewModel: CameraViewModel = koinActivityViewModel(),
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {}
 ) {
+    val cameraToken = "RECORD_METER"
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
@@ -59,13 +69,22 @@ fun MeterRecordScreen(
                 onNavigateBack()
             }
 
-            MeterRecordEvents.PickImage -> {
-                // TODO: Implement pick image
+            MeterRecordEvents.OpenCamera -> {
+                cameraViewModel.setToken(cameraToken)
+                onNavigate(Screen.Camera)
             }
 
             MeterRecordEvents.RecordSent -> {
-                // TODO: Implement record sent
+                Toast.makeText(context, "Berhasil catat meter", Toast.LENGTH_SHORT).show()
+                onNavigateBack()
             }
+        }
+    }
+
+    ObserveAsEvent(cameraViewModel.cameraResult) {
+        if (it != null && it.token == cameraToken && it.image.exists()) {
+            viewModel.onAction(MeterRecordAction.SetImage(it.image))
+            cameraViewModel.clearResult()
         }
     }
 
@@ -89,7 +108,7 @@ fun MeterRecordContent(
         containerColor = Color.Transparent,
         topBar = {
             TopBar(
-                text = "Catat Meter",
+                text = if (state.isEditMode) "Perbarui Catat Meter" else "Catat Meter",
                 navigationIcon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_arrow_backward),
@@ -169,7 +188,7 @@ fun MeterRecordContent(
                                 vertical = SimbanyuTheme.padding.extraSmall,
                                 horizontal = SimbanyuTheme.padding.medium
                             ),
-                        text = "GOL: ${state.category}",
+                        text = "GOL: ${state.plan}",
                         style = SimbanyuTheme.typography.labelUnit,
                         color = SimbanyuTheme.colors.brand
                     )
@@ -293,6 +312,7 @@ fun MeterRecordContent(
                         state = state.meterRecordState,
                         hint = "${state.lastMeterValue + 1}",
                         fontSize = 28.sp,
+                        keyboardType = KeyboardType.Number,
                         suffix = {
                             SimbanyuText(
                                 text = "m³",
@@ -319,7 +339,7 @@ fun MeterRecordContent(
                         )
 
                         SimbanyuText(
-                            text = "Pastikan angka lebih besar dari catatan sebelumnya",
+                            text = "Pastikan angka lebih besar dari meter terakhir",
                             style = SimbanyuTheme.typography.bodySmall,
                         )
                     }
@@ -354,53 +374,73 @@ fun MeterRecordContent(
                     )
                 }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp)
-                        .clip(SimbanyuTheme.shapes.large)
-                        .clickable {
-                            onAction(MeterRecordAction.PickImage)
-                        }
-                        .conditional(
-                            state.errorFields.fastAny {
-                                it == Fields.IMAGE
+                Log.d("SDKSDK", "MeterRecordContent: ${state.imageUrl}")
+
+                if (state.image != null) {
+                    ImageView(
+                        model = state.image,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            onAction(MeterRecordAction.OpenCamera)
+                        },
+                    )
+                } else if (!state.imageUrl.isNullOrEmpty()) {
+                    ImageView(
+                        model = state.imageUrl,
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            onAction(MeterRecordAction.OpenCamera)
+                        },
+                    )
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp)
+                            .clip(SimbanyuTheme.shapes.large)
+                            .clickable {
+                                onAction(MeterRecordAction.OpenCamera)
                             }
-                        ) {
-                            dashedBorder(
+                            .conditional(
+                                state.errorFields.fastAny {
+                                    it == Fields.IMAGE
+                                }
+                            ) {
+                                dashedBorder(
+                                    strokeWidth = 4.dp,
+                                    gapLength = 6.dp,
+                                    dashLength = 8.dp,
+                                    color = SimbanyuTheme.colors.statusNegativeText,
+                                    shape = SimbanyuTheme.shapes.large
+                                )
+                            }
+                            .dashedBorder(
                                 strokeWidth = 4.dp,
                                 gapLength = 6.dp,
                                 dashLength = 8.dp,
-                                color = SimbanyuTheme.colors.statusNegativeText,
+                                color = SimbanyuTheme.colors.borderCardAlternate,
                                 shape = SimbanyuTheme.shapes.large
-                            )
-                        }
-                        .dashedBorder(
-                            strokeWidth = 4.dp,
-                            gapLength = 6.dp,
-                            dashLength = 8.dp,
-                            color = SimbanyuTheme.colors.borderCardAlternate,
-                            shape = SimbanyuTheme.shapes.large
+                            ),
+                        verticalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.medium,
+                            alignment = Alignment.CenterVertically
                         ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.medium,
-                        alignment = Alignment.CenterVertically
-                    ),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        modifier = Modifier
-                            .requiredSize(40.dp),
-                        painter = painterResource(R.drawable.ic_photo_camera_filled),
-                        contentDescription = null,
-                        tint = SimbanyuTheme.colors.statusNeutral
-                    )
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            modifier = Modifier
+                                .requiredSize(40.dp),
+                            painter = painterResource(R.drawable.ic_photo_camera_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.statusNeutral
+                        )
 
-                    SimbanyuText(
-                        text = "Unggah foto (maks 5MB)",
-                        style = SimbanyuTheme.typography.bodySmall,
-                        color = SimbanyuTheme.colors.statusNeutral
-                    )
+                        SimbanyuText(
+                            text = "Unggah foto (maks 5MB)",
+                            style = SimbanyuTheme.typography.bodySmall,
+                            color = SimbanyuTheme.colors.statusNeutral
+                        )
+                    }
                 }
             }
 

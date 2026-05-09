@@ -93,7 +93,7 @@ fun OperatorReportScreen(
     ObserveAsEvent(cameraViewModel.cameraResult) {
         if (it != null && it.token == cameraToken && it.image.exists()) {
             viewModel.onAction(OperatorReportAction.SetImage(it.image))
-            cameraViewModel.clearToken()
+            cameraViewModel.clearResult()
         }
     }
 

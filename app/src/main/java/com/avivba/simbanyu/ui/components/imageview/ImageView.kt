@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.components.imageview
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -68,6 +69,10 @@ fun ImageView(
         contentDescription = contentDescription,
         contentScale = contentScale,
         loading = { loading() },
-        error = { error() }
+        error = { error() },
+        onError = {
+            Log.d("SDKSDK", "IMAGEVIEW: ${model::class}")
+            it.result.throwable.printStackTrace()
+        }
     )
 }

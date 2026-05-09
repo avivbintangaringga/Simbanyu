@@ -80,7 +80,7 @@ class SubscriberDetailsViewModel(
                 }
 
                 SubscriberDetailsAction.RecordMeter -> {
-                    sendEvent(SubscriberDetailsEvent.GoToRecordMeter)
+                    sendEvent(SubscriberDetailsEvent.GoToRecordMeter(false))
                 }
 
                 SubscriberDetailsAction.ContactViaWhatsApp -> {
@@ -93,6 +93,10 @@ class SubscriberDetailsViewModel(
 
                 is SubscriberDetailsAction.ClickUsage -> {
                     toggleUsageExpanded(action.usage)
+                }
+
+                SubscriberDetailsAction.UpdateMeter -> {
+                    sendEvent(SubscriberDetailsEvent.GoToRecordMeter(true))
                 }
             }
         }

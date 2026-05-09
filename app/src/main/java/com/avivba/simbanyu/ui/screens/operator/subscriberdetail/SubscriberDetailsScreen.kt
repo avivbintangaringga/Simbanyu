@@ -71,7 +71,7 @@ fun SubscriberDetailsScreen(
             }
 
             is SubscriberDetailsEvent.GoToRecordMeter -> {
-                onNavigate(RecordMeter(viewModel.subscriberId))
+                onNavigate(RecordMeter(viewModel.subscriberId, it.editMode))
             }
 
             is SubscriberDetailsEvent.GoToWhatsApp -> {
@@ -304,6 +304,7 @@ fun SubscriberDetailsContent(
                         )
                     },
                     onClick = {
+                        // TODO: Implement contact via whatsapp
                         onAction(SubscriberDetailsAction.ContactViaWhatsApp)
                     }
                 )
@@ -331,7 +332,7 @@ fun SubscriberDetailsContent(
                             )
                         },
                         onClick = {
-                            onAction(SubscriberDetailsAction.RecordMeter)
+                            onAction(SubscriberDetailsAction.UpdateMeter)
                         }
                     )
                 } else {

@@ -21,23 +21,35 @@ class UsageRepositoryImpl(
 ) : UsageRepository {
     override suspend fun getAll(
         subscriberId: String?,
-        limit: Int?
+        limit: Int?,
+        includeInitial: Boolean
     ): Result<List<Usage>, DataError> {
         return safeApiCall {
             usageService.getAll(
                 subscriberId = subscriberId,
-                limit = limit
+                limit = limit,
+                includeInitial = includeInitial
             ).data?.map {
                 it.toDomain()
             } ?: emptyList()
         }
     }
 
-    override suspend fun getLastUsage(subscriberId: String): Result<Usage, DataError> {
+    override suspend fun getById(id: String): Result<Usage, DataError> {
+        return safeApiCall {
+            usageService.getById(id).data?.toDomain() ?: throw Exception("Invalid response")
+        }
+    }
+
+    override suspend fun getLastUsage(
+        subscriberId: String,
+        includeInitial: Boolean
+    ): Result<Usage, DataError> {
         return safeApiCall {
             usageService.getAll(
                 subscriberId = subscriberId,
-                limit = 1
+                limit = 1,
+                includeInitial = includeInitial
             ).data?.firstOrNull()?.toDomain() ?: throw Exception("Invalid response")
         }
     }

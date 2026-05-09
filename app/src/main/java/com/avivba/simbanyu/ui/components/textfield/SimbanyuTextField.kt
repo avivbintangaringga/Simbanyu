@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
@@ -37,7 +38,8 @@ fun SimbanyuTextField(
     imeAction: ImeAction = ImeAction.Default,
     isPasswordVisible: Boolean = false,
     onKeyboardAction: KeyboardActionHandler? = null,
-    fontSize: TextUnit = TextUnit.Unspecified
+    fontSize: TextUnit = TextUnit.Unspecified,
+    keyboardType: KeyboardType = KeyboardType.Unspecified
 ) {
     Row(
         modifier = modifier
@@ -87,14 +89,15 @@ fun SimbanyuTextField(
                 ),
                 decorator = decorator,
                 keyboardOptions = KeyboardOptions(
-                    imeAction = imeAction
+                    imeAction = imeAction,
+                    keyboardType = keyboardType
                 ),
                 textObfuscationMode =
                     if (isPasswordVisible)
                         TextObfuscationMode.Visible
                     else
                         TextObfuscationMode.Hidden,
-                onKeyboardAction = onKeyboardAction
+                onKeyboardAction = onKeyboardAction,
             )
         } else {
             BasicTextField(
@@ -107,9 +110,10 @@ fun SimbanyuTextField(
                 lineLimits = lineLimits,
                 decorator = decorator,
                 keyboardOptions = KeyboardOptions(
-                    imeAction = imeAction
+                    imeAction = imeAction,
+                    keyboardType = keyboardType
                 ),
-                onKeyboardAction = onKeyboardAction
+                onKeyboardAction = onKeyboardAction,
             )
         }
 

@@ -48,6 +48,6 @@ val viewModelModule = module {
     viewModel { SubscribersViewModel(get()) }
     viewModel { SubscriberDetailsViewModel(get(), get(), get(), get()) }
     viewModel { OperatorReportViewModel(get()) }
-    viewModel { MeterRecordViewModel(get()) }
+    viewModel { MeterRecordViewModel(get(), get(), get()) }
     viewModel { MapViewModel(get()) }
 }

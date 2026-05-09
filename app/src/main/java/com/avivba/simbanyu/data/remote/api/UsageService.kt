@@ -18,8 +18,14 @@ interface UsageService {
     @GET("usages")
     suspend fun getAll(
         @Query("subscriberId") subscriberId: String?,
-        @Query("limit") limit: Int? = null
+        @Query("limit") limit: Int? = null,
+        @Query("includeInitial") includeInitial: Boolean? = false
     ): Envelope<List<UsageDto>>
+
+    @GET("usages/{id}")
+    suspend fun getById(
+        @Path("id") id: String
+    ): Envelope<UsageDto>
 
     @Multipart
     @POST("usages")

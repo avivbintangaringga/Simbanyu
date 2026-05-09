@@ -1,6 +1,5 @@
 package com.avivba.simbanyu.ui.screens.camera
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.ui.screens.camera.CameraEvent.*
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
@@ -71,11 +70,13 @@ class CameraViewModel : BaseViewModel<CameraUiState, CameraAction, CameraEvent>(
         }
     }
 
-    fun clearToken() {
+    fun clearResult() {
         updateState {
             it.copy(
                 currentToken = null
             )
         }
+
+        _cameraResult.update { null }
     }
 }

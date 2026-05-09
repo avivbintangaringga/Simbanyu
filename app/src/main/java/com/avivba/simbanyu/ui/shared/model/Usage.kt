@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.ui.shared.model
 
 import com.avivba.simbanyu.domain.model.Usage
+import com.avivba.simbanyu.ui.utils.toFullDateTime
 import com.avivba.simbanyu.ui.utils.toMonthFull
 import com.avivba.simbanyu.ui.utils.toYear
 
@@ -14,6 +15,7 @@ data class Usage(
     val imageUrl: String = "",
     val operatorNotes: String = "",
     val isExpanded: Boolean = false,
+    val fullDate: String = "",
 ) {
     companion object {
         fun fromDomain(data: Usage) = Usage(
@@ -25,6 +27,7 @@ data class Usage(
             periodYear = data.date.toYear().toInt(),
             imageUrl = data.evidenceImageUrl,
             operatorNotes = data.operatorNotes ?: "",
+            fullDate = data.date.toFullDateTime(),
             isExpanded = false,
         )
     }

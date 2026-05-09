@@ -29,7 +29,7 @@ sealed interface Screen {
     data class SubscriberDetails(val id: String) : Screen
 
     @Serializable
-    data class RecordMeter(val id: String) : Screen
+    data class RecordMeter(val subscriberId: String, val editMode: Boolean = false) : Screen
 
     @Serializable
     data object AnnouncementScreen : Screen

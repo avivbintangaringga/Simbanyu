@@ -99,7 +99,7 @@ fun ReportScreen(
     ObserveAsEvent(cameraViewModel.cameraResult) {
         if (it != null && it.token == cameraToken && it.image.exists()) {
             viewModel.onAction(ReportAction.SetImage(it.image))
-            cameraViewModel.clearToken()
+            cameraViewModel.clearResult()
         }
     }
 

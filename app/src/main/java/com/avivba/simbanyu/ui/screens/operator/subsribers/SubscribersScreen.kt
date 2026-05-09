@@ -49,7 +49,7 @@ fun SubscribersScreen(
             }
 
             is SubscribersEvent.GoToRecordMeter -> {
-                onNavigate(Screen.RecordMeter(it.subscriber.id))
+                onNavigate(Screen.RecordMeter(it.subscriber.id, it.subscriber.isRecorded))
             }
         }
     }
