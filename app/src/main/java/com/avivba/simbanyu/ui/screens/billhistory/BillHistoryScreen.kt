@@ -9,9 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -23,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,11 +83,11 @@ fun BillHistoryContent(
     onNavigate: (Screen) -> Unit = {}
 ) {
     var isExpanded by remember { mutableStateOf(false) }
-    val listState = rememberLazyListState()
 
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(SimbanyuTheme.padding.large),
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
@@ -155,23 +155,19 @@ fun BillHistoryContent(
         }
 
         if (state.bills.isNotEmpty()) {
-            LazyColumn(
+            Column(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(
                     SimbanyuTheme.spacing.medium
                 ),
-                state = listState,
             ) {
-                items(
-                    items = state.bills.sortedByDescending { it.id },
-                    key = { it.id }
-                ) { bill ->
-                    var iconId = R.drawable.ic_history
-                    var iconTint = SimbanyuTheme.colors.brand
-                    var iconBackgroundColor = SimbanyuTheme.colors.surfaceCardAlternate
-                    var statusBackgroundColor = SimbanyuTheme.colors.brand
+                state.bills.forEach { bill ->
+                    var iconId: Int
+                    var iconTint: Color
+                    var iconBackgroundColor: Color
+                    var statusBackgroundColor: Color
 
                     if (bill.status == BillingStatus.PAID) {
                         iconId = R.drawable.ic_done_all

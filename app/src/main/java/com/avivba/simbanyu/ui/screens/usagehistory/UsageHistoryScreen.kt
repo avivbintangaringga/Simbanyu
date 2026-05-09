@@ -8,15 +8,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -77,7 +75,6 @@ fun UsageHistoryScreen(
     ) {
         UsageHistoryContent(
             state = state,
-            onNavigate = onNavigate,
             onAction = viewModel::onAction
         )
     }
@@ -89,11 +86,9 @@ fun UsageHistoryContent(
     modifier: Modifier = Modifier,
     state: UsageHistoryUiState,
     onAction: (UsageHistoryAction) -> Unit = {},
-    onNavigate: (Screen) -> Unit = {}
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
-    val listState = rememberLazyListState()
     val chartColor = SolidColor(SimbanyuTheme.colors.brand)
     val chartGradientColor = SimbanyuTheme.colors.brandLighter
     val usageData = remember(state.usages, chartColor, chartGradientColor) {
@@ -114,6 +109,7 @@ fun UsageHistoryContent(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(SimbanyuTheme.padding.large),
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
@@ -181,146 +177,132 @@ fun UsageHistoryContent(
         }
 
         if (state.usages.isNotEmpty()) {
-            LazyColumn(
+            Column(
                 modifier = Modifier
-                    .fillMaxSize(),
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(
+                    .fillMaxWidth()
+                    .border(
+                        1.dp,
+                        SimbanyuTheme.colors.borderCard,
+                        shape = SimbanyuTheme.shapes.extraLarge
+                    )
+                    .background(
+                        color = SimbanyuTheme.colors.surfaceCard,
+                        shape = SimbanyuTheme.shapes.extraLarge
+                    )
+                    .padding(SimbanyuTheme.padding.large)
+            ) {
+                LineChart(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp),
+                    data = usageData,
+                    dotsProperties = DotProperties(
+                        enabled = true,
+                        color = SolidColor(SimbanyuTheme.colors.brandText),
+                        strokeColor = SolidColor(SimbanyuTheme.colors.brand),
+                        strokeWidth = 2.dp,
+                        radius = 3.dp
+                    ),
+                    gridProperties = GridProperties(
+                        enabled = true,
+                        yAxisProperties = GridProperties.AxisProperties(
+                            enabled = false
+                        ),
+                        xAxisProperties = GridProperties.AxisProperties(
+                            enabled = true,
+                            lineCount = 3
+                        )
+                    ),
+                    labelHelperProperties = LabelHelperProperties(
+                        enabled = false
+                    ),
+                    indicatorProperties = HorizontalIndicatorProperties(
+                        count = IndicatorCount.CountBased(3)
+                    ),
+                    dividerProperties = DividerProperties(
+                        yAxisProperties = LineProperties(
+                            enabled = false
+                        )
+                    ),
+                    labelProperties = LabelProperties(
+                        enabled = false,
+                    )
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(
                     SimbanyuTheme.spacing.medium
                 )
             ) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .border(
-                                1.dp,
-                                SimbanyuTheme.colors.borderCard,
-                                shape = SimbanyuTheme.shapes.extraLarge
-                            )
-                            .background(
-                                color = SimbanyuTheme.colors.surfaceCard,
-                                shape = SimbanyuTheme.shapes.extraLarge
-                            )
-                            .padding(SimbanyuTheme.padding.large)
-                    ) {
-                        LineChart(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp),
-                            data = usageData,
-                            dotsProperties = DotProperties(
-                                enabled = true,
-                                color = SolidColor(SimbanyuTheme.colors.brandText),
-                                strokeColor = SolidColor(SimbanyuTheme.colors.brand),
-                                strokeWidth = 2.dp,
-                                radius = 3.dp
-                            ),
-                            gridProperties = GridProperties(
-                                enabled = true,
-                                yAxisProperties = GridProperties.AxisProperties(
-                                    enabled = false
-                                ),
-                                xAxisProperties = GridProperties.AxisProperties(
-                                    enabled = true,
-                                    lineCount = 3
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                listOf(
+                                    SimbanyuTheme.colors.brand,
+                                    SimbanyuTheme.colors.brandLighter
                                 )
                             ),
-                            labelHelperProperties = LabelHelperProperties(
-                                enabled = false
-                            ),
-                            indicatorProperties = HorizontalIndicatorProperties(
-                                count = IndicatorCount.CountBased(3)
-                            ),
-                            dividerProperties = DividerProperties(
-                                yAxisProperties = LineProperties(
-                                    enabled = false
-                                )
-                            ),
-                            labelProperties = LabelProperties(
-                                enabled = false,
-                            )
+                            shape = SimbanyuTheme.shapes.large
                         )
-                    }
-                }
-                item {
-                    Row(
-                        modifier = Modifier
-                            .height(IntrinsicSize.Max)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        listOf(
-                                            SimbanyuTheme.colors.brand,
-                                            SimbanyuTheme.colors.brandLighter
-                                        )
-                                    ),
-                                    shape = SimbanyuTheme.shapes.large
-                                )
-                                .padding(
-                                    SimbanyuTheme.padding.large
-                                ),
-                        ) {
-                            SimbanyuText(
-                                text = "TOTAL PENGGUNAAN",
-                                style = SimbanyuTheme.typography.labelBadge,
-                                color = SimbanyuTheme.colors.brandText
-                            )
+                        .padding(
+                            SimbanyuTheme.padding.large
+                        ),
+                ) {
+                    SimbanyuText(
+                        text = "TOTAL PENGGUNAAN",
+                        style = SimbanyuTheme.typography.labelBadge,
+                        color = SimbanyuTheme.colors.brandText
+                    )
 
-                            SimbanyuText(
-                                text = "${state.usageTotal} m³",
-                                style = SimbanyuTheme.typography.displayMedium,
-                                color = SimbanyuTheme.colors.brandText
-                            )
-                        }
-
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .background(
-                                    brush = Brush.horizontalGradient(
-                                        listOf(
-                                            SimbanyuTheme.colors.brand,
-                                            SimbanyuTheme.colors.brandLighter
-                                        )
-                                    ),
-                                    shape = SimbanyuTheme.shapes.large
-                                )
-                                .padding(
-                                    SimbanyuTheme.padding.large
-                                ),
-                        ) {
-                            SimbanyuText(
-                                text = "RATA-RATA BULANAN",
-                                style = SimbanyuTheme.typography.labelBadge,
-                                color = SimbanyuTheme.colors.brandText
-                            )
-
-                            SimbanyuText(
-                                text = "%.1f m³".format(state.usageAverage),
-                                style = SimbanyuTheme.typography.displayMedium,
-                                color = SimbanyuTheme.colors.brandText
-                            )
-                        }
-                    }
-                }
-
-                items(
-                    items = state.usages.sortedByDescending { it.id },
-                    key = { it.id }
-                ) { usage ->
-                    UsageHistoryItem(
-                        usage = usage,
-                        onClick = {
-                            onAction(UsageHistoryAction.ClickUsage(usage))
-                        }
+                    SimbanyuText(
+                        text = "${state.usageTotal} m³",
+                        style = SimbanyuTheme.typography.displayMedium,
+                        color = SimbanyuTheme.colors.brandText
                     )
                 }
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                listOf(
+                                    SimbanyuTheme.colors.brand,
+                                    SimbanyuTheme.colors.brandLighter
+                                )
+                            ),
+                            shape = SimbanyuTheme.shapes.large
+                        )
+                        .padding(
+                            SimbanyuTheme.padding.large
+                        ),
+                ) {
+                    SimbanyuText(
+                        text = "RATA-RATA BULANAN",
+                        style = SimbanyuTheme.typography.labelBadge,
+                        color = SimbanyuTheme.colors.brandText
+                    )
+
+                    SimbanyuText(
+                        text = "%.1f m³".format(state.usageAverage),
+                        style = SimbanyuTheme.typography.displayMedium,
+                        color = SimbanyuTheme.colors.brandText
+                    )
+                }
+            }
+
+            state.usages.forEach { usage ->
+                UsageHistoryItem(
+                    usage = usage,
+                    onClick = {
+                        onAction(UsageHistoryAction.ClickUsage(usage))
+                    }
+                )
             }
         } else {
             EmptyState(

@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.operator.subscriberdetail
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -24,13 +26,15 @@ import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -97,18 +101,19 @@ fun SubscriberDetailsContent(
     val pagerState = rememberPagerState {
         tabs.size
     }
+    val pagerHeights = remember { mutableStateMapOf<Int, Int>() }
+    val animatedHeight by animateDpAsState(
+        targetValue = with(LocalDensity.current) {
+            (pagerHeights[pagerState.currentPage] ?: 0).toDp().coerceAtLeast(1.dp)
+        },
+        label = "pagerHeight"
+    )
 
     LaunchedEffect(pagerState.currentPage) {
         onAction(SubscriberDetailsAction.ChangeTab(pagerState.currentPage))
     }
 
     val scope = rememberCoroutineScope()
-
-    val containerHeightPx = LocalWindowInfo.current.containerSize.height
-    val containerHeightDp = with(LocalDensity.current) {
-        containerHeightPx.toDp()
-    }
-    val dynamicPagerHeight = containerHeightDp * 0.7f
 
     Scaffold(
         modifier = modifier,
@@ -389,27 +394,36 @@ fun SubscriberDetailsContent(
 
             HorizontalPager(
                 state = pagerState,
+                beyondViewportPageCount = 1,
                 modifier = Modifier
-                    .height(dynamicPagerHeight)
                     .fillMaxWidth()
+                    .height(animatedHeight)
             ) { page ->
-                when (page) {
-                    0 -> {
-                        BillHistory(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            state = state,
-                            onAction = onAction
-                        )
-                    }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(unbounded = true)
+                        .onGloballyPositioned { layoutCoordinates ->
+                            val height = layoutCoordinates.size.height
+                            if (height > 0) {
+                                pagerHeights[page] = height
+                            }
+                        }
+                ) {
+                    when (page) {
+                        0 -> {
+                            BillHistory(
+                                state = state,
+                                onAction = onAction
+                            )
+                        }
 
-                    1 -> {
-                        UsageHistory(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            state = state,
-                            onAction = onAction
-                        )
+                        1 -> {
+                            UsageHistory(
+                                state = state,
+                                onAction = onAction
+                            )
+                        }
                     }
                 }
             }
