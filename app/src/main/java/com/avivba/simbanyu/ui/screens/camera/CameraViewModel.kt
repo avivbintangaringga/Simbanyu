@@ -1,7 +1,7 @@
 package com.avivba.simbanyu.ui.screens.camera
 
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.ui.screens.camera.CameraEvent.*
+import com.avivba.simbanyu.ui.screens.camera.CameraEvent.ImageCaptured
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

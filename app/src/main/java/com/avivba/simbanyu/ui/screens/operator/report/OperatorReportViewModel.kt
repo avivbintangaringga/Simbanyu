@@ -150,14 +150,9 @@ class OperatorReportViewModel(
     private fun validateFields(): Boolean {
         val report = state.value.currentReport?.report ?: return false
 
-        if (report.status == ReportStatus.COMPLETED &&
-            state.value.image == null &&
-            report.handlingEvidenceImageUrl.isEmpty()
-        ) {
-            return false
-        }
-
-        return true
+        return !(report.status == ReportStatus.COMPLETED &&
+                state.value.image == null &&
+                report.handlingEvidenceImageUrl.isEmpty())
     }
 
     private suspend fun send() {

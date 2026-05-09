@@ -2,9 +2,6 @@ package com.avivba.simbanyu.ui.screens.camera
 
 import android.Manifest
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Matrix
-import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -15,7 +12,6 @@ import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
@@ -326,42 +322,6 @@ private fun capturePhoto(
     capture.takePicture(
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageCapturedCallback() {
-            override fun onCaptureStarted() {
-                super.onCaptureStarted()
-            }
-
-            override fun onCaptureSuccess(image: ImageProxy) {
-                val rotation = image.imageInfo.rotationDegrees.toFloat()
-                val originalBitmap = image.toBitmap()
-                val matrix = Matrix().apply {
-                    postRotate(rotation)
-                }
-                val bitmap = Bitmap.createBitmap(
-                    originalBitmap,
-                    0,
-                    0,
-                    originalBitmap.width,
-                    originalBitmap.height,
-                    matrix,
-                    true
-                )
-
-                val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    Bitmap.CompressFormat.WEBP_LOSSY
-                } else {
-                    Bitmap.CompressFormat.WEBP
-                }
-
-                photoFile.outputStream().use { stream ->
-                    bitmap.compress(
-                        format,
-                        80,
-                        stream
-                    )
-                }
-
-                onSuccess(photoFile)
-            }
 
             override fun onError(e: ImageCaptureException) {
                 Log.e("SDKSDK", "Camera Capture Error: ${e.message}")
