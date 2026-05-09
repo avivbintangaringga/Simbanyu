@@ -16,6 +16,11 @@ enum class ReportStatusFilter(
     REJECTED(ReportStatus.REJECTED, "Ditolak"),
 }
 
+enum class Fields {
+    STATUS,
+    NOTES,
+    IMAGE
+}
 
 data class OperatorReport(
     val report: Report,
@@ -27,6 +32,7 @@ data class OperatorReportUiState(
     val isRefreshing: Boolean = false,
     val reports: List<OperatorReport> = emptyList(),
     val filterStatus: ReportStatusFilter = ReportStatusFilter.ALL,
+    val errorFields: List<Fields> = emptyList(),
     val currentReport: OperatorReport? = null,
     val notesState: TextFieldState = TextFieldState(),
     val image: File? = null,
@@ -35,11 +41,12 @@ data class OperatorReportUiState(
 sealed interface OperatorReportAction {
     data object Load : OperatorReportAction
     data object Refresh : OperatorReportAction
-    data object HideUpdateReport : OperatorReportAction
     data class SetStatusFilter(val filter: ReportStatusFilter) : OperatorReportAction
-    data class UpdateReport(val report: OperatorReport) : OperatorReportAction
-    data class ToggleItemExpand(val report: OperatorReport) : OperatorReportAction
+    data class ShowUpdateReport(val report: OperatorReport) : OperatorReportAction
+    data object HideUpdateReport : OperatorReportAction
     data object SendUpdatedReport : OperatorReportAction
+    data class SelectCurrentReportStatus(val status: ReportStatus) : OperatorReportAction
+    data class ToggleItemExpand(val report: OperatorReport) : OperatorReportAction
     data object OpenCamera : OperatorReportAction
     data class SetImage(val image: File) : OperatorReportAction
 }

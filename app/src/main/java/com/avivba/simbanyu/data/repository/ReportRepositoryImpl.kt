@@ -69,11 +69,13 @@ class ReportRepositoryImpl(
         val data = jsonData.toRequestBody(
             "application/json; charset=utf-8".toMediaTypeOrNull()
         )
-        val imagePart = MultipartBody.Part.createFormData(
-            "image",
-            report.handlingEvidenceImage.name,
-            report.handlingEvidenceImage.asRequestBody()
-        )
+        val imagePart = report.handlingEvidenceImage?.let {
+            MultipartBody.Part.createFormData(
+                "image",
+                it.name,
+                it.asRequestBody()
+            )
+        }
 
         return safeApiCall {
             reportService.handleReport(

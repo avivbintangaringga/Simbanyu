@@ -29,6 +29,6 @@ interface ReportService {
     suspend fun handleReport(
         @Path("id") id: String,
         @Part("data") data: RequestBody,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part?
     ): Envelope<ReportDto>
 }

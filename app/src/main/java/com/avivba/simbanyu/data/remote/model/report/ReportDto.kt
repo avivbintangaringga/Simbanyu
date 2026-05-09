@@ -29,7 +29,7 @@ data class ReportDto(
         status = Report.ReportStatus.valueOf(status),
         evidenceImageUrl = "$BASE_URL$evidenceImageUrl",
         operatorNotes = operatorNotes ?: "",
-        handlingEvidenceImageUrl = handlingEvidenceImageUrl.let { "$BASE_URL$it" },
+        handlingEvidenceImageUrl = handlingEvidenceImageUrl?.let { "$BASE_URL$it" } ?: "",
         date = Instant.parse(createdAt),
         subscriber = subscriber.toDomain(),
         coordinate = if (latitude != null && longitude != null) {

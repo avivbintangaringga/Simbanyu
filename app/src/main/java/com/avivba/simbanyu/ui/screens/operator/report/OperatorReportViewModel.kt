@@ -1,11 +1,14 @@
 package com.avivba.simbanyu.ui.screens.operator.report
 
 import android.util.Log
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.model.ReportUpdateSubmission
 import com.avivba.simbanyu.domain.repository.ReportRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.Report
+import com.avivba.simbanyu.ui.shared.model.ReportStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -37,15 +40,19 @@ class OperatorReportViewModel(
                 OperatorReportAction.HideUpdateReport -> {
                     updateState {
                         it.copy(
-                            currentReport = null
+                            currentReport = null,
+                            errorFields = emptyList(),
+                            notesState = TextFieldState(),
+                            image = null
                         )
                     }
                 }
 
-                is OperatorReportAction.UpdateReport -> {
+                is OperatorReportAction.ShowUpdateReport -> {
                     updateState {
                         it.copy(
-                            currentReport = action.report
+                            currentReport = action.report,
+                            notesState = TextFieldState(action.report.report.operatorNotes)
                         )
                     }
                 }
@@ -66,6 +73,18 @@ class OperatorReportViewModel(
                     updateState {
                         it.copy(
                             image = action.image
+                        )
+                    }
+                }
+
+                is OperatorReportAction.SelectCurrentReportStatus -> {
+                    updateState {
+                        it.copy(
+                            currentReport = it.currentReport?.copy(
+                                report = it.currentReport.report.copy(
+                                    status = action.status
+                                )
+                            )
                         )
                     }
                 }
@@ -109,11 +128,16 @@ class OperatorReportViewModel(
         when (val reports = reportRepository.getAll()) {
             is Result.Success -> {
                 _reports.update {
-                    reports.data.map { report ->
-                        OperatorReport(
-                            report = Report.fromDomain(report)
-                        )
-                    }
+                    reports.data
+                        .sortedByDescending {
+                            it.date
+                        }
+                        .map { report ->
+                            Log.d("SDKSDK", "REPORT: $report")
+                            OperatorReport(
+                                report = Report.fromDomain(report)
+                            )
+                        }
                 }
             }
 
@@ -123,21 +147,71 @@ class OperatorReportViewModel(
         }
     }
 
-    private suspend fun send() {
-        updateState {
-            it.copy(
-                currentReport = it.currentReport?.copy(
-                    isSending = true
-                )
-            )
+    private fun validateFields(): Boolean {
+        val report = state.value.currentReport?.report ?: return false
+
+        if (report.status == ReportStatus.COMPLETED &&
+            state.value.image == null &&
+            report.handlingEvidenceImageUrl.isEmpty()
+        ) {
+            return false
         }
 
-        // TODO: Send
+        return true
+    }
 
-        updateState {
-            it.copy(
-                currentReport = null
+    private suspend fun send() {
+        val report = state.value.currentReport ?: return
+        if (!report.isSending) {
+            updateState {
+                it.copy(
+                    errorFields = emptyList(),
+                    currentReport = it.currentReport?.copy(
+                        isSending = true
+                    )
+                )
+            }
+
+            if (!validateFields()) {
+                updateState {
+                    it.copy(
+                        currentReport = it.currentReport?.copy(
+                            isSending = false
+                        )
+                    )
+                }
+                return
+            }
+
+            val submission = ReportUpdateSubmission(
+                status = com.avivba.simbanyu.domain.model.Report.ReportStatus.valueOf(
+                    report.report.status.id
+                ),
+                handlingEvidenceImage = state.value.image,
+                operatorNotes = state.value.notesState.text.toString()
             )
+
+            when (reportRepository.handle(report.report.id, submission)) {
+                is Result.Success -> {
+                    updateState {
+                        it.copy(
+                            currentReport = null,
+                        )
+                    }
+                    sendEvent(OperatorReportEvent.OnSent)
+                }
+
+                is Result.Error -> {
+                    updateState {
+                        it.copy(
+                            currentReport = it.currentReport?.copy(
+                                isSending = false
+                            )
+                        )
+                    }
+                    // TODO: Handle error
+                }
+            }
         }
     }
 

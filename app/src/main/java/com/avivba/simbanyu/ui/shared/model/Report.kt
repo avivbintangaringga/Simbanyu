@@ -6,10 +6,22 @@ enum class ReportStatus(
     val id: String,
     val status: String,
 ) {
-    WAITING("waiting", "Menunggu"),
-    IN_PROGRESS("in_progress", "Dalam Proses"),
-    COMPLETED("completed", "Selesai"),
-    REJECTED("rejected", "Ditolak"),
+    WAITING(
+        id = com.avivba.simbanyu.domain.model.Report.ReportStatus.WAITING.name,
+        status = "Menunggu"
+    ),
+    IN_PROGRESS(
+        id = com.avivba.simbanyu.domain.model.Report.ReportStatus.IN_PROGRESS.name,
+        status = "Dalam Proses"
+    ),
+    COMPLETED(
+        id = com.avivba.simbanyu.domain.model.Report.ReportStatus.COMPLETED.name,
+        status = "Selesai"
+    ),
+    REJECTED(
+        id = com.avivba.simbanyu.domain.model.Report.ReportStatus.REJECTED.name,
+        status = "Ditolak"
+    ),
 }
 
 data class Report(

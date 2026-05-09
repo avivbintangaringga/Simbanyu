@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -38,11 +39,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.item.ReportItem
@@ -77,6 +80,8 @@ fun OperatorReportScreen(
                     "Laporan berhasil diperbarui",
                     Toast.LENGTH_SHORT
                 ).show()
+                viewModel.onAction(OperatorReportAction.Load)
+                viewModel.onAction(OperatorReportAction.HideUpdateReport)
             }
 
             OperatorReportEvent.OpenCamera -> {
@@ -215,7 +220,7 @@ private fun OperatorReportContent(
                             onAction(OperatorReportAction.ToggleItemExpand(report))
                         },
                         onClickHandleReport = {
-                            onAction(OperatorReportAction.UpdateReport(report))
+                            onAction(OperatorReportAction.ShowUpdateReport(report))
                         }
                     )
                 }
@@ -231,13 +236,18 @@ private fun OperatorReportContent(
                         onAction(OperatorReportAction.HideUpdateReport)
                     }
                 },
+                sheetGesturesEnabled = false,
                 properties = ModalBottomSheetProperties(
                     shouldDismissOnBackPress = !state.currentReport.isSending,
                     shouldDismissOnClickOutside = !state.currentReport.isSending
-                )
+                ),
+                dragHandle = {
+                    Spacer(Modifier.height(SimbanyuTheme.spacing.large))
+                }
             ) {
                 Column(
                     modifier = Modifier
+                        .verticalScroll(rememberScrollState())
                         .padding(
                             horizontal = SimbanyuTheme.padding.large
                         ),
@@ -315,7 +325,11 @@ private fun OperatorReportContent(
                                         )
                                     },
                                     onClick = {
-                                        // TODO: Handle on status selected
+                                        onAction(
+                                            OperatorReportAction.SelectCurrentReportStatus(
+                                                status
+                                            )
+                                        )
                                         isExpanded = false
                                     }
                                 )
@@ -364,51 +378,66 @@ private fun OperatorReportContent(
                         )
                     }
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(150.dp)
-                            .clip(SimbanyuTheme.shapes.large)
-                            .clickable {
-                                onAction(OperatorReportAction.OpenCamera)
-                            }
-                            .conditional(
-                                state.image == null
-                            ) {
-                                dashedBorder(
+                    if (state.image != null ||
+                        state.currentReport.report.handlingEvidenceImageUrl.isNotEmpty()
+                    ) {
+                        AsyncImage(
+                            model = state.image
+                                ?: state.currentReport.report.handlingEvidenceImageUrl,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(SimbanyuTheme.shapes.large),
+                            contentScale = ContentScale.FillWidth
+                        )
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(150.dp)
+                                .clip(SimbanyuTheme.shapes.large)
+                                .clickable {
+                                    onAction(OperatorReportAction.OpenCamera)
+                                }
+                                .conditional(
+                                    state.currentReport.report.status == ReportStatus.COMPLETED &&
+                                            state.currentReport.report.handlingEvidenceImageUrl.isEmpty()
+                                ) {
+                                    dashedBorder(
+                                        strokeWidth = 4.dp,
+                                        gapLength = 6.dp,
+                                        dashLength = 8.dp,
+                                        color = SimbanyuTheme.colors.statusNegativeText,
+                                        shape = SimbanyuTheme.shapes.large
+                                    )
+                                }
+                                .dashedBorder(
                                     strokeWidth = 4.dp,
                                     gapLength = 6.dp,
                                     dashLength = 8.dp,
-                                    color = SimbanyuTheme.colors.statusNegativeText,
+                                    color = SimbanyuTheme.colors.borderCardAlternate,
                                     shape = SimbanyuTheme.shapes.large
-                                )
-                            }
-                            .dashedBorder(
-                                strokeWidth = 4.dp,
-                                gapLength = 6.dp,
-                                dashLength = 8.dp,
-                                color = SimbanyuTheme.colors.borderCardAlternate,
-                                shape = SimbanyuTheme.shapes.large
+                                ),
+                            verticalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.medium,
+                                alignment = Alignment.CenterVertically
                             ),
-                        verticalArrangement = Arrangement.spacedBy(
-                            SimbanyuTheme.spacing.medium,
-                            alignment = Alignment.CenterVertically
-                        ),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .requiredSize(40.dp),
-                            painter = painterResource(R.drawable.ic_photo_camera_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.statusNeutral
-                        )
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .requiredSize(40.dp),
+                                painter = painterResource(R.drawable.ic_photo_camera_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.statusNeutral
+                            )
 
-                        SimbanyuText(
-                            text = "Unggah foto (maks 5MB)",
-                            style = SimbanyuTheme.typography.bodySmall,
-                            color = SimbanyuTheme.colors.statusNeutral
-                        )
+                            SimbanyuText(
+                                text = "Unggah foto (maks 5MB)",
+                                style = SimbanyuTheme.typography.bodySmall,
+                                color = SimbanyuTheme.colors.statusNeutral
+                            )
+                        }
                     }
 
                     Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
@@ -451,7 +480,8 @@ private fun OperatorReportContent(
 fun OperatorReportScreenPreview() {
     SimbanyuTheme {
         OperatorReportContent(
-            state = OperatorReportUiState(),
+            state = OperatorReportUiState(
+            ),
         )
     }
 }

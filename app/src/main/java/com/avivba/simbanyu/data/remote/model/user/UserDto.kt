@@ -21,6 +21,6 @@ data class UserDto(
         name = name,
         role = User.UserRole.valueOf(role),
         phoneNumber = phoneNumber,
-        photoImageUrl = photoImageUrl.let { "$BASE_URL$it" },
+        photoImageUrl = photoImageUrl?.let { "$BASE_URL$it" } ?: "",
     )
 }

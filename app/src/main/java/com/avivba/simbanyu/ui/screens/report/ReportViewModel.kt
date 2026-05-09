@@ -181,7 +181,7 @@ class ReportViewModel(
 
         updateState {
             it.copy(
-                isRefreshing = true
+                isRefreshing = false
             )
         }
     }
