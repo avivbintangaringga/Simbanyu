@@ -38,7 +38,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -46,10 +45,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
+import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.item.ReportItem
 import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
@@ -475,16 +474,13 @@ private fun CreateReport(
                 }
 
             } else {
-                AsyncImage(
+                ImageView(
                     model = state.image,
-                    contentDescription = null,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(SimbanyuTheme.shapes.large)
-                        .clickable {
-                            onAction(ReportAction.OpenCamera)
-                        },
-                    contentScale = ContentScale.FillWidth
+                        .fillMaxWidth(),
+                    onClick = {
+                        onAction(ReportAction.OpenCamera)
+                    },
                 )
             }
         }

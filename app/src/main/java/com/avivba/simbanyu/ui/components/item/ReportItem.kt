@@ -16,14 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
@@ -219,13 +218,9 @@ fun ReportItem(
                     )
                 }
 
-                AsyncImage(
+                ImageView(
                     model = report.evidenceImageUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(SimbanyuTheme.shapes.large),
-                    contentScale = ContentScale.FillWidth
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 if (report.operatorNotes.isNotEmpty()) {
@@ -271,13 +266,9 @@ fun ReportItem(
                         )
                     }
 
-                    AsyncImage(
+                    ImageView(
                         model = report.handlingEvidenceImageUrl,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(SimbanyuTheme.shapes.large),
-                        contentScale = ContentScale.FillWidth
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
 

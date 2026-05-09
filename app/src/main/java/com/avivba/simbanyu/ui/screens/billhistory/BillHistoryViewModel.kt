@@ -25,8 +25,8 @@ class BillHistoryViewModel(
 
     init {
         viewModelScope.launch {
-            observeDataChanges()
             load()
+            observeDataChanges()
         }
     }
 
@@ -183,7 +183,7 @@ class BillHistoryViewModel(
     }
 
     private suspend fun fetchData() {
-        when (val bills = billRepository.getAll()) {
+        when (val bills = billRepository.getAll(null)) {
             is Result.Success -> {
                 val bills = bills.data.map {
                     Bill.fromDomain(it)
@@ -192,9 +192,13 @@ class BillHistoryViewModel(
                 val years = bills.map { it.periodYear }.distinct().sortedDescending()
                 val selectedYear = years.firstOrNull() ?: 0
 
+                _bills.update {
+                    bills
+                }
+
                 updateState {
                     it.copy(
-                        bills = bills,
+//                        bills = bills,
                         years = years,
                         selectedYear = selectedYear,
                     )

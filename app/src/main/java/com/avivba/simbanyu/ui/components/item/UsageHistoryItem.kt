@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.usagehistory.fakeUsages
 import com.avivba.simbanyu.ui.shared.model.Usage
@@ -116,14 +116,9 @@ fun UsageHistoryItem(
                     )
                 }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp)
-                        .clip(SimbanyuTheme.shapes.large)
-                        .background(
-                            SimbanyuTheme.colors.statusNeutral
-                        )
+                ImageView(
+                    model = usage.imageUrl,
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 if (usage.operatorNotes.isNotEmpty()) {
@@ -147,36 +142,6 @@ fun UsageHistoryItem(
 
                     SimbanyuText(
                         text = usage.operatorNotes
-                    )
-                }
-
-                if (usage.imageUrl.isNotEmpty()) {
-                    Row(
-                        modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .height(16.dp)
-                                .padding(end = SimbanyuTheme.padding.medium),
-                            painter = painterResource(R.drawable.ic_photo_camera_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.brand
-                        )
-                        SimbanyuText(
-                            text = "BUKTI PENANGANAN",
-                            style = SimbanyuTheme.typography.labelOverline
-                        )
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(150.dp)
-                            .clip(SimbanyuTheme.shapes.large)
-                            .background(
-                                SimbanyuTheme.colors.statusNeutral
-                            )
                     )
                 }
             }

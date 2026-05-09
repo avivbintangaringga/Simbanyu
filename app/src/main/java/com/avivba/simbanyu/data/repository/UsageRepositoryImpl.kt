@@ -20,13 +20,13 @@ class UsageRepositoryImpl(
     private val usageService: UsageService
 ) : UsageRepository {
     override suspend fun getAll(
-        subscriberId: String,
-        limitLast: Int
+        subscriberId: String?,
+        limit: Int?
     ): Result<List<Usage>, DataError> {
         return safeApiCall {
-            usageService.getBySubscriber(
+            usageService.getAll(
                 subscriberId = subscriberId,
-                limit = limitLast
+                limit = limit
             ).data?.map {
                 it.toDomain()
             } ?: emptyList()
@@ -35,7 +35,7 @@ class UsageRepositoryImpl(
 
     override suspend fun getLastUsage(subscriberId: String): Result<Usage, DataError> {
         return safeApiCall {
-            usageService.getBySubscriber(
+            usageService.getAll(
                 subscriberId = subscriberId,
                 limit = 1
             ).data?.firstOrNull()?.toDomain() ?: throw Exception("Invalid response")

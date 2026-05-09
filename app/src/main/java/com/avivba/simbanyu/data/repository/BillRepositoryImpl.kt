@@ -14,9 +14,17 @@ class BillRepositoryImpl(
     private val billService: BillService,
     private val paymentService: PaymentService
 ) : BillRepository {
-    override suspend fun getAll(): Result<List<Bill>, DataError> {
+    override suspend fun getAll(
+        subscriberId: String?,
+        limit: Int?,
+        activeOnly: Boolean?
+    ): Result<List<Bill>, DataError> {
         return safeApiCall {
-            billService.getAll().data?.map {
+            billService.getAll(
+                subscriberId = subscriberId,
+                limit = limit,
+                activeOnly = activeOnly,
+            ).data?.map {
                 it.toDomain()
             } ?: emptyList()
         }
@@ -25,14 +33,6 @@ class BillRepositoryImpl(
     override suspend fun getById(id: String): Result<Bill, DataError> {
         return safeApiCall {
             billService.getById(id).data?.toDomain() ?: throw Exception("Invalid response")
-        }
-    }
-
-    override suspend fun getActive(): Result<List<Bill>, DataError> {
-        return safeApiCall {
-            billService.getActive().data?.map {
-                it.toDomain()
-            } ?: emptyList()
         }
     }
 

@@ -93,7 +93,9 @@ class OperatorMainViewModel(
             is Result.Success -> {
                 updateState {
                     it.copy(
-                        notifications = notifications.data.map { Notification.fromDomain(it) }
+                        notifications = notifications.data
+                            .sortedByDescending { it.date }
+                            .map { Notification.fromDomain(it) }
                     )
                 }
             }

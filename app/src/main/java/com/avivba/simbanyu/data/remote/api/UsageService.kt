@@ -16,9 +16,9 @@ import retrofit2.http.Query
 @Keep
 interface UsageService {
     @GET("usages")
-    suspend fun getBySubscriber(
-        @Query("subscriberId") subscriberId: String,
-        @Query("limit") limit: Int
+    suspend fun getAll(
+        @Query("subscriberId") subscriberId: String?,
+        @Query("limit") limit: Int? = null
     ): Envelope<List<UsageDto>>
 
     @Multipart

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.model.BillingStatus
@@ -108,56 +110,65 @@ internal fun BillHistory(
             }
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            ),
-            state = listState,
-        ) {
-            items(
-                items = state.bills.sortedByDescending { it.id },
-                key = { it.id }
-            ) { bill ->
-                var iconId = R.drawable.ic_history
-                var iconTint = SimbanyuTheme.colors.brand
-                var iconBackgroundColor = SimbanyuTheme.colors.surfaceCardAlternate
-                var statusBackgroundColor = SimbanyuTheme.colors.brand
+        if (state.bills.isNotEmpty()) {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
+                ),
+                state = listState,
+            ) {
+                items(
+                    items = state.bills.sortedByDescending { it.id },
+                    key = { it.id }
+                ) { bill ->
+                    var iconId = R.drawable.ic_history
+                    var iconTint = SimbanyuTheme.colors.brand
+                    var iconBackgroundColor = SimbanyuTheme.colors.surfaceCardAlternate
+                    var statusBackgroundColor = SimbanyuTheme.colors.brand
 
-                if (bill.status == BillingStatus.PAID) {
-                    iconId = R.drawable.ic_done_all
-                    iconTint = SimbanyuTheme.colors.statusPositiveText
-                    iconBackgroundColor = SimbanyuTheme.colors.statusPositive
-                    statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
-                } else if (bill.status == BillingStatus.PENDING) {
-                    iconId = R.drawable.ic_pending
-                    iconTint = SimbanyuTheme.colors.statusWarningText
-                    iconBackgroundColor = SimbanyuTheme.colors.statusWarning
-                    statusBackgroundColor = SimbanyuTheme.colors.statusWarningText
-                } else {
-                    statusBackgroundColor = SimbanyuTheme.colors.statusNegativeText
-                    iconId = R.drawable.ic_contract
-                    iconTint = SimbanyuTheme.colors.statusNegativeText
-                    iconBackgroundColor = SimbanyuTheme.colors.statusNegative
-                }
-
-                BillHistoryItem(
-                    period = "${bill.periodMonth} ${bill.periodYear}",
-                    id = bill.id,
-                    amount = bill.amount,
-                    status = bill.status.status,
-                    iconId = iconId,
-                    iconTint = iconTint,
-                    iconBackgroundColor = iconBackgroundColor,
-                    statusBackgroundColor = statusBackgroundColor,
-                    canPayByCash = bill.status == BillingStatus.UNPAID,
-                    onClickPayByCash = {
-                        onAction(SubscriberDetailsAction.PayByCash(bill))
+                    if (bill.status == BillingStatus.PAID) {
+                        iconId = R.drawable.ic_done_all
+                        iconTint = SimbanyuTheme.colors.statusPositiveText
+                        iconBackgroundColor = SimbanyuTheme.colors.statusPositive
+                        statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
+                    } else if (bill.status == BillingStatus.PENDING) {
+                        iconId = R.drawable.ic_pending
+                        iconTint = SimbanyuTheme.colors.statusWarningText
+                        iconBackgroundColor = SimbanyuTheme.colors.statusWarning
+                        statusBackgroundColor = SimbanyuTheme.colors.statusWarningText
+                    } else {
+                        statusBackgroundColor = SimbanyuTheme.colors.statusNegativeText
+                        iconId = R.drawable.ic_contract
+                        iconTint = SimbanyuTheme.colors.statusNegativeText
+                        iconBackgroundColor = SimbanyuTheme.colors.statusNegative
                     }
-                )
+
+                    BillHistoryItem(
+                        period = "${bill.periodMonth} ${bill.periodYear}",
+                        id = bill.id,
+                        amount = bill.amount,
+                        status = bill.status.status,
+                        iconId = iconId,
+                        iconTint = iconTint,
+                        iconBackgroundColor = iconBackgroundColor,
+                        statusBackgroundColor = statusBackgroundColor,
+                        canPayByCash = bill.status == BillingStatus.UNPAID,
+                        onClickPayByCash = {
+                            onAction(SubscriberDetailsAction.PayByCash(bill))
+                        }
+                    )
+                }
             }
+        } else {
+            EmptyState(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.3f),
+                message = "Pelanggan ini belum memiliki riwayat tagihan"
+            )
         }
     }
 }

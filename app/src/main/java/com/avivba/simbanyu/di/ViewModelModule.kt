@@ -46,7 +46,7 @@ val viewModelModule = module {
     viewModel { OperatorDashboardViewModel(get(), get()) }
     viewModel { OperatorAnnouncementViewModel(get()) }
     viewModel { SubscribersViewModel(get()) }
-    viewModel { SubscriberDetailsViewModel(get()) }
+    viewModel { SubscriberDetailsViewModel(get(), get(), get(), get()) }
     viewModel { OperatorReportViewModel(get()) }
     viewModel { MeterRecordViewModel(get()) }
     viewModel { MapViewModel(get()) }

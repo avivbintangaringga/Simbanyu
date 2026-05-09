@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class UsageHistoryViewModel(
@@ -22,8 +23,8 @@ class UsageHistoryViewModel(
 
     init {
         viewModelScope.launch {
-            observeDataChanges()
             load()
+            observeDataChanges()
         }
     }
 
@@ -123,29 +124,23 @@ class UsageHistoryViewModel(
     }
 
     private suspend fun fetchData() {
-        when (val profile = userRepository.getLocalProfile()) {
+        when (val usage = usageRepository.getAll(null)) {
             is Result.Success -> {
-                when (val usage = usageRepository.getAll(profile.data.subscriberId!!)) {
-                    is Result.Success -> {
-                        val usages = usage.data.map {
-                            Usage.fromDomain(it)
-                        }
+                val usages = usage.data.map {
+                    Usage.fromDomain(it)
+                }
 
-                        val years = usages.map { it.periodYear }.distinct().sortedDescending()
-                        val selectedYear = years.firstOrNull() ?: 0
+                val years = usages.map { it.periodYear }.distinct().sortedDescending()
+                val selectedYear = years.firstOrNull() ?: 0
 
-                        updateState {
-                            it.copy(
-                                usages = usages,
-                                years = years,
-                                selectedYear = selectedYear,
-                            )
-                        }
-                    }
+                _usages.update { usages }
 
-                    is Result.Error -> {
-                        // TODO: Handle error
-                    }
+                updateState {
+                    it.copy(
+                        usages = usages,
+                        years = years,
+                        selectedYear = selectedYear,
+                    )
                 }
             }
 

@@ -72,7 +72,7 @@ class DashboardViewModel(
     }
 
     private suspend fun fetchData() {
-        when (val activeBill = billRepository.getActive()) {
+        when (val activeBill = billRepository.getAll(null, activeOnly = true)) {
             is Result.Success -> {
                 updateState { it ->
                     val totalActiveBill = activeBill.data.sumOf { it.amount }

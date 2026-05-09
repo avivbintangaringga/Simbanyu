@@ -39,15 +39,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.item.ReportItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
@@ -382,17 +381,13 @@ private fun OperatorReportContent(
                     if (state.image != null ||
                         state.currentReport.report.handlingEvidenceImageUrl.isNotEmpty()
                     ) {
-                        AsyncImage(
+                        ImageView(
                             model = state.image
                                 ?: state.currentReport.report.handlingEvidenceImageUrl,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(SimbanyuTheme.shapes.large)
-                                .clickable {
-                                    onAction(OperatorReportAction.OpenCamera)
-                                },
-                            contentScale = ContentScale.FillWidth
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                onAction(OperatorReportAction.OpenCamera)
+                            },
                         )
                     } else {
                         Column(
