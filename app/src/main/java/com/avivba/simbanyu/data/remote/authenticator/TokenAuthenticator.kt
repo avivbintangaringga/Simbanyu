@@ -23,6 +23,10 @@ class TokenAuthenticator(
     private val authService by lazy { authServiceProvider() }
 
     override fun authenticate(route: Route?, response: Response): Request? {
+        if (response.request.header("No-Auth") == "true") {
+            return null
+        }
+
         if (response.countPriorResponses() >= 2) {
             handleSessionExpired()
             return null
