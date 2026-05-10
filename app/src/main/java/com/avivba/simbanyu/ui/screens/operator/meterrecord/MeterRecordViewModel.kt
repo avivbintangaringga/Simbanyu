@@ -12,6 +12,8 @@ import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.utils.toFullDateTime
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class MeterRecordViewModel(
@@ -161,7 +163,14 @@ class MeterRecordViewModel(
             )
         }
 
-        fetchSubscriberData()
+        listOf(
+            viewModelScope.async {
+                fetchSubscriberData()
+            },
+            viewModelScope.async {
+                fetchUsageData()
+            }
+        ).awaitAll()
 
         updateState {
             it.copy(
@@ -174,8 +183,6 @@ class MeterRecordViewModel(
         when (val subscriber = subscriberRepository.getById(subscriberId)) {
             is Result.Success -> {
                 val data = subscriber.data
-
-                fetchUsageData()
 
                 updateState {
                     it.copy(

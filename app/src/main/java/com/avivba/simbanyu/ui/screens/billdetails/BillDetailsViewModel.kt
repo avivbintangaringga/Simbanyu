@@ -9,7 +9,8 @@ import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiBill
-import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class BillDetailsViewModel(
@@ -47,8 +48,14 @@ class BillDetailsViewModel(
             )
         }
 
-        fetchUserData()
-        fetchData()
+        listOf(
+            viewModelScope.async {
+                fetchUserData()
+            },
+            viewModelScope.async {
+                fetchData()
+            }
+        ).awaitAll()
 
         updateState {
             it.copy(
@@ -83,7 +90,7 @@ class BillDetailsViewModel(
                 val bill = UiBill.fromDomain(bill.data)
                 updateState {
                     it.copy(
-                        period = "${bill.periodMonth} ${bill.periodYear}" ,
+                        period = "${bill.periodMonth} ${bill.periodYear}",
                         details = bill.costs,
                         status = bill.status,
                         totalAmount = bill.amount,

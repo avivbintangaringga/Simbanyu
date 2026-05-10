@@ -109,20 +109,18 @@ class UsageHistoryViewModel(
     }
 
     private suspend fun load() {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    isLoading = true
-                )
-            }
+        updateState {
+            it.copy(
+                isLoading = true
+            )
+        }
 
-            fetchData()
+        fetchData()
 
-            updateState {
-                it.copy(
-                    isLoading = false
-                )
-            }
+        updateState {
+            it.copy(
+                isLoading = false
+            )
         }
     }
 

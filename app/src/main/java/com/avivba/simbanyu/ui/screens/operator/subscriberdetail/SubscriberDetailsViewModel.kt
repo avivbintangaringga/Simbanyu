@@ -13,6 +13,8 @@ import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiBill
 import com.avivba.simbanyu.ui.shared.model.UiCoordinate
 import com.avivba.simbanyu.ui.shared.model.UiUsage
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -151,78 +153,84 @@ class SubscriberDetailsViewModel(
     }
 
     private suspend fun fetchData() {
-        when (val subscriber = subscriberRepository.getById(subscriberId)) {
-            is Result.Success -> {
-                val data = subscriber.data
-                updateState {
-                    it.copy(
-                        name = data.user.name,
-                        address = data.address,
-                        meterId = data.meterId,
-                        phone = data.user.phoneNumber,
-                        category = data.plan,
-                        location = UiCoordinate.fromDomain(
-                            data.location
-                        ),
-                        isRecorded = data.isRecorded,
-                    )
+        listOf(
+            viewModelScope.async {
+                when (val subscriber = subscriberRepository.getById(subscriberId)) {
+                    is Result.Success -> {
+                        val data = subscriber.data
+                        updateState {
+                            it.copy(
+                                name = data.user.name,
+                                address = data.address,
+                                meterId = data.meterId,
+                                phone = data.user.phoneNumber,
+                                category = data.plan,
+                                location = UiCoordinate.fromDomain(
+                                    data.location
+                                ),
+                                isRecorded = data.isRecorded,
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
+                }
+            },
+            viewModelScope.async {
+                when (val usages = usageRepository.getAll(subscriberId)) {
+                    is Result.Success -> {
+                        val usages = usages.data.map {
+                            UiUsage.fromDomain(it)
+                        }
+
+                        val years = usages.map { it.periodYear }.distinct().sortedDescending()
+                        val selectedYear = years.firstOrNull() ?: 0
+
+                        _usages.update { usages }
+
+                        updateState {
+                            it.copy(
+                                usageYears = years,
+                                usageSelectedYear = selectedYear,
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
+                }
+            },
+            viewModelScope.async {
+                when (val bills = billRepository.getAll(subscriberId)) {
+                    is Result.Success -> {
+                        val bills = bills.data.map {
+                            UiBill.fromDomain(it)
+                        }
+
+                        val years = bills.map { it.periodYear }.distinct().sortedDescending()
+                        val selectedYear = years.firstOrNull() ?: 0
+
+                        _bills.update {
+                            bills
+                        }
+
+                        updateState {
+                            it.copy(
+                                billYears = years,
+                                billSelectedYear = selectedYear,
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
                 }
             }
-
-            is Result.Error -> {
-                // TODO: Handle error
-            }
-        }
-
-        when (val usages = usageRepository.getAll(subscriberId)) {
-            is Result.Success -> {
-                val usages = usages.data.map {
-                    UiUsage.fromDomain(it)
-                }
-
-                val years = usages.map { it.periodYear }.distinct().sortedDescending()
-                val selectedYear = years.firstOrNull() ?: 0
-
-                _usages.update { usages }
-
-                updateState {
-                    it.copy(
-                        usageYears = years,
-                        usageSelectedYear = selectedYear,
-                    )
-                }
-            }
-
-            is Result.Error -> {
-                // TODO: Handle error
-            }
-        }
-
-        when (val bills = billRepository.getAll(subscriberId)) {
-            is Result.Success -> {
-                val bills = bills.data.map {
-                    UiBill.fromDomain(it)
-                }
-
-                val years = bills.map { it.periodYear }.distinct().sortedDescending()
-                val selectedYear = years.firstOrNull() ?: 0
-
-                _bills.update {
-                    bills
-                }
-
-                updateState {
-                    it.copy(
-                        billYears = years,
-                        billSelectedYear = selectedYear,
-                    )
-                }
-            }
-
-            is Result.Error -> {
-                // TODO: Handle error
-            }
-        }
+        ).awaitAll()
     }
 
     private suspend fun payByCash(id: String) {

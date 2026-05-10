@@ -50,8 +50,14 @@ class InvoiceViewModel(
             )
         }
 
-        fetchUserData()
-        fetchBillData()
+        listOf(
+            viewModelScope.async {
+                fetchUserData()
+            },
+            viewModelScope.async {
+                fetchBillData()
+            }
+        ).awaitAll()
 
         updateState {
             it.copy(

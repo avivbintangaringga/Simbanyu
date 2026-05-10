@@ -6,6 +6,8 @@ import com.avivba.simbanyu.domain.repository.ActivityRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiActivity
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class OperatorDashboardViewModel(
@@ -65,36 +67,41 @@ class OperatorDashboardViewModel(
     }
 
     private suspend fun fetchData() {
-        when (val profile = userRepository.getLocalProfile()) {
-            is Result.Success -> {
-                updateState {
-                    it.copy(
-                        name = profile.data.name
-                    )
+        listOf(
+            viewModelScope.async {
+                when (val profile = userRepository.getLocalProfile()) {
+                    is Result.Success -> {
+                        updateState {
+                            it.copy(
+                                name = profile.data.name
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
+                }
+            },
+            viewModelScope.async {
+                when (val activities = activityRepository.getAll(limit = 3)) {
+                    is Result.Success -> {
+                        updateState {
+                            it.copy(
+                                activities = activities.data
+                                    .sortedByDescending { it.date }
+                                    .map {
+                                        UiActivity.fromDomain(it)
+                                    }
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
                 }
             }
-
-            is Result.Error -> {
-                // TODO: Handle error
-            }
-        }
-
-        when (val activities = activityRepository.getAll(limit = 3)) {
-            is Result.Success -> {
-                updateState {
-                    it.copy(
-                        activities = activities.data
-                            .sortedByDescending { it.date }
-                            .map {
-                                UiActivity.fromDomain(it)
-                            }
-                    )
-                }
-            }
-
-            is Result.Error -> {
-                // TODO: Handle error
-            }
-        }
+        ).awaitAll()
     }
 }

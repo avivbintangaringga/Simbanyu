@@ -11,6 +11,8 @@ import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
 import com.avivba.simbanyu.ui.utils.toDottedCurrency
 import com.avivba.simbanyu.ui.utils.toMonthShort
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
@@ -22,7 +24,9 @@ class DashboardViewModel(
     DashboardUiState()
 ) {
     init {
-        onAction(DashboardAction.Load)
+        viewModelScope.launch {
+            fetchData()
+        }
     }
 
     override fun onAction(action: DashboardAction) {
@@ -32,6 +36,7 @@ class DashboardViewModel(
                 DashboardAction.PayBill -> {
                     sendEvent(DashboardEvent.GoToInvoice)
                 }
+
                 DashboardAction.ViewAllAnnouncements -> sendEvent(DashboardEvent.ViewAllAnnouncements)
                 DashboardAction.Refresh -> refresh()
             }
@@ -71,63 +76,67 @@ class DashboardViewModel(
     }
 
     private suspend fun fetchData() {
-        when (val activeBill = billRepository.getAll(null, activeOnly = true)) {
-            is Result.Success -> {
-                updateState { it ->
-                    val totalActiveBill = activeBill.data.sumOf { it.amount }
-                    it.copy(
-                        bill = if (totalActiveBill > 0) totalActiveBill.toDottedCurrency(prefix = "") else "",
-                        billIds = activeBill.data.map { it.id }
-                    )
+        listOf(
+            viewModelScope.async {
+                when (val profile = userRepository.getLocalProfile()) {
+                    is Result.Success -> {
+                        updateState {
+                            it.copy(
+                                name = profile.data.name
+                            )
+                        }
+                        val subscriberId = profile.data.subscriberId
+                        if (subscriberId != null) {
+                            loadUsages(subscriberId)
+                        } else {
+                            // TODO: Handle error
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
+                }
+            },
+            viewModelScope.async {
+                when (val activeBill = billRepository.getAll(null, activeOnly = true)) {
+                    is Result.Success -> {
+                        updateState { it ->
+                            val totalActiveBill = activeBill.data.sumOf { it.amount }
+                            it.copy(
+                                bill = if (totalActiveBill > 0) totalActiveBill.toDottedCurrency(
+                                    prefix = ""
+                                ) else "",
+                                billIds = activeBill.data.map { it.id }
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
+                }
+            },
+            viewModelScope.async {
+                when (val announcements = announcementRepository.getAllAnnouncements()) {
+                    is Result.Success -> {
+                        updateState {
+                            it.copy(
+                                announcements = announcements.data
+                                    .sortedByDescending { it.date }
+                                    .take(3).map { announcement ->
+                                        UiAnnouncement.fromDomain(announcement)
+                                    }
+                            )
+                        }
+                    }
+
+                    is Result.Error -> {
+                        // TODO: Handle error
+                    }
                 }
             }
-
-            is Result.Error -> {
-                Log.e("DashboardViewModel", "Error: ${activeBill.error}")
-                // TODO: Handle error
-            }
-        }
-
-        when (val profile = userRepository.getLocalProfile()) {
-            is Result.Success -> {
-                updateState {
-                    it.copy(
-                        name = profile.data.name
-                    )
-                }
-
-                val subscriberId = profile.data.subscriberId
-                if (subscriberId != null) {
-                    loadUsages(subscriberId)
-                } else {
-                    // TODO: Handle error
-                }
-            }
-
-            is Result.Error -> {
-                // TODO: Handle error
-            }
-        }
-
-
-        when (val announcements = announcementRepository.getAllAnnouncements()) {
-            is Result.Success -> {
-                updateState {
-                    it.copy(
-                        announcements = announcements.data
-                            .sortedByDescending { it.date }
-                            .take(3).map { announcement ->
-                                UiAnnouncement.fromDomain(announcement)
-                            }
-                    )
-                }
-            }
-
-            is Result.Error -> {
-                Log.e("DashboardViewModel", "Error: ${announcements.error}")
-                // TODO: Handle error
-            }
-        }
+        ).awaitAll()
     }
 
     private suspend fun loadUsages(subscriberId: String) {
@@ -137,7 +146,6 @@ class DashboardViewModel(
                 val average = usage.map { it.amount }.average().takeIf { !it.isNaN() } ?: 0.0
                 val max = usage.maxByOrNull { it.amount }
 
-                // TODO: Load properly
                 updateState {
                     it.copy(
                         usage = usage.map {
