@@ -3,7 +3,7 @@ package com.avivba.simbanyu.data.remote.api
 import androidx.annotation.Keep
 import com.avivba.simbanyu.data.remote.model.Envelope
 import com.avivba.simbanyu.data.remote.model.announcement.AnnouncementDto
-import com.avivba.simbanyu.domain.model.AnnouncementSubmission
+import com.avivba.simbanyu.data.remote.model.announcement.AnnouncementRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -23,13 +23,13 @@ interface AnnouncementService {
 
     @POST("announcements")
     suspend fun add(
-        @Body announcement: AnnouncementSubmission
+        @Body announcement: AnnouncementRequest
     ): Envelope<AnnouncementDto>
 
     @PUT("announcements/{id}")
     suspend fun update(
         @Path("id") id: String,
-        @Body announcement: AnnouncementSubmission
+        @Body announcement: AnnouncementRequest
     ): Envelope<AnnouncementDto>
 
     @DELETE("announcements/{id}")

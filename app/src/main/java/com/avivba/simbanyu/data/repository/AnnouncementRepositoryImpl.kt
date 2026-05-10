@@ -1,6 +1,8 @@
 package com.avivba.simbanyu.data.repository
 
+import android.util.Log
 import com.avivba.simbanyu.data.remote.api.AnnouncementService
+import com.avivba.simbanyu.data.remote.model.announcement.AnnouncementRequest
 import com.avivba.simbanyu.data.utils.safeApiCall
 import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
@@ -27,7 +29,13 @@ class AnnouncementRepositoryImpl(
 
     override suspend fun addAnnouncement(announcement: AnnouncementSubmission): Result<Announcement, DataError> {
         return safeApiCall {
-            announcementService.add(announcement).data?.toDomain()
+            Log.d("SDKSDK", "addAnnouncement: $announcement")
+            announcementService.add(
+                AnnouncementRequest(
+                    title = announcement.title,
+                    body = announcement.body
+                )
+            ).data?.toDomain()
                 ?: throw Exception("Invalid response")
         }
     }
@@ -37,7 +45,13 @@ class AnnouncementRepositoryImpl(
         announcement: AnnouncementSubmission
     ): Result<Announcement, DataError> {
         return safeApiCall {
-            announcementService.update(id, announcement).data?.toDomain()
+            announcementService.update(
+                id = id,
+                announcement = AnnouncementRequest(
+                    title = announcement.title,
+                    body = announcement.body
+                )
+            ).data?.toDomain()
                 ?: throw Exception("Invalid response")
         }
     }
