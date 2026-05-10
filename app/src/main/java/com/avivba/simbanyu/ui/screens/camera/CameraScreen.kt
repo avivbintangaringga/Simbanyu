@@ -1,10 +1,14 @@
 package com.avivba.simbanyu.ui.screens.camera
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.os.Build
 import android.util.Log
+import android.view.OrientationEventListener
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -18,6 +22,7 @@ import androidx.camera.core.ImageProxy
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,6 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -67,6 +74,7 @@ import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
+@SuppressLint("SourceLockedOrientationActivity")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
@@ -87,10 +95,13 @@ fun CameraScreen(
     }
 
     DisposableEffect(Unit) {
+        val originalOrientation = activity.requestedOrientation
+        activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         activity.enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
         )
         onDispose {
+            activity.requestedOrientation = originalOrientation
             activity.enableEdgeToEdge()
         }
     }
@@ -145,6 +156,31 @@ fun CameraContent(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
+
+    var rotationDegrees by remember { mutableFloatStateOf(0f) }
+
+    DisposableEffect(context) {
+        val listener = object : OrientationEventListener(context) {
+            override fun onOrientationChanged(orientation: Int) {
+                if (orientation == ORIENTATION_UNKNOWN) return
+                val newRotation = when (orientation) {
+                    in 45..134 -> 270f
+                    in 135..224 -> 180f
+                    in 225..314 -> 90f
+                    else -> 0f
+                }
+                if (rotationDegrees != newRotation) {
+                    rotationDegrees = newRotation
+                }
+            }
+        }
+        listener.enable()
+        onDispose {
+            listener.disable()
+        }
+    }
+
+    val animatedRotation by animateFloatAsState(targetValue = rotationDegrees)
 
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
 
@@ -261,6 +297,9 @@ fun CameraContent(
                             .clip(
                                 shape = CircleShape
                             )
+                            .graphicsLayer {
+                                rotationZ = animatedRotation
+                            }
                             .clickable(enabled = !state.isCapturing) {
                                 onAction(CameraAction.ToggleFlash)
                             }
@@ -280,6 +319,9 @@ fun CameraContent(
                     Icon(
                         painter = painterResource(R.drawable.ic_photo_camera_filled),
                         modifier = Modifier
+                            .graphicsLayer {
+                                rotationZ = animatedRotation
+                            }
                             .background(
                                 color = Color.White,
                                 shape = CircleShape
@@ -288,7 +330,7 @@ fun CameraContent(
                                 onAction(CameraAction.SetCaptureState(true))
                                 scope.launch {
                                     try {
-                                        val file = capturePhoto(context, imageCapture)
+                                        val file = capturePhoto(context, imageCapture, rotationDegrees)
                                         onAction(CameraAction.ImageCaptured(file))
                                     } catch (e: Exception) {
                                         onAction(CameraAction.SetCaptureState(false))
@@ -319,6 +361,9 @@ fun CameraContent(
                             .clip(
                                 shape = CircleShape
                             )
+                            .graphicsLayer {
+                                rotationZ = animatedRotation
+                            }
                             .clickable(enabled = !state.isCapturing) {
                                 onAction(CameraAction.ToggleCamera)
                             }
@@ -337,6 +382,7 @@ fun CameraContent(
 private suspend fun capturePhoto(
     context: Context,
     imageCapture: ImageCapture?,
+    rotation: Float
 ): File {
     return suspendCancellableCoroutine { continuation ->
         val capture = imageCapture ?: run {
@@ -352,7 +398,21 @@ private suspend fun capturePhoto(
             object : ImageCapture.OnImageCapturedCallback() {
 
                 override fun onCaptureSuccess(image: ImageProxy) {
-                    val bitmap = image.use { it.toBitmap() }
+                    val originalBitmap = image.use { it.toBitmap() }
+
+                    // Rotate the bitmap to match the UI orientation
+                    val matrix = Matrix().apply {
+                        postRotate(rotation)
+                    }
+                    val rotatedBitmap = Bitmap.createBitmap(
+                        originalBitmap,
+                        0,
+                        0,
+                        originalBitmap.width,
+                        originalBitmap.height,
+                        matrix,
+                        true
+                    )
 
                     try {
                         photoFile.outputStream().use { out ->
@@ -362,14 +422,17 @@ private suspend fun capturePhoto(
                                 @Suppress("DEPRECATION")
                                 Bitmap.CompressFormat.WEBP
                             }
-                            bitmap.compress(format, 80, out)
+                            rotatedBitmap.compress(format, 80, out)
                         }
                         continuation.resume(photoFile)
                     } catch (e: Exception) {
                         Log.e("SDKSDK", "Error saving image: ${e.message}")
                         continuation.resumeWithException(e)
                     } finally {
-                        bitmap.recycle()
+                        originalBitmap.recycle()
+                        if (rotatedBitmap != originalBitmap) {
+                            rotatedBitmap.recycle()
+                        }
                     }
                 }
 
