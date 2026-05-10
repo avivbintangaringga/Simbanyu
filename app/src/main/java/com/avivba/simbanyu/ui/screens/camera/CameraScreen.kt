@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,7 +48,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
@@ -56,9 +57,15 @@ import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.koin.compose.viewmodel.koinActivityViewModel
 import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -110,16 +117,11 @@ fun CameraScreen(
             contentAlignment = Alignment.Center
         ) {
             if (cameraPermissionState.status.isGranted) {
-                if (!state.isCapturing) {
-                    CameraContent(
-                        state = state,
-                        onAction = viewModel::onAction
-                    )
-                } else {
-                    CircularProgressIndicator(
-                        color = Color.White
-                    )
-                }
+                CameraContent(
+                    state = state,
+                    onAction = viewModel::onAction
+                )
+
             } else {
                 SimbanyuText(
                     modifier = Modifier
@@ -142,6 +144,7 @@ fun CameraContent(
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val scope = rememberCoroutineScope()
 
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
 
@@ -187,12 +190,29 @@ fun CameraContent(
         verticalArrangement = Arrangement.Bottom
     ) {
         surfaceRequest?.let {
-            CameraXViewfinder(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                surfaceRequest = it
-            )
+            ) {
+                CameraXViewfinder(
+                    modifier = Modifier.fillMaxSize(),
+                    surfaceRequest = it
+                )
+
+                if (state.isCapturing) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.5f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            color = Color.White
+                        )
+                    }
+                }
+            }
         } ?: @Composable {
             Box(
                 modifier = Modifier
@@ -212,156 +232,154 @@ fun CameraContent(
             }
         }
 
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    horizontal = SimbanyuTheme.padding.large,
-                    vertical = SimbanyuTheme.padding.extraExtraLarge
-                )
         ) {
-            Box(
+            Row(
                 modifier = Modifier
-                    .weight(1f),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = SimbanyuTheme.padding.large,
+                        vertical = SimbanyuTheme.padding.extraExtraLarge
+                    )
             ) {
-                val icon = if (state.isUsingFlash) {
-                    R.drawable.ic_flashlight_off_filled
-                } else {
-                    R.drawable.ic_flashlight_on_filled
+                Box(
+                    modifier = Modifier
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    val icon = if (state.isUsingFlash) {
+                        R.drawable.ic_flashlight_off_filled
+                    } else {
+                        R.drawable.ic_flashlight_on_filled
+                    }
+
+                    Icon(
+                        painter = painterResource(icon),
+                        modifier = Modifier
+                            .clip(
+                                shape = CircleShape
+                            )
+                            .clickable(enabled = !state.isCapturing) {
+                                onAction(CameraAction.ToggleFlash)
+                            }
+                            .padding(
+                                SimbanyuTheme.padding.large
+                            ),
+                        tint = Color.White,
+                        contentDescription = null
+                    )
                 }
 
-                Icon(
-                    painter = painterResource(icon),
+                Box(
                     modifier = Modifier
-                        .clip(
-                            shape = CircleShape
-                        )
-                        .clickable {
-                            onAction(CameraAction.ToggleFlash)
-                        }
-                        .padding(
-                            SimbanyuTheme.padding.large
-                        ),
-                    tint = Color.White,
-                    contentDescription = null
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_photo_camera_filled),
-                    modifier = Modifier
-                        .background(
-                            color = Color.White,
-                            shape = CircleShape
-                        )
-                        .clickable {
-                            onAction(CameraAction.SetCaptureState(true))
-                            capturePhoto(
-                                context,
-                                imageCapture,
-                                onSuccess = { file ->
-                                    onAction(CameraAction.ImageCaptured(file))
-                                },
-                                onError = {
-                                    onAction(CameraAction.SetCaptureState(false))
-                                    Toast.makeText(
-                                        context,
-                                        "Gagal mengambil foto",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_photo_camera_filled),
+                        modifier = Modifier
+                            .background(
+                                color = Color.White,
+                                shape = CircleShape
                             )
-                        }
-                        .padding(
-                            SimbanyuTheme.padding.large
-                        ),
-                    tint = Color.Black,
-                    contentDescription = null
-                )
-            }
+                            .clickable(enabled = !state.isCapturing) {
+                                onAction(CameraAction.SetCaptureState(true))
+                                scope.launch {
+                                    try {
+                                        val file = capturePhoto(context, imageCapture)
+                                        onAction(CameraAction.ImageCaptured(file))
+                                    } catch (e: Exception) {
+                                        onAction(CameraAction.SetCaptureState(false))
+                                        Toast.makeText(
+                                            context,
+                                            "Gagal mengambil foto",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }
+                            .padding(
+                                SimbanyuTheme.padding.large
+                            ),
+                        tint = Color.Black,
+                        contentDescription = null
+                    )
+                }
 
-            Box(
-                modifier = Modifier
-                    .weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_cameraswitch_filled),
+                Box(
                     modifier = Modifier
-                        .clip(
-                            shape = CircleShape
-                        )
-                        .clickable {
-                            onAction(CameraAction.ToggleCamera)
-                        }
-                        .padding(
-                            SimbanyuTheme.padding.large
-                        ),
-                    tint = Color.White,
-                    contentDescription = null
-                )
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_cameraswitch_filled),
+                        modifier = Modifier
+                            .clip(
+                                shape = CircleShape
+                            )
+                            .clickable(enabled = !state.isCapturing) {
+                                onAction(CameraAction.ToggleCamera)
+                            }
+                            .padding(
+                                SimbanyuTheme.padding.large
+                            ),
+                        tint = Color.White,
+                        contentDescription = null
+                    )
+                }
             }
         }
     }
 }
 
-private fun capturePhoto(
+private suspend fun capturePhoto(
     context: Context,
     imageCapture: ImageCapture?,
-    onSuccess: (File) -> Unit = {},
-    onError: (ImageCaptureException) -> Unit = {}
-) {
-    val capture = imageCapture ?: return
+): File {
+    return suspendCancellableCoroutine { continuation ->
+        val capture = imageCapture ?: run {
+            continuation.resumeWithException(IllegalStateException("Kamera belum siap"))
+            return@suspendCancellableCoroutine
+        }
 
-    val timeStamp = System.currentTimeMillis()
-    val photoFile = File(context.cacheDir, "IMG_${timeStamp}.webp")
+        val timeStamp = System.currentTimeMillis()
+        val photoFile = File(context.cacheDir, "IMG_${timeStamp}.webp")
 
-    capture.takePicture(
-        ContextCompat.getMainExecutor(context),
-        object : ImageCapture.OnImageCapturedCallback() {
+        capture.takePicture(
+            Dispatchers.IO.asExecutor(),
+            object : ImageCapture.OnImageCapturedCallback() {
 
-            override fun onCaptureSuccess(image: ImageProxy) {
-                val bitmap = image.use { it.toBitmap() }
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    val bitmap = image.use { it.toBitmap() }
 
-                try {
-                    photoFile.outputStream().use { out ->
-                        val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            Bitmap.CompressFormat.WEBP_LOSSY
-                        } else {
-                            @Suppress("DEPRECATION")
-                            Bitmap.CompressFormat.WEBP
+                    try {
+                        photoFile.outputStream().use { out ->
+                            val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                Bitmap.CompressFormat.WEBP_LOSSY
+                            } else {
+                                @Suppress("DEPRECATION")
+                                Bitmap.CompressFormat.WEBP
+                            }
+                            bitmap.compress(format, 80, out)
                         }
-                        bitmap.compress(format, 80, out)
+                        continuation.resume(photoFile)
+                    } catch (e: Exception) {
+                        Log.e("SDKSDK", "Error saving image: ${e.message}")
+                        continuation.resumeWithException(e)
+                    } finally {
+                        bitmap.recycle()
                     }
-                    onSuccess(photoFile)
-                } catch (e: Exception) {
-                    Log.e("SDKSDK", "Error saving image: ${e.message}")
-                    onError(
-                        ImageCaptureException(
-                            ImageCapture.ERROR_UNKNOWN,
-                            "Gagal menyimpan gambar",
-                            e
-                        )
-                    )
-                } finally {
-                    bitmap.recycle()
+                }
+
+                override fun onError(e: ImageCaptureException) {
+                    Log.e("SDKSDK", "Camera capture error: ${e.message}")
+                    continuation.resumeWithException(e)
                 }
             }
-
-            override fun onError(e: ImageCaptureException) {
-                Log.e("SDKSDK", "Camera Capture Error: ${e.message}")
-                e.printStackTrace()
-                onError(e)
-            }
-        }
-    )
-
+        )
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
