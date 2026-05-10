@@ -140,7 +140,7 @@ class ReportViewModel(
             when (submitResult) {
                 is Result.Success -> {
                     sendEvent(ReportEvent.ReportSent)
-                    load()
+                    refreshEventBus.triggerRefresh()
                 }
 
                 is Result.Error -> {
