@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -272,6 +273,7 @@ fun OperatorAnnouncementContent(
                             },
                         state = state.titleState,
                         hint = "Masukkan judul pemberitahuan...",
+                        capitalization = KeyboardCapitalization.Words
                     )
 
                     Row(
@@ -302,7 +304,7 @@ fun OperatorAnnouncementContent(
                                 )
                             },
                         state = state.descriptionState,
-                        lineLimits = TextFieldLineLimits.MultiLine(3, 3),
+                        lineLimits = TextFieldLineLimits.MultiLine(5, 5),
                         hint = "Masukkan isi pemberitahuan...",
                     )
                     Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
