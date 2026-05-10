@@ -4,7 +4,7 @@ import com.avivba.simbanyu.domain.model.Activity
 import com.avivba.simbanyu.ui.utils.toRelativeTime
 import java.time.Instant
 
-data class Activity(
+data class UiActivity(
     val id: String,
     val title: String,
     val body: String,
@@ -20,8 +20,8 @@ data class Activity(
     }
 
     companion object {
-        fun fromDomain(activity: Activity): com.avivba.simbanyu.ui.shared.model.Activity {
-            return Activity(
+        fun fromDomain(activity: Activity): com.avivba.simbanyu.ui.shared.model.UiActivity {
+            return UiActivity(
                 id = activity.id,
                 title = activity.title,
                 body = activity.body,

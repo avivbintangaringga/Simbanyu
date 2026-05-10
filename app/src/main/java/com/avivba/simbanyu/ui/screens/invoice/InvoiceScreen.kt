@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.invoice
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +26,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +51,8 @@ fun InvoiceScreen(
     onNavigateBack: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
@@ -55,8 +60,13 @@ fun InvoiceScreen(
                 onNavigateBack()
             }
 
-            InvoiceEvent.GoToPaymentMethod -> {
-                onNavigate(Screen.PaymentMethods)
+            is InvoiceEvent.OnPaymentError -> {
+                Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+            }
+
+            is InvoiceEvent.OnPaymentSuccess -> {
+                onNavigateBack()
+                uriHandler.openUri(it.url)
             }
         }
     }

@@ -5,7 +5,7 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.SubscriberRepository
 import com.avivba.simbanyu.ui.screens.operator.map.MapUiEvent.GoToRecordMeter
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Subscriber
+import com.avivba.simbanyu.ui.shared.model.UiSubscriber
 import kotlinx.coroutines.launch
 
 class MapViewModel(
@@ -83,7 +83,7 @@ class MapViewModel(
                 updateState {
                     it.copy(
                         subscribers = subscribers.data.map {
-                            Subscriber.fromDomain(it)
+                            UiSubscriber.fromDomain(it)
                         }
                     )
                 }

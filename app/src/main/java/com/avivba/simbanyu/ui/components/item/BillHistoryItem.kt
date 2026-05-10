@@ -110,7 +110,7 @@ fun BillHistoryItem(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     SimbanyuText(
-                        text = "Rp. $amount",
+                        text = amount,
                         style = SimbanyuTheme.typography.titleCard
                     )
                     Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))

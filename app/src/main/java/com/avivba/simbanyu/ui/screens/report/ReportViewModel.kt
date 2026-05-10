@@ -6,7 +6,7 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.ReportSubmission
 import com.avivba.simbanyu.domain.repository.ReportRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Report
+import com.avivba.simbanyu.ui.shared.model.UiReport
 import kotlinx.coroutines.launch
 
 class ReportViewModel(
@@ -159,7 +159,7 @@ class ReportViewModel(
         }
     }
 
-    private fun toggleReportExpand(report: Report) {
+    private fun toggleReportExpand(report: UiReport) {
         updateState {
             it.copy(
                 reports = it.reports.map { item ->
@@ -218,7 +218,7 @@ class ReportViewModel(
                             .sortedByDescending { report ->
                                 report.date
                             }.map {
-                                Report.fromDomain(it)
+                                UiReport.fromDomain(it)
                             }
                     )
                 }

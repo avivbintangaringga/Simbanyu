@@ -2,12 +2,12 @@ package com.avivba.simbanyu.ui.shared.model
 
 import com.avivba.simbanyu.ui.utils.toFullDateTime
 
-data class Subscriber(
+data class UiSubscriber(
     val id: String,
     val name: String,
     val address: String,
     val phone: String,
-    val coordinate: Coordinate,
+    val coordinate: UiCoordinate,
     val plan: String,
     val meterId: String,
     val lastMeterRecordDate: String,
@@ -15,13 +15,13 @@ data class Subscriber(
     val imageUrl: String,
 ) {
     companion object {
-        fun fromDomain(domain: com.avivba.simbanyu.domain.model.Subscriber): Subscriber {
-            return Subscriber(
+        fun fromDomain(domain: com.avivba.simbanyu.domain.model.Subscriber): UiSubscriber {
+            return UiSubscriber(
                 id = domain.id,
                 name = domain.user.name,
                 address = domain.address,
                 phone = domain.user.phoneNumber,
-                coordinate = Coordinate(
+                coordinate = UiCoordinate(
                     latitude = domain.location.latitude,
                     longitude = domain.location.longitude
                 ),

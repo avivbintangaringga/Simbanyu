@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.NotificationRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Notification
+import com.avivba.simbanyu.ui.shared.model.UiNotification
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -68,7 +68,7 @@ class MainViewModel(
         }
     }
 
-    private fun markAsRead(notification: Notification) {
+    private fun markAsRead(notification: UiNotification) {
         updateState {
             it.copy(
                 notifications = it.notifications.map { n ->
@@ -95,7 +95,7 @@ class MainViewModel(
                     it.copy(
                         notifications = notifications.data
                             .sortedByDescending { it.date }
-                            .map { Notification.fromDomain(it) }
+                            .map { UiNotification.fromDomain(it) }
                     )
                 }
             }

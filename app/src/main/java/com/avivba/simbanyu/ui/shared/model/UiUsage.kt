@@ -5,7 +5,7 @@ import com.avivba.simbanyu.ui.utils.toFullDateTime
 import com.avivba.simbanyu.ui.utils.toMonthFull
 import com.avivba.simbanyu.ui.utils.toYear
 
-data class Usage(
+data class UiUsage(
     val id: String,
     val meterStart: Int,
     val meterEnd: Int,
@@ -18,7 +18,7 @@ data class Usage(
     val fullDate: String = "",
 ) {
     companion object {
-        fun fromDomain(data: Usage) = Usage(
+        fun fromDomain(data: Usage) = UiUsage(
             id = data.id,
             meterStart = data.meterStart,
             meterEnd = data.meterEnd,

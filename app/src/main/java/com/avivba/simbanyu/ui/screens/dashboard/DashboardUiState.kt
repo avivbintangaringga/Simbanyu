@@ -1,6 +1,6 @@
 package com.avivba.simbanyu.ui.screens.dashboard
 
-import com.avivba.simbanyu.ui.shared.model.Announcement
+import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
 
 data class WaterUsage(
     val usage: Int,
@@ -18,7 +18,7 @@ data class DashboardUiState(
     val usageAverage: Double = 0.0,
     val usageMaximum: Int = 0,
     val usageMaximumMonth: String = "-",
-    val announcements: List<Announcement> = emptyList()
+    val announcements: List<UiAnnouncement> = emptyList()
 )
 
 sealed interface DashboardAction {
@@ -43,19 +43,19 @@ val fakeWaterUsage = listOf(
 )
 
 val fakeAnnouncements = listOf(
-    Announcement(
+    UiAnnouncement(
         id = "1",
         title = "Gangguan Distribusi",
         body = "Terjadi kebocoran pipa utama di Jl. Sudirman. Distribusi air akan terhenti sementara selama perbaikan.",
         date = "5 menit lalu"
     ),
-    Announcement(
+    UiAnnouncement(
         id = "2",
         title = "Pemeliharaan Rutin",
         body = "Pembersihan reservoir pusat sedang berlangsung. Tekanan air mungkin akan menurun di wilayah Utara.",
         date = "1 hari lalu"
     ),
-    Announcement(
+    UiAnnouncement(
         id = "3",
         title = "Layanan Normal",
         body = "Perbaikan di area Jl. Merdeka telah selesai. Pasokan air kini kembali normal di seluruh wilayah.",

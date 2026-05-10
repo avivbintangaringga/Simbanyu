@@ -2,7 +2,7 @@ package com.avivba.simbanyu.ui.shared.model
 
 import com.avivba.simbanyu.ui.utils.toRelativeTime
 
-data class Notification(
+data class UiNotification(
     val id: String,
     val title: String,
     val body: String,
@@ -10,8 +10,8 @@ data class Notification(
     val isRead: Boolean
 ) {
     companion object {
-        fun fromDomain(notification: com.avivba.simbanyu.domain.model.Notification): Notification {
-            return Notification(
+        fun fromDomain(notification: com.avivba.simbanyu.domain.model.Notification): UiNotification {
+            return UiNotification(
                 id = notification.id,
                 title = notification.title,
                 body = notification.body,

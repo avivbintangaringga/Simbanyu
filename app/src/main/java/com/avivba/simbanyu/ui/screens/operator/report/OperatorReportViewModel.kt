@@ -7,8 +7,8 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.ReportUpdateSubmission
 import com.avivba.simbanyu.domain.repository.ReportRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Report
-import com.avivba.simbanyu.ui.shared.model.ReportStatus
+import com.avivba.simbanyu.ui.shared.model.UiReport
+import com.avivba.simbanyu.ui.shared.model.UiReportStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -135,7 +135,7 @@ class OperatorReportViewModel(
                         .map { report ->
                             Log.d("SDKSDK", "REPORT: $report")
                             OperatorReport(
-                                report = Report.fromDomain(report)
+                                report = UiReport.fromDomain(report)
                             )
                         }
                 }
@@ -150,7 +150,7 @@ class OperatorReportViewModel(
     private fun validateFields(): Boolean {
         val report = state.value.currentReport?.report ?: return false
 
-        return !(report.status == ReportStatus.COMPLETED &&
+        return !(report.status == UiReportStatus.COMPLETED &&
                 state.value.image == null &&
                 report.handlingEvidenceImageUrl.isEmpty())
     }

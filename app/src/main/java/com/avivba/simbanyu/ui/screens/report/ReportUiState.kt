@@ -1,8 +1,8 @@
 package com.avivba.simbanyu.ui.screens.report
 
 import androidx.compose.foundation.text.input.TextFieldState
-import com.avivba.simbanyu.ui.shared.model.Coordinate
-import com.avivba.simbanyu.ui.shared.model.Report
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
+import com.avivba.simbanyu.ui.shared.model.UiReport
 import java.io.File
 
 enum class Fields {
@@ -18,10 +18,10 @@ data class ReportUiState(
     val isLoading: Boolean = false,
     val locationState: TextFieldState = TextFieldState(),
     val descriptionState: TextFieldState = TextFieldState(),
-    val locationCoordinate: Coordinate? = null,
+    val locationCoordinate: UiCoordinate? = null,
     val image: File? = null,
     val selectedTabIndex: Int = 0,
-    val reports: List<Report> = emptyList(),
+    val reports: List<UiReport> = emptyList(),
     val errorFields: List<Fields> = emptyList(),
 )
 
@@ -30,10 +30,10 @@ sealed interface ReportAction {
     data object Refresh : ReportAction
     data object OpenCamera : ReportAction
     data class SetImage(val file: File) : ReportAction
-    data class SetMyLocation(val coordinate: Coordinate) : ReportAction
+    data class SetMyLocation(val coordinate: UiCoordinate) : ReportAction
     data object SendReport : ReportAction
     data class ChangeTab(val index: Int) : ReportAction
-    data class ToggleExpandItem(val report: Report) : ReportAction
+    data class ToggleExpandItem(val report: UiReport) : ReportAction
 }
 
 sealed interface ReportEvent {

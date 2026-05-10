@@ -1,6 +1,6 @@
 package com.avivba.simbanyu.ui.shared.model
 
-data class Coordinate(
+data class UiCoordinate(
     val latitude: Double,
     val longitude: Double,
 ) {
@@ -12,8 +12,8 @@ data class Coordinate(
     }
 
     companion object {
-        fun fromDomain(coordinate: com.avivba.simbanyu.domain.model.Coordinate): Coordinate {
-            return Coordinate(
+        fun fromDomain(coordinate: com.avivba.simbanyu.domain.model.Coordinate): UiCoordinate {
+            return UiCoordinate(
                 latitude = coordinate.latitude,
                 longitude = coordinate.longitude,
             )

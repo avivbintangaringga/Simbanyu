@@ -46,7 +46,7 @@ import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.Screen.RecordMeter
-import com.avivba.simbanyu.ui.shared.model.Coordinate
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import kotlinx.coroutines.launch
@@ -439,7 +439,7 @@ private fun SubscriberDetailsContentPreview() {
         state = fakeSubscriberDetailsUiState.copy(
             selectedTabIndex = 1,
             isRecorded = true,
-            location = Coordinate(
+            location = UiCoordinate(
                 7.911178168148756,
                 110.69031351790268
             )

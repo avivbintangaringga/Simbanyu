@@ -1,8 +1,8 @@
 package com.avivba.simbanyu.ui.screens.billdetails
 
 import com.avivba.simbanyu.domain.model.Payment
-import com.avivba.simbanyu.ui.shared.model.BillingStatus
-import com.avivba.simbanyu.ui.shared.model.Cost
+import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
+import com.avivba.simbanyu.ui.shared.model.UiCost
 import com.avivba.simbanyu.ui.utils.toFullDateTime
 
 enum class UiPaymentStatus(val status: String) {
@@ -46,8 +46,8 @@ data class BillDetailsUiState(
     val meterId: String = "",
     val category: String = "",
     val period: String = "",
-    val details: List<Cost> = emptyList(),
-    val status: BillingStatus = BillingStatus.UNPAID,
+    val details: List<UiCost> = emptyList(),
+    val status: UiBillingStatus = UiBillingStatus.UNPAID,
     val totalAmount: String = "",
     val payments: List<UiPayment> = emptyList(),
 )
@@ -71,12 +71,12 @@ val fakeBillDetailsUiState = BillDetailsUiState(
     category = "Rumah Tangga A1",
     period = "Oktober 2023",
     details = listOf(
-        Cost("Tagihan Air", "Rp 150.000"),
-        Cost("Biaya Admin", "Rp 2.500"),
-        Cost("Pemeliharaan Metro", "Rp 5.000")
+        UiCost("Tagihan Air", "Rp 150.000"),
+        UiCost("Biaya Admin", "Rp 2.500"),
+        UiCost("Pemeliharaan Metro", "Rp 5.000")
     ),
     totalAmount = "Rp 157.500",
-    status = BillingStatus.PENDING,
+    status = UiBillingStatus.PENDING,
     payments = listOf(
         UiPayment(
             id = "1",

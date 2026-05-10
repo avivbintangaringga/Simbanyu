@@ -4,14 +4,14 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
-fun Double.toDottedString(): String {
+fun Double.toDottedCurrency(prefix: String = "Rp "): String {
     val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
         groupingSeparator = '.'
     }
     val formatter = DecimalFormat("#,###", symbols)
-    return formatter.format(this)
+    return prefix + formatter.format(this)
 }
 
-fun Int.toDottedString(): String {
-    return this.toDouble().toDottedString()
+fun Int.toDottedCurrency(prefix: String = "Rp "): String {
+    return this.toDouble().toDottedCurrency(prefix)
 }

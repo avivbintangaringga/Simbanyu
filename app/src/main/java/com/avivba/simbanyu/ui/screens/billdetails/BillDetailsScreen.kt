@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Devices
@@ -33,7 +34,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
-import com.avivba.simbanyu.ui.shared.model.BillingStatus
+import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.viewmodel.koinViewModel
@@ -45,6 +46,7 @@ fun BillDetailsScreen(
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val uriHandler = LocalUriHandler.current
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
@@ -53,8 +55,7 @@ fun BillDetailsScreen(
             }
 
             is BillDetailsEvent.OpenPaymentPage -> {
-                it.url
-                // TODO: Handle open payment URL
+                uriHandler.openUri(it.url)
             }
         }
     }
@@ -197,19 +198,19 @@ fun BillDetailsContent(
                 var backgroundColor: Color
 
                 when (state.status) {
-                    BillingStatus.PAID -> {
+                    UiBillingStatus.PAID -> {
                         iconId = R.drawable.ic_check_circle_filled
                         iconTint = SimbanyuTheme.colors.statusPositiveText
                         backgroundColor = SimbanyuTheme.colors.statusPositive
                     }
 
-                    BillingStatus.PENDING -> {
+                    UiBillingStatus.PENDING -> {
                         iconId = R.drawable.ic_pending
                         iconTint = SimbanyuTheme.colors.statusWarningText
                         backgroundColor = SimbanyuTheme.colors.statusWarning
                     }
 
-                    BillingStatus.UNPAID -> {
+                    UiBillingStatus.UNPAID -> {
                         iconId = R.drawable.ic_error
                         iconTint = SimbanyuTheme.colors.statusNegativeText
                         backgroundColor = SimbanyuTheme.colors.statusNegative
@@ -384,7 +385,7 @@ fun BillDetailsContent(
                             )
 
                             SimbanyuText(
-                                text = "ID #${payment.orderId}",
+                                text = "${payment.orderId}",
                                 style = SimbanyuTheme.typography.bodyProminent,
                                 modifier = Modifier.weight(1f)
                             )
@@ -487,7 +488,7 @@ fun BillDetailsContent(
                     }
                 }
 
-                if (state.status == BillingStatus.PAID) {
+                if (state.status == UiBillingStatus.PAID) {
                     SimbanyuButton(
                         modifier = Modifier
                             .padding(
@@ -510,7 +511,7 @@ fun BillDetailsContent(
                             )
                         }
                     )
-                } else if (state.status == BillingStatus.PENDING) {
+                } else if (state.status == UiBillingStatus.PENDING) {
                     SimbanyuButton(
                         modifier = Modifier
                             .padding(

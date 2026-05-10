@@ -8,8 +8,8 @@ import com.avivba.simbanyu.domain.repository.BillRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Bill
-import com.avivba.simbanyu.ui.utils.toDottedString
+import com.avivba.simbanyu.ui.shared.model.UiBill
+import com.avivba.simbanyu.ui.utils.toDottedCurrency
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -38,10 +38,6 @@ class InvoiceViewModel(
 
                 InvoiceAction.NavigateBack -> {
                     sendEvent(InvoiceEvent.NavigateBack)
-                }
-
-                InvoiceAction.SelectPaymentMethod -> {
-                    sendEvent(InvoiceEvent.GoToPaymentMethod)
                 }
             }
         }
@@ -93,9 +89,9 @@ class InvoiceViewModel(
 
         updateState {
             it.copy(
-                totalAmount = bills.sumOf { it.amount }.toDottedString(),
+                totalAmount = bills.sumOf { it.amount }.toDottedCurrency(),
                 bills = bills.map {
-                    Bill.fromDomain(it)
+                    UiBill.fromDomain(it)
                 }
             )
         }
@@ -114,7 +110,28 @@ class InvoiceViewModel(
         }
     }
 
-    private fun pay() {
+    private suspend fun pay() {
+        updateState {
+            it.copy(
+                isSending = true
+            )
+        }
 
+        when (val link = billRepository.requestPaymentLink(billIds)) {
+            is Result.Success -> {
+                sendEvent(InvoiceEvent.OnPaymentSuccess(link.data))
+            }
+
+            is Result.Error -> {
+                val message = "Pembayaran gagal, silahkan coba kembali"
+                sendEvent(InvoiceEvent.OnPaymentError(message))
+            }
+        }
+
+        updateState {
+            it.copy(
+                isSending = false
+            )
+        }
     }
 }

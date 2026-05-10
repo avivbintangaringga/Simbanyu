@@ -23,13 +23,13 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.usagehistory.fakeUsages
-import com.avivba.simbanyu.ui.shared.model.Usage
+import com.avivba.simbanyu.ui.shared.model.UiUsage
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
 fun UsageHistoryItem(
     modifier: Modifier = Modifier,
-    usage: Usage,
+    usage: UiUsage,
     onClick: () -> Unit = {}
 ) {
     Column(

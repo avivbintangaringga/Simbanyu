@@ -38,7 +38,7 @@ val viewModelModule = module {
     viewModel { ProfileViewModel(get(), get()) }
     viewModel { InvoiceViewModel(get(), get(), get()) }
     viewModel { PaymentMethodViewModel() }
-    viewModel { BillDetailsViewModel(get(), get()) }
+    viewModel { BillDetailsViewModel(get(), get(), get()) }
     viewModel { AnnouncementViewModel(get()) }
 
     // OPERATOR

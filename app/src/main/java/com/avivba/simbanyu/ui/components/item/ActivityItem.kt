@@ -20,13 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.shared.model.Activity
+import com.avivba.simbanyu.ui.shared.model.UiActivity
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
 fun ActivityItem(
     modifier: Modifier = Modifier,
-    activity: Activity
+    activity: UiActivity
 ) {
     Row(
         modifier = modifier
@@ -92,7 +92,7 @@ fun ActivityItem(
 @Composable
 private fun ActivityItemPreview() {
     ActivityItem(
-        activity = Activity(
+        activity = UiActivity(
             id = "1",
             title = "Meter Dicatat #123123",
             body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit",

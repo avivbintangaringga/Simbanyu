@@ -55,7 +55,7 @@ import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.screens.camera.CameraViewModel
 import com.avivba.simbanyu.ui.shared.Screen
-import com.avivba.simbanyu.ui.shared.model.Coordinate
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.conditional
@@ -293,7 +293,7 @@ private fun CreateReport(
                         location?.let {
                             onAction(
                                 ReportAction.SetMyLocation(
-                                    Coordinate(
+                                    UiCoordinate(
                                         it.latitude,
                                         it.longitude
                                     )

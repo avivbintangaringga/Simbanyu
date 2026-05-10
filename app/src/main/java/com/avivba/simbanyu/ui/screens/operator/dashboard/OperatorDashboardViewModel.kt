@@ -5,7 +5,7 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.ActivityRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Activity
+import com.avivba.simbanyu.ui.shared.model.UiActivity
 import kotlinx.coroutines.launch
 
 class OperatorDashboardViewModel(
@@ -86,7 +86,7 @@ class OperatorDashboardViewModel(
                         activities = activities.data
                             .sortedByDescending { it.date }
                             .map {
-                                Activity.fromDomain(it)
+                                UiActivity.fromDomain(it)
                             }
                     )
                 }

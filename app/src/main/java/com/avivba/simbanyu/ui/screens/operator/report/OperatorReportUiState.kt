@@ -1,19 +1,19 @@
 package com.avivba.simbanyu.ui.screens.operator.report
 
 import androidx.compose.foundation.text.input.TextFieldState
-import com.avivba.simbanyu.ui.shared.model.Report
-import com.avivba.simbanyu.ui.shared.model.ReportStatus
+import com.avivba.simbanyu.ui.shared.model.UiReport
+import com.avivba.simbanyu.ui.shared.model.UiReportStatus
 import java.io.File
 
 enum class ReportStatusFilter(
-    val status: ReportStatus?,
+    val status: UiReportStatus?,
     val title: String
 ) {
     ALL(null, "Semua"),
-    WAITING(ReportStatus.WAITING, "Menunggu"),
-    IN_PROGRESS(ReportStatus.IN_PROGRESS, "Dalam Proses"),
-    COMPLETED(ReportStatus.COMPLETED, "Selesai"),
-    REJECTED(ReportStatus.REJECTED, "Ditolak"),
+    WAITING(UiReportStatus.WAITING, "Menunggu"),
+    IN_PROGRESS(UiReportStatus.IN_PROGRESS, "Dalam Proses"),
+    COMPLETED(UiReportStatus.COMPLETED, "Selesai"),
+    REJECTED(UiReportStatus.REJECTED, "Ditolak"),
 }
 
 enum class Fields {
@@ -23,7 +23,7 @@ enum class Fields {
 }
 
 data class OperatorReport(
-    val report: Report,
+    val report: UiReport,
     val isSending: Boolean = false,
 )
 
@@ -45,7 +45,7 @@ sealed interface OperatorReportAction {
     data class ShowUpdateReport(val report: OperatorReport) : OperatorReportAction
     data object HideUpdateReport : OperatorReportAction
     data object SendUpdatedReport : OperatorReportAction
-    data class SelectCurrentReportStatus(val status: ReportStatus) : OperatorReportAction
+    data class SelectCurrentReportStatus(val status: UiReportStatus) : OperatorReportAction
     data class ToggleItemExpand(val report: OperatorReport) : OperatorReportAction
     data object OpenCamera : OperatorReportAction
     data class SetImage(val image: File) : OperatorReportAction

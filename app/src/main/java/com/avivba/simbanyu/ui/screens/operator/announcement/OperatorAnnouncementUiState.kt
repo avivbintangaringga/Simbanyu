@@ -1,7 +1,7 @@
 package com.avivba.simbanyu.ui.screens.operator.announcement
 
 import androidx.compose.foundation.text.input.TextFieldState
-import com.avivba.simbanyu.ui.shared.model.Announcement
+import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
 
 enum class Fields {
     TITLE,
@@ -11,7 +11,7 @@ enum class Fields {
 data class OperatorAnnouncementUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
-    val announcements: List<Announcement> = emptyList(),
+    val announcements: List<UiAnnouncement> = emptyList(),
     val isShowCreateDialog: Boolean = false,
     val isCreatingAnnouncement: Boolean = false,
     val titleState: TextFieldState = TextFieldState(),
@@ -25,7 +25,7 @@ sealed interface OperatorAnnouncementAction {
     data object ShowCreateDialog : OperatorAnnouncementAction
     data object HideCreateDialog : OperatorAnnouncementAction
     data object CreateAnnouncement : OperatorAnnouncementAction
-    data class DeleteAnnouncement(val announcement: Announcement) : OperatorAnnouncementAction
+    data class DeleteAnnouncement(val announcement: UiAnnouncement) : OperatorAnnouncementAction
     data object NavigateBack : OperatorAnnouncementAction
 }
 
@@ -35,19 +35,19 @@ sealed interface OperatorAnnouncementEvent {
 }
 
 val fakeAnnouncements = listOf(
-    Announcement(
+    UiAnnouncement(
         id = "1",
         title = "Pipa Bocor",
         body = "Terjadi kebocoran pipa di area pusat kota.",
         date = "10:00 AM"
     ),
-    Announcement(
+    UiAnnouncement(
         id = "2",
         title = "Pemeliharaan Rutin",
         body = "Pemeliharaan berkala untuk wilayah utara.",
         date = "09:00 AM"
     ),
-    Announcement(
+    UiAnnouncement(
         id = "3",
         title = "Himbauan Hemat Air",
         body = "Gunakan air secukupnya selama musim kemarau.",

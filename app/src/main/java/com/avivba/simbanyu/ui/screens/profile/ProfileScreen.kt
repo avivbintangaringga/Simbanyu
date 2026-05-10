@@ -32,7 +32,7 @@ import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
-import com.avivba.simbanyu.ui.shared.model.Coordinate
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import org.koin.compose.viewmodel.koinViewModel
@@ -279,7 +279,7 @@ private fun ProfilePreview() {
             phone = "08123412312",
             address = "Jl. Raya No. 123",
             category = "Rumah Tangga",
-            coordinate = Coordinate(-6.9667, 110.4167),
+            coordinate = UiCoordinate(-6.9667, 110.4167),
         )
     )
 }

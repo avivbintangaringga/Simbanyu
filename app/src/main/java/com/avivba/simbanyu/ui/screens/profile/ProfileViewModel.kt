@@ -6,7 +6,7 @@ import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.domain.repository.AuthRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Coordinate
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
@@ -44,7 +44,7 @@ class ProfileViewModel(
                         address = data.address,
                         category = if (data.role == User.UserRole.SUBSCRIBER.name)
                             (data.plan ?: "SUBSCRIBER") else "OPERATOR",
-                        coordinate = if (data.latitude != null && data.longitude != null) Coordinate(
+                        coordinate = if (data.latitude != null && data.longitude != null) UiCoordinate(
                             data.latitude,
                             data.longitude
                         ) else null

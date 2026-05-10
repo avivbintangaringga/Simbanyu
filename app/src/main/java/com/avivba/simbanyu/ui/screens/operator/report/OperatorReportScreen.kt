@@ -52,7 +52,7 @@ import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.screens.camera.CameraViewModel
 import com.avivba.simbanyu.ui.shared.Screen
-import com.avivba.simbanyu.ui.shared.model.ReportStatus
+import com.avivba.simbanyu.ui.shared.model.UiReportStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.avivba.simbanyu.ui.utils.conditional
@@ -316,7 +316,7 @@ private fun OperatorReportContent(
                             },
                             containerColor = SimbanyuTheme.colors.surfaceCard,
                         ) {
-                            ReportStatus.entries.forEach { status ->
+                            UiReportStatus.entries.forEach { status ->
                                 DropdownMenuItem(
                                     text = {
                                         SimbanyuText(
@@ -399,7 +399,7 @@ private fun OperatorReportContent(
                                     onAction(OperatorReportAction.OpenCamera)
                                 }
                                 .conditional(
-                                    state.currentReport.report.status == ReportStatus.COMPLETED &&
+                                    state.currentReport.report.status == UiReportStatus.COMPLETED &&
                                             state.currentReport.report.handlingEvidenceImageUrl.isEmpty()
                                 ) {
                                     dashedBorder(

@@ -1,11 +1,11 @@
 package com.avivba.simbanyu.ui.screens.announcement
 
-import com.avivba.simbanyu.ui.shared.model.Announcement
+import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
 
 data class AnnouncementUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
-    val announcements: List<Announcement> = emptyList(),
+    val announcements: List<UiAnnouncement> = emptyList(),
 )
 
 sealed interface AnnouncementAction {
@@ -19,19 +19,19 @@ sealed interface AnnouncementEvent {
 }
 
 val fakeAnnouncements = listOf(
-    Announcement(
+    UiAnnouncement(
         id = "1",
         title = "Pipa Bocor",
         body = "Terjadi kebocoran pipa di area pusat kota.",
         date = "10:00 AM"
     ),
-    Announcement(
+    UiAnnouncement(
         id = "2",
         title = "Pemeliharaan Rutin",
         body = "Pemeliharaan berkala untuk wilayah utara.",
         date = "09:00 AM"
     ),
-    Announcement(
+    UiAnnouncement(
         id = "3",
         title = "Himbauan Hemat Air",
         body = "Gunakan air secukupnya selama musim kemarau.",

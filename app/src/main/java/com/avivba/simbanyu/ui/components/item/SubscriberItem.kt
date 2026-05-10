@@ -25,13 +25,13 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
-import com.avivba.simbanyu.ui.shared.model.Subscriber
+import com.avivba.simbanyu.ui.shared.model.UiSubscriber
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
 fun SubscriberItem(
     modifier: Modifier = Modifier,
-    subscriber: Subscriber,
+    subscriber: UiSubscriber,
     onClick: () -> Unit = {},
     onClickRecordMeter: () -> Unit = {},
 ) {

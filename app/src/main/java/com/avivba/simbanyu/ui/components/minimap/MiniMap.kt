@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
-import com.avivba.simbanyu.ui.shared.model.Coordinate
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.CameraPosition
@@ -48,7 +48,7 @@ val DefaultMiniMapMarker = @Composable {
 @Composable
 fun MiniMap(
     modifier: Modifier = Modifier,
-    location: Coordinate,
+    location: UiCoordinate,
     marker: @Composable () -> Unit = DefaultMiniMapMarker,
     zoom: Float = 17f
 ) {
@@ -111,7 +111,7 @@ fun MiniMap(
 @Composable
 private fun MiniMapPreview() {
     MiniMap(
-        location = Coordinate(
+        location = UiCoordinate(
             -7.911178168148756, 110.69031351790268
         )
     )

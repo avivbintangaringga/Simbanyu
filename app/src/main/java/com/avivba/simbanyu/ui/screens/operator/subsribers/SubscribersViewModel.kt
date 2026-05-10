@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.SubscriberRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Subscriber
+import com.avivba.simbanyu.ui.shared.model.UiSubscriber
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -19,7 +19,7 @@ class SubscribersViewModel(
 ) : BaseViewModel<SubscribersUiState, SubscribersAction, SubscribersEvent>(
     SubscribersUiState()
 ) {
-    private val _subscribers = MutableStateFlow<List<Subscriber>>(emptyList())
+    private val _subscribers = MutableStateFlow<List<UiSubscriber>>(emptyList())
 
     init {
         viewModelScope.launch {
@@ -89,7 +89,7 @@ class SubscribersViewModel(
             is Result.Success -> {
                 _subscribers.update {
                     subscribers.data.map {
-                        Subscriber.fromDomain(it)
+                        UiSubscriber.fromDomain(it)
                     }
                 }
             }

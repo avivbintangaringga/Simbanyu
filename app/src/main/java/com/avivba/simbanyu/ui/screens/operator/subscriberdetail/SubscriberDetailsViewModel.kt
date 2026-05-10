@@ -10,9 +10,9 @@ import com.avivba.simbanyu.domain.repository.SubscriberRepository
 import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Bill
-import com.avivba.simbanyu.ui.shared.model.Coordinate
-import com.avivba.simbanyu.ui.shared.model.Usage
+import com.avivba.simbanyu.ui.shared.model.UiBill
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
+import com.avivba.simbanyu.ui.shared.model.UiUsage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -29,8 +29,8 @@ class SubscriberDetailsViewModel(
     SubscriberDetailsUiState()
 ) {
     val subscriberId = savedStateHandle.toRoute<Screen.SubscriberDetails>().id
-    private val _usages = MutableStateFlow<List<Usage>>(emptyList())
-    private val _bills = MutableStateFlow<List<Bill>>(emptyList())
+    private val _usages = MutableStateFlow<List<UiUsage>>(emptyList())
+    private val _bills = MutableStateFlow<List<UiBill>>(emptyList())
 
     init {
         viewModelScope.launch {
@@ -102,7 +102,7 @@ class SubscriberDetailsViewModel(
         }
     }
 
-    private fun toggleUsageExpanded(usage: Usage) {
+    private fun toggleUsageExpanded(usage: UiUsage) {
         updateState {
             it.copy(
                 usages = it.usages.map { item ->
@@ -161,7 +161,7 @@ class SubscriberDetailsViewModel(
                         meterId = data.meterId,
                         phone = data.user.phoneNumber,
                         category = data.plan,
-                        location = Coordinate.fromDomain(
+                        location = UiCoordinate.fromDomain(
                             data.location
                         ),
                         isRecorded = data.isRecorded,
@@ -177,7 +177,7 @@ class SubscriberDetailsViewModel(
         when (val usages = usageRepository.getAll(subscriberId)) {
             is Result.Success -> {
                 val usages = usages.data.map {
-                    Usage.fromDomain(it)
+                    UiUsage.fromDomain(it)
                 }
 
                 val years = usages.map { it.periodYear }.distinct().sortedDescending()
@@ -201,7 +201,7 @@ class SubscriberDetailsViewModel(
         when (val bills = billRepository.getAll(subscriberId)) {
             is Result.Success -> {
                 val bills = bills.data.map {
-                    Bill.fromDomain(it)
+                    UiBill.fromDomain(it)
                 }
 
                 val years = bills.map { it.periodYear }.distinct().sortedDescending()

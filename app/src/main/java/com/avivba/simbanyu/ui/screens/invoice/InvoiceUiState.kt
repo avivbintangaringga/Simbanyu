@@ -1,44 +1,45 @@
 package com.avivba.simbanyu.ui.screens.invoice
 
-import com.avivba.simbanyu.ui.shared.model.Bill
-import com.avivba.simbanyu.ui.shared.model.BillingStatus
-import com.avivba.simbanyu.ui.shared.model.Cost
+import com.avivba.simbanyu.ui.shared.model.UiBill
+import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
+import com.avivba.simbanyu.ui.shared.model.UiCost
 
 
 data class InvoiceUiState(
     val isLoading: Boolean = false,
+    val isSending: Boolean = false,
     val name: String = "",
     val address: String = "",
     val meterId: String = "",
     val category: String = "",
     val totalAmount: String = "",
-    val bills: List<Bill> = emptyList(),
+    val bills: List<UiBill> = emptyList(),
 )
 
 sealed interface InvoiceAction {
     data object NavigateBack : InvoiceAction
     data object Pay : InvoiceAction
-    data object SelectPaymentMethod : InvoiceAction
 }
 
 sealed interface InvoiceEvent {
     data object NavigateBack : InvoiceEvent
-    data object GoToPaymentMethod : InvoiceEvent
+    data class OnPaymentSuccess(val url: String) : InvoiceEvent
+    data class OnPaymentError(val message: String) : InvoiceEvent
 }
 
 val fakeInvoiceState = InvoiceUiState(
     totalAmount = "Rp 157.000",
     bills = listOf(
-        Bill(
+        UiBill(
             id = "INV-2023-10-001",
             periodMonth = "Oktober",
             periodYear = 2023,
             costs = listOf(
-                Cost("Biaya Pemakaian Air", "Rp 120.000"),
-                Cost("Biaya Administrasi", "Rp 10.000"),
-                Cost("Biaya Pemeliharaan Meter", "Rp 5.000")
+                UiCost("Biaya Pemakaian Air", "Rp 120.000"),
+                UiCost("Biaya Administrasi", "Rp 10.000"),
+                UiCost("Biaya Pemeliharaan Meter", "Rp 5.000")
             ),
-            status = BillingStatus.UNPAID,
+            status = UiBillingStatus.UNPAID,
             amount = "Rp. 135.000"
         ),
 //        Bill(

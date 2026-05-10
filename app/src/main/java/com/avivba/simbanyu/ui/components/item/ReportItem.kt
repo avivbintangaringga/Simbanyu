@@ -26,15 +26,15 @@ import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
-import com.avivba.simbanyu.ui.shared.model.Coordinate
-import com.avivba.simbanyu.ui.shared.model.Report
-import com.avivba.simbanyu.ui.shared.model.ReportStatus
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
+import com.avivba.simbanyu.ui.shared.model.UiReport
+import com.avivba.simbanyu.ui.shared.model.UiReportStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
 fun ReportItem(
     modifier: Modifier = Modifier,
-    report: Report,
+    report: UiReport,
     showHandleReport: Boolean = false,
     showUser: Boolean = false,
     onClickExpand: () -> Unit = {},
@@ -63,19 +63,19 @@ fun ReportItem(
 
         var statusBackgroundColor: Color
         when (report.status) {
-            ReportStatus.WAITING -> {
+            UiReportStatus.WAITING -> {
                 statusBackgroundColor = SimbanyuTheme.colors.statusNeutral
             }
 
-            ReportStatus.IN_PROGRESS -> {
+            UiReportStatus.IN_PROGRESS -> {
                 statusBackgroundColor = SimbanyuTheme.colors.statusWarningText
             }
 
-            ReportStatus.COMPLETED -> {
+            UiReportStatus.COMPLETED -> {
                 statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
             }
 
-            ReportStatus.REJECTED -> {
+            UiReportStatus.REJECTED -> {
                 statusBackgroundColor = SimbanyuTheme.colors.statusNegativeText
             }
         }
@@ -327,11 +327,11 @@ private fun ReportPreview() {
         modifier = Modifier,
         showHandleReport = true,
         showUser = true,
-        report = Report(
+        report = UiReport(
             id = "REP-001",
-            status = ReportStatus.WAITING,
+            status = UiReportStatus.WAITING,
             address = "Jl. Merdeka No. 10, Jakarta",
-            coordinate = Coordinate(-6.1754, 106.8272),
+            coordinate = UiCoordinate(-6.1754, 106.8272),
             description = "Pipa air depan rumah pecah, air meluap ke jalanan.",
             evidenceImageUrl = "https://example.com/leak1.jpg",
             date = "24 Mei 2024",

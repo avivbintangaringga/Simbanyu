@@ -38,22 +38,22 @@ class BillRepositoryImpl(
         }
     }
 
-    override suspend fun requestPaymentLink(bills: List<Bill>): Result<String, DataError> {
+    override suspend fun requestPaymentLink(billIds: List<String>): Result<String, DataError> {
         return safeApiCall {
             paymentService.requestPayment(
                 PaymentRequest(
-                    billIds = bills.map { it.id },
+                    billIds = billIds,
                     callbackUrl = "$BASE_URL/payment-success" // TODO: Change to real URL
                 )
             ).data?.paymentUrl ?: throw Exception("Invalid response")
         }
     }
 
-    override suspend fun payByCash(bills: List<Bill>): Result<List<Payment>, DataError> {
+    override suspend fun payByCash(billIds: List<String>): Result<List<Payment>, DataError> {
         return safeApiCall {
             paymentService.requestCashPayment(
                 CashPaymentRequest(
-                    billIds = bills.map { it.id }
+                    billIds = billIds
                 )
             ).data?.map { it.toDomain() } ?: throw Exception("Invalid response")
         }

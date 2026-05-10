@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.AnnouncementRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Announcement
+import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
 import kotlinx.coroutines.launch
 
 class AnnouncementViewModel(
@@ -68,7 +68,7 @@ class AnnouncementViewModel(
                     it.copy(
                         announcements = announcements.data
                             .sortedByDescending { it.date }
-                            .map { Announcement.fromDomain(it) }
+                            .map { UiAnnouncement.fromDomain(it) }
                     )
                 }
             }

@@ -5,7 +5,7 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Usage
+import com.avivba.simbanyu.ui.shared.model.UiUsage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -19,7 +19,7 @@ class UsageHistoryViewModel(
 ) : BaseViewModel<UsageHistoryUiState, UsageHistoryAction, UsageHistoryEvent>(
     UsageHistoryUiState()
 ) {
-    private val _usages = MutableStateFlow<List<Usage>>(emptyList())
+    private val _usages = MutableStateFlow<List<UiUsage>>(emptyList())
 
     init {
         viewModelScope.launch {
@@ -44,7 +44,7 @@ class UsageHistoryViewModel(
         }
     }
 
-    private fun toggleItemExpanded(usage: Usage) {
+    private fun toggleItemExpanded(usage: UiUsage) {
         updateState {
             it.copy(
                 usages = it.usages.map { item ->
@@ -130,7 +130,7 @@ class UsageHistoryViewModel(
         when (val usage = usageRepository.getAll(null)) {
             is Result.Success -> {
                 val usages = usage.data.map {
-                    Usage.fromDomain(it)
+                    UiUsage.fromDomain(it)
                 }
 
                 val years = usages.map { it.periodYear }.distinct().sortedDescending()

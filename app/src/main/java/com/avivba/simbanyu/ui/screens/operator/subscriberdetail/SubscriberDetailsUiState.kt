@@ -2,9 +2,9 @@ package com.avivba.simbanyu.ui.screens.operator.subscriberdetail
 
 import com.avivba.simbanyu.ui.screens.billhistory.fakeBills
 import com.avivba.simbanyu.ui.screens.usagehistory.fakeUsages
-import com.avivba.simbanyu.ui.shared.model.Bill
-import com.avivba.simbanyu.ui.shared.model.Coordinate
-import com.avivba.simbanyu.ui.shared.model.Usage
+import com.avivba.simbanyu.ui.shared.model.UiBill
+import com.avivba.simbanyu.ui.shared.model.UiCoordinate
+import com.avivba.simbanyu.ui.shared.model.UiUsage
 
 data class SubscriberDetailsUiState(
     val isLoading: Boolean = false,
@@ -14,7 +14,7 @@ data class SubscriberDetailsUiState(
     val meterId: String = "",
     val phone: String = "",
     val category: String = "",
-    val location: Coordinate? = null,
+    val location: UiCoordinate? = null,
     val isRecorded: Boolean = false,
 
     val selectedTabIndex: Int = 0,
@@ -23,11 +23,11 @@ data class SubscriberDetailsUiState(
     val usageYears: List<Int> = emptyList(),
     val usageTotal: Int = 0,
     val usageAverage: Double = 0.0,
-    val usages: List<Usage> = emptyList(),
+    val usages: List<UiUsage> = emptyList(),
 
     val billSelectedYear: Int = 0,
     val billYears: List<Int> = emptyList(),
-    val bills: List<Bill> = emptyList(),
+    val bills: List<UiBill> = emptyList(),
 )
 
 sealed interface SubscriberDetailsAction {
@@ -40,8 +40,8 @@ sealed interface SubscriberDetailsAction {
     data object RecordMeter : SubscriberDetailsAction
     data object UpdateMeter : SubscriberDetailsAction
     data object ContactViaWhatsApp : SubscriberDetailsAction
-    data class PayByCash(val bill: Bill) : SubscriberDetailsAction
-    data class ClickUsage(val usage: Usage) : SubscriberDetailsAction
+    data class PayByCash(val bill: UiBill) : SubscriberDetailsAction
+    data class ClickUsage(val usage: UiUsage) : SubscriberDetailsAction
 }
 
 sealed interface SubscriberDetailsEvent {
@@ -56,7 +56,7 @@ val fakeSubscriberDetailsUiState = SubscriberDetailsUiState(
     meterId = "MTR001",
     category = "Rumah Tangga A",
     phone = "082212232131",
-    location = Coordinate(
+    location = UiCoordinate(
         -7.911178168148756,
         110.69031351790268
     ),

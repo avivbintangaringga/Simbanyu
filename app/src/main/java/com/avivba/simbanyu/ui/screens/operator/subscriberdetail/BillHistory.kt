@@ -25,7 +25,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.shared.model.BillingStatus
+import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
@@ -121,12 +121,12 @@ internal fun BillHistory(
                     var iconBackgroundColor: Color
                     var statusBackgroundColor: Color
 
-                    if (bill.status == BillingStatus.PAID) {
+                    if (bill.status == UiBillingStatus.PAID) {
                         iconId = R.drawable.ic_done_all
                         iconTint = SimbanyuTheme.colors.statusPositiveText
                         iconBackgroundColor = SimbanyuTheme.colors.statusPositive
                         statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
-                    } else if (bill.status == BillingStatus.PENDING) {
+                    } else if (bill.status == UiBillingStatus.PENDING) {
                         iconId = R.drawable.ic_pending
                         iconTint = SimbanyuTheme.colors.statusWarningText
                         iconBackgroundColor = SimbanyuTheme.colors.statusWarning
@@ -147,7 +147,7 @@ internal fun BillHistory(
                         iconTint = iconTint,
                         iconBackgroundColor = iconBackgroundColor,
                         statusBackgroundColor = statusBackgroundColor,
-                        canPayByCash = bill.status == BillingStatus.UNPAID,
+                        canPayByCash = bill.status == UiBillingStatus.UNPAID,
                         onClickPayByCash = {
                             onAction(SubscriberDetailsAction.PayByCash(bill))
                         }

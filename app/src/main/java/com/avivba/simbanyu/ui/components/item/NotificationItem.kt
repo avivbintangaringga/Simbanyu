@@ -20,13 +20,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.shared.model.Notification
+import com.avivba.simbanyu.ui.shared.model.UiNotification
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 
 @Composable
 fun NotificationItem(
     modifier: Modifier = Modifier,
-    notification: Notification,
+    notification: UiNotification,
     onClick: () -> Unit
 ) {
     Box(

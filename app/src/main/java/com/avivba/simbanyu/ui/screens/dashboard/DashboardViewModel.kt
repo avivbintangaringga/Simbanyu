@@ -8,8 +8,8 @@ import com.avivba.simbanyu.domain.repository.BillRepository
 import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Announcement
-import com.avivba.simbanyu.ui.utils.toDottedString
+import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
+import com.avivba.simbanyu.ui.utils.toDottedCurrency
 import com.avivba.simbanyu.ui.utils.toMonthShort
 import kotlinx.coroutines.launch
 
@@ -76,7 +76,7 @@ class DashboardViewModel(
                 updateState { it ->
                     val totalActiveBill = activeBill.data.sumOf { it.amount }
                     it.copy(
-                        bill = if (totalActiveBill > 0) totalActiveBill.toDottedString() else "",
+                        bill = if (totalActiveBill > 0) totalActiveBill.toDottedCurrency(prefix = "") else "",
                         billIds = activeBill.data.map { it.id }
                     )
                 }
@@ -117,7 +117,7 @@ class DashboardViewModel(
                         announcements = announcements.data
                             .sortedByDescending { it.date }
                             .take(3).map { announcement ->
-                                Announcement.fromDomain(announcement)
+                                UiAnnouncement.fromDomain(announcement)
                             }
                     )
                 }

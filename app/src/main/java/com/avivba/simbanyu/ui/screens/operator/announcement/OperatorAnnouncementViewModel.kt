@@ -6,7 +6,7 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.AnnouncementSubmission
 import com.avivba.simbanyu.domain.repository.AnnouncementRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Announcement
+import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
 import kotlinx.coroutines.launch
 
 class OperatorAnnouncementViewModel(
@@ -88,7 +88,7 @@ class OperatorAnnouncementViewModel(
                         announcements = announcements.data
                             .sortedByDescending { it.date }
                             .map { item ->
-                                Announcement.fromDomain(item)
+                                UiAnnouncement.fromDomain(item)
                             }
                     )
                 }
@@ -150,7 +150,7 @@ class OperatorAnnouncementViewModel(
         }
     }
 
-    private suspend fun deleteAnnouncement(announcement: Announcement) {
+    private suspend fun deleteAnnouncement(announcement: UiAnnouncement) {
         when (announcementRepository.deleteAnnouncement(announcement.id)) {
             is Result.Success -> {
                 updateState {

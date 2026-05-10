@@ -8,6 +8,6 @@ import com.avivba.simbanyu.domain.model.Payment
 interface BillRepository {
     suspend fun getAll(subscriberId: String?, limit: Int? = null, activeOnly: Boolean? = false): Result<List<Bill>, DataError>
     suspend fun getById(id: String): Result<Bill, DataError>
-    suspend fun requestPaymentLink(bills: List<Bill>): Result<String, DataError>
-    suspend fun payByCash(bills: List<Bill>): Result<List<Payment>, DataError>
+    suspend fun requestPaymentLink(billIds: List<String>): Result<String, DataError>
+    suspend fun payByCash(billIds: List<String>): Result<List<Payment>, DataError>
 }

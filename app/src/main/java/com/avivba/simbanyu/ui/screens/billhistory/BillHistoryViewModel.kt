@@ -6,8 +6,8 @@ import com.avivba.simbanyu.domain.repository.BillRepository
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.PayBill
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.ShowBill
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.Bill
-import com.avivba.simbanyu.ui.shared.model.BillingStatus
+import com.avivba.simbanyu.ui.shared.model.UiBill
+import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -21,7 +21,7 @@ class BillHistoryViewModel(
 ) : BaseViewModel<BillHistoryUiState, BillHistoryAction, BillHistoryEvent>(
     BillHistoryUiState()
 ) {
-    private val _bills = MutableStateFlow<List<Bill>>(emptyList())
+    private val _bills = MutableStateFlow<List<UiBill>>(emptyList())
 
     init {
         viewModelScope.launch {
@@ -70,7 +70,7 @@ class BillHistoryViewModel(
         }
     }
 
-    private fun changeBillSelection(bill: Bill, selected: Boolean) {
+    private fun changeBillSelection(bill: UiBill, selected: Boolean) {
         _bills.update {
             it.map { b ->
                 if (b.id == bill.id) b.copy(isSelected = selected) else b
@@ -92,14 +92,14 @@ class BillHistoryViewModel(
         return selectedBills.sumOf { it.amount.toDouble() }
     }
 
-    private fun clickBill(bill: Bill) {
+    private fun clickBill(bill: UiBill) {
         if (state.value.isMultipleSelectMode) {
             changeBillSelection(bill, !bill.isSelected)
         } else {
-            if (bill.status == BillingStatus.PAID) {
-                sendEvent(ShowBill(bill))
-            } else {
+            if (bill.status == UiBillingStatus.UNPAID) {
                 sendEvent(PayBill(listOf(bill.id)))
+            } else {
+                sendEvent(ShowBill(bill))
             }
         }
     }
@@ -111,11 +111,11 @@ class BillHistoryViewModel(
         dismissMultipleSelectMode()
     }
 
-    private fun longClickBill(bill: Bill) {
+    private fun longClickBill(bill: UiBill) {
         if (state.value.isMultipleSelectMode) {
             dismissMultipleSelectMode()
         } else {
-            if (!bill.isSelected && bill.status == BillingStatus.UNPAID) {
+            if (!bill.isSelected && bill.status == UiBillingStatus.UNPAID) {
                 changeBillSelection(bill, true)
             }
         }
@@ -181,7 +181,7 @@ class BillHistoryViewModel(
         when (val bills = billRepository.getAll(null)) {
             is Result.Success -> {
                 val bills = bills.data.map {
-                    Bill.fromDomain(it)
+                    UiBill.fromDomain(it)
                 }
 
                 val years = bills.map { it.periodYear }.distinct().sortedDescending()

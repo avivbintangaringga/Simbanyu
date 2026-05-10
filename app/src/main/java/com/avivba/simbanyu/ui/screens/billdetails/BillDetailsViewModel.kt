@@ -5,15 +5,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.BillRepository
+import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.avivba.simbanyu.ui.shared.model.BillingStatus
-import com.avivba.simbanyu.ui.shared.model.Cost
-import com.avivba.simbanyu.ui.utils.toDottedString
+import com.avivba.simbanyu.ui.shared.model.UiBill
+import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
 import kotlinx.coroutines.launch
 
 class BillDetailsViewModel(
     private val billRepository: BillRepository,
+    private val userRepository: UserRepository,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<BillDetailsUiState, BillDetailsAction, BillDetailsEvent>(
     BillDetailsUiState()
@@ -46,6 +47,7 @@ class BillDetailsViewModel(
             )
         }
 
+        fetchUserData()
         fetchData()
 
         updateState {
@@ -55,25 +57,37 @@ class BillDetailsViewModel(
         }
     }
 
+    private suspend fun fetchUserData() {
+        when (val user = userRepository.getLocalProfile()) {
+            is Result.Success -> {
+                val data = user.data
+                updateState {
+                    it.copy(
+                        name = data.name,
+                        meterId = data.meterId ?: "-",
+                        address = data.address ?: "-",
+                        category = data.plan ?: "-"
+                    )
+                }
+            }
+
+            is Result.Error -> {
+                // TODO: Handle error
+            }
+        }
+    }
+
     private suspend fun fetchData() {
         when (val bill = billRepository.getById(id)) {
             is Result.Success -> {
-                val bill = bill.data
+                val bill = UiBill.fromDomain(bill.data)
                 updateState {
                     it.copy(
-                        details = bill.items.map {
-                            Cost(
-                                name = it.name,
-                                amount = it.amount.toDottedString()
-                            )
-                        },
-                        status = BillingStatus.valueOf(bill.status.name),
-                        totalAmount = bill.amount.toDottedString(),
+                        period = "${bill.periodMonth} ${bill.periodYear}" ,
+                        details = bill.costs,
+                        status = bill.status,
+                        totalAmount = bill.amount,
                         payments = bill.payments
-                            .sortedByDescending { it.date }
-                            .map {
-                                UiPayment.fromDomain(it)
-                            }
                     )
                 }
             }

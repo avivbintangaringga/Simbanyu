@@ -33,10 +33,10 @@ import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
-import com.avivba.simbanyu.ui.shared.model.BillingStatus
+import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
-import com.avivba.simbanyu.ui.utils.toDottedString
+import com.avivba.simbanyu.ui.utils.toDottedCurrency
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -170,12 +170,12 @@ fun BillHistoryContent(
                     var iconBackgroundColor: Color
                     var statusBackgroundColor: Color
 
-                    if (bill.status == BillingStatus.PAID) {
+                    if (bill.status == UiBillingStatus.PAID) {
                         iconId = R.drawable.ic_done_all
                         iconTint = SimbanyuTheme.colors.statusPositiveText
                         iconBackgroundColor = SimbanyuTheme.colors.statusPositive
                         statusBackgroundColor = SimbanyuTheme.colors.statusPositiveText
-                    } else if (bill.status == BillingStatus.PENDING) {
+                    } else if (bill.status == UiBillingStatus.PENDING) {
                         iconId = R.drawable.ic_pending
                         iconTint = SimbanyuTheme.colors.statusWarningText
                         iconBackgroundColor = SimbanyuTheme.colors.statusWarning
@@ -201,7 +201,7 @@ fun BillHistoryContent(
                     }
 
                     val isDisabled = if (state.isMultipleSelectMode) {
-                        bill.status == BillingStatus.PAID || bill.status == BillingStatus.PENDING
+                        bill.status == UiBillingStatus.PAID || bill.status == UiBillingStatus.PENDING
                     } else {
                         false
                     }
@@ -234,7 +234,7 @@ fun BillHistoryContent(
                 ) {
                     SimbanyuText(
                         modifier = Modifier.weight(1f),
-                        text = "Rp. ${state.totalSelectedBills.toDottedString()}",
+                        text = "Rp. ${state.totalSelectedBills.toDottedCurrency()}",
                         style = SimbanyuTheme.typography.displaySmall,
                         color = SimbanyuTheme.colors.brand
                     )
