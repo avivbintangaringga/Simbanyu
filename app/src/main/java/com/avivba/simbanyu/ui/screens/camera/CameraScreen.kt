@@ -5,7 +5,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import androidx.exifinterface.media.ExifInterface
 import android.os.Build
 import android.util.Log
 import android.view.OrientationEventListener
@@ -19,7 +21,6 @@ import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.ImageProxy
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
@@ -30,7 +31,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -119,8 +119,7 @@ fun CameraScreen(
     }
 
     Scaffold(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         containerColor = Color.Black
     ) { paddingValues ->
         Box(
@@ -134,13 +133,20 @@ fun CameraScreen(
                     state = state,
                     onAction = viewModel::onAction
                 )
-
+                
+                if (state.isCapturing) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Black.copy(alpha = 0.5f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = Color.White)
+                    }
+                }
             } else {
                 SimbanyuText(
-                    modifier = Modifier
-                        .padding(
-                            horizontal = SimbanyuTheme.padding.medium
-                        ),
+                    modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.medium),
                     text = "Izinkan aplikasi mengakses kamera untuk melanjutkan",
                     color = Color.White
                 )
@@ -160,21 +166,22 @@ fun CameraContent(
     val scope = rememberCoroutineScope()
 
     var rotationDegrees by remember { mutableFloatStateOf(0f) }
+    var currentTargetRotation by remember { mutableIntStateOf(Surface.ROTATION_0) }
     var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
 
     DisposableEffect(context) {
         val listener = object : OrientationEventListener(context) {
             override fun onOrientationChanged(orientation: Int) {
                 if (orientation == ORIENTATION_UNKNOWN) return
-                val newRotation = when (orientation) {
-                    in 45..134 -> 270f
-                    in 135..224 -> 180f
-                    in 225..314 -> 90f
-                    else -> 0f
+                val (uiRotation, target) = when (orientation) {
+                    in 45..134 -> 270f to Surface.ROTATION_270
+                    in 135..224 -> 180f to Surface.ROTATION_180
+                    in 225..314 -> 90f to Surface.ROTATION_90
+                    else -> 0f to Surface.ROTATION_0
                 }
-                if (rotationDegrees != newRotation) {
-                    rotationDegrees = newRotation
-                }
+                rotationDegrees = uiRotation
+                currentTargetRotation = target
+                imageCapture?.targetRotation = target
             }
         }
         listener.enable()
@@ -184,84 +191,35 @@ fun CameraContent(
     }
 
     val animatedRotation by animateFloatAsState(targetValue = rotationDegrees)
-
     val surfaceRequests = remember { MutableStateFlow<SurfaceRequest?>(null) }
     val surfaceRequest by surfaceRequests.collectAsStateWithLifecycle(null)
 
     LaunchedEffect(state.isFrontCamera, state.isUsingFlash) {
         val provider = ProcessCameraProvider.awaitInstance(context)
-        val preview = androidx.camera.core.Preview.Builder()
-            .build().apply {
-                setSurfaceProvider { req ->
-                    surfaceRequests.value = req
-                }
-            }
-
-        val cameraSelector = if (state.isFrontCamera) {
-            CameraSelector.DEFAULT_FRONT_CAMERA
-        } else {
-            CameraSelector.DEFAULT_BACK_CAMERA
+        val preview = androidx.camera.core.Preview.Builder().build().apply {
+            setSurfaceProvider { surfaceRequests.value = it }
         }
 
         imageCapture = ImageCapture.Builder()
-            .setFlashMode(
-                if (state.isUsingFlash)
-                    ImageCapture.FLASH_MODE_ON
-                else ImageCapture.FLASH_MODE_OFF
-            )
+            .setFlashMode(if (state.isUsingFlash) ImageCapture.FLASH_MODE_ON else ImageCapture.FLASH_MODE_OFF)
+            .setTargetRotation(currentTargetRotation)
             .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
             .build()
 
+        val selector = if (state.isFrontCamera) CameraSelector.DEFAULT_FRONT_CAMERA else CameraSelector.DEFAULT_BACK_CAMERA
         provider.unbindAll()
-        provider.bindToLifecycle(
-            lifecycleOwner,
-            cameraSelector,
-            preview,
-            imageCapture
-        )
+        provider.bindToLifecycle(lifecycleOwner, selector, preview, imageCapture)
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        surfaceRequest?.let {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-            ) {
-                CameraXViewfinder(
-                    modifier = Modifier.fillMaxSize(),
-                    surfaceRequest = it
-                )
-
-                if (state.isCapturing) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Black.copy(alpha = 0.5f)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(
-                            color = Color.White
-                        )
-                    }
-                }
-            }
-        } ?: @Composable {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(
-                        horizontal = SimbanyuTheme.padding.medium
-                    ),
+    Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
+        Box(modifier = Modifier.fillMaxWidth().weight(1f)) {
+            surfaceRequest?.let {
+                CameraXViewfinder(modifier = Modifier.fillMaxSize(), surfaceRequest = it)
+            } ?: Box(
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 SimbanyuText(
-                    modifier = Modifier,
                     text = "Memuat kamera...",
                     textAlign = TextAlign.Center,
                     color = Color.White
@@ -269,117 +227,59 @@ fun CameraContent(
             }
         }
 
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = SimbanyuTheme.padding.large, vertical = SimbanyuTheme.padding.extraExtraLarge)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = SimbanyuTheme.padding.large,
-                        vertical = SimbanyuTheme.padding.extraExtraLarge
-                    )
-            ) {
-                Box(
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Icon(
+                    painter = painterResource(if (state.isUsingFlash) R.drawable.ic_flashlight_off_filled else R.drawable.ic_flashlight_on_filled),
                     modifier = Modifier
-                        .weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    val icon = if (state.isUsingFlash) {
-                        R.drawable.ic_flashlight_off_filled
-                    } else {
-                        R.drawable.ic_flashlight_on_filled
-                    }
+                        .clip(CircleShape)
+                        .graphicsLayer { rotationZ = animatedRotation }
+                        .clickable(enabled = !state.isCapturing) { onAction(CameraAction.ToggleFlash) }
+                        .padding(SimbanyuTheme.padding.large),
+                    tint = Color.White,
+                    contentDescription = null
+                )
+            }
 
-                    Icon(
-                        painter = painterResource(icon),
-                        modifier = Modifier
-                            .clip(
-                                shape = CircleShape
-                            )
-                            .graphicsLayer {
-                                rotationZ = animatedRotation
-                            }
-                            .clickable(enabled = !state.isCapturing) {
-                                onAction(CameraAction.ToggleFlash)
-                            }
-                            .padding(
-                                SimbanyuTheme.padding.large
-                            ),
-                        tint = Color.White,
-                        contentDescription = null
-                    )
-                }
-
-                Box(
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_photo_camera_filled),
                     modifier = Modifier
-                        .weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_photo_camera_filled),
-                        modifier = Modifier
-                            .graphicsLayer {
-                                rotationZ = animatedRotation
-                            }
-                            .background(
-                                color = Color.White,
-                                shape = CircleShape
-                            )
-                            .clickable(enabled = !state.isCapturing) {
-                                onAction(CameraAction.SetCaptureState(true))
-                                scope.launch {
-                                    try {
-                                        val file = capturePhoto(
-                                            context = context,
-                                            imageCapture = imageCapture,
-                                            rotationDegrees = rotationDegrees,
-                                            isFrontCamera = state.isFrontCamera
-                                        )
-                                        onAction(CameraAction.ImageCaptured(file))
-                                    } catch (_: Exception) {
-                                        onAction(CameraAction.SetCaptureState(false))
-                                        Toast.makeText(
-                                            context,
-                                            "Gagal mengambil foto",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                        .graphicsLayer { rotationZ = animatedRotation }
+                        .background(Color.White, CircleShape)
+                        .clickable(enabled = !state.isCapturing) {
+                            onAction(CameraAction.SetCaptureState(true))
+                            scope.launch {
+                                try {
+                                    val file = capturePhoto(context, imageCapture, state.isFrontCamera)
+                                    onAction(CameraAction.ImageCaptured(file))
+                                } catch (_: Exception) {
+                                    onAction(CameraAction.SetCaptureState(false))
+                                    Toast.makeText(context, "Gagal mengambil foto", Toast.LENGTH_SHORT).show()
                                 }
                             }
-                            .padding(
-                                SimbanyuTheme.padding.large
-                            ),
-                        tint = Color.Black,
-                        contentDescription = null
-                    )
-                }
+                        }
+                        .padding(SimbanyuTheme.padding.large),
+                    tint = Color.Black,
+                    contentDescription = null
+                )
+            }
 
-                Box(
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_cameraswitch_filled),
                     modifier = Modifier
-                        .weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_cameraswitch_filled),
-                        modifier = Modifier
-                            .clip(
-                                shape = CircleShape
-                            )
-                            .graphicsLayer {
-                                rotationZ = animatedRotation
-                            }
-                            .clickable(enabled = !state.isCapturing) {
-                                onAction(CameraAction.ToggleCamera)
-                            }
-                            .padding(
-                                SimbanyuTheme.padding.large
-                            ),
-                        tint = Color.White,
-                        contentDescription = null
-                    )
-                }
+                        .clip(CircleShape)
+                        .graphicsLayer { rotationZ = animatedRotation }
+                        .clickable(enabled = !state.isCapturing) { onAction(CameraAction.ToggleCamera) }
+                        .padding(SimbanyuTheme.padding.large),
+                    tint = Color.White,
+                    contentDescription = null
+                )
             }
         }
     }
@@ -388,7 +288,6 @@ fun CameraContent(
 private suspend fun capturePhoto(
     context: Context,
     imageCapture: ImageCapture?,
-    rotationDegrees: Float,
     isFrontCamera: Boolean
 ): File {
     return suspendCancellableCoroutine { continuation ->
@@ -397,37 +296,24 @@ private suspend fun capturePhoto(
             return@suspendCancellableCoroutine
         }
 
-        val timeStamp = System.currentTimeMillis()
-        val photoFile = File(context.cacheDir, "IMG_${timeStamp}.webp")
+        val tempFile = File(context.cacheDir, "TEMP_IMG_${System.currentTimeMillis()}.jpg")
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(tempFile).build()
 
         capture.takePicture(
+            outputOptions,
             Dispatchers.IO.asExecutor(),
-            object : ImageCapture.OnImageCapturedCallback() {
-
-                override fun onCaptureSuccess(image: ImageProxy) {
-                    val originalBitmap = image.use { it.toBitmap() }
-
-                    val matrix = Matrix().apply {
-                        if (isFrontCamera) {
-                            postRotate(270f + rotationDegrees)
-                            postScale(-1f, 1f, originalBitmap.width / 2f, originalBitmap.height / 2f)
-                        } else {
-                            postRotate(90f - rotationDegrees)
-                        }
-                    }
-
-                    val finalBitmap = Bitmap.createBitmap(
-                        originalBitmap,
-                        0,
-                        0,
-                        originalBitmap.width,
-                        originalBitmap.height,
-                        matrix,
-                        true
-                    )
-
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     try {
-                        photoFile.outputStream().use { out ->
+                        val bitmap = decodeFileWithExif(tempFile)
+                        
+                        val finalBitmap = if (isFrontCamera) {
+                            val matrix = Matrix().apply { postScale(-1f, 1f, bitmap.width / 2f, bitmap.height / 2f) }
+                            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                        } else bitmap
+
+                        val webpFile = File(context.cacheDir, "IMG_${System.currentTimeMillis()}.webp")
+                        webpFile.outputStream().use { out ->
                             val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                                 Bitmap.CompressFormat.WEBP_LOSSY
                             } else {
@@ -436,24 +322,44 @@ private suspend fun capturePhoto(
                             }
                             finalBitmap.compress(format, 80, out)
                         }
-                        continuation.resume(photoFile)
+                        
+                        if (finalBitmap != bitmap) finalBitmap.recycle()
+                        bitmap.recycle()
+                        tempFile.delete()
+                        
+                        continuation.resume(webpFile)
                     } catch (e: Exception) {
-                        Log.e("SDKSDK", "Error saving image: ${e.message}")
+                        tempFile.delete()
                         continuation.resumeWithException(e)
-                    } finally {
-                        originalBitmap.recycle()
-                        if (finalBitmap != originalBitmap) {
-                            finalBitmap.recycle()
-                        }
                     }
                 }
 
                 override fun onError(e: ImageCaptureException) {
-                    Log.e("SDKSDK", "Camera capture error: ${e.message}")
+                    tempFile.delete()
                     continuation.resumeWithException(e)
                 }
             }
         )
+    }
+}
+
+private fun decodeFileWithExif(file: File): Bitmap {
+    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+    val exif = ExifInterface(file.absolutePath)
+    val orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+    val rotationDegrees = when (orientation) {
+        ExifInterface.ORIENTATION_ROTATE_90 -> 90
+        ExifInterface.ORIENTATION_ROTATE_180 -> 180
+        ExifInterface.ORIENTATION_ROTATE_270 -> 270
+        else -> 0
+    }
+    return if (rotationDegrees != 0) {
+        val matrix = Matrix().apply { postRotate(rotationDegrees.toFloat()) }
+        val rotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        bitmap.recycle()
+        rotated
+    } else {
+        bitmap
     }
 }
 
