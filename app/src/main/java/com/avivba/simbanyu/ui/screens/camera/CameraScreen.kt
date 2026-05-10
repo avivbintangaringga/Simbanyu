@@ -9,6 +9,7 @@ import android.graphics.Matrix
 import android.os.Build
 import android.util.Log
 import android.view.OrientationEventListener
+import android.view.Surface
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -42,6 +43,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -158,6 +160,7 @@ fun CameraContent(
     val scope = rememberCoroutineScope()
 
     var rotationDegrees by remember { mutableFloatStateOf(0f) }
+    var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
 
     DisposableEffect(context) {
         val listener = object : OrientationEventListener(context) {
@@ -181,8 +184,6 @@ fun CameraContent(
     }
 
     val animatedRotation by animateFloatAsState(targetValue = rotationDegrees)
-
-    var imageCapture by remember { mutableStateOf<ImageCapture?>(null) }
 
     val surfaceRequests = remember { MutableStateFlow<SurfaceRequest?>(null) }
     val surfaceRequest by surfaceRequests.collectAsStateWithLifecycle(null)
@@ -221,7 +222,7 @@ fun CameraContent(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Bottom
     ) {
@@ -330,9 +331,14 @@ fun CameraContent(
                                 onAction(CameraAction.SetCaptureState(true))
                                 scope.launch {
                                     try {
-                                        val file = capturePhoto(context, imageCapture, rotationDegrees)
+                                        val file = capturePhoto(
+                                            context = context,
+                                            imageCapture = imageCapture,
+                                            rotationDegrees = rotationDegrees,
+                                            isFrontCamera = state.isFrontCamera
+                                        )
                                         onAction(CameraAction.ImageCaptured(file))
-                                    } catch (e: Exception) {
+                                    } catch (_: Exception) {
                                         onAction(CameraAction.SetCaptureState(false))
                                         Toast.makeText(
                                             context,
@@ -382,7 +388,8 @@ fun CameraContent(
 private suspend fun capturePhoto(
     context: Context,
     imageCapture: ImageCapture?,
-    rotation: Float
+    rotationDegrees: Float,
+    isFrontCamera: Boolean
 ): File {
     return suspendCancellableCoroutine { continuation ->
         val capture = imageCapture ?: run {
@@ -400,11 +407,16 @@ private suspend fun capturePhoto(
                 override fun onCaptureSuccess(image: ImageProxy) {
                     val originalBitmap = image.use { it.toBitmap() }
 
-                    // Rotate the bitmap to match the UI orientation
                     val matrix = Matrix().apply {
-                        postRotate(rotation)
+                        if (isFrontCamera) {
+                            postRotate(270f + rotationDegrees)
+                            postScale(-1f, 1f, originalBitmap.width / 2f, originalBitmap.height / 2f)
+                        } else {
+                            postRotate(90f - rotationDegrees)
+                        }
                     }
-                    val rotatedBitmap = Bitmap.createBitmap(
+
+                    val finalBitmap = Bitmap.createBitmap(
                         originalBitmap,
                         0,
                         0,
@@ -422,7 +434,7 @@ private suspend fun capturePhoto(
                                 @Suppress("DEPRECATION")
                                 Bitmap.CompressFormat.WEBP
                             }
-                            rotatedBitmap.compress(format, 80, out)
+                            finalBitmap.compress(format, 80, out)
                         }
                         continuation.resume(photoFile)
                     } catch (e: Exception) {
@@ -430,8 +442,8 @@ private suspend fun capturePhoto(
                         continuation.resumeWithException(e)
                     } finally {
                         originalBitmap.recycle()
-                        if (rotatedBitmap != originalBitmap) {
-                            rotatedBitmap.recycle()
+                        if (finalBitmap != originalBitmap) {
+                            finalBitmap.recycle()
                         }
                     }
                 }
