@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -39,7 +40,8 @@ fun SimbanyuTextField(
     isPasswordVisible: Boolean = false,
     onKeyboardAction: KeyboardActionHandler? = null,
     fontSize: TextUnit = TextUnit.Unspecified,
-    keyboardType: KeyboardType = KeyboardType.Unspecified
+    keyboardType: KeyboardType = KeyboardType.Unspecified,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.Sentences
 ) {
     Row(
         modifier = modifier
@@ -90,7 +92,8 @@ fun SimbanyuTextField(
                 decorator = decorator,
                 keyboardOptions = KeyboardOptions(
                     imeAction = imeAction,
-                    keyboardType = keyboardType
+                    keyboardType = keyboardType,
+                    capitalization = KeyboardCapitalization.None
                 ),
                 textObfuscationMode =
                     if (isPasswordVisible)
@@ -111,7 +114,8 @@ fun SimbanyuTextField(
                 decorator = decorator,
                 keyboardOptions = KeyboardOptions(
                     imeAction = imeAction,
-                    keyboardType = keyboardType
+                    keyboardType = keyboardType,
+                    capitalization = capitalization
                 ),
                 onKeyboardAction = onKeyboardAction,
             )
