@@ -474,7 +474,7 @@ fun MeterRecordContent(
                 SimbanyuTextField(
                     modifier = Modifier,
                     state = state.notesState,
-                    lineLimits = TextFieldLineLimits.MultiLine(6, 8),
+                    lineLimits = TextFieldLineLimits.MultiLine(4, 6),
                     hint = "Catatan petugas apabila diperlukan...",
                 )
             }
