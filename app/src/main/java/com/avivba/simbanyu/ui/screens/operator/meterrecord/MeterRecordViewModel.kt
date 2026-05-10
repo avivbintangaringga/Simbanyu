@@ -133,6 +133,7 @@ class MeterRecordViewModel(
             when (usageRepository.recordUsage(submission)) {
                 is Result.Success -> {
                     sendEvent(MeterRecordEvents.RecordSent)
+                    refreshEventBus.triggerRefresh()
                 }
 
                 is Result.Error -> {
@@ -149,6 +150,7 @@ class MeterRecordViewModel(
             when (usageRepository.updateUsage(state.value.usageId, submission)) {
                 is Result.Success -> {
                     sendEvent(MeterRecordEvents.RecordSent)
+                    refreshEventBus.triggerRefresh()
                 }
 
                 is Result.Error -> {

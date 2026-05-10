@@ -205,6 +205,7 @@ class OperatorReportViewModel(
                         )
                     }
                     sendEvent(OperatorReportEvent.OnSent)
+                    refreshEventBus.triggerRefresh()
                 }
 
                 is Result.Error -> {

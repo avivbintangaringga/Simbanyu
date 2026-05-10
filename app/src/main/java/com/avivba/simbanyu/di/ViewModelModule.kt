@@ -17,7 +17,6 @@ import com.avivba.simbanyu.ui.screens.operator.meterrecord.MeterRecordViewModel
 import com.avivba.simbanyu.ui.screens.operator.report.OperatorReportViewModel
 import com.avivba.simbanyu.ui.screens.operator.subscriberdetail.SubscriberDetailsViewModel
 import com.avivba.simbanyu.ui.screens.operator.subsribers.SubscribersViewModel
-import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodViewModel
 import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryViewModel
@@ -28,26 +27,25 @@ val viewModelModule = module {
     viewModel { MainActivityViewModel(get(), get(), get()) }
 
     viewModel { LoginViewModel(get()) }
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get()) }
     viewModel { CameraViewModel() }
 
-    viewModel { DashboardViewModel(get(), get(), get(), get()) }
-    viewModel { BillHistoryViewModel(get()) }
+    viewModel { DashboardViewModel(get(), get(), get(), get(), get()) }
+    viewModel { BillHistoryViewModel(get(), get()) }
     viewModel { UsageHistoryViewModel(get(), get()) }
-    viewModel { ReportViewModel(get()) }
-    viewModel { ProfileViewModel(get(), get()) }
-    viewModel { InvoiceViewModel(get(), get(), get()) }
-    viewModel { PaymentMethodViewModel() }
-    viewModel { BillDetailsViewModel(get(), get(), get()) }
-    viewModel { AnnouncementViewModel(get()) }
+    viewModel { ReportViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get(), get(), get()) }
+    viewModel { InvoiceViewModel(get(), get(), get(), get()) }
+    viewModel { BillDetailsViewModel(get(), get(), get(), get()) }
+    viewModel { AnnouncementViewModel(get(), get()) }
 
     // OPERATOR
-    viewModel { OperatorMainViewModel(get()) }
-    viewModel { OperatorDashboardViewModel(get(), get()) }
-    viewModel { OperatorAnnouncementViewModel(get()) }
-    viewModel { SubscribersViewModel(get()) }
-    viewModel { SubscriberDetailsViewModel(get(), get(), get(), get()) }
-    viewModel { OperatorReportViewModel(get()) }
-    viewModel { MeterRecordViewModel(get(), get(), get()) }
-    viewModel { MapViewModel(get()) }
+    viewModel { OperatorMainViewModel(get(), get()) }
+    viewModel { OperatorDashboardViewModel(get(), get(), get()) }
+    viewModel { OperatorAnnouncementViewModel(get(), get()) }
+    viewModel { SubscribersViewModel(get(), get()) }
+    viewModel { SubscriberDetailsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { OperatorReportViewModel(get(), get()) }
+    viewModel { MeterRecordViewModel(get(), get(), get(), get()) }
+    viewModel { MapViewModel(get(), get()) }
 }

@@ -134,7 +134,7 @@ class OperatorAnnouncementViewModel(
             when (announcementRepository.addAnnouncement(submission)) {
                 is Result.Success -> {
                     sendEvent(OperatorAnnouncementEvent.AnnouncementCreated)
-                    load()
+                    refreshEventBus.triggerRefresh()
 
                     updateState {
                         it.copy(

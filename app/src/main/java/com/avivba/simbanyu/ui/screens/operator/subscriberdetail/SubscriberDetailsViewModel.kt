@@ -258,7 +258,7 @@ class SubscriberDetailsViewModel(
                     )
                 )
 
-                load()
+                refreshEventBus.triggerRefresh()
             }
 
             is Result.Error -> {

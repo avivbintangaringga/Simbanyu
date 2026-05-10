@@ -134,6 +134,7 @@ class InvoiceViewModel(
         when (val link = billRepository.requestPaymentLink(billIds)) {
             is Result.Success -> {
                 sendEvent(InvoiceEvent.OnPaymentSuccess(link.data))
+                refreshEventBus.triggerRefresh()
             }
 
             is Result.Error -> {
