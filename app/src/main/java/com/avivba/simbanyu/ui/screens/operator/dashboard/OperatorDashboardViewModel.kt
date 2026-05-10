@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.operator.dashboard
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.ActivityRepository
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiActivity
@@ -12,13 +13,20 @@ import kotlinx.coroutines.launch
 
 class OperatorDashboardViewModel(
     private val userRepository: UserRepository,
-    private val activityRepository: ActivityRepository
+    private val activityRepository: ActivityRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<OperatorDashboardUiState, OperatorDashboardAction, OperatorDashboardEvent>(
     OperatorDashboardUiState()
 ) {
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

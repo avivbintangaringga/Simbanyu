@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.SubscriberRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiSubscriber
@@ -15,7 +16,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SubscribersViewModel(
-    private val subscriberRepository: SubscriberRepository
+    private val subscriberRepository: SubscriberRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<SubscribersUiState, SubscribersAction, SubscribersEvent>(
     SubscribersUiState()
 ) {
@@ -24,7 +26,16 @@ class SubscribersViewModel(
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
             observeDataChanges()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

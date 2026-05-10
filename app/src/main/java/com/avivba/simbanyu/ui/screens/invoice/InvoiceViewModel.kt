@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.BillRepository
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 class InvoiceViewModel(
     private val billRepository: BillRepository,
     private val userRepository: UserRepository,
+    private val refreshEventBus: RefreshEventBus,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<InvoiceUiState, InvoiceAction, InvoiceEvent>(
     InvoiceUiState()
@@ -26,6 +28,12 @@ class InvoiceViewModel(
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

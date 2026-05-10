@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.billhistory
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.BillRepository
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.PayBill
 import com.avivba.simbanyu.ui.screens.billhistory.BillHistoryEvent.ShowBill
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class BillHistoryViewModel(
     private val billRepository: BillRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<BillHistoryUiState, BillHistoryAction, BillHistoryEvent>(
     BillHistoryUiState()
 ) {
@@ -30,6 +32,12 @@ class BillHistoryViewModel(
 
         viewModelScope.launch {
             observeDataChanges()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

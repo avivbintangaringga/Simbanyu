@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.BillRepository
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.SubscriberRepository
 import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.ui.shared.Screen
@@ -26,6 +27,7 @@ class SubscriberDetailsViewModel(
     private val subscriberRepository: SubscriberRepository,
     private val usageRepository: UsageRepository,
     private val billRepository: BillRepository,
+    private val refreshEventBus: RefreshEventBus,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SubscriberDetailsUiState, SubscriberDetailsAction, SubscriberDetailsEvent>(
     SubscriberDetailsUiState()
@@ -45,6 +47,12 @@ class SubscriberDetailsViewModel(
 
         viewModelScope.launch {
             observeBillChanges()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.AnnouncementRepository
 import com.avivba.simbanyu.domain.repository.BillRepository
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
@@ -19,13 +20,20 @@ class DashboardViewModel(
     private val billRepository: BillRepository,
     private val announcementRepository: AnnouncementRepository,
     private val usageRepository: UsageRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<DashboardUiState, DashboardAction, DashboardEvent>(
     DashboardUiState()
 ) {
     init {
         viewModelScope.launch {
             fetchData()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

@@ -3,19 +3,23 @@ package com.avivba.simbanyu.ui.screens.operator.main
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.NotificationRepository
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiNotification
 import kotlinx.coroutines.launch
 
 class OperatorMainViewModel(
-    private val notificationRepository: NotificationRepository
+    private val notificationRepository: NotificationRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<OperatorMainUiState, OperatorMainAction, OperatorMainEvent>(
     OperatorMainUiState()
 ) {
     init {
         viewModelScope.launch {
             loadNotifications()
+        }
 
+        viewModelScope.launch {
             state.collect { currentState ->
                 val hasUnread = currentState.notifications.any { !it.isRead }
                 if (currentState.isShowNotificationDot != hasUnread) {
@@ -25,6 +29,12 @@ class OperatorMainViewModel(
                         )
                     }
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                loadNotifications()
             }
         }
     }

@@ -5,12 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.AnnouncementSubmission
 import com.avivba.simbanyu.domain.repository.AnnouncementRepository
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
 import kotlinx.coroutines.launch
 
 class OperatorAnnouncementViewModel(
-    private val announcementRepository: AnnouncementRepository
+    private val announcementRepository: AnnouncementRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<OperatorAnnouncementUiState, OperatorAnnouncementAction, OperatorAnnouncementEvent>(
     OperatorAnnouncementUiState()
 ) {
@@ -18,6 +20,12 @@ class OperatorAnnouncementViewModel(
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

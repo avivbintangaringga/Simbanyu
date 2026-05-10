@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.domain.repository.AuthRepository
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiCoordinate
@@ -11,13 +12,20 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<ProfileUiState, ProfileAction, ProfileEvent>(
     ProfileUiState()
 ) {
     init {
         viewModelScope.launch {
             getProfile()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                getProfile()
+            }
         }
     }
 

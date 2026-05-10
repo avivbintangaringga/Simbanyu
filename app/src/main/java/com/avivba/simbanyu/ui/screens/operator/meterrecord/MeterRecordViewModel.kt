@@ -7,6 +7,7 @@ import androidx.navigation.toRoute
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.UsageSubmission
 import com.avivba.simbanyu.domain.model.UsageUpdateSubmission
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.SubscriberRepository
 import com.avivba.simbanyu.domain.repository.UsageRepository
 import com.avivba.simbanyu.ui.shared.Screen
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 class MeterRecordViewModel(
     private val subscriberRepository: SubscriberRepository,
     private val usageRepository: UsageRepository,
+    private val refreshEventBus: RefreshEventBus,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MeterRecordUiState, MeterRecordAction, MeterRecordEvents>(
     MeterRecordUiState()
@@ -35,6 +37,12 @@ class MeterRecordViewModel(
             }
 
             load()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

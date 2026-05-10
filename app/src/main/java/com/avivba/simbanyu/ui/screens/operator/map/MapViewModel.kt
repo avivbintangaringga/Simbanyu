@@ -2,6 +2,7 @@ package com.avivba.simbanyu.ui.screens.operator.map
 
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.SubscriberRepository
 import com.avivba.simbanyu.ui.screens.operator.map.MapUiEvent.GoToRecordMeter
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
@@ -9,13 +10,20 @@ import com.avivba.simbanyu.ui.shared.model.UiSubscriber
 import kotlinx.coroutines.launch
 
 class MapViewModel(
-    private val subscriberRepository: SubscriberRepository
+    private val subscriberRepository: SubscriberRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<MapUiState, MapUiAction, MapUiEvent>(
     MapUiState()
 ) {
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

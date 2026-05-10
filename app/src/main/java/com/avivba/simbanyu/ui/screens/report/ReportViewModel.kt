@@ -4,19 +4,27 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.ReportSubmission
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.ReportRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiReport
 import kotlinx.coroutines.launch
 
 class ReportViewModel(
-    private val reportRepository: ReportRepository
+    private val reportRepository: ReportRepository,
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<ReportUiState, ReportAction, ReportEvent>(
     ReportUiState()
 ) {
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 

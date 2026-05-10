@@ -2,8 +2,8 @@ package com.avivba.simbanyu.ui.screens.usagehistory
 
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.UsageRepository
-import com.avivba.simbanyu.domain.repository.UserRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiUsage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class UsageHistoryViewModel(
     private val usageRepository: UsageRepository,
-    private val userRepository: UserRepository
+    private val refreshEventBus: RefreshEventBus
 ) : BaseViewModel<UsageHistoryUiState, UsageHistoryAction, UsageHistoryEvent>(
     UsageHistoryUiState()
 ) {
@@ -28,6 +28,12 @@ class UsageHistoryViewModel(
 
         viewModelScope.launch {
             observeDataChanges()
+        }
+
+        viewModelScope.launch {
+            refreshEventBus.refreshEvent.collect {
+                load()
+            }
         }
     }
 
