@@ -26,7 +26,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { MainActivityViewModel(get(), get(), get()) }
 
-    viewModel { LoginViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { MainViewModel(get(), get()) }
     viewModel { CameraViewModel() }
 
