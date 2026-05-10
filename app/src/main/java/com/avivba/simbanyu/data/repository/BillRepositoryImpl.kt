@@ -3,11 +3,13 @@ package com.avivba.simbanyu.data.repository
 import com.avivba.simbanyu.data.di.BASE_URL
 import com.avivba.simbanyu.data.remote.api.BillService
 import com.avivba.simbanyu.data.remote.api.PaymentService
-import com.avivba.simbanyu.data.remote.model.payment.RequestPaymentRequest
+import com.avivba.simbanyu.data.remote.model.payment.CashPaymentRequest
+import com.avivba.simbanyu.data.remote.model.payment.PaymentRequest
 import com.avivba.simbanyu.data.utils.safeApiCall
 import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.Bill
+import com.avivba.simbanyu.domain.model.Payment
 import com.avivba.simbanyu.domain.repository.BillRepository
 
 class BillRepositoryImpl(
@@ -39,7 +41,7 @@ class BillRepositoryImpl(
     override suspend fun requestPaymentLink(bills: List<Bill>): Result<String, DataError> {
         return safeApiCall {
             paymentService.requestPayment(
-                RequestPaymentRequest(
+                PaymentRequest(
                     billIds = bills.map { it.id },
                     callbackUrl = "$BASE_URL/payment-success" // TODO: Change to real URL
                 )
@@ -47,7 +49,13 @@ class BillRepositoryImpl(
         }
     }
 
-    override suspend fun payByCash(bill: Bill): Result<Unit, DataError> {
-        TODO("Not yet implemented")
+    override suspend fun payByCash(bills: List<Bill>): Result<List<Payment>, DataError> {
+        return safeApiCall {
+            paymentService.requestCashPayment(
+                CashPaymentRequest(
+                    billIds = bills.map { it.id }
+                )
+            ).data?.map { it.toDomain() } ?: throw Exception("Invalid response")
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.avivba.simbanyu.data.remote.model.payment
 import androidx.annotation.Keep
 
 @Keep
-data class RequestPaymentResponse(
-    val paymentUrl: String
+data class PaymentRequest(
+    val billIds: List<String>,
+    val callbackUrl: String,
 )

@@ -69,9 +69,11 @@ class BillDetailsViewModel(
                         },
                         status = BillingStatus.valueOf(bill.status.name),
                         totalAmount = bill.amount.toDottedString(),
-                        payments = bill.payments.map {
-                            UiPayment.fromDomain(it)
-                        }
+                        payments = bill.payments
+                            .sortedByDescending { it.date }
+                            .map {
+                                UiPayment.fromDomain(it)
+                            }
                     )
                 }
             }
