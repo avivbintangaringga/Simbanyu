@@ -489,28 +489,28 @@ fun BillDetailsContent(
                 }
 
                 if (state.status == UiBillingStatus.PAID) {
-                    SimbanyuButton(
-                        modifier = Modifier
-                            .padding(
-                                vertical = SimbanyuTheme.padding.large
-                            )
-                            .fillMaxWidth()
-                            .background(
-                                brush = SimbanyuTheme.colors.brush.brandVertical,
-                                shape = SimbanyuTheme.shapes.extraLarge
-                            ),
-                        text = "Unduh Bukti Pembayaran",
-                        onClick = {
-                            onAction(BillDetailsAction.DownloadReceipt)
-                        },
-                        iconLeft = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_download),
-                                contentDescription = null,
-                                tint = SimbanyuTheme.colors.brandText
-                            )
-                        }
-                    )
+//                    SimbanyuButton(
+//                        modifier = Modifier
+//                            .padding(
+//                                vertical = SimbanyuTheme.padding.large
+//                            )
+//                            .fillMaxWidth()
+//                            .background(
+//                                brush = SimbanyuTheme.colors.brush.brandVertical,
+//                                shape = SimbanyuTheme.shapes.extraLarge
+//                            ),
+//                        text = "Unduh Bukti Pembayaran",
+//                        onClick = {
+//                            onAction(BillDetailsAction.DownloadReceipt)
+//                        },
+//                        iconLeft = {
+//                            Icon(
+//                                painter = painterResource(R.drawable.ic_download),
+//                                contentDescription = null,
+//                                tint = SimbanyuTheme.colors.brandText
+//                            )
+//                        }
+//                    )
                 } else if (state.status == UiBillingStatus.PENDING) {
                     SimbanyuButton(
                         modifier = Modifier
