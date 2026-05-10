@@ -64,12 +64,12 @@ fun Instant.toRelativeTime(): String {
 
     return when {
         diffSeconds < 60 -> "Baru saja"
-        diffSeconds < 3600 -> "${diffSeconds / 60} mnt lalu"
+        diffSeconds < 3600 -> "${diffSeconds / 60} menit lalu"
         diffSeconds < 86400 -> "${diffSeconds / 3600} jam lalu"
-        diffSeconds < 604800 -> "${diffSeconds / 86400} hr lalu"
+        diffSeconds < 604800 -> "${diffSeconds / 86400} hari lalu"
         else -> {
             val localeId = Locale.forLanguageTag("id-ID")
-            val formatter = DateTimeFormatter.ofPattern("d MMM yyyy")
+            val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
                 .withLocale(localeId)
                 .withZone(ZoneId.systemDefault())
             this.formatWith(formatter)
