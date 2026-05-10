@@ -2,6 +2,8 @@ package com.avivba.simbanyu.ui.screens.camera
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -12,6 +14,7 @@ import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
@@ -70,8 +73,8 @@ fun CameraScreen(
     ObserveAsEvent(viewModel.event) {
         when (it) {
             is CameraEvent.ImageCaptured -> {
-                onNavigateBack()
                 viewModel.onAction(CameraAction.SetCaptureState(false))
+                onNavigateBack()
             }
         }
     }
@@ -322,6 +325,34 @@ private fun capturePhoto(
     capture.takePicture(
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageCapturedCallback() {
+
+            override fun onCaptureSuccess(image: ImageProxy) {
+                val bitmap = image.use { it.toBitmap() }
+
+                try {
+                    photoFile.outputStream().use { out ->
+                        val format = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            Bitmap.CompressFormat.WEBP_LOSSY
+                        } else {
+                            @Suppress("DEPRECATION")
+                            Bitmap.CompressFormat.WEBP
+                        }
+                        bitmap.compress(format, 80, out)
+                    }
+                    onSuccess(photoFile)
+                } catch (e: Exception) {
+                    Log.e("SDKSDK", "Error saving image: ${e.message}")
+                    onError(
+                        ImageCaptureException(
+                            ImageCapture.ERROR_UNKNOWN,
+                            "Gagal menyimpan gambar",
+                            e
+                        )
+                    )
+                } finally {
+                    bitmap.recycle()
+                }
+            }
 
             override fun onError(e: ImageCaptureException) {
                 Log.e("SDKSDK", "Camera Capture Error: ${e.message}")

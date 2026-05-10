@@ -76,7 +76,6 @@ class CameraViewModel : BaseViewModel<CameraUiState, CameraAction, CameraEvent>(
                 currentToken = null
             )
         }
-
         _cameraResult.update { null }
     }
 }
