@@ -5,11 +5,13 @@ import coil3.disk.DiskCache
 import coil3.disk.directory
 import coil3.memory.MemoryCache
 import com.avivba.simbanyu.domain.repository.AuthEventBus
+import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val appModule = module {
     single { AuthEventBus() }
+    single { RefreshEventBus() }
     single {
         val context = androidContext()
         ImageLoader.Builder(
