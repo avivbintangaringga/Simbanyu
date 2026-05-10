@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.profile
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.User
@@ -33,8 +34,15 @@ class ProfileViewModel(
         viewModelScope.launch {
             when (action) {
                 ProfileAction.Logout -> {
-                    authRepository.logout()
-                    sendEvent(ProfileEvent.GoToLogin)
+                    when (authRepository.logout()) {
+                        is Result.Success -> {
+                            sendEvent(ProfileEvent.GoToLogin)
+                        }
+
+                        is Result.Error -> {
+                            Log.e("SDKSDK", "Failed to logout")
+                        }
+                    }
                 }
             }
         }

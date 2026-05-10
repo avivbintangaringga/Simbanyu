@@ -11,6 +11,7 @@ import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.domain.repository.AuthRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -92,9 +93,11 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun logout(): Result<Unit, DataError> {
-        localTokenManager.clearToken()
-        localUserService.clearUser()
-
-        return Result.Success(Unit)
+        return safeApiCall {
+            authService.logout()
+            FirebaseMessaging.getInstance().deleteToken()
+            localTokenManager.clearToken()
+            localUserService.clearUser()
+        }
     }
 }

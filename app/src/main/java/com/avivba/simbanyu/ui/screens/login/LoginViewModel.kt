@@ -48,11 +48,10 @@ class LoginViewModel(
             password = state.value.password.text.toString()
         )
 
-        updateState { it.copy(isLoading = false) }
-
         when (result) {
             is Result.Success -> {
                 sendFcmToken()
+
                 when (result.data.role) {
                     User.UserRole.SUBSCRIBER -> {
                         sendEvent(LoginEvent.GoToSubscriberDashboard)
@@ -76,6 +75,8 @@ class LoginViewModel(
                 }
             }
         }
+
+        updateState { it.copy(isLoading = false) }
     }
 
     private suspend fun sendFcmToken() {
@@ -84,16 +85,16 @@ class LoginViewModel(
             withContext(NonCancellable) {
                 when (fcmTokenRepository.save(token)) {
                     is Result.Success -> {
-                        Log.d("LoginViewModel", "FCM token sent successfully")
+                        Log.d("SDKSDK", "FCM token sent successfully: $token")
                     }
 
                     is Result.Error -> {
-                        Log.e("LoginViewModel", "Failed to send FCM token")
+                        Log.e("SDKSDK", "Failed to send FCM token")
                     }
                 }
             }
         } catch (e: Exception) {
-            Log.e("LoginViewModel", "Failed to get FCM token", e)
+            Log.e("SDKSDK", "Failed to get FCM token", e)
         }
     }
 }
