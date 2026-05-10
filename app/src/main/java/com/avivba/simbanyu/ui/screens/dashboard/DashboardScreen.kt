@@ -33,6 +33,7 @@ import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
+import com.avivba.simbanyu.ui.shared.Screen.Invoice
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import ir.ehsannarmani.compose_charts.ColumnChart
@@ -52,7 +53,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun DashboardScreen(
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = koinViewModel(),
-    onNavigate: (Screen) -> Unit = {}
+    onNavigate: (Screen) -> Unit = {},
+    onChangeTab: (Screen) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -64,8 +66,12 @@ fun DashboardScreen(
 
             DashboardEvent.GoToInvoice -> {
                 if (state.billIds.isNotEmpty()) {
-                    onNavigate(Screen.Invoice(state.billIds))
+                    onNavigate(Invoice(state.billIds))
                 }
+            }
+
+            DashboardEvent.GoToBillHistory -> {
+                onChangeTab(Screen.MainScreen.BillHistory)
             }
         }
     }

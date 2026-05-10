@@ -12,6 +12,7 @@ data class DashboardUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
     val name: String = "User",
+    val hasPendingBill: Boolean = false,
     val bill: String = "",
     val billIds: List<String> = emptyList(),
     val usage: List<WaterUsage> = emptyList(),
@@ -31,6 +32,7 @@ sealed interface DashboardAction {
 sealed interface DashboardEvent {
     data object ViewAllAnnouncements : DashboardEvent
     data object GoToInvoice : DashboardEvent
+    data object GoToBillHistory : DashboardEvent
 }
 
 val fakeWaterUsage = listOf(

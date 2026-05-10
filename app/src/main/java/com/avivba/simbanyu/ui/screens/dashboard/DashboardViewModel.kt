@@ -3,6 +3,7 @@ package com.avivba.simbanyu.ui.screens.dashboard
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
+import com.avivba.simbanyu.domain.model.Bill
 import com.avivba.simbanyu.domain.repository.AnnouncementRepository
 import com.avivba.simbanyu.domain.repository.BillRepository
 import com.avivba.simbanyu.domain.repository.RefreshEventBus
@@ -42,7 +43,11 @@ class DashboardViewModel(
             when (action) {
                 DashboardAction.Load -> load()
                 DashboardAction.PayBill -> {
-                    sendEvent(DashboardEvent.GoToInvoice)
+                    if (state.value.hasPendingBill) {
+                        sendEvent(DashboardEvent.GoToBillHistory)
+                    } else {
+                        sendEvent(DashboardEvent.GoToInvoice)
+                    }
                 }
 
                 DashboardAction.ViewAllAnnouncements -> sendEvent(DashboardEvent.ViewAllAnnouncements)
@@ -112,6 +117,7 @@ class DashboardViewModel(
                         updateState { it ->
                             val totalActiveBill = activeBill.data.sumOf { it.amount }
                             it.copy(
+                                hasPendingBill = activeBill.data.any { it.status == Bill.BillStatus.PENDING },
                                 bill = if (totalActiveBill > 0) totalActiveBill.toDottedCurrency(
                                     prefix = ""
                                 ) else "",

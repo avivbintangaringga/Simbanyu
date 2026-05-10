@@ -272,7 +272,10 @@ fun MainScreenContent(
         ) {
             composable<Screen.MainScreen.Home> {
                 DashboardScreen(
-                    onNavigate = onNavigate
+                    onNavigate = onNavigate,
+                    onChangeTab = { tab ->
+                        onAction(MainAction.ChangeScreen(tab))
+                    }
                 )
             }
             composable<Screen.MainScreen.UsageHistory> {
