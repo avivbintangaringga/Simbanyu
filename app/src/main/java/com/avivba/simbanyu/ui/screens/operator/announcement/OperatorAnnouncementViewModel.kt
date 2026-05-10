@@ -16,7 +16,6 @@ class OperatorAnnouncementViewModel(
 ) : BaseViewModel<OperatorAnnouncementUiState, OperatorAnnouncementAction, OperatorAnnouncementEvent>(
     OperatorAnnouncementUiState()
 ) {
-
     init {
         viewModelScope.launch {
             load()
@@ -161,13 +160,7 @@ class OperatorAnnouncementViewModel(
     private suspend fun deleteAnnouncement(announcement: UiAnnouncement) {
         when (announcementRepository.deleteAnnouncement(announcement.id)) {
             is Result.Success -> {
-                updateState {
-                    it.copy(
-                        announcements = it.announcements.filter { item ->
-                            item.id != announcement.id
-                        }
-                    )
-                }
+                refreshEventBus.triggerRefresh()
             }
 
             is Result.Error -> {
