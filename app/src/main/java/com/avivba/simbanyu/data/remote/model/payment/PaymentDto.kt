@@ -1,8 +1,10 @@
 package com.avivba.simbanyu.data.remote.model.payment
 
+import androidx.annotation.Keep
 import com.avivba.simbanyu.domain.model.Payment
 import java.time.Instant
 
+@Keep
 data class PaymentDto(
     val id: String,
     val orderId: String,
