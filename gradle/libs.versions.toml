@@ -22,6 +22,8 @@ sandwich = "2.2.2"
 datastore = "1.2.1"
 camerax = "1.6.1"
 exifinterface = "1.4.2"
+google-services = "4.4.4"
+firebaseBom = "34.13.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -61,6 +63,11 @@ androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", 
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camerax" }
 androidx-camera-compose = { group = "androidx.camera", name = "camera-compose", version.ref = "camerax" }
 androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
+firebase-perf = { group = "com.google.firebase", name = "firebase-perf" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -68,3 +75,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 koin-compiler = { id = "io.insert-koin.compiler.plugin", version.ref = "koin-plugin" }
 maps-secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "maps-secrets" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }

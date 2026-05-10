@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "442042400832",
+    "project_id": "simbanyu-c946d",
+    "storage_bucket": "simbanyu-c946d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442042400832:android:8b3274447660e8969e5fa5",
+        "android_client_info": {
+          "package_name": "com.avivba.simbanyu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNk-iv2ru3hNIWqxwA912OG1m-6eHl9rk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

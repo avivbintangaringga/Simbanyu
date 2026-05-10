@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.avivba.simbanyu" />
+                  <option name="mobileSdkAppId" value="1:442042400832:android:8b3274447660e8969e5fa5" />
+                  <option name="projectId" value="simbanyu-c946d" />
+                  <option name="projectNumber" value="442042400832" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.koin.compiler)
     alias(libs.plugins.maps.secrets)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -88,6 +89,11 @@ dependencies {
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.compose)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.messaging)
+    implementation(libs.firebase.perf)
 
     testImplementation(libs.junit)
 
