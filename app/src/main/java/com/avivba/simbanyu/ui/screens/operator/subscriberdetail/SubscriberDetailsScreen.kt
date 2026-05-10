@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.operator.subscriberdetail
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,7 +36,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -63,6 +67,8 @@ fun SubscriberDetailsScreen(
     onNavigateBack: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     ObserveAsEvent(viewModel.event) {
         when (it) {
@@ -75,19 +81,44 @@ fun SubscriberDetailsScreen(
             }
 
             is SubscriberDetailsEvent.GoToWhatsApp -> {
-                // TODO: Implement go to WhatsApp
+                if (state.phone.isNotEmpty()) {
+                    val cleanedPhone = if (state.phone.startsWith("0")) {
+                        state.phone.substring(1)
+                    } else {
+                        state.phone
+                    }
+
+                    val url = "https://wa.me/62$cleanedPhone"
+                    uriHandler.openUri(url)
+                }
+            }
+
+            is SubscriberDetailsEvent.OnCashPaymentResult -> {
+                Toast.makeText(
+                    context,
+                    it.message,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
-    SubscriberDetailsContent(
-        modifier = modifier,
-        state = state,
-        onAction = viewModel::onAction,
-        onNavigate = onNavigate
-    )
+    PullToRefreshBox(
+        modifier = modifier
+            .fillMaxSize(),
+        isRefreshing = state.isRefreshing,
+        onRefresh = {
+            viewModel.onAction(SubscriberDetailsAction.Refresh)
+        }
+    ) {
+        SubscriberDetailsContent(
+            modifier = Modifier,
+            state = state,
+            onAction = viewModel::onAction,
+            onNavigate = onNavigate
+        )
+    }
 }
-
 
 @Composable
 fun SubscriberDetailsContent(
@@ -304,7 +335,6 @@ fun SubscriberDetailsContent(
                         )
                     },
                     onClick = {
-                        // TODO: Implement contact via whatsapp
                         onAction(SubscriberDetailsAction.ContactViaWhatsApp)
                     }
                 )

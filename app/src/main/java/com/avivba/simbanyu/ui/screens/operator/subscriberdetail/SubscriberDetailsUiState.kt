@@ -9,6 +9,7 @@ import com.avivba.simbanyu.ui.shared.model.UiUsage
 data class SubscriberDetailsUiState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
+    val isSending: Boolean = false,
     val name: String = "",
     val address: String = "",
     val meterId: String = "",
@@ -48,6 +49,7 @@ sealed interface SubscriberDetailsEvent {
     data object NavigateBack : SubscriberDetailsEvent
     data class GoToRecordMeter(val editMode: Boolean) : SubscriberDetailsEvent
     data object GoToWhatsApp : SubscriberDetailsEvent
+    data class OnCashPaymentResult(val message: String) : SubscriberDetailsEvent
 }
 
 val fakeSubscriberDetailsUiState = SubscriberDetailsUiState(

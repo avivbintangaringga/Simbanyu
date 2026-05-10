@@ -88,7 +88,7 @@ class SubscriberDetailsViewModel(
                 }
 
                 is SubscriberDetailsAction.PayByCash -> {
-                    // TODO: Handle pay by cash
+                    payByCash(action.bill.id)
                 }
 
                 is SubscriberDetailsAction.ClickUsage -> {
@@ -222,6 +222,43 @@ class SubscriberDetailsViewModel(
             is Result.Error -> {
                 // TODO: Handle error
             }
+        }
+    }
+
+    private suspend fun payByCash(id: String) {
+        if (state.value.isSending) return
+
+        updateState {
+            it.copy(
+                isSending = true
+            )
+        }
+
+        when (billRepository.payByCash(listOf(id))) {
+            is Result.Success -> {
+                sendEvent(
+                    SubscriberDetailsEvent.OnCashPaymentResult(
+                        "Pembayaran berhasil"
+                    )
+                )
+
+                load()
+            }
+
+            is Result.Error -> {
+                // TODO: Handle error
+                sendEvent(
+                    SubscriberDetailsEvent.OnCashPaymentResult(
+                        "Pembayaran gagal, coba lagi nanti"
+                    )
+                )
+            }
+        }
+
+        updateState {
+            it.copy(
+                isSending = false
+            )
         }
     }
 

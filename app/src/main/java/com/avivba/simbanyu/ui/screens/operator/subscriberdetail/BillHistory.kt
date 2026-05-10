@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
@@ -138,6 +140,58 @@ internal fun BillHistory(
                         iconBackgroundColor = SimbanyuTheme.colors.statusNegative
                     }
 
+                    val openDialog = remember { mutableStateOf(false) }
+
+                    when {
+                        openDialog.value -> {
+                            AlertDialog(
+                                title = {
+                                    SimbanyuText(
+                                        text = "Konfirmasi Pembayaran",
+                                        style = SimbanyuTheme.typography.titleSection
+                                    )
+                                },
+                                text = {
+                                    SimbanyuText(
+                                        text = "Lakukan pembayaran sebesar ${bill.amount} secara tunai?",
+                                    )
+                                },
+                                onDismissRequest = {
+                                    openDialog.value = false
+                                },
+                                confirmButton = {
+                                    SimbanyuButton(
+                                        modifier = Modifier
+                                            .background(
+                                                brush = SimbanyuTheme.colors.brush.brandVertical,
+                                                shape = SimbanyuTheme.shapes.extraLarge
+                                            ),
+                                        textColor = SimbanyuTheme.colors.brandText,
+                                        text = "Lanjutkan",
+                                        onClick = {
+                                            openDialog.value = false
+                                            onAction(SubscriberDetailsAction.PayByCash(bill))
+                                        },
+                                    )
+                                },
+                                dismissButton = {
+                                    SimbanyuButton(
+                                        modifier = Modifier
+                                            .background(
+                                                color = SimbanyuTheme.colors.statusNegative,
+                                                shape = SimbanyuTheme.shapes.extraLarge
+                                            ),
+                                        textColor = SimbanyuTheme.colors.statusNegativeText,
+                                        text = "Batal",
+                                        onClick = {
+                                            openDialog.value = false
+                                        },
+                                    )
+                                }
+                            )
+                        }
+                    }
+
                     BillHistoryItem(
                         period = "${bill.periodMonth} ${bill.periodYear}",
                         id = bill.id,
@@ -147,9 +201,9 @@ internal fun BillHistory(
                         iconTint = iconTint,
                         iconBackgroundColor = iconBackgroundColor,
                         statusBackgroundColor = statusBackgroundColor,
-                        canPayByCash = bill.status == UiBillingStatus.UNPAID,
+                        canPayByCash = bill.status == UiBillingStatus.UNPAID || bill.status == UiBillingStatus.PENDING,
                         onClickPayByCash = {
-                            onAction(SubscriberDetailsAction.PayByCash(bill))
+                            openDialog.value = true
                         }
                     )
                 }
