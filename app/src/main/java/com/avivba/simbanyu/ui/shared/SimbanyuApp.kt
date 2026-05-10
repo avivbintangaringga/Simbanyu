@@ -22,7 +22,6 @@ import com.avivba.simbanyu.ui.screens.operator.announcement.OperatorAnnouncement
 import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
 import com.avivba.simbanyu.ui.screens.operator.meterrecord.MeterRecordScreen
 import com.avivba.simbanyu.ui.screens.operator.subscriberdetail.SubscriberDetailsScreen
-import com.avivba.simbanyu.ui.screens.paymentmethod.PaymentMethodScreen
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -107,17 +106,6 @@ fun SimbanyuApp(
 
         composable<Screen.BillDetails> {
             BillDetailsScreen(
-                onNavigateBack = {
-                    navHostController.popBackStack()
-                }
-            )
-        }
-
-        composable<Screen.PaymentMethods> {
-            PaymentMethodScreen(
-                onNavigate = { dest ->
-                    navHostController.navigate(dest)
-                },
                 onNavigateBack = {
                     navHostController.popBackStack()
                 }
