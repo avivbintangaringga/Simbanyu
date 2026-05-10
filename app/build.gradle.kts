@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.koin.compiler)
     alias(libs.plugins.maps.secrets)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.firebase.perf)
 }
 
 android {
