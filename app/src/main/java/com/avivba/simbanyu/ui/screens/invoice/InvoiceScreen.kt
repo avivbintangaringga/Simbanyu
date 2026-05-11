@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -172,11 +173,11 @@ fun InvoiceContent(
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
-                .padding(paddingValues)
-                .padding(
-                    horizontal = SimbanyuTheme.padding.large,
-                    vertical = SimbanyuTheme.padding.medium
-                ),
+                .padding(paddingValues),
+            contentPadding = PaddingValues(
+                horizontal = SimbanyuTheme.padding.large,
+                vertical = SimbanyuTheme.padding.medium
+            ),
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.large
             ),

@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -99,10 +100,7 @@ fun OperatorReportScreen(
 
     PullToRefreshBox(
         modifier = modifier
-            .fillMaxSize()
-            .padding(
-                SimbanyuTheme.padding.large
-            ),
+            .fillMaxSize(),
         isRefreshing = state.isRefreshing,
         onRefresh = {
             viewModel.onAction(OperatorReportAction.Refresh)
@@ -137,11 +135,13 @@ private fun OperatorReportContent(
         )
     ) {
         SimbanyuText(
+            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
             text = "Laporan Pelanggan",
             style = SimbanyuTheme.typography.displayMedium
         )
 
         SimbanyuText(
+            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
             text = "Aduan dari pelanggan terkait layanan air",
             style = SimbanyuTheme.typography.bodySmall,
             color = SimbanyuTheme.colors.brand
@@ -150,7 +150,8 @@ private fun OperatorReportContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .horizontalScroll(filterScrollState),
+                .horizontalScroll(filterScrollState)
+                .padding(horizontal = SimbanyuTheme.padding.large),
             horizontalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
             )
@@ -196,8 +197,9 @@ private fun OperatorReportContent(
         }
 
         LazyColumn(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize(),
+            contentPadding = PaddingValues(SimbanyuTheme.padding.large),
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
             ),

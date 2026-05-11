@@ -178,10 +178,10 @@ fun SubscriberDetailsContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(scrollState)
                 .padding(
                     SimbanyuTheme.padding.large
-                )
-                .verticalScroll(scrollState),
+                ),
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
             )

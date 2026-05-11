@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -81,23 +82,24 @@ fun SubscribersContent(
 
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .padding(SimbanyuTheme.padding.large),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
         SimbanyuText(
+            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
             text = "Data Pelanggan",
             style = SimbanyuTheme.typography.displayMedium
         )
 
         SimbanyuText(
+            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
             text = "Daftar pelanggan aktif",
             style = SimbanyuTheme.typography.bodySmall,
             color = SimbanyuTheme.colors.brand
         )
 
         SimbanyuTextField(
-            modifier = Modifier,
+            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
             state = state.searchBarState,
             hint = "Nama Pelanggan / ID Meter / No. HP",
             prefix = {
@@ -111,7 +113,9 @@ fun SubscribersContent(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = SimbanyuTheme.padding.large),
             horizontalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
             )
@@ -158,8 +162,9 @@ fun SubscribersContent(
 
         if (state.filteredSubscribers.isNotEmpty()) {
             LazyColumn(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize(),
+                contentPadding = PaddingValues(SimbanyuTheme.padding.large),
                 verticalArrangement = Arrangement.spacedBy(
                     SimbanyuTheme.spacing.medium
                 ),

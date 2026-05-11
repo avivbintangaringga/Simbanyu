@@ -107,10 +107,10 @@ fun BillDetailsContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(paddingValues)
+                .verticalScroll(scrollState)
                 .padding(
                     SimbanyuTheme.padding.large,
-                )
-                .verticalScroll(scrollState),
+                ),
             verticalArrangement = Arrangement.spacedBy(
                 SimbanyuTheme.spacing.medium
             )

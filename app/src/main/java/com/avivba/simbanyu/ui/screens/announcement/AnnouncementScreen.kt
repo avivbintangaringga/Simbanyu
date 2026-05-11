@@ -3,6 +3,8 @@ package com.avivba.simbanyu.ui.screens.announcement
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -106,17 +108,17 @@ fun AnnouncementContent(
         ) {
             Column(
                 modifier = modifier
-                    .fillMaxSize()
-                    .padding(SimbanyuTheme.padding.large),
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
             ) {
                     SimbanyuText(
-                        modifier = Modifier,
+                        modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
                         text = "Pemberitahuan",
                         style = SimbanyuTheme.typography.displayMedium
                     )
 
                 SimbanyuText(
+                    modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
                     text = "Informasi terkini mengenai layanan air",
                     style = SimbanyuTheme.typography.bodySmall,
                     color = SimbanyuTheme.colors.brand
@@ -127,6 +129,7 @@ fun AnnouncementContent(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize(),
+                    contentPadding = PaddingValues(SimbanyuTheme.padding.large),
                     state = listState,
                     verticalArrangement = Arrangement.spacedBy(
                         SimbanyuTheme.spacing.medium

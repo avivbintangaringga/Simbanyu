@@ -8,10 +8,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
@@ -117,6 +121,7 @@ private val menus = listOf(
     )
 )
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OperatorMainScreenContent(
     modifier: Modifier = Modifier,
@@ -126,16 +131,19 @@ fun OperatorMainScreenContent(
     onNavigate: (Screen) -> Unit = {},
     onLogout: () -> Unit
 ) {
+    val isKeyboardVisible = WindowInsets.isImeVisible
     Scaffold(
         modifier = modifier,
         containerColor = Color.Transparent,
         bottomBar = {
-            BottomBar(
-                selected = state.selectedScreen,
-                menus = menus,
-                onSelectedMenuChanged = { menu ->
-                    onAction(OperatorMainAction.ChangeScreen(menu.screen))
-                })
+            if (!isKeyboardVisible) {
+                BottomBar(
+                    selected = state.selectedScreen,
+                    menus = menus,
+                    onSelectedMenuChanged = { menu ->
+                        onAction(OperatorMainAction.ChangeScreen(menu.screen))
+                    })
+            }
         },
         topBar = {
             TopBar(
@@ -252,9 +260,9 @@ fun OperatorMainScreenContent(
     ) { paddingValues ->
         val fadeDuration = 250
         NavHost(
-            modifier = Modifier.padding(
-                paddingValues
-            ),
+            modifier = Modifier
+                .padding(paddingValues)
+                .imePadding(),
             navController = navController,
             startDestination = Screen.OperatorMainScreen.Home,
             enterTransition = {

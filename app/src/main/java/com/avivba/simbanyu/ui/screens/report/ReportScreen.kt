@@ -11,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -133,16 +134,17 @@ fun ReportContent(
     }
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .padding(SimbanyuTheme.padding.large),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
         SimbanyuText(
+            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
             text = "Laporkan Gangguan",
             style = SimbanyuTheme.typography.displayMedium
         )
 
         SimbanyuText(
+            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
             text = "Sampaikan keluhan Anda terkait layanan air kami",
             style = SimbanyuTheme.typography.bodySmall,
             color = SimbanyuTheme.colors.brand
@@ -150,7 +152,8 @@ fun ReportContent(
 
         SecondaryTabRow(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = SimbanyuTheme.padding.large),
             selectedTabIndex = pagerState.currentPage,
             containerColor = SimbanyuTheme.colors.brandText,
             indicator = {
@@ -224,7 +227,8 @@ private fun CreateReport(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(scrollState),
+            .verticalScroll(scrollState)
+            .padding(SimbanyuTheme.padding.large),
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
         Column(
@@ -522,6 +526,8 @@ private fun ReportList(
 ) {
     val listState = rememberLazyListState()
     PullToRefreshBox(
+        modifier = modifier
+            .fillMaxSize(),
         isRefreshing = state.isRefreshing,
         onRefresh = {
             onAction(ReportAction.Refresh)
@@ -529,8 +535,9 @@ private fun ReportList(
     ) {
         if (state.reports.isNotEmpty()) {
             LazyColumn(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize(),
+                contentPadding = PaddingValues(SimbanyuTheme.padding.large),
                 verticalArrangement = Arrangement.spacedBy(
                     SimbanyuTheme.spacing.medium
                 ),
