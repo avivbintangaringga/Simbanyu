@@ -24,6 +24,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +61,7 @@ import org.koin.dsl.KoinConfiguration
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
+    tab: Screen.MainScreen = Screen.MainScreen.Home,
     onNavigate: (Screen) -> Unit = {},
     onNavigateBack: () -> Unit = {},
     onLogout: () -> Unit,
@@ -67,6 +69,10 @@ fun MainScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val navController = rememberNavController()
+
+    LaunchedEffect(tab) {
+        viewModel.onAction(MainAction.ChangeScreen(tab))
+    }
 
     ObserveAsEvent(viewModel.event) {
         when (it) {

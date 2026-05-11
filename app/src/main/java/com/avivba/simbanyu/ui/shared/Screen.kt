@@ -11,7 +11,7 @@ sealed interface Screen {
     data object Camera : Screen
 
     @Serializable
-    data object Main : Screen
+    data class Main(val tab: MainScreen = MainScreen.Home) : Screen
 
     @Serializable
     data object OperatorMain : Screen
@@ -27,6 +27,9 @@ sealed interface Screen {
 
     @Serializable
     data class RecordMeter(val subscriberId: String, val editMode: Boolean = false) : Screen
+
+    @Serializable
+    data object PaymentSuccess : Screen
 
     @Serializable
     data object AnnouncementScreen : Screen

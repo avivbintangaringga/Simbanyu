@@ -58,7 +58,7 @@ fun LoginScreen(
     ObserveAsEvent(viewModel.event) {
         when (it) {
             is LoginEvent.GoToSubscriberDashboard -> {
-                onNavigate(Screen.Main)
+                onNavigate(Screen.Main())
             }
 
             is LoginEvent.GoToOperatorDashboard -> {

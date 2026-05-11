@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                         isLoggedIn && profile != null -> {
                             when (profile?.role) {
                                 User.UserRole.OPERATOR.name -> Screen.OperatorMain
-                                User.UserRole.SUBSCRIBER.name -> Screen.Main
+                                User.UserRole.SUBSCRIBER.name -> Screen.Main()
                                 else -> Screen.Login
                             }
                         }
@@ -72,6 +72,7 @@ class MainActivity : ComponentActivity() {
                     key(isLoggedIn) {
                         SimbanyuApp(
                             startScreen = startScreen,
+                            userRole = profile?.role,
                             authEventFlow = viewModel.authEvents
                         )
                     }

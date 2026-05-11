@@ -5,11 +5,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
+import androidx.navigation.toRoute
+import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.domain.repository.AuthEvent
 import com.avivba.simbanyu.ui.components.background.Background
 import com.avivba.simbanyu.ui.screens.announcement.AnnouncementScreen
@@ -22,6 +26,7 @@ import com.avivba.simbanyu.ui.screens.operator.announcement.OperatorAnnouncement
 import com.avivba.simbanyu.ui.screens.operator.main.OperatorMainScreen
 import com.avivba.simbanyu.ui.screens.operator.meterrecord.MeterRecordScreen
 import com.avivba.simbanyu.ui.screens.operator.subscriberdetail.SubscriberDetailsScreen
+import com.avivba.simbanyu.ui.screens.paymentsuccess.PaymentSuccessScreen
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -29,6 +34,7 @@ import kotlinx.coroutines.flow.SharedFlow
 fun SimbanyuApp(
     navHostController: NavHostController = rememberNavController(),
     startScreen: Screen,
+    userRole: String? = null,
     authEventFlow: SharedFlow<AuthEvent>
 ) {
     val context = LocalContext.current
@@ -81,16 +87,30 @@ fun SimbanyuApp(
             )
         }
 
-        composable<Screen.Main> {
-            MainScreen(
-                onNavigate = { dest ->
-                    navHostController.navigate(dest)
-                },
-                onLogout = {
-                    navHostController.navigate(Screen.Login) {
-                        popUpTo(navHostController.graph.id) { inclusive = true }
+        composable<Screen.Main>(
+            deepLinks = listOf(
+                navDeepLink { uriPattern = "https://simbanyu.avivba.com" }
+            )
+        ) { backStackEntry ->
+            val screen = backStackEntry.toRoute<Screen.Main>()
+            if (userRole == User.UserRole.OPERATOR.name) {
+                LaunchedEffect(Unit) {
+                    navHostController.navigate(Screen.OperatorMain) {
+                        popUpTo(Screen.Main()) { inclusive = true }
                     }
-                })
+                }
+            } else {
+                MainScreen(
+                    tab = screen.tab,
+                    onNavigate = { dest ->
+                        navHostController.navigate(dest)
+                    },
+                    onLogout = {
+                        navHostController.navigate(Screen.Login) {
+                            popUpTo(navHostController.graph.id) { inclusive = true }
+                        }
+                    })
+            }
         }
 
         composable<Screen.Invoice> {
@@ -110,6 +130,28 @@ fun SimbanyuApp(
                     navHostController.popBackStack()
                 }
             )
+        }
+
+        composable<Screen.PaymentSuccess>(
+            deepLinks = listOf(
+                navDeepLink { uriPattern = "https://simbanyu.avivba.com/payment-success" }
+            )
+        ) {
+            if (userRole == User.UserRole.OPERATOR.name) {
+                LaunchedEffect(Unit) {
+                    navHostController.navigate(Screen.OperatorMain) {
+                        popUpTo(Screen.PaymentSuccess) { inclusive = true }
+                    }
+                }
+            } else {
+                PaymentSuccessScreen(
+                    onNavigateToBillHistory = {
+                        navHostController.navigate(Screen.Main(Screen.MainScreen.BillHistory)) {
+                            popUpTo(Screen.PaymentSuccess) { inclusive = true }
+                        }
+                    }
+                )
+            }
         }
 
         // OPERATOR
