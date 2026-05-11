@@ -90,15 +90,11 @@ fun SimbanyuApp(
         }
 
         composable<Screen.Main>(
-            typeMap = mapOf(
-                typeOf<Screen.MainScreen>() to serializableNavType<Screen.MainScreen>()
-            ),
+            typeMap = NavTypeMaps.Main,
             deepLinks = listOf(
                 navDeepLink { uriPattern = "https://simbanyu.avivba.com" }
             )
-        ) { backStackEntry ->
-            val screen = backStackEntry.toRoute<Screen.Main>()
-
+        ) {
             LaunchedEffect(userRole) {
                 if (userRole == User.UserRole.OPERATOR.name) {
                     navHostController.navigate(Screen.OperatorMain) {
@@ -109,7 +105,6 @@ fun SimbanyuApp(
 
             if (userRole != User.UserRole.OPERATOR.name) {
                 MainScreen(
-                    tab = screen.tab,
                     onNavigate = { dest ->
                         navHostController.navigate(dest)
                     },
@@ -122,9 +117,7 @@ fun SimbanyuApp(
         }
 
         composable<Screen.Invoice>(
-            typeMap = mapOf(
-                typeOf<List<String>>() to serializableNavType<List<String>>()
-            )
+            typeMap = NavTypeMaps.Invoice
         ) {
             InvoiceScreen(
                 onNavigate = { dest ->

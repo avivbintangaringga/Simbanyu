@@ -27,7 +27,7 @@ val viewModelModule = module {
     viewModel { MainActivityViewModel(get(), get(), get()) }
 
     viewModel { LoginViewModel(get(), get()) }
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel { CameraViewModel() }
 
     viewModel { DashboardViewModel(get(), get(), get(), get(), get()) }

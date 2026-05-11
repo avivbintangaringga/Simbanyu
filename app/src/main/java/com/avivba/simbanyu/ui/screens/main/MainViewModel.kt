@@ -1,20 +1,32 @@
 package com.avivba.simbanyu.ui.screens.main
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.NotificationRepository
 import com.avivba.simbanyu.domain.repository.RefreshEventBus
+import com.avivba.simbanyu.ui.shared.NavTypeMaps
+import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiNotification
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val notificationRepository: NotificationRepository,
-    private val refreshEventBus: RefreshEventBus
+    private val refreshEventBus: RefreshEventBus,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MainUiState, MainAction, MainEvent>(
-    MainUiState()
+    MainUiState(
+        selectedScreen = savedStateHandle.toRoute<Screen.Main>(NavTypeMaps.Main).tab
+    )
 ) {
     init {
+        val initialTab = savedStateHandle.toRoute<Screen.Main>(NavTypeMaps.Main).tab
+        viewModelScope.launch {
+            sendEvent(MainEvent.ChangeScreen(initialTab))
+        }
+
         viewModelScope.launch {
             loadNotifications()
         }
@@ -124,7 +136,6 @@ class MainViewModel(
             }
 
             is Result.Error -> {
-                // TODO: Handle error
             }
         }
     }

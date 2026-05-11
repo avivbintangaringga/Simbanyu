@@ -17,7 +17,9 @@ suspend fun <T> safeApiCall(
     return withContext(dispatcher) {
         try {
             Log.d("SDKSDK", "Executing api call: $apiCall")
-            Result.Success(apiCall())
+            val result = apiCall()
+            Log.d("SDKSDK", "API Call Success")
+            Result.Success(result)
         } catch (t: Throwable) {
             Log.e("SDKSDK", "API Call Exception: $t")
             Log.e("SDKSDK", "API Call Exception Message: " + t.message)

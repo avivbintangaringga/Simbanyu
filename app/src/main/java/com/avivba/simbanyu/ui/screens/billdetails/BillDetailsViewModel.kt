@@ -123,6 +123,5 @@ class BillDetailsViewModel(
     }
 
     private fun downloadReceipt() {
-        // TODO: Implement download receipt
     }
 }

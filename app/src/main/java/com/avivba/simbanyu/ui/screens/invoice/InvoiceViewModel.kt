@@ -7,6 +7,7 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.BillRepository
 import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.UserRepository
+import com.avivba.simbanyu.ui.shared.NavTypeMaps
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiBill
@@ -23,7 +24,7 @@ class InvoiceViewModel(
 ) : BaseViewModel<InvoiceUiState, InvoiceAction, InvoiceEvent>(
     InvoiceUiState()
 ) {
-    private val billIds = savedStateHandle.toRoute<Screen.Invoice>().ids
+    private val billIds = savedStateHandle.toRoute<Screen.Invoice>(NavTypeMaps.Invoice).ids
 
     init {
         viewModelScope.launch {
