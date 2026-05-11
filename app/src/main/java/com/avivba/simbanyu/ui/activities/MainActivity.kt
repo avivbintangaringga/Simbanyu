@@ -58,11 +58,11 @@ class MainActivity : ComponentActivity() {
                     isLoading = isCheckingAuth
                 ) {
                     val startScreen = when {
-                        isLoggedIn && profile != null -> {
+                        isLoggedIn -> {
                             when (profile?.role) {
                                 User.UserRole.OPERATOR.name -> Screen.OperatorMain
                                 User.UserRole.SUBSCRIBER.name -> Screen.Main()
-                                else -> Screen.Login
+                                else -> Screen.Main()
                             }
                         }
 

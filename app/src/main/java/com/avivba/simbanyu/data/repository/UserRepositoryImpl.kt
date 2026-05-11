@@ -8,6 +8,8 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.Profile
 import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.domain.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class UserRepositoryImpl(
     private val userService: UserService,
@@ -23,6 +25,11 @@ class UserRepositoryImpl(
 
     override suspend fun getLocalProfile(): Result<Profile, DataError> {
         val localUser = localUserService.getUser() ?: return Result.Error(DataError.NotFound)
+        if (localUser.id.isEmpty()) return Result.Error(DataError.NotFound)
         return Result.Success(localUser.toDomain())
+    }
+
+    override fun getLocalProfileFlow(): Flow<Profile?> {
+        return localUserService.getUserFlow().map { it?.toDomain() }
     }
 }

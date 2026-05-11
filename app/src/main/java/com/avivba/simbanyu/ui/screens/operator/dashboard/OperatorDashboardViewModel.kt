@@ -24,6 +24,18 @@ class OperatorDashboardViewModel(
         }
 
         viewModelScope.launch {
+            userRepository.getLocalProfileFlow().collect { profile ->
+                if (profile != null) {
+                    updateState {
+                        it.copy(
+                            name = profile.name
+                        )
+                    }
+                }
+            }
+        }
+
+        viewModelScope.launch {
             refreshEventBus.refreshEvent.collect {
                 load()
             }
@@ -76,21 +88,6 @@ class OperatorDashboardViewModel(
 
     private suspend fun fetchData() {
         listOf(
-            viewModelScope.async {
-                when (val profile = userRepository.getLocalProfile()) {
-                    is Result.Success -> {
-                        updateState {
-                            it.copy(
-                                name = profile.data.name
-                            )
-                        }
-                    }
-
-                    is Result.Error -> {
-                        // TODO: Handle error
-                    }
-                }
-            },
             viewModelScope.async {
                 when (val activities = activityRepository.getAll(limit = 3)) {
                     is Result.Success -> {

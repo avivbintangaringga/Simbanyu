@@ -10,7 +10,6 @@ import com.avivba.simbanyu.domain.repository.AuthRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -32,18 +31,24 @@ class MainActivityViewModel(
 
     init {
         viewModelScope.launch {
-            try {
-                _isCheckingAuth.value = true
-                val loggedIn = authRepository.isLoggedIn()
-                Log.d("SDKSDK", "loggedIn: $loggedIn")
-
-                _isLoggedIn.update { loggedIn }
-
-                if (loggedIn) {
-                    refreshProfile()
+            authRepository.isLoggedInFlow().collect { loggedIn ->
+                if (loggedIn && !_isLoggedIn.value) {
+                    _isCheckingAuth.value = true
                 }
-            } finally {
-                _isCheckingAuth.value = false
+                _isLoggedIn.value = loggedIn
+                if (!loggedIn) {
+                    _profile.value = null
+                    _isCheckingAuth.value = false
+                }
+            }
+        }
+
+        viewModelScope.launch {
+            userRepository.getLocalProfileFlow().collect { profile ->
+                _profile.value = profile
+                if (profile != null && _isLoggedIn.value) {
+                    _isCheckingAuth.value = false
+                }
             }
         }
     }
@@ -51,7 +56,6 @@ class MainActivityViewModel(
     private suspend fun refreshProfile() {
         when (val profileResult = userRepository.getLocalProfile()) {
             is Result.Success -> {
-                Log.d("SDKSDK", profileResult.data.toString())
                 _profile.value = profileResult.data
             }
 

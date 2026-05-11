@@ -20,12 +20,29 @@ class ProfileViewModel(
 ) {
     init {
         viewModelScope.launch {
-            getProfile()
+            userRepository.getLocalProfileFlow().collect { profile ->
+                if (profile != null) {
+                    updateState {
+                        it.copy(
+                            name = profile.name,
+                            meterId = profile.meterId,
+                            phone = profile.phoneNumber,
+                            address = profile.address,
+                            category = if (profile.role == User.UserRole.SUBSCRIBER.name)
+                                (profile.plan ?: "SUBSCRIBER") else "OPERATOR",
+                            coordinate = if (profile.latitude != null && profile.longitude != null) UiCoordinate(
+                                profile.latitude,
+                                profile.longitude
+                            ) else null
+                        )
+                    }
+                }
+            }
         }
 
         viewModelScope.launch {
             refreshEventBus.refreshEvent.collect {
-                getProfile()
+                // Profile will be updated via getLocalProfileFlow
             }
         }
     }
@@ -44,32 +61,6 @@ class ProfileViewModel(
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private suspend fun getProfile() {
-        when (val profile = userRepository.getLocalProfile()) {
-            is Result.Success -> {
-                val data = profile.data
-                updateState {
-                    it.copy(
-                        name = data.name,
-                        meterId = data.meterId,
-                        phone = data.phoneNumber,
-                        address = data.address,
-                        category = if (data.role == User.UserRole.SUBSCRIBER.name)
-                            (data.plan ?: "SUBSCRIBER") else "OPERATOR",
-                        coordinate = if (data.latitude != null && data.longitude != null) UiCoordinate(
-                            data.latitude,
-                            data.longitude
-                        ) else null
-                    )
-                }
-            }
-
-            is Result.Error -> {
-                // TODO: Handle error
             }
         }
     }

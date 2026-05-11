@@ -1,10 +1,12 @@
 package com.avivba.simbanyu.data.local.userdetail
 
 import androidx.annotation.Keep
+import kotlinx.coroutines.flow.Flow
 
 @Keep
 interface LocalUserService {
-    fun saveUser(user: LocalUser)
-    fun getUser(): LocalUser?
-    fun clearUser()
+    suspend fun saveUser(user: LocalUser)
+    suspend fun getUser(): LocalUser?
+    fun getUserFlow(): Flow<LocalUser?>
+    suspend fun clearUser()
 }

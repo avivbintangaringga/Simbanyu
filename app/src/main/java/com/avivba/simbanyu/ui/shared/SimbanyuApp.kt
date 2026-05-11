@@ -98,13 +98,16 @@ fun SimbanyuApp(
             )
         ) { backStackEntry ->
             val screen = backStackEntry.toRoute<Screen.Main>()
-            if (userRole == User.UserRole.OPERATOR.name) {
-                LaunchedEffect(Unit) {
+
+            LaunchedEffect(userRole) {
+                if (userRole == User.UserRole.OPERATOR.name) {
                     navHostController.navigate(Screen.OperatorMain) {
                         popUpTo(Screen.Main()) { inclusive = true }
                     }
                 }
-            } else {
+            }
+
+            if (userRole != User.UserRole.OPERATOR.name) {
                 MainScreen(
                     tab = screen.tab,
                     onNavigate = { dest ->
@@ -146,13 +149,15 @@ fun SimbanyuApp(
                 navDeepLink { uriPattern = "https://simbanyu.avivba.com/payment-success" }
             )
         ) {
-            if (userRole == User.UserRole.OPERATOR.name) {
-                LaunchedEffect(Unit) {
+            LaunchedEffect(userRole) {
+                if (userRole == User.UserRole.OPERATOR.name) {
                     navHostController.navigate(Screen.OperatorMain) {
                         popUpTo(Screen.PaymentSuccess) { inclusive = true }
                     }
                 }
-            } else {
+            }
+
+            if (userRole != User.UserRole.OPERATOR.name) {
                 PaymentSuccessScreen(
                     onNavigateToBillHistory = {
                         navHostController.navigate(Screen.Main(Screen.MainScreen.BillHistory)) {
@@ -162,8 +167,6 @@ fun SimbanyuApp(
                 )
             }
         }
-
-        // OPERATOR
 
         composable<Screen.OperatorMain> {
             OperatorMainScreen(

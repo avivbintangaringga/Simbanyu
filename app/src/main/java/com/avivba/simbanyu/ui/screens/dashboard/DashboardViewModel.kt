@@ -32,6 +32,19 @@ class DashboardViewModel(
         }
 
         viewModelScope.launch {
+            userRepository.getLocalProfileFlow().collect { profile ->
+                if (profile != null) {
+                    updateState {
+                        it.copy(
+                            name = profile.name
+                        )
+                    }
+                    loadUsages(profile.subscriberId ?: "")
+                }
+            }
+        }
+
+        viewModelScope.launch {
             refreshEventBus.refreshEvent.collect {
                 load()
             }
@@ -90,27 +103,6 @@ class DashboardViewModel(
 
     private suspend fun fetchData() {
         listOf(
-            viewModelScope.async {
-                when (val profile = userRepository.getLocalProfile()) {
-                    is Result.Success -> {
-                        updateState {
-                            it.copy(
-                                name = profile.data.name
-                            )
-                        }
-                        val subscriberId = profile.data.subscriberId
-                        if (subscriberId != null) {
-                            loadUsages(subscriberId)
-                        } else {
-                            // TODO: Handle error
-                        }
-                    }
-
-                    is Result.Error -> {
-                        // TODO: Handle error
-                    }
-                }
-            },
             viewModelScope.async {
                 when (val activeBill = billRepository.getAll(null, activeOnly = true)) {
                     is Result.Success -> {

@@ -2,31 +2,31 @@ package com.avivba.simbanyu.data.local.userdetail
 
 import android.content.Context
 import androidx.datastore.dataStore
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.map
 
 val Context.userStore by dataStore("user", LocalUserSerializer)
 
 class LocalUserServiceImpl(
     context: Context,
 ) : LocalUserService {
-    val store = context.userStore
+    private val store = context.userStore
 
-    override fun saveUser(user: LocalUser) {
-        runBlocking {
-            store.updateData { user }
-        }
+    override suspend fun saveUser(user: LocalUser) {
+        store.updateData { user }
     }
 
-    override fun getUser(): LocalUser? {
-        return runBlocking {
-            store.data.firstOrNull()
-        }
+    override suspend fun getUser(): LocalUser? {
+        val user = store.data.map { if (it.id.isEmpty()) null else it }.firstOrNull()
+        return user
     }
 
-    override fun clearUser() {
-        runBlocking {
-            store.updateData { LocalUser() }
-        }
+    override fun getUserFlow(): Flow<LocalUser?> {
+        return store.data.map { if (it.id.isEmpty()) null else it }
+    }
+
+    override suspend fun clearUser() {
+        store.updateData { LocalUser() }
     }
 }

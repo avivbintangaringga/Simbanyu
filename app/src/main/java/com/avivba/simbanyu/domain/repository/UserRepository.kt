@@ -4,8 +4,10 @@ import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.Profile
 import com.avivba.simbanyu.domain.model.User
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     suspend fun getCurrentUser(): Result<User, DataError>
     suspend fun getLocalProfile(): Result<Profile, DataError>
+    fun getLocalProfileFlow(): Flow<Profile?>
 }
