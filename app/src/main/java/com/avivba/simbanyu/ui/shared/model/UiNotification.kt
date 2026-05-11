@@ -16,7 +16,7 @@ data class UiNotification(
                 title = notification.title,
                 body = notification.body,
                 date = notification.date.toRelativeTime(),
-                isRead = false // TODO: Check local storage
+                isRead = notification.isRead
             )
         }
     }

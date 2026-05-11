@@ -6,5 +6,6 @@ import com.avivba.simbanyu.domain.model.Notification
 
 interface NotificationRepository {
     suspend fun getAll(): Result<List<Notification>, DataError>
-    suspend fun markAsRead(notification: Notification): Result<Unit, DataError>
+    suspend fun markAsRead(id: String): Result<Unit, DataError>
+    suspend fun markAllAsRead(ids: List<String>): Result<Unit, DataError>
 }

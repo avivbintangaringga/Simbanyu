@@ -89,12 +89,25 @@ class MainViewModel(
             )
         }
 
-        // TODO: Store marked id
+        viewModelScope.launch {
+            notificationRepository.markAsRead(notification.id)
+        }
     }
 
     private fun markAllAsRead() {
-        state.value.notifications.filter { !it.isRead }.forEach {
-            markAsRead(it)
+        val unreadIds = state.value.notifications.filter { !it.isRead }.map { it.id }
+        if (unreadIds.isEmpty()) return
+
+        updateState {
+            it.copy(
+                notifications = it.notifications.map { n ->
+                    n.copy(isRead = true)
+                }
+            )
+        }
+
+        viewModelScope.launch {
+            notificationRepository.markAllAsRead(unreadIds)
         }
     }
 

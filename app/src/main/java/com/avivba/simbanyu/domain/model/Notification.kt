@@ -6,5 +6,6 @@ data class Notification(
     val id: String,
     val title: String,
     val body: String,
-    val date: Instant
+    val date: Instant,
+    val isRead: Boolean = false
 )

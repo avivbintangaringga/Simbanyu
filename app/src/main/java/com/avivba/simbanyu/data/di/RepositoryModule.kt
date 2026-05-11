@@ -32,5 +32,5 @@ val repositoryModule = module {
     single<ActivityRepository> { ActivityRepositoryImpl(get()) }
     single<SubscriberRepository> { SubscriberRepositoryImpl(get()) }
     single<AnnouncementRepository> { AnnouncementRepositoryImpl(get()) }
-    single<NotificationRepository> { NotificationRepositoryImpl(get()) }
+    single<NotificationRepository> { NotificationRepositoryImpl(get(), get()) }
 }
