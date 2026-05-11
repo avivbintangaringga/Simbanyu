@@ -31,6 +31,10 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logo_only" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="simbanyu_channel" />
+
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true"

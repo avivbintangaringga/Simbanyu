@@ -37,6 +37,8 @@ class App : Application() {
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel("simbanyu_channel", name, importance).apply {
             description = descriptionText
+            enableLights(true)
+            enableVibration(true)
         }
         val notificationManager =
             getSystemService(NOTIFICATION_SERVICE) as NotificationManager
