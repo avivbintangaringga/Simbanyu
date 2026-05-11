@@ -1,16 +1,19 @@
 package com.avivba.simbanyu.ui.activities
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.model.Profile
 import com.avivba.simbanyu.domain.repository.AuthEventBus
 import com.avivba.simbanyu.domain.repository.AuthRepository
 import com.avivba.simbanyu.domain.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 class MainActivityViewModel(
     private val authRepository: AuthRepository,
@@ -31,25 +34,29 @@ class MainActivityViewModel(
 
     init {
         viewModelScope.launch {
-            authRepository.isLoggedInFlow().collect { loggedIn ->
-                if (loggedIn && !_isLoggedIn.value) {
-                    _isCheckingAuth.value = true
-                }
-                _isLoggedIn.value = loggedIn
-                if (!loggedIn) {
-                    _profile.value = null
-                    _isCheckingAuth.value = false
-                }
+            authRepository.isLoggedInFlow().collect {
+                _isLoggedIn.value = it
             }
         }
 
         viewModelScope.launch {
-            userRepository.getLocalProfileFlow().collect { profile ->
-                _profile.value = profile
-                if (profile != null && _isLoggedIn.value) {
-                    _isCheckingAuth.value = false
-                }
+            userRepository.getLocalProfileFlow().collect {
+                _profile.value = it
             }
+        }
+
+        viewModelScope.launch {
+            withTimeoutOrNull(2000) {
+                combine(
+                    authRepository.isLoggedInFlow(),
+                    userRepository.getLocalProfileFlow()
+                ) { loggedIn, profile ->
+                    loggedIn to profile
+                }.filter { (loggedIn, profile) ->
+                    !loggedIn || profile != null
+                }.first()
+            }
+            _isCheckingAuth.value = false
         }
     }
 }
