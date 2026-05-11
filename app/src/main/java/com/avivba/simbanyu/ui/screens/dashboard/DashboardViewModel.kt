@@ -171,7 +171,7 @@ class DashboardViewModel(
                         },
                         usageAverage = average,
                         usageMaximum = max?.amount ?: 0,
-                        usageMaximumMonth = max?.date?.toMonthShort() ?: "-"
+                        usageMaximumMonth = max?.date?.toMonthShort()?.uppercase() ?: "-"
                     )
                 }
             }
