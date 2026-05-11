@@ -66,7 +66,7 @@ class OperatorAnnouncementViewModel(
 
         updateState {
             it.copy(
-                isLoading = true
+                isLoading = false
             )
         }
     }
@@ -82,7 +82,7 @@ class OperatorAnnouncementViewModel(
 
         updateState {
             it.copy(
-                isRefreshing = true
+                isRefreshing = false
             )
         }
     }
