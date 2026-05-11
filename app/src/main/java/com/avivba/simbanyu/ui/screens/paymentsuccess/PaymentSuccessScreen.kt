@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -23,6 +24,17 @@ import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 fun PaymentSuccessScreen(
     modifier: Modifier = Modifier,
     onNavigateToBillHistory: () -> Unit
+) {
+    PaymentSuccessContent(
+        modifier = modifier,
+        onNavigateToBillHistory = onNavigateToBillHistory
+    )
+}
+
+@Composable
+fun PaymentSuccessContent(
+    modifier: Modifier = Modifier,
+    onNavigateToBillHistory: () -> Unit = {}
 ) {
     Scaffold(
         modifier = modifier,
@@ -42,9 +54,9 @@ fun PaymentSuccessScreen(
                 color = SimbanyuTheme.colors.brand,
                 textAlign = TextAlign.Center
             )
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             SimbanyuText(
                 text = "Terima kasih telah melakukan pembayaran tepat waktu.",
                 style = SimbanyuTheme.typography.bodySmall,
@@ -60,9 +72,17 @@ fun PaymentSuccessScreen(
                         brush = SimbanyuTheme.colors.brush.brandVertical,
                         shape = SimbanyuTheme.shapes.extraLarge
                     ),
-                text = "Kembali ke Riwayat Tagihan",
+                text = "Kembali",
                 onClick = onNavigateToBillHistory
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PaymentSuccessPreview() {
+    SimbanyuTheme {
+        PaymentSuccessContent()
     }
 }
