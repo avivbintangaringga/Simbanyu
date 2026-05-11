@@ -23,12 +23,6 @@ class UserRepositoryImpl(
         return userData
     }
 
-    override suspend fun getLocalProfile(): Result<Profile, DataError> {
-        val localUser = localUserService.getUser() ?: return Result.Error(DataError.NotFound)
-        if (localUser.id.isEmpty()) return Result.Error(DataError.NotFound)
-        return Result.Success(localUser.toDomain())
-    }
-
     override fun getLocalProfileFlow(): Flow<Profile?> {
         return localUserService.getUserFlow().map { it?.toDomain() }
     }

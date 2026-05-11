@@ -11,8 +11,6 @@ import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsEvent.OpenPaymentPa
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiBill
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class BillDetailsViewModel(
@@ -28,6 +26,21 @@ class BillDetailsViewModel(
     init {
         viewModelScope.launch {
             load()
+        }
+
+        viewModelScope.launch {
+            userRepository.getLocalProfileFlow().collect { profile ->
+                if (profile != null) {
+                    updateState {
+                        it.copy(
+                            name = profile.name,
+                            meterId = profile.meterId ?: "-",
+                            address = profile.address ?: "-",
+                            category = profile.plan ?: "-"
+                        )
+                    }
+                }
+            }
         }
 
         viewModelScope.launch {
@@ -59,18 +72,11 @@ class BillDetailsViewModel(
             )
         }
 
-        listOf(
-            viewModelScope.async {
-                fetchUserData()
-            },
-            viewModelScope.async {
-                fetchBillData()
-            }
-        ).awaitAll()
+        fetchBillData()
 
         updateState {
             it.copy(
-                isLoading = true
+                isLoading = false
             )
         }
     }
@@ -92,26 +98,6 @@ class BillDetailsViewModel(
             it.copy(
                 isRefreshing = false
             )
-        }
-    }
-
-    private suspend fun fetchUserData() {
-        when (val user = userRepository.getLocalProfile()) {
-            is Result.Success -> {
-                val data = user.data
-                updateState {
-                    it.copy(
-                        name = data.name,
-                        meterId = data.meterId ?: "-",
-                        address = data.address ?: "-",
-                        category = data.plan ?: "-"
-                    )
-                }
-            }
-
-            is Result.Error -> {
-                // TODO: Handle error
-            }
         }
     }
 

@@ -8,6 +8,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     suspend fun getCurrentUser(): Result<User, DataError>
-    suspend fun getLocalProfile(): Result<Profile, DataError>
     fun getLocalProfileFlow(): Flow<Profile?>
 }

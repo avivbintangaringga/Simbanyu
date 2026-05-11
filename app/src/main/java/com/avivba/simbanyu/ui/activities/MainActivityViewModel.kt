@@ -52,16 +52,4 @@ class MainActivityViewModel(
             }
         }
     }
-
-    private suspend fun refreshProfile() {
-        when (val profileResult = userRepository.getLocalProfile()) {
-            is Result.Success -> {
-                _profile.value = profileResult.data
-            }
-
-            is Result.Error -> {
-                Log.d("SDKSDK", profileResult.error.toString())
-            }
-        }
-    }
 }

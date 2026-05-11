@@ -3,7 +3,6 @@ package com.avivba.simbanyu.data.local.userdetail
 import android.content.Context
 import androidx.datastore.dataStore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
 val Context.userStore by dataStore("user", LocalUserSerializer)
@@ -15,11 +14,6 @@ class LocalUserServiceImpl(
 
     override suspend fun saveUser(user: LocalUser) {
         store.updateData { user }
-    }
-
-    override suspend fun getUser(): LocalUser? {
-        val user = store.data.map { if (it.id.isEmpty()) null else it }.firstOrNull()
-        return user
     }
 
     override fun getUserFlow(): Flow<LocalUser?> {

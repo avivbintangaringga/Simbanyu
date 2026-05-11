@@ -31,6 +31,21 @@ class InvoiceViewModel(
         }
 
         viewModelScope.launch {
+            userRepository.getLocalProfileFlow().collect { profile ->
+                if (profile != null) {
+                    updateState {
+                        it.copy(
+                            name = profile.name,
+                            address = profile.address ?: "-",
+                            meterId = profile.meterId ?: "-",
+                            category = profile.plan ?: "-"
+                        )
+                    }
+                }
+            }
+        }
+
+        viewModelScope.launch {
             refreshEventBus.refreshEvent.collect {
                 load()
             }
@@ -58,39 +73,12 @@ class InvoiceViewModel(
             )
         }
 
-        listOf(
-            viewModelScope.async {
-                fetchUserData()
-            },
-            viewModelScope.async {
-                fetchBillData()
-            }
-        ).awaitAll()
+        fetchBillData()
 
         updateState {
             it.copy(
                 isLoading = false
             )
-        }
-    }
-
-    private suspend fun fetchUserData() {
-        when (val user = userRepository.getLocalProfile()) {
-            is Result.Success -> {
-                val data = user.data
-                updateState {
-                    it.copy(
-                        name = data.name,
-                        address = data.address ?: "-",
-                        meterId = data.meterId ?: "-",
-                        category = data.plan ?: "-"
-                    )
-                }
-            }
-
-            is Result.Error -> {
-                // TODO: Handle error
-            }
         }
     }
 
