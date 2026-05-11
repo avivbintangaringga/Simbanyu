@@ -86,7 +86,9 @@ fun SubscribersContent(
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
         SimbanyuText(
-            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
+            modifier = Modifier
+                .padding(top = SimbanyuTheme.padding.large)
+                .padding(horizontal = SimbanyuTheme.padding.large),
             text = "Data Pelanggan",
             style = SimbanyuTheme.typography.displayMedium
         )

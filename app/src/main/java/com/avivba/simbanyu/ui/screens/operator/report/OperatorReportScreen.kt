@@ -135,7 +135,9 @@ private fun OperatorReportContent(
         )
     ) {
         SimbanyuText(
-            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
+            modifier = Modifier
+                .padding(top = SimbanyuTheme.padding.large)
+                .padding(horizontal = SimbanyuTheme.padding.large),
             text = "Laporan Pelanggan",
             style = SimbanyuTheme.typography.displayMedium
         )

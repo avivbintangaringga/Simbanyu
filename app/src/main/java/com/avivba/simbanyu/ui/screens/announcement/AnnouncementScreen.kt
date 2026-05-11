@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -111,11 +110,13 @@ fun AnnouncementContent(
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
             ) {
-                    SimbanyuText(
-                        modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
-                        text = "Pemberitahuan",
-                        style = SimbanyuTheme.typography.displayMedium
-                    )
+                SimbanyuText(
+                    modifier = Modifier
+                        .padding(top = SimbanyuTheme.padding.large)
+                        .padding(horizontal = SimbanyuTheme.padding.large),
+                    text = "Pemberitahuan",
+                    style = SimbanyuTheme.typography.displayMedium
+                )
 
                 SimbanyuText(
                     modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
@@ -129,7 +130,9 @@ fun AnnouncementContent(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize(),
-                    contentPadding = PaddingValues(SimbanyuTheme.padding.large),
+                    contentPadding = PaddingValues(
+                        horizontal = SimbanyuTheme.padding.large
+                    ),
                     state = listState,
                     verticalArrangement = Arrangement.spacedBy(
                         SimbanyuTheme.spacing.medium

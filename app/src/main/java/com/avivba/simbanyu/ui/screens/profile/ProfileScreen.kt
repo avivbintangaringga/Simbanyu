@@ -84,8 +84,8 @@ fun ProfileContent(
                 .dropShadow(
                     shape = CircleShape,
                     shadow = Shadow(
-                        radius = SimbanyuTheme.spacing.medium,
-                        alpha = 0.3f
+                        radius = SimbanyuTheme.spacing.small,
+                        alpha = 0.2f
                     )
                 )
                 .clip(CircleShape)

@@ -138,7 +138,9 @@ fun ReportContent(
         verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
     ) {
         SimbanyuText(
-            modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
+            modifier = Modifier
+                .padding(top = SimbanyuTheme.padding.large)
+                .padding(horizontal = SimbanyuTheme.padding.large),
             text = "Laporkan Gangguan",
             style = SimbanyuTheme.typography.displayMedium
         )

@@ -146,6 +146,7 @@ fun OperatorAnnouncementContent(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(top = SimbanyuTheme.padding.large)
                         .padding(horizontal = SimbanyuTheme.padding.large),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
