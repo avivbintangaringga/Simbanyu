@@ -96,6 +96,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.perf)
+    implementation(libs.lottie.compose)
 
     testImplementation(libs.junit)
 

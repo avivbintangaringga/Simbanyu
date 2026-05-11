@@ -10,12 +10,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -36,6 +42,8 @@ fun PaymentSuccessContent(
     modifier: Modifier = Modifier,
     onNavigateToBillHistory: () -> Unit = {}
 ) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.success))
+
     Scaffold(
         modifier = modifier,
         containerColor = Color.Transparent
@@ -48,6 +56,12 @@ fun PaymentSuccessContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            LottieAnimation(
+                modifier = Modifier.height(200.dp),
+                composition = composition,
+                iterations = LottieConstants.IterateForever,
+            )
+
             SimbanyuText(
                 text = "Pembayaran Berhasil!",
                 style = SimbanyuTheme.typography.displayMedium,
