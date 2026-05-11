@@ -7,6 +7,7 @@ import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.BillRepository
 import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.UserRepository
+import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsEvent.OpenPaymentPage
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiBill
@@ -42,8 +43,10 @@ class BillDetailsViewModel(
                 BillDetailsAction.DownloadReceipt -> downloadReceipt()
                 BillDetailsAction.NavigateBack -> sendEvent(BillDetailsEvent.NavigateBack)
                 BillDetailsAction.Load -> load()
+                BillDetailsAction.Refresh -> refresh()
+                BillDetailsAction.CheckBillStatus -> checkBillStatus()
                 is BillDetailsAction.OpenPaymentPage -> {
-                    sendEvent(BillDetailsEvent.OpenPaymentPage(action.url))
+                    sendEvent(OpenPaymentPage(action.url))
                 }
             }
         }
@@ -61,13 +64,33 @@ class BillDetailsViewModel(
                 fetchUserData()
             },
             viewModelScope.async {
-                fetchData()
+                fetchBillData()
             }
         ).awaitAll()
 
         updateState {
             it.copy(
                 isLoading = true
+            )
+        }
+    }
+
+    private suspend fun checkBillStatus() {
+        fetchBillData()
+    }
+
+    private suspend fun refresh() {
+        updateState {
+            it.copy(
+                isRefreshing = true
+            )
+        }
+
+        fetchBillData()
+
+        updateState {
+            it.copy(
+                isRefreshing = false
             )
         }
     }
@@ -92,7 +115,7 @@ class BillDetailsViewModel(
         }
     }
 
-    private suspend fun fetchData() {
+    private suspend fun fetchBillData() {
         when (val bill = billRepository.getById(id)) {
             is Result.Success -> {
                 val bill = UiBill.fromDomain(bill.data)

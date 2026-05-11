@@ -49,6 +49,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.item.ReportItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.screens.camera.CameraViewModel
@@ -98,19 +99,24 @@ fun OperatorReportScreen(
         }
     }
 
-    PullToRefreshBox(
-        modifier = modifier
-            .fillMaxSize(),
-        isRefreshing = state.isRefreshing,
-        onRefresh = {
-            viewModel.onAction(OperatorReportAction.Refresh)
-        }
+    LoadingBox(
+        modifier = modifier,
+        isLoading = state.isLoading
     ) {
-        OperatorReportContent(
-            modifier = modifier,
-            state = state,
-            onAction = viewModel::onAction
-        )
+        PullToRefreshBox(
+            modifier = Modifier
+                .fillMaxSize(),
+            isRefreshing = state.isRefreshing,
+            onRefresh = {
+                viewModel.onAction(OperatorReportAction.Refresh)
+            }
+        ) {
+            OperatorReportContent(
+                modifier = Modifier,
+                state = state,
+                onAction = viewModel::onAction
+            )
+        }
     }
 }
 

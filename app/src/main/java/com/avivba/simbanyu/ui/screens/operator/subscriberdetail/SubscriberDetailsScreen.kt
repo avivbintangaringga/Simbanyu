@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
@@ -55,9 +56,6 @@ import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
-
-
-// TODO: Implement cash payment here
 
 @Composable
 fun SubscriberDetailsScreen(
@@ -103,21 +101,12 @@ fun SubscriberDetailsScreen(
         }
     }
 
-    PullToRefreshBox(
-        modifier = modifier
-            .fillMaxSize(),
-        isRefreshing = state.isRefreshing,
-        onRefresh = {
-            viewModel.onAction(SubscriberDetailsAction.Refresh)
-        }
-    ) {
-        SubscriberDetailsContent(
-            modifier = Modifier,
-            state = state,
-            onAction = viewModel::onAction,
-            onNavigate = onNavigate
-        )
-    }
+    SubscriberDetailsContent(
+        modifier = Modifier,
+        state = state,
+        onAction = viewModel::onAction,
+        onNavigate = onNavigate
+    )
 }
 
 @Composable
@@ -174,53 +163,30 @@ fun SubscriberDetailsContent(
             )
         }
     ) { paddingValues ->
-        Column(
+        LoadingBox(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(scrollState)
-                .padding(
-                    SimbanyuTheme.padding.large
-                ),
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            )
+                .padding(paddingValues),
+            isLoading = state.isLoading
         ) {
-            Row(
+            PullToRefreshBox(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.medium
-                )
+                    .fillMaxSize(),
+                isRefreshing = state.isRefreshing,
+                onRefresh = {
+                    onAction(SubscriberDetailsAction.Refresh)
+                }
             ) {
-                Icon(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(
-                            color = SimbanyuTheme.colors.brand.copy(alpha = 0.3f),
-                            shape = CircleShape
-                        )
-                        .padding(
-                            SimbanyuTheme.padding.medium
-                        ),
-                    painter = painterResource(R.drawable.ic_person_filled),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brand
-                )
-
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(
+                            SimbanyuTheme.padding.large
+                        ),
                     verticalArrangement = Arrangement.spacedBy(
                         SimbanyuTheme.spacing.medium
                     )
                 ) {
-                    SimbanyuText(
-                        text = state.name,
-                        style = SimbanyuTheme.typography.displayMedium,
-                        color = SimbanyuTheme.colors.brand
-                    )
-
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -228,232 +194,269 @@ fun SubscriberDetailsContent(
                             SimbanyuTheme.spacing.medium
                         )
                     ) {
-                        SimbanyuText(
+                        Icon(
                             modifier = Modifier
+                                .size(40.dp)
                                 .background(
-                                    color = SimbanyuTheme.colors.brand,
-                                    shape = SimbanyuTheme.shapes.medium
+                                    color = SimbanyuTheme.colors.brand.copy(alpha = 0.3f),
+                                    shape = CircleShape
                                 )
                                 .padding(
-                                    vertical = SimbanyuTheme.padding.extraSmall,
-                                    horizontal = SimbanyuTheme.padding.medium
+                                    SimbanyuTheme.padding.medium
                                 ),
-                            text = "ID: ${state.meterId}",
-                            style = SimbanyuTheme.typography.labelUnit,
-                            color = SimbanyuTheme.colors.brandText
+                            painter = painterResource(R.drawable.ic_person_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.brand
+                        )
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.medium
+                            )
+                        ) {
+                            SimbanyuText(
+                                text = state.name,
+                                style = SimbanyuTheme.typography.displayMedium,
+                                color = SimbanyuTheme.colors.brand
+                            )
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    SimbanyuTheme.spacing.medium
+                                )
+                            ) {
+                                SimbanyuText(
+                                    modifier = Modifier
+                                        .background(
+                                            color = SimbanyuTheme.colors.brand,
+                                            shape = SimbanyuTheme.shapes.medium
+                                        )
+                                        .padding(
+                                            vertical = SimbanyuTheme.padding.extraSmall,
+                                            horizontal = SimbanyuTheme.padding.medium
+                                        ),
+                                    text = "ID: ${state.meterId}",
+                                    style = SimbanyuTheme.typography.labelUnit,
+                                    color = SimbanyuTheme.colors.brandText
+                                )
+
+                                SimbanyuText(
+                                    modifier = Modifier
+                                        .background(
+                                            color = SimbanyuTheme.colors.brand.copy(0.3f),
+                                            shape = SimbanyuTheme.shapes.medium
+                                        )
+                                        .padding(
+                                            vertical = SimbanyuTheme.padding.extraSmall,
+                                            horizontal = SimbanyuTheme.padding.medium
+                                        ),
+                                    text = "GOL: ${state.category}",
+                                    style = SimbanyuTheme.typography.labelUnit,
+                                    color = SimbanyuTheme.colors.brand
+                                )
+                            }
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.small
+                        )
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_location_on_filled),
+                            contentDescription = null,
+                            tint = SimbanyuTheme.colors.brand,
+                            modifier = Modifier.size(16.dp)
                         )
 
                         SimbanyuText(
-                            modifier = Modifier
-                                .background(
-                                    color = SimbanyuTheme.colors.brand.copy(0.3f),
-                                    shape = SimbanyuTheme.shapes.medium
-                                )
-                                .padding(
-                                    vertical = SimbanyuTheme.padding.extraSmall,
-                                    horizontal = SimbanyuTheme.padding.medium
-                                ),
-                            text = "GOL: ${state.category}",
+                            modifier = Modifier,
+                            text = state.address,
                             style = SimbanyuTheme.typography.labelUnit,
-                            color = SimbanyuTheme.colors.brand
                         )
                     }
-                }
-            }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.small
-                )
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_location_on_filled),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brand,
-                    modifier = Modifier.size(16.dp)
-                )
-
-                SimbanyuText(
-                    modifier = Modifier,
-                    text = state.address,
-                    style = SimbanyuTheme.typography.labelUnit,
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.small
-                )
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_call_filled),
-                    contentDescription = null,
-                    tint = SimbanyuTheme.colors.brand,
-                    modifier = Modifier.size(16.dp)
-                )
-
-                SimbanyuText(
-                    modifier = Modifier,
-                    text = state.phone,
-                    style = SimbanyuTheme.typography.labelUnit,
-                )
-            }
-
-            if (state.location != null) {
-                MiniMap(
-                    location = state.location
-                )
-            }
-
-            Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.medium
-                )
-            ) {
-                SimbanyuButton(
-                    text = "WhatsApp",
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    SimbanyuTheme.colors.statusPositiveText,
-                                    SimbanyuTheme.colors.statusPositiveText.copy(
-                                        alpha = 0.6f
-                                    )
-                                )
-                            ),
-                        ),
-                    iconLeft = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.small
+                        )
+                    ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_call_filled),
                             contentDescription = null,
-                            tint = SimbanyuTheme.colors.actionBrandText
+                            tint = SimbanyuTheme.colors.brand,
+                            modifier = Modifier.size(16.dp)
                         )
-                    },
-                    onClick = {
-                        onAction(SubscriberDetailsAction.ContactViaWhatsApp)
+
+                        SimbanyuText(
+                            modifier = Modifier,
+                            text = state.phone,
+                            style = SimbanyuTheme.typography.labelUnit,
+                        )
                     }
-                )
 
-                if (state.isRecorded) {
-                    SimbanyuButton(
-                        text = "Perbarui",
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        SimbanyuTheme.colors.statusNeutral,
-                                        SimbanyuTheme.colors.statusNeutral.copy(
-                                            alpha = 0.6f
+                    if (state.location != null) {
+                        MiniMap(
+                            location = state.location
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier,
+                        horizontalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.medium
+                        )
+                    ) {
+                        SimbanyuButton(
+                            text = "WhatsApp",
+                            modifier = Modifier
+                                .weight(1f)
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colors = listOf(
+                                            SimbanyuTheme.colors.statusPositiveText,
+                                            SimbanyuTheme.colors.statusPositiveText.copy(
+                                                alpha = 0.6f
+                                            )
                                         )
-                                    )
+                                    ),
                                 ),
-                            ),
-                        iconLeft = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_speed_filled),
-                                contentDescription = null,
-                                tint = SimbanyuTheme.colors.actionBrandText
-                            )
-                        },
-                        onClick = {
-                            onAction(SubscriberDetailsAction.UpdateMeter)
-                        }
-                    )
-                } else {
-                    SimbanyuButton(
-                        text = "Catat",
-                        modifier = Modifier
-                            .weight(1f)
-                            .background(
-                                brush = SimbanyuTheme.colors.brush.brandVertical,
-                            ),
-                        iconLeft = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_speed_filled),
-                                contentDescription = null,
-                                tint = SimbanyuTheme.colors.actionBrandText
-                            )
-                        },
-                        onClick = {
-                            onAction(SubscriberDetailsAction.RecordMeter)
-                        }
-                    )
-                }
-            }
-
-            SecondaryTabRow(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                selectedTabIndex = pagerState.currentPage,
-                containerColor = SimbanyuTheme.colors.brandText,
-                indicator = {
-                    Box(
-                        modifier = Modifier
-                            .tabIndicatorOffset(pagerState.currentPage)
-                            .height(4.dp)
-                            .background(
-                                color = SimbanyuTheme.colors.brand,
-                                shape = SimbanyuTheme.shapes.medium
-                            ),
-                    )
-                }
-            ) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = pagerState.currentPage == index,
-                        onClick = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(index)
+                            iconLeft = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_call_filled),
+                                    contentDescription = null,
+                                    tint = SimbanyuTheme.colors.actionBrandText
+                                )
+                            },
+                            onClick = {
+                                onAction(SubscriberDetailsAction.ContactViaWhatsApp)
                             }
+                        )
 
-                            onAction(SubscriberDetailsAction.ChangeTab(index))
-                        },
-                        text = {
-                            SimbanyuText(
-                                text = title,
+                        if (state.isRecorded) {
+                            SimbanyuButton(
+                                text = "Perbarui",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .background(
+                                        brush = Brush.verticalGradient(
+                                            colors = listOf(
+                                                SimbanyuTheme.colors.statusNeutral,
+                                                SimbanyuTheme.colors.statusNeutral.copy(
+                                                    alpha = 0.6f
+                                                )
+                                            )
+                                        ),
+                                    ),
+                                iconLeft = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_speed_filled),
+                                        contentDescription = null,
+                                        tint = SimbanyuTheme.colors.actionBrandText
+                                    )
+                                },
+                                onClick = {
+                                    onAction(SubscriberDetailsAction.UpdateMeter)
+                                }
+                            )
+                        } else {
+                            SimbanyuButton(
+                                text = "Catat",
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .background(
+                                        brush = SimbanyuTheme.colors.brush.brandVertical,
+                                    ),
+                                iconLeft = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_speed_filled),
+                                        contentDescription = null,
+                                        tint = SimbanyuTheme.colors.actionBrandText
+                                    )
+                                },
+                                onClick = {
+                                    onAction(SubscriberDetailsAction.RecordMeter)
+                                }
                             )
                         }
-                    )
-                }
-            }
+                    }
 
-            HorizontalPager(
-                state = pagerState,
-                beyondViewportPageCount = 1,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(animatedHeight)
-            ) { page ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(unbounded = true)
-                        .onGloballyPositioned { layoutCoordinates ->
-                            val height = layoutCoordinates.size.height
-                            if (height > 0) {
-                                pagerHeights[page] = height
+                    SecondaryTabRow(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        selectedTabIndex = pagerState.currentPage,
+                        containerColor = SimbanyuTheme.colors.brandText,
+                        indicator = {
+                            Box(
+                                modifier = Modifier
+                                    .tabIndicatorOffset(pagerState.currentPage)
+                                    .height(4.dp)
+                                    .background(
+                                        color = SimbanyuTheme.colors.brand,
+                                        shape = SimbanyuTheme.shapes.medium
+                                    ),
+                            )
+                        }
+                    ) {
+                        tabs.forEachIndexed { index, title ->
+                            Tab(
+                                selected = pagerState.currentPage == index,
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(index)
+                                    }
+
+                                    onAction(SubscriberDetailsAction.ChangeTab(index))
+                                },
+                                text = {
+                                    SimbanyuText(
+                                        text = title,
+                                    )
+                                }
+                            )
+                        }
+                    }
+
+                    HorizontalPager(
+                        state = pagerState,
+                        beyondViewportPageCount = 1,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(animatedHeight)
+                    ) { page ->
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(unbounded = true)
+                                .onGloballyPositioned { layoutCoordinates ->
+                                    val height = layoutCoordinates.size.height
+                                    if (height > 0) {
+                                        pagerHeights[page] = height
+                                    }
+                                }
+                        ) {
+                            when (page) {
+                                0 -> {
+                                    BillHistory(
+                                        state = state,
+                                        onAction = onAction
+                                    )
+                                }
+
+                                1 -> {
+                                    UsageHistory(
+                                        state = state,
+                                        onAction = onAction
+                                    )
+                                }
                             }
-                        }
-                ) {
-                    when (page) {
-                        0 -> {
-                            BillHistory(
-                                state = state,
-                                onAction = onAction
-                            )
-                        }
-
-                        1 -> {
-                            UsageHistory(
-                                state = state,
-                                onAction = onAction
-                            )
                         }
                     }
                 }

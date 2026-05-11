@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
 import com.avivba.simbanyu.ui.shared.Screen
@@ -73,7 +74,7 @@ fun InvoiceScreen(
     }
 
     InvoiceContent(
-        modifier = modifier,
+        modifier = Modifier,
         state = state,
         onAction = viewModel::onAction,
     )
@@ -171,292 +172,220 @@ fun InvoiceContent(
         }
 
     ) { paddingValues ->
-        LazyColumn(
+        LoadingBox(
             modifier = Modifier
                 .padding(paddingValues),
-            contentPadding = PaddingValues(
-                horizontal = SimbanyuTheme.padding.large,
-                vertical = SimbanyuTheme.padding.medium
-            ),
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.large
-            ),
+            isLoading = state.isLoading
         ) {
-            item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = SimbanyuTheme.padding.medium,
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.medium
-                    )
-                ) {
-                    SimbanyuText(
-                        text = state.name,
-                        style = SimbanyuTheme.typography.displayMedium,
-                        color = SimbanyuTheme.colors.brand
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
+            LazyColumn(
+                modifier = Modifier,
+                contentPadding = PaddingValues(
+                    horizontal = SimbanyuTheme.padding.large,
+                    vertical = SimbanyuTheme.padding.medium
+                ),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.large
+                ),
+            ) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = SimbanyuTheme.padding.medium,
+                            ),
+                        verticalArrangement = Arrangement.spacedBy(
                             SimbanyuTheme.spacing.medium
                         )
                     ) {
                         SimbanyuText(
-                            modifier = Modifier
-                                .background(
-                                    color = SimbanyuTheme.colors.brand,
-                                    shape = SimbanyuTheme.shapes.medium
-                                )
-                                .padding(
-                                    vertical = SimbanyuTheme.padding.extraSmall,
-                                    horizontal = SimbanyuTheme.padding.medium
-                                ),
-                            text = "ID: ${state.meterId}",
-                            style = SimbanyuTheme.typography.labelUnit,
-                            color = SimbanyuTheme.colors.brandText
-                        )
-
-                        SimbanyuText(
-                            modifier = Modifier
-                                .background(
-                                    color = SimbanyuTheme.colors.brand.copy(0.3f),
-                                    shape = SimbanyuTheme.shapes.medium
-                                )
-                                .padding(
-                                    vertical = SimbanyuTheme.padding.extraSmall,
-                                    horizontal = SimbanyuTheme.padding.medium
-                                ),
-                            text = "GOL: ${state.category}",
-                            style = SimbanyuTheme.typography.labelUnit,
+                            text = state.name,
+                            style = SimbanyuTheme.typography.displayMedium,
                             color = SimbanyuTheme.colors.brand
                         )
-                    }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(
-                            SimbanyuTheme.spacing.small
-                        )
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_location),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.brand,
-                            modifier = Modifier.size(16.dp)
-                        )
-
-                        SimbanyuText(
-                            modifier = Modifier,
-                            text = state.address,
-                            style = SimbanyuTheme.typography.labelUnit,
-                        )
-                    }
-                }
-            }
-
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            top = SimbanyuTheme.padding.medium,
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SimbanyuText(
-                        text = "Tagihan",
-                        style = SimbanyuTheme.typography.titleSection,
-                        modifier = Modifier.weight(1f)
-                    )
-
-
-                    SimbanyuText(
-                        modifier = Modifier
-                            .background(
-                                color = SimbanyuTheme.colors.statusNegative,
-                                shape = SimbanyuTheme.shapes.medium
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.medium
                             )
-                            .padding(
-                                vertical = SimbanyuTheme.padding.extraSmall,
-                                horizontal = SimbanyuTheme.padding.medium
-                            ),
-                        text = "${state.bills.size} periode",
-                        style = SimbanyuTheme.typography.labelUnit,
-                        color = SimbanyuTheme.colors.statusNegativeText
-                    )
-                }
-            }
+                        ) {
+                            SimbanyuText(
+                                modifier = Modifier
+                                    .background(
+                                        color = SimbanyuTheme.colors.brand,
+                                        shape = SimbanyuTheme.shapes.medium
+                                    )
+                                    .padding(
+                                        vertical = SimbanyuTheme.padding.extraSmall,
+                                        horizontal = SimbanyuTheme.padding.medium
+                                    ),
+                                text = "ID: ${state.meterId}",
+                                style = SimbanyuTheme.typography.labelUnit,
+                                color = SimbanyuTheme.colors.brandText
+                            )
 
-            items(
-                items = state.bills,
-                key = { it.id }
-            ) { bill ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(
-                            SimbanyuTheme.shapes.medium
-                        )
-                        .background(
-                            color = SimbanyuTheme.colors.surfaceCardAlternate,
-                            shape = SimbanyuTheme.shapes.medium
-                        )
-                        .leftBorder(
-                            width = 12.dp,
-                            color = SimbanyuTheme.colors.brand,
-                        )
-                        .padding(
-                            SimbanyuTheme.padding.extraLarge
-                        ),
-                ) {
+                            SimbanyuText(
+                                modifier = Modifier
+                                    .background(
+                                        color = SimbanyuTheme.colors.brand.copy(0.3f),
+                                        shape = SimbanyuTheme.shapes.medium
+                                    )
+                                    .padding(
+                                        vertical = SimbanyuTheme.padding.extraSmall,
+                                        horizontal = SimbanyuTheme.padding.medium
+                                    ),
+                                text = "GOL: ${state.category}",
+                                style = SimbanyuTheme.typography.labelUnit,
+                                color = SimbanyuTheme.colors.brand
+                            )
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.small
+                            )
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_location),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.brand,
+                                modifier = Modifier.size(16.dp)
+                            )
+
+                            SimbanyuText(
+                                modifier = Modifier,
+                                text = state.address,
+                                style = SimbanyuTheme.typography.labelUnit,
+                            )
+                        }
+                    }
+                }
+
+                item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                bottom = SimbanyuTheme.padding.medium
-                            )
+                                top = SimbanyuTheme.padding.medium,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         SimbanyuText(
-                            text = "${bill.periodMonth} ${bill.periodYear}",
+                            text = "Tagihan",
                             style = SimbanyuTheme.typography.titleSection,
                             modifier = Modifier.weight(1f)
                         )
 
-                        Icon(
-                            painter = painterResource(R.drawable.ic_contract),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.5f)
+
+                        SimbanyuText(
+                            modifier = Modifier
+                                .background(
+                                    color = SimbanyuTheme.colors.statusNegative,
+                                    shape = SimbanyuTheme.shapes.medium
+                                )
+                                .padding(
+                                    vertical = SimbanyuTheme.padding.extraSmall,
+                                    horizontal = SimbanyuTheme.padding.medium
+                                ),
+                            text = "${state.bills.size} periode",
+                            style = SimbanyuTheme.typography.labelUnit,
+                            color = SimbanyuTheme.colors.statusNegativeText
                         )
                     }
+                }
 
-                    bill.costs.forEach { detail ->
+                items(
+                    items = state.bills,
+                    key = { it.id }
+                ) { bill ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(
+                                SimbanyuTheme.shapes.medium
+                            )
+                            .background(
+                                color = SimbanyuTheme.colors.surfaceCardAlternate,
+                                shape = SimbanyuTheme.shapes.medium
+                            )
+                            .leftBorder(
+                                width = 12.dp,
+                                color = SimbanyuTheme.colors.brand,
+                            )
+                            .padding(
+                                SimbanyuTheme.padding.extraLarge
+                            ),
+                    ) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = SimbanyuTheme.spacing.extraSmall),
+                                .padding(
+                                    bottom = SimbanyuTheme.padding.medium
+                                )
+                        ) {
+                            SimbanyuText(
+                                text = "${bill.periodMonth} ${bill.periodYear}",
+                                style = SimbanyuTheme.typography.titleSection,
+                                modifier = Modifier.weight(1f)
+                            )
+
+                            Icon(
+                                painter = painterResource(R.drawable.ic_contract),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.5f)
+                            )
+                        }
+
+                        bill.costs.forEach { detail ->
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = SimbanyuTheme.spacing.extraSmall),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                SimbanyuText(
+                                    text = detail.name,
+                                    style = SimbanyuTheme.typography.bodySmall
+                                )
+                                SimbanyuText(
+                                    text = detail.amount,
+                                    style = SimbanyuTheme.typography.bodySmall
+                                )
+                            }
+                        }
+
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = SimbanyuTheme.padding.small)
+                                .height(1.dp)
+                                .background(
+                                    color = SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.3f)
+                                )
+                        )
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             SimbanyuText(
-                                text = detail.name,
-                                style = SimbanyuTheme.typography.bodySmall
+                                text = "Subtotal",
+                                style = SimbanyuTheme.typography.bodySmall,
+                                fontWeight = FontWeight.Bold
                             )
                             SimbanyuText(
-                                text = detail.amount,
-                                style = SimbanyuTheme.typography.bodySmall
+                                text = bill.amount,
+                                style = SimbanyuTheme.typography.bodyProminent,
+                                color = SimbanyuTheme.colors.brand
                             )
                         }
                     }
-
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = SimbanyuTheme.padding.small)
-                            .height(1.dp)
-                            .background(
-                                color = SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.3f)
-                            )
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        SimbanyuText(
-                            text = "Subtotal",
-                            style = SimbanyuTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                        SimbanyuText(
-                            text = bill.amount,
-                            style = SimbanyuTheme.typography.bodyProminent,
-                            color = SimbanyuTheme.colors.brand
-                        )
-                    }
                 }
             }
-
-//            item {
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(vertical = SimbanyuTheme.padding.medium)
-//                ) {
-//                    SimbanyuText(
-//                        text = "Metode Pembayaran",
-//                        style = SimbanyuTheme.typography.titleSection,
-//                    )
-//
-//                    Box(
-//                        modifier = modifier
-//                            .fillMaxWidth()
-//                            .padding(
-//                                top = SimbanyuTheme.padding.large,
-//                            )
-//                            .background(
-//                                color = SimbanyuTheme.colors.surfaceCardAlternate,
-//                                shape = SimbanyuTheme.shapes.large
-//                            )
-//                            .clip(
-//                                shape = SimbanyuTheme.shapes.large
-//                            )
-//                            .clickable {
-//                                onAction(InvoiceAction.SelectPaymentMethod)
-//                            }
-//                    ) {
-//                        Row(
-//                            modifier = Modifier
-//                                .padding(SimbanyuTheme.padding.large),
-//                            horizontalArrangement = Arrangement.spacedBy(
-//                                SimbanyuTheme.spacing.large
-//                            ),
-//                            verticalAlignment = Alignment.CenterVertically
-//                        ) {
-//                            Icon(
-//                                painter = painterResource(R.drawable.ic_payment),
-//                                contentDescription = null,
-//                                tint = SimbanyuTheme.colors.brand,
-//                                modifier = Modifier
-//                                    .background(
-//                                        color = SimbanyuTheme.colors.brand.copy(alpha = 0.3f),
-//                                        shape = CircleShape
-//                                    )
-//                                    .padding(SimbanyuTheme.padding.medium)
-//                            )
-//                            Column(
-//                                modifier = Modifier
-//                                    .weight(1f)
-//                            ) {
-//                                SimbanyuText(
-//                                    text = if (state.paymentMethodId.isEmpty()) {
-//                                        "Pilih metode pembayaran"
-//                                    } else {
-//                                        state.paymentMethodName
-//                                    },
-//                                    style = SimbanyuTheme.typography.bodyProminent
-//                                )
-//                                if (!state.paymentMethodId.isEmpty()) {
-//                                    Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-//                                    SimbanyuText(
-//                                        text = "Biaya layanan: Rp. 5000",
-//                                        style = SimbanyuTheme.typography.bodySmall
-//                                    )
-//                                }
-//                            }
-//                            Icon(
-//                                painter = painterResource(R.drawable.ic_chevron_forward),
-//                                contentDescription = null,
-//                                tint = SimbanyuTheme.colors.brand,
-//                            )
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 }

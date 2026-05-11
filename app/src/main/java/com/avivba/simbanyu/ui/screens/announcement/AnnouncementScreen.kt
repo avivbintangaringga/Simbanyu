@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.topbar.TopBar
 import com.avivba.simbanyu.ui.shared.Screen
@@ -53,7 +54,7 @@ fun AnnouncementScreen(
     }
 
     AnnouncementContent(
-        modifier = modifier,
+        modifier = Modifier,
         state = state,
         onNavigate = onNavigate,
         onAction = viewModel::onAction
@@ -97,57 +98,62 @@ fun AnnouncementContent(
             )
         },
     ) { paddingValues ->
-        PullToRefreshBox(
+        LoadingBox(
             modifier = Modifier
                 .padding(paddingValues),
-            isRefreshing = state.isRefreshing,
-            onRefresh = {
-                onAction(AnnouncementAction.Refresh)
-            }
+            isLoading = state.isLoading
         ) {
-            Column(
-                modifier = modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
+            PullToRefreshBox(
+                modifier = Modifier,
+                isRefreshing = state.isRefreshing,
+                onRefresh = {
+                    onAction(AnnouncementAction.Refresh)
+                }
             ) {
-                SimbanyuText(
-                    modifier = Modifier
-                        .padding(top = SimbanyuTheme.padding.large)
-                        .padding(horizontal = SimbanyuTheme.padding.large),
-                    text = "Pemberitahuan",
-                    style = SimbanyuTheme.typography.displayMedium
-                )
-
-                SimbanyuText(
-                    modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
-                    text = "Informasi terkini mengenai layanan air",
-                    style = SimbanyuTheme.typography.bodySmall,
-                    color = SimbanyuTheme.colors.brand
-                )
-
-                Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
-
-                LazyColumn(
-                    modifier = Modifier
+                Column(
+                    modifier = modifier
                         .fillMaxSize(),
-                    contentPadding = PaddingValues(
-                        horizontal = SimbanyuTheme.padding.large
-                    ),
-                    state = listState,
-                    verticalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.medium
-                    )
+                    verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
                 ) {
-                    items(
-                        items = state.announcements,
-                        key = { it.id }
-                    ) { announcement ->
-                        AnnouncementItem(
-                            title = announcement.title,
-                            content = announcement.body,
-                            time = announcement.date,
-                            iconId = R.drawable.ic_campaign_filled,
+                    SimbanyuText(
+                        modifier = Modifier
+                            .padding(top = SimbanyuTheme.padding.large)
+                            .padding(horizontal = SimbanyuTheme.padding.large),
+                        text = "Pemberitahuan",
+                        style = SimbanyuTheme.typography.displayMedium
+                    )
+
+                    SimbanyuText(
+                        modifier = Modifier.padding(horizontal = SimbanyuTheme.padding.large),
+                        text = "Informasi terkini mengenai layanan air",
+                        style = SimbanyuTheme.typography.bodySmall,
+                        color = SimbanyuTheme.colors.brand
+                    )
+
+                    Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentPadding = PaddingValues(
+                            horizontal = SimbanyuTheme.padding.large
+                        ),
+                        state = listState,
+                        verticalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.medium
                         )
+                    ) {
+                        items(
+                            items = state.announcements,
+                            key = { it.id }
+                        ) { announcement ->
+                            AnnouncementItem(
+                                title = announcement.title,
+                                content = announcement.body,
+                                time = announcement.date,
+                                iconId = R.drawable.ic_campaign_filled,
+                            )
+                        }
                     }
                 }
             }

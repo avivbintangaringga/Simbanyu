@@ -97,7 +97,7 @@ class BillHistoryViewModel(
 
     private fun calculateTotalSelectedBills(): Double {
         val selectedBills = _bills.value.filter { it.isSelected }
-        return selectedBills.sumOf { it.amount.toDouble() }
+        return selectedBills.sumOf { it.realAmount }
     }
 
     private fun clickBill(bill: UiBill) {

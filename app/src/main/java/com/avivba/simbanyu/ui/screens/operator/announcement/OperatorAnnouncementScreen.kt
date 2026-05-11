@@ -47,6 +47,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.components.topbar.TopBar
@@ -130,219 +131,224 @@ fun OperatorAnnouncementContent(
             )
         },
     ) { paddingValues ->
-        PullToRefreshBox(
+        LoadingBox(
             modifier = Modifier
                 .padding(paddingValues),
-            isRefreshing = state.isRefreshing,
-            onRefresh = {
-                onAction(OperatorAnnouncementAction.Refresh)
-            }
+            isLoading = state.isLoading
         ) {
-            Column(
-                modifier = modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
+            PullToRefreshBox(
+                modifier = Modifier,
+                isRefreshing = state.isRefreshing,
+                onRefresh = {
+                    onAction(OperatorAnnouncementAction.Refresh)
+                }
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = SimbanyuTheme.padding.large)
-                        .padding(horizontal = SimbanyuTheme.padding.large),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                Column(
+                    modifier = modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = SimbanyuTheme.padding.large)
+                            .padding(horizontal = SimbanyuTheme.padding.large),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            SimbanyuText(
+                                modifier = Modifier,
+                                text = "Pemberitahuan",
+                                style = SimbanyuTheme.typography.displayMedium
+                            )
+
+                            SimbanyuText(
+                                text = "Sampaikan pemberitahuan kepada pelanggan",
+                                style = SimbanyuTheme.typography.bodySmall,
+                                color = SimbanyuTheme.colors.brand
+                            )
+                        }
+                        SimbanyuButton(
+                            text = "Tambah",
+                            textColor = SimbanyuTheme.colors.actionBrand,
+                            modifier = Modifier.border(
+                                1.dp,
+                                SimbanyuTheme.colors.actionBrand,
+                                shape = SimbanyuTheme.shapes.extraLarge
+                            ),
+                            iconLeft = {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_add),
+                                    contentDescription = null,
+                                    tint = SimbanyuTheme.colors.actionBrand
+                                )
+                            }
+                        ) {
+                            onAction(OperatorAnnouncementAction.ShowCreateDialog)
+                        }
+                    }
+
+                    if (state.announcements.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentPadding = PaddingValues(SimbanyuTheme.padding.large),
+                            state = listState,
+                            verticalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.medium
+                            )
+                        ) {
+                            items(
+                                items = state.announcements,
+                                key = { it.id }
+                            ) { announcement ->
+                                AnnouncementItem(
+                                    title = announcement.title,
+                                    content = announcement.body,
+                                    time = announcement.date,
+                                    iconId = R.drawable.ic_campaign_filled,
+                                    canDelete = true,
+                                    onDelete = {
+                                        onAction(
+                                            OperatorAnnouncementAction.DeleteAnnouncement(
+                                                announcement
+                                            )
+                                        )
+                                    }
+                                )
+                            }
+                        }
+                    } else {
+                        EmptyState(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(SimbanyuTheme.padding.large),
+                            message = "Belum ada pemberitahuan"
+                        )
+                    }
+                }
+            }
+
+            if (state.isShowCreateDialog) {
+                ModalBottomSheet(
+                    sheetState = bottomSheetState,
+                    onDismissRequest = {
+                        onAction(OperatorAnnouncementAction.HideCreateDialog)
+                    }
                 ) {
                     Column(
                         modifier = Modifier
-                            .weight(1f)
-                    ) {
-                        SimbanyuText(
-                            modifier = Modifier,
-                            text = "Pemberitahuan",
-                            style = SimbanyuTheme.typography.displayMedium
-                        )
-
-                        SimbanyuText(
-                            text = "Sampaikan pemberitahuan kepada pelanggan",
-                            style = SimbanyuTheme.typography.bodySmall,
-                            color = SimbanyuTheme.colors.brand
-                        )
-                    }
-                    SimbanyuButton(
-                        text = "Tambah",
-                        textColor = SimbanyuTheme.colors.actionBrand,
-                        modifier = Modifier.border(
-                            1.dp,
-                            SimbanyuTheme.colors.actionBrand,
-                            shape = SimbanyuTheme.shapes.extraLarge
-                        ),
-                        iconLeft = {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_add),
-                                contentDescription = null,
-                                tint = SimbanyuTheme.colors.actionBrand
-                            )
-                        }
-                    ) {
-                        onAction(OperatorAnnouncementAction.ShowCreateDialog)
-                    }
-                }
-
-                if (state.announcements.isNotEmpty()) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentPadding = PaddingValues(SimbanyuTheme.padding.large),
-                        state = listState,
+                            .verticalScroll(rememberScrollState())
+                            .padding(
+                                horizontal = SimbanyuTheme.padding.large
+                            ),
                         verticalArrangement = Arrangement.spacedBy(
                             SimbanyuTheme.spacing.medium
                         )
                     ) {
-                        items(
-                            items = state.announcements,
-                            key = { it.id }
-                        ) { announcement ->
-                            AnnouncementItem(
-                                title = announcement.title,
-                                content = announcement.body,
-                                time = announcement.date,
-                                iconId = R.drawable.ic_campaign_filled,
-                                canDelete = true,
-                                onDelete = {
-                                    onAction(
-                                        OperatorAnnouncementAction.DeleteAnnouncement(
-                                            announcement
-                                        )
-                                    )
-                                }
+                        SimbanyuText(
+                            text = "Tambah Pemberitahuan",
+                            style = SimbanyuTheme.typography.displayMedium
+                        )
+
+                        Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .height(16.dp)
+                                    .padding(end = SimbanyuTheme.padding.medium),
+                                painter = painterResource(R.drawable.ic_description),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.brand
+                            )
+                            SimbanyuText(
+                                text = "JUDUL",
+                                style = SimbanyuTheme.typography.labelOverline
                             )
                         }
-                    }
-                } else {
-                    EmptyState(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(SimbanyuTheme.padding.large),
-                        message = "Belum ada pemberitahuan"
-                    )
-                }
-            }
-        }
 
-        if (state.isShowCreateDialog) {
-            ModalBottomSheet(
-                sheetState = bottomSheetState,
-                onDismissRequest = {
-                    onAction(OperatorAnnouncementAction.HideCreateDialog)
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(
-                            horizontal = SimbanyuTheme.padding.large
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.medium
-                    )
-                ) {
-                    SimbanyuText(
-                        text = "Tambah Pemberitahuan",
-                        style = SimbanyuTheme.typography.displayMedium
-                    )
-
-                    Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
+                        SimbanyuTextField(
                             modifier = Modifier
-                                .height(16.dp)
-                                .padding(end = SimbanyuTheme.padding.medium),
-                            painter = painterResource(R.drawable.ic_description),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.brand
+                                .conditional(state.errorFields.fastAny { it == Fields.TITLE }) {
+                                    border(
+                                        width = 2.dp,
+                                        color = SimbanyuTheme.colors.statusNegativeText,
+                                        shape = SimbanyuTheme.shapes.large
+
+                                    )
+                                },
+                            state = state.titleState,
+                            hint = "Masukkan judul pemberitahuan...",
+                            capitalization = KeyboardCapitalization.Words
                         )
-                        SimbanyuText(
-                            text = "JUDUL",
-                            style = SimbanyuTheme.typography.labelOverline
-                        )
-                    }
 
-                    SimbanyuTextField(
-                        modifier = Modifier
-                            .conditional(state.errorFields.fastAny { it == Fields.TITLE }) {
-                                border(
-                                    width = 2.dp,
-                                    color = SimbanyuTheme.colors.statusNegativeText,
-                                    shape = SimbanyuTheme.shapes.large
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .height(16.dp)
+                                    .padding(end = SimbanyuTheme.padding.medium),
+                                painter = painterResource(R.drawable.ic_description),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.brand
+                            )
+                            SimbanyuText(
+                                text = "ISI",
+                                style = SimbanyuTheme.typography.labelOverline
+                            )
+                        }
 
-                                )
-                            },
-                        state = state.titleState,
-                        hint = "Masukkan judul pemberitahuan...",
-                        capitalization = KeyboardCapitalization.Words
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
+                        SimbanyuTextField(
                             modifier = Modifier
-                                .height(16.dp)
-                                .padding(end = SimbanyuTheme.padding.medium),
-                            painter = painterResource(R.drawable.ic_description),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.brand
-                        )
-                        SimbanyuText(
-                            text = "ISI",
-                            style = SimbanyuTheme.typography.labelOverline
-                        )
-                    }
+                                .conditional(state.errorFields.fastAny { it == Fields.DESCRIPTION }) {
+                                    border(
+                                        width = 2.dp,
+                                        color = SimbanyuTheme.colors.statusNegativeText,
+                                        shape = SimbanyuTheme.shapes.large
 
-                    SimbanyuTextField(
-                        modifier = Modifier
-                            .conditional(state.errorFields.fastAny { it == Fields.DESCRIPTION }) {
-                                border(
-                                    width = 2.dp,
-                                    color = SimbanyuTheme.colors.statusNegativeText,
-                                    shape = SimbanyuTheme.shapes.large
-
-                                )
+                                    )
+                                },
+                            state = state.descriptionState,
+                            lineLimits = TextFieldLineLimits.MultiLine(5, 5),
+                            hint = "Masukkan isi pemberitahuan...",
+                        )
+                        Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
+                        SimbanyuButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    brush = SimbanyuTheme.colors.brush.brandVertical
+                                ),
+                            text = "Selesai",
+                            iconRight = {
+                                if (state.isCreatingAnnouncement) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(18.dp),
+                                        strokeWidth = 2.dp,
+                                        color = SimbanyuTheme.colors.actionBrandText
+                                    )
+                                } else {
+                                    Icon(
+                                        modifier = Modifier.size(18.dp),
+                                        painter = painterResource(R.drawable.ic_check),
+                                        contentDescription = null,
+                                        tint = SimbanyuTheme.colors.actionBrandText
+                                    )
+                                }
                             },
-                        state = state.descriptionState,
-                        lineLimits = TextFieldLineLimits.MultiLine(5, 5),
-                        hint = "Masukkan isi pemberitahuan...",
-                    )
-                    Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
-                    SimbanyuButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                brush = SimbanyuTheme.colors.brush.brandVertical
-                            ),
-                        text = "Selesai",
-                        iconRight = {
-                            if (state.isCreatingAnnouncement) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(18.dp),
-                                    strokeWidth = 2.dp,
-                                    color = SimbanyuTheme.colors.actionBrandText
-                                )
-                            } else {
-                                Icon(
-                                    modifier = Modifier.size(18.dp),
-                                    painter = painterResource(R.drawable.ic_check),
-                                    contentDescription = null,
-                                    tint = SimbanyuTheme.colors.actionBrandText
-                                )
-                            }
-                        },
-                    ) {
-                        onAction(OperatorAnnouncementAction.CreateAnnouncement)
+                        ) {
+                            onAction(OperatorAnnouncementAction.CreateAnnouncement)
+                        }
+                        Spacer(Modifier.height(SimbanyuTheme.spacing.large))
                     }
-                    Spacer(Modifier.height(SimbanyuTheme.spacing.large))
                 }
             }
         }

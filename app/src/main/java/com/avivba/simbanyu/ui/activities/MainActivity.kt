@@ -14,6 +14,7 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.domain.model.User
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.SimbanyuApp
 import com.avivba.simbanyu.ui.theme.Blue30
@@ -53,9 +54,9 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                if (isCheckingAuth) {
-                    // TODO: Splash / loading?
-                } else {
+                LoadingBox(
+                    isLoading = isCheckingAuth
+                ) {
                     val startScreen = when {
                         isLoggedIn && profile != null -> {
                             when (profile?.role) {

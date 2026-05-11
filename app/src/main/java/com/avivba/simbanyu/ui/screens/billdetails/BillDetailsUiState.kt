@@ -41,6 +41,7 @@ data class UiPayment(
 
 data class BillDetailsUiState(
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val name: String = "",
     val address: String = "",
     val meterId: String = "",
@@ -54,6 +55,8 @@ data class BillDetailsUiState(
 
 sealed interface BillDetailsAction {
     data object Load : BillDetailsAction
+    data object Refresh : BillDetailsAction
+    data object CheckBillStatus : BillDetailsAction
     data object NavigateBack : BillDetailsAction
     data object DownloadReceipt : BillDetailsAction
     data class OpenPaymentPage(val url: String) : BillDetailsAction

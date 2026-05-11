@@ -9,6 +9,7 @@ import com.avivba.simbanyu.ui.utils.toYear
 data class UiBill(
     val id: String,
     val amount: String,
+    val realAmount: Double,
     val periodMonth: String,
     val periodYear: Int,
     val status: UiBillingStatus,
@@ -20,6 +21,7 @@ data class UiBill(
         fun fromDomain(bill: Bill): UiBill {
             return UiBill(
                 id = bill.id,
+                realAmount = bill.amount,
                 amount = bill.amount.toDottedCurrency(),
                 periodMonth = bill.date.toMonthFull(),
                 periodYear = bill.date.toYear().toInt(),

@@ -51,6 +51,7 @@ import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.item.ReportItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
@@ -527,46 +528,52 @@ private fun ReportList(
     onAction: (ReportAction) -> Unit
 ) {
     val listState = rememberLazyListState()
-    PullToRefreshBox(
-        modifier = modifier
-            .fillMaxSize(),
-        isRefreshing = state.isRefreshing,
-        onRefresh = {
-            onAction(ReportAction.Refresh)
-        }
+
+    LoadingBox(
+        modifier = modifier,
+        isLoading = state.isLoading
     ) {
-        if (state.reports.isNotEmpty()) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(SimbanyuTheme.padding.large),
-                verticalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.medium
-                ),
-                state = listState
-            ) {
-                items(
-                    items = state.reports,
-                    key = { it.id }
-                ) { report ->
-                    Column(
-                        modifier = Modifier
-                            .animateContentSize()
-                    ) {
-                        ReportItem(
-                            modifier = Modifier,
-                            report = report,
-                            onClickExpand = {
-                                onAction(ReportAction.ToggleExpandItem(report))
-                            }
-                        )
+        PullToRefreshBox(
+            modifier = Modifier
+                .fillMaxSize(),
+            isRefreshing = state.isRefreshing,
+            onRefresh = {
+                onAction(ReportAction.Refresh)
+            }
+        ) {
+            if (state.reports.isNotEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentPadding = PaddingValues(SimbanyuTheme.padding.large),
+                    verticalArrangement = Arrangement.spacedBy(
+                        SimbanyuTheme.spacing.medium
+                    ),
+                    state = listState
+                ) {
+                    items(
+                        items = state.reports,
+                        key = { it.id }
+                    ) { report ->
+                        Column(
+                            modifier = Modifier
+                                .animateContentSize()
+                        ) {
+                            ReportItem(
+                                modifier = Modifier,
+                                report = report,
+                                onClickExpand = {
+                                    onAction(ReportAction.ToggleExpandItem(report))
+                                }
+                            )
+                        }
                     }
                 }
+            } else {
+                EmptyState(
+                    message = "Anda belum memiliki riwayat laporan"
+                )
             }
-        } else {
-            EmptyState(
-                message = "Anda belum memiliki riwayat laporan"
-            )
         }
     }
 }

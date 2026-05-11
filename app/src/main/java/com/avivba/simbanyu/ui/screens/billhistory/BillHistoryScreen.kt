@@ -31,6 +31,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.BillHistoryItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.model.UiBillingStatus
@@ -60,20 +61,24 @@ fun BillHistoryScreen(
         }
     }
 
-    PullToRefreshBox(
+    LoadingBox(
         modifier = modifier,
-        isRefreshing = state.isRefreshing,
-        onRefresh = {
-            viewModel.onAction(BillHistoryAction.Refresh)
-        }
+        isLoading = state.isLoading
     ) {
-        BillHistoryContent(
-            state = state,
-            onNavigate = onNavigate,
-            onAction = viewModel::onAction
-        )
+        PullToRefreshBox(
+            modifier = Modifier,
+            isRefreshing = state.isRefreshing,
+            onRefresh = {
+                viewModel.onAction(BillHistoryAction.Refresh)
+            }
+        ) {
+            BillHistoryContent(
+                state = state,
+                onNavigate = onNavigate,
+                onAction = viewModel::onAction
+            )
+        }
     }
-
 }
 
 @Composable
@@ -234,7 +239,7 @@ fun BillHistoryContent(
                 ) {
                     SimbanyuText(
                         modifier = Modifier.weight(1f),
-                        text = "Rp. ${state.totalSelectedBills.toDottedCurrency()}",
+                        text = state.totalSelectedBills.toDottedCurrency(),
                         style = SimbanyuTheme.typography.displaySmall,
                         color = SimbanyuTheme.colors.brand
                     )

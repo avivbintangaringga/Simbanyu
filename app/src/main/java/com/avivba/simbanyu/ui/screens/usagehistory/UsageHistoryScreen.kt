@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.UsageHistoryItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -66,19 +67,23 @@ fun UsageHistoryScreen(
     ObserveAsEvent(viewModel.event) {
     }
 
-    PullToRefreshBox(
+    LoadingBox(
         modifier = modifier,
-        isRefreshing = state.isRefreshing,
-        onRefresh = {
-            viewModel.onAction(UsageHistoryAction.Refresh)
-        }
+        isLoading = state.isLoading
     ) {
-        UsageHistoryContent(
-            state = state,
-            onAction = viewModel::onAction
-        )
+        PullToRefreshBox(
+            modifier = Modifier,
+            isRefreshing = state.isRefreshing,
+            onRefresh = {
+                viewModel.onAction(UsageHistoryAction.Refresh)
+            }
+        ) {
+            UsageHistoryContent(
+                state = state,
+                onAction = viewModel::onAction
+            )
+        }
     }
-
 }
 
 @Composable

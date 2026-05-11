@@ -31,6 +31,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.Screen.Invoice
@@ -76,18 +77,22 @@ fun DashboardScreen(
         }
     }
 
-    PullToRefreshBox(
+    LoadingBox(
         modifier = modifier,
-        isRefreshing = state.isRefreshing,
-        onRefresh = {
-            viewModel.onAction(DashboardAction.Refresh)
-        }
+        isLoading = state.isLoading,
     ) {
-        DashboardContent(
-            state = state,
-            onAction = viewModel::onAction,
-            onNavigate = onNavigate
-        )
+        PullToRefreshBox(
+            isRefreshing = state.isRefreshing,
+            onRefresh = {
+                viewModel.onAction(DashboardAction.Refresh)
+            }
+        ) {
+            DashboardContent(
+                state = state,
+                onAction = viewModel::onAction,
+                onNavigate = onNavigate
+            )
+        }
     }
 }
 

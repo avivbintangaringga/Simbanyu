@@ -61,7 +61,7 @@ class OperatorDashboardViewModel(
     private suspend fun refresh() {
         updateState {
             it.copy(
-                isLoading = true
+                isRefreshing = true
             )
         }
 
@@ -69,7 +69,7 @@ class OperatorDashboardViewModel(
 
         updateState {
             it.copy(
-                isLoading = false
+                isRefreshing = false
             )
         }
     }

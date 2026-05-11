@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.SubscriberItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.components.textfield.SimbanyuTextField
 import com.avivba.simbanyu.ui.shared.Screen
@@ -55,19 +56,24 @@ fun SubscribersScreen(
         }
     }
 
-    PullToRefreshBox(
-        modifier = modifier
-            .fillMaxSize(),
-        isRefreshing = state.isRefreshing,
-        onRefresh = {
-            viewModel.onAction(SubscribersAction.Refresh)
-        }
+    LoadingBox(
+        modifier = modifier,
+        isLoading = state.isLoading
     ) {
-        SubscribersContent(
-            state = state,
-            onAction = viewModel::onAction,
-            onNavigate = onNavigate
-        )
+        PullToRefreshBox(
+            modifier = Modifier
+                .fillMaxSize(),
+            isRefreshing = state.isRefreshing,
+            onRefresh = {
+                viewModel.onAction(SubscribersAction.Refresh)
+            }
+        ) {
+            SubscribersContent(
+                state = state,
+                onAction = viewModel::onAction,
+                onNavigate = onNavigate
+            )
+        }
     }
 }
 

@@ -20,6 +20,7 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuCardButton
 import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.ActivityItem
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
@@ -43,18 +44,23 @@ fun OperatorDashboardScreen(
         }
     }
 
-    PullToRefreshBox(
-        isRefreshing = state.isRefreshing,
-        onRefresh = {
-            viewModel.onAction(OperatorDashboardAction.Refresh)
-        }
+    LoadingBox(
+        modifier = modifier,
+        isLoading = state.isLoading
     ) {
-        OperatorDashboardContent(
-            modifier = modifier,
-            state = state,
-            onAction = viewModel::onAction,
-            onChangeTab = onChangeTab
-        )
+        PullToRefreshBox(
+            isRefreshing = state.isRefreshing,
+            onRefresh = {
+                viewModel.onAction(OperatorDashboardAction.Refresh)
+            }
+        ) {
+            OperatorDashboardContent(
+                modifier = Modifier,
+                state = state,
+                onAction = viewModel::onAction,
+                onChangeTab = onChangeTab
+            )
+        }
     }
 }
 

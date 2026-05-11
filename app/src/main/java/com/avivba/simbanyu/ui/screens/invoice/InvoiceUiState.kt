@@ -40,7 +40,8 @@ val fakeInvoiceState = InvoiceUiState(
                 UiCost("Biaya Pemeliharaan Meter", "Rp 5.000")
             ),
             status = UiBillingStatus.UNPAID,
-            amount = "Rp. 135.000"
+            amount = "Rp. 135.000",
+            realAmount = 135000.0
         ),
 //        Bill(
 //            id = "INV-2023-11-001",
