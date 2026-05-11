@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,6 +16,7 @@ import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.domain.repository.AuthEvent
+import kotlin.reflect.typeOf
 import com.avivba.simbanyu.ui.components.background.Background
 import com.avivba.simbanyu.ui.screens.announcement.AnnouncementScreen
 import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsScreen
@@ -88,6 +90,9 @@ fun SimbanyuApp(
         }
 
         composable<Screen.Main>(
+            typeMap = mapOf(
+                typeOf<Screen.MainScreen>() to serializableNavType<Screen.MainScreen>()
+            ),
             deepLinks = listOf(
                 navDeepLink { uriPattern = "https://simbanyu.avivba.com" }
             )
@@ -113,7 +118,11 @@ fun SimbanyuApp(
             }
         }
 
-        composable<Screen.Invoice> {
+        composable<Screen.Invoice>(
+            typeMap = mapOf(
+                typeOf<List<String>>() to serializableNavType<List<String>>()
+            )
+        ) {
             InvoiceScreen(
                 onNavigate = { dest ->
                     navHostController.navigate(dest)
