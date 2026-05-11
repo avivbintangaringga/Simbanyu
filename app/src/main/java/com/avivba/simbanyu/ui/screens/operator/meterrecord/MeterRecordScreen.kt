@@ -443,7 +443,7 @@ fun MeterRecordContent(
                             )
 
                             SimbanyuText(
-                                text = "Unggah foto (maks 5MB)",
+                                text = "Unggah foto",
                                 style = SimbanyuTheme.typography.bodySmall,
                                 color = SimbanyuTheme.colors.statusNeutral
                             )
