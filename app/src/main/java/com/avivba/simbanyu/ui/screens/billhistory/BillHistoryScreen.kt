@@ -264,7 +264,7 @@ fun BillHistoryContent(
             }
         } else {
             EmptyState(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.weight(1f),
                 message = "Anda belum memiliki riwayat tagihan"
             )
         }

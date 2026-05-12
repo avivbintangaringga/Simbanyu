@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.item.AnnouncementItem
 import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
@@ -132,28 +133,36 @@ fun AnnouncementContent(
 
                     Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
 
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentPadding = PaddingValues(
-                            horizontal = SimbanyuTheme.padding.large
-                        ),
-                        state = listState,
-                        verticalArrangement = Arrangement.spacedBy(
-                            SimbanyuTheme.spacing.medium
-                        )
-                    ) {
-                        items(
-                            items = state.announcements,
-                            key = { it.id }
-                        ) { announcement ->
-                            AnnouncementItem(
-                                title = announcement.title,
-                                content = announcement.body,
-                                time = announcement.date,
-                                iconId = R.drawable.ic_campaign_filled,
+                    if (state.announcements.isNotEmpty()) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            contentPadding = PaddingValues(
+                                horizontal = SimbanyuTheme.padding.large
+                            ),
+                            state = listState,
+                            verticalArrangement = Arrangement.spacedBy(
+                                SimbanyuTheme.spacing.medium
                             )
+                        ) {
+                            items(
+                                items = state.announcements,
+                                key = { it.id }
+                            ) { announcement ->
+                                AnnouncementItem(
+                                    title = announcement.title,
+                                    content = announcement.body,
+                                    time = announcement.date,
+                                    iconId = R.drawable.ic_campaign_filled,
+                                )
+                            }
                         }
+                    } else {
+                        EmptyState(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            message = "Tidak ada pemberitahuan"
+                        )
                     }
                 }
             }
@@ -166,7 +175,7 @@ fun AnnouncementContent(
 private fun AnnouncementPreview() {
     AnnouncementContent(
         state = AnnouncementUiState(
-            announcements = fakeAnnouncements
+//            announcements = fakeAnnouncements
         )
     )
 }

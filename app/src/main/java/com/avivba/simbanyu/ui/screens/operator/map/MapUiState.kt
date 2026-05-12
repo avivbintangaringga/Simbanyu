@@ -1,6 +1,6 @@
 package com.avivba.simbanyu.ui.screens.operator.map
 
-import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
+import com.avivba.simbanyu.ui.screens.operator.subscribers.fakeSubscribers
 import com.avivba.simbanyu.ui.shared.model.UiSubscriber
 
 data class MapUiState(

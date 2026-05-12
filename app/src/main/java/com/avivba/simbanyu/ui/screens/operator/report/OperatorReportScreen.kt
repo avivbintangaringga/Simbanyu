@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.emptystate.EmptyState
 import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.item.ReportItem
 import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
@@ -204,282 +205,291 @@ private fun OperatorReportContent(
             }
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentPadding = PaddingValues(SimbanyuTheme.padding.large),
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            ),
-            state = listState
-        ) {
-            items(
-                items = state.reports,
-                key = { it.report.id }
-            ) { report ->
-                Column(
-                    modifier = Modifier
-                        .animateContentSize()
-                ) {
-                    ReportItem(
-                        modifier = Modifier,
-                        report = report.report,
-                        showHandleReport = true,
-                        showUser = true,
-                        onClickExpand = {
-                            onAction(OperatorReportAction.ToggleItemExpand(report))
-                        },
-                        onClickHandleReport = {
-                            onAction(OperatorReportAction.ShowUpdateReport(report))
-                        }
-                    )
-                }
-            }
-        }
-
-
-        if (state.currentReport != null) {
-            ModalBottomSheet(
-                sheetState = bottomSheetState,
-                onDismissRequest = {
-                    if (!state.currentReport.isSending) {
-                        onAction(OperatorReportAction.HideUpdateReport)
-                    }
-                },
-                sheetGesturesEnabled = false,
-                properties = ModalBottomSheetProperties(
-                    shouldDismissOnBackPress = !state.currentReport.isSending,
-                    shouldDismissOnClickOutside = !state.currentReport.isSending
+        if (state.reports.isNotEmpty()) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentPadding = PaddingValues(SimbanyuTheme.padding.large),
+                verticalArrangement = Arrangement.spacedBy(
+                    SimbanyuTheme.spacing.medium
                 ),
-                dragHandle = {
-                    Spacer(Modifier.height(SimbanyuTheme.spacing.large))
-                }
+                state = listState
             ) {
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(
-                            horizontal = SimbanyuTheme.padding.large
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.medium
-                    )
-                ) {
-                    var isExpanded by remember { mutableStateOf(false) }
-
-                    SimbanyuText(
-                        text = "Update Laporan",
-                        style = SimbanyuTheme.typography.displayMedium
-                    )
-
-                    Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .height(16.dp)
-                                .padding(end = SimbanyuTheme.padding.medium),
-                            painter = painterResource(R.drawable.ic_description_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.brand
-                        )
-                        SimbanyuText(
-                            text = "STATUS",
-                            style = SimbanyuTheme.typography.labelOverline
-                        )
-                    }
-
+                items(
+                    items = state.reports,
+                    key = { it.report.id }
+                ) { report ->
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .animateContentSize()
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .background(
-                                    color = SimbanyuTheme.colors.surfaceCardAlternate,
-                                    shape = SimbanyuTheme.shapes.medium
-                                )
-                                .clickable {
-                                    isExpanded = true
-                                }
-                                .padding(SimbanyuTheme.padding.medium),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            SimbanyuText(
-                                modifier = Modifier.padding(end = SimbanyuTheme.padding.small),
-                                text = state.currentReport.report.status.status,
-                                style = SimbanyuTheme.typography.bodyProminent
-                            )
-                            Icon(
-                                painter = painterResource(if (isExpanded) R.drawable.ic_arrow_dropdown_up else R.drawable.ic_arrow_dropdown_down),
-                                contentDescription = null,
-                            )
-                        }
-
-                        DropdownMenu(
+                        ReportItem(
                             modifier = Modifier,
-                            expanded = isExpanded,
-                            onDismissRequest = {
-                                isExpanded = false
+                            report = report.report,
+                            showHandleReport = true,
+                            showUser = true,
+                            onClickExpand = {
+                                onAction(OperatorReportAction.ToggleItemExpand(report))
                             },
-                            containerColor = SimbanyuTheme.colors.surfaceCard,
-                        ) {
-                            UiReportStatus.entries.forEach { status ->
-                                DropdownMenuItem(
-                                    text = {
-                                        SimbanyuText(
-                                            text = status.status,
-                                            style = SimbanyuTheme.typography.bodyStandard
-                                        )
-                                    },
-                                    onClick = {
-                                        onAction(
-                                            OperatorReportAction.SelectCurrentReportStatus(
-                                                status
-                                            )
-                                        )
-                                        isExpanded = false
-                                    }
-                                )
+                            onClickHandleReport = {
+                                onAction(OperatorReportAction.ShowUpdateReport(report))
                             }
+                        )
+                    }
+                }
+            }
+
+
+            if (state.currentReport != null) {
+                ModalBottomSheet(
+                    sheetState = bottomSheetState,
+                    onDismissRequest = {
+                        if (!state.currentReport.isSending) {
+                            onAction(OperatorReportAction.HideUpdateReport)
                         }
+                    },
+                    sheetGesturesEnabled = false,
+                    properties = ModalBottomSheetProperties(
+                        shouldDismissOnBackPress = !state.currentReport.isSending,
+                        shouldDismissOnClickOutside = !state.currentReport.isSending
+                    ),
+                    dragHandle = {
+                        Spacer(Modifier.height(SimbanyuTheme.spacing.large))
                     }
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .height(16.dp)
-                                .padding(end = SimbanyuTheme.padding.medium),
-                            painter = painterResource(R.drawable.ic_description_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.brand
-                        )
-                        SimbanyuText(
-                            text = "CATATAN PETUGAS",
-                            style = SimbanyuTheme.typography.labelOverline
-                        )
-                    }
-
-                    SimbanyuTextField(
-                        modifier = Modifier,
-                        state = state.notesState,
-                        lineLimits = TextFieldLineLimits.MultiLine(3, 3),
-                        hint = "Masukkan catatan petugas jika diperlukan...",
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            modifier = Modifier
-                                .height(16.dp)
-                                .padding(end = SimbanyuTheme.padding.medium),
-                            painter = painterResource(R.drawable.ic_photo_camera_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.brand
-                        )
-                        SimbanyuText(
-                            text = "BUKTI PENANGANAN",
-                            style = SimbanyuTheme.typography.labelOverline
-                        )
-                    }
-
-                    if (state.image != null ||
-                        state.currentReport.report.handlingEvidenceImageUrl.isNotEmpty()
-                    ) {
-                        ImageView(
-                            model = state.image
-                                ?: state.currentReport.report.handlingEvidenceImageUrl,
-                            modifier = Modifier.fillMaxWidth(),
-                            onClick = {
-                                onAction(OperatorReportAction.OpenCamera)
-                            },
-                        )
-                    } else {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .clip(SimbanyuTheme.shapes.large)
-                                .clickable {
-                                    onAction(OperatorReportAction.OpenCamera)
-                                }
-                                .conditional(
-                                    state.currentReport.report.status == UiReportStatus.COMPLETED &&
-                                            state.currentReport.report.handlingEvidenceImageUrl.isEmpty()
-                                ) {
-                                    dashedBorder(
-                                        strokeWidth = 4.dp,
-                                        gapLength = 6.dp,
-                                        dashLength = 8.dp,
-                                        color = SimbanyuTheme.colors.statusNegativeText,
-                                        shape = SimbanyuTheme.shapes.large
-                                    )
-                                }
-                                .dashedBorder(
-                                    strokeWidth = 4.dp,
-                                    gapLength = 6.dp,
-                                    dashLength = 8.dp,
-                                    color = SimbanyuTheme.colors.borderCardAlternate,
-                                    shape = SimbanyuTheme.shapes.large
-                                ),
-                            verticalArrangement = Arrangement.spacedBy(
-                                SimbanyuTheme.spacing.medium,
-                                alignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                            .padding(
+                                horizontal = SimbanyuTheme.padding.large
                             ),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        verticalArrangement = Arrangement.spacedBy(
+                            SimbanyuTheme.spacing.medium
+                        )
+                    ) {
+                        var isExpanded by remember { mutableStateOf(false) }
+
+                        SimbanyuText(
+                            text = "Update Laporan",
+                            style = SimbanyuTheme.typography.displayMedium
+                        )
+
+                        Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Icon(
                                 modifier = Modifier
-                                    .requiredSize(40.dp),
-                                painter = painterResource(R.drawable.ic_photo_camera_filled),
+                                    .height(16.dp)
+                                    .padding(end = SimbanyuTheme.padding.medium),
+                                painter = painterResource(R.drawable.ic_description_filled),
                                 contentDescription = null,
-                                tint = SimbanyuTheme.colors.statusNeutral
+                                tint = SimbanyuTheme.colors.brand
                             )
-
                             SimbanyuText(
-                                text = "Unggah foto",
-                                style = SimbanyuTheme.typography.bodySmall,
-                                color = SimbanyuTheme.colors.statusNeutral
+                                text = "STATUS",
+                                style = SimbanyuTheme.typography.labelOverline
                             )
                         }
-                    }
 
-                    Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
-
-                    SimbanyuButton(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(
-                                brush = SimbanyuTheme.colors.brush.brandVertical
-                            ),
-                        text = "Selesai",
-                        iconRight = {
-                            if (state.currentReport.isSending) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(18.dp),
-                                    strokeWidth = 2.dp,
-                                    color = SimbanyuTheme.colors.actionBrandText
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .background(
+                                        color = SimbanyuTheme.colors.surfaceCardAlternate,
+                                        shape = SimbanyuTheme.shapes.medium
+                                    )
+                                    .clickable {
+                                        isExpanded = true
+                                    }
+                                    .padding(SimbanyuTheme.padding.medium),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                SimbanyuText(
+                                    modifier = Modifier.padding(end = SimbanyuTheme.padding.small),
+                                    text = state.currentReport.report.status.status,
+                                    style = SimbanyuTheme.typography.bodyProminent
                                 )
-                            } else {
                                 Icon(
-                                    modifier = Modifier.size(18.dp),
-                                    painter = painterResource(R.drawable.ic_check),
+                                    painter = painterResource(if (isExpanded) R.drawable.ic_arrow_dropdown_up else R.drawable.ic_arrow_dropdown_down),
                                     contentDescription = null,
-                                    tint = SimbanyuTheme.colors.actionBrandText
                                 )
                             }
-                        },
-                    ) {
-                        onAction(OperatorReportAction.SendUpdatedReport)
+
+                            DropdownMenu(
+                                modifier = Modifier,
+                                expanded = isExpanded,
+                                onDismissRequest = {
+                                    isExpanded = false
+                                },
+                                containerColor = SimbanyuTheme.colors.surfaceCard,
+                            ) {
+                                UiReportStatus.entries.forEach { status ->
+                                    DropdownMenuItem(
+                                        text = {
+                                            SimbanyuText(
+                                                text = status.status,
+                                                style = SimbanyuTheme.typography.bodyStandard
+                                            )
+                                        },
+                                        onClick = {
+                                            onAction(
+                                                OperatorReportAction.SelectCurrentReportStatus(
+                                                    status
+                                                )
+                                            )
+                                            isExpanded = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .height(16.dp)
+                                    .padding(end = SimbanyuTheme.padding.medium),
+                                painter = painterResource(R.drawable.ic_description_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.brand
+                            )
+                            SimbanyuText(
+                                text = "CATATAN PETUGAS",
+                                style = SimbanyuTheme.typography.labelOverline
+                            )
+                        }
+
+                        SimbanyuTextField(
+                            modifier = Modifier,
+                            state = state.notesState,
+                            lineLimits = TextFieldLineLimits.MultiLine(3, 3),
+                            hint = "Masukkan catatan petugas jika diperlukan...",
+                        )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .height(16.dp)
+                                    .padding(end = SimbanyuTheme.padding.medium),
+                                painter = painterResource(R.drawable.ic_photo_camera_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.brand
+                            )
+                            SimbanyuText(
+                                text = "BUKTI PENANGANAN",
+                                style = SimbanyuTheme.typography.labelOverline
+                            )
+                        }
+
+                        if (state.image != null ||
+                            state.currentReport.report.handlingEvidenceImageUrl.isNotEmpty()
+                        ) {
+                            ImageView(
+                                model = state.image
+                                    ?: state.currentReport.report.handlingEvidenceImageUrl,
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = {
+                                    onAction(OperatorReportAction.OpenCamera)
+                                },
+                            )
+                        } else {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(150.dp)
+                                    .clip(SimbanyuTheme.shapes.large)
+                                    .clickable {
+                                        onAction(OperatorReportAction.OpenCamera)
+                                    }
+                                    .conditional(
+                                        state.currentReport.report.status == UiReportStatus.COMPLETED &&
+                                                state.currentReport.report.handlingEvidenceImageUrl.isEmpty()
+                                    ) {
+                                        dashedBorder(
+                                            strokeWidth = 4.dp,
+                                            gapLength = 6.dp,
+                                            dashLength = 8.dp,
+                                            color = SimbanyuTheme.colors.statusNegativeText,
+                                            shape = SimbanyuTheme.shapes.large
+                                        )
+                                    }
+                                    .dashedBorder(
+                                        strokeWidth = 4.dp,
+                                        gapLength = 6.dp,
+                                        dashLength = 8.dp,
+                                        color = SimbanyuTheme.colors.borderCardAlternate,
+                                        shape = SimbanyuTheme.shapes.large
+                                    ),
+                                verticalArrangement = Arrangement.spacedBy(
+                                    SimbanyuTheme.spacing.medium,
+                                    alignment = Alignment.CenterVertically
+                                ),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .requiredSize(40.dp),
+                                    painter = painterResource(R.drawable.ic_photo_camera_filled),
+                                    contentDescription = null,
+                                    tint = SimbanyuTheme.colors.statusNeutral
+                                )
+
+                                SimbanyuText(
+                                    text = "Unggah foto",
+                                    style = SimbanyuTheme.typography.bodySmall,
+                                    color = SimbanyuTheme.colors.statusNeutral
+                                )
+                            }
+                        }
+
+                        Spacer(Modifier.height(SimbanyuTheme.spacing.medium))
+
+                        SimbanyuButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    brush = SimbanyuTheme.colors.brush.brandVertical
+                                ),
+                            text = "Selesai",
+                            iconRight = {
+                                if (state.currentReport.isSending) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(18.dp),
+                                        strokeWidth = 2.dp,
+                                        color = SimbanyuTheme.colors.actionBrandText
+                                    )
+                                } else {
+                                    Icon(
+                                        modifier = Modifier.size(18.dp),
+                                        painter = painterResource(R.drawable.ic_check),
+                                        contentDescription = null,
+                                        tint = SimbanyuTheme.colors.actionBrandText
+                                    )
+                                }
+                            },
+                        ) {
+                            onAction(OperatorReportAction.SendUpdatedReport)
+                        }
+                        Spacer(Modifier.height(SimbanyuTheme.spacing.large))
                     }
-                    Spacer(Modifier.height(SimbanyuTheme.spacing.large))
                 }
             }
+        } else {
+            EmptyState(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(SimbanyuTheme.padding.large),
+                message = "Belum ada laporan"
+            )
         }
     }
 }

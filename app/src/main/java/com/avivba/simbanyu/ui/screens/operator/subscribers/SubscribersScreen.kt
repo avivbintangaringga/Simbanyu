@@ -1,4 +1,4 @@
-package com.avivba.simbanyu.ui.screens.operator.subsribers
+package com.avivba.simbanyu.ui.screens.operator.subscribers
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

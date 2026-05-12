@@ -1,4 +1,4 @@
-package com.avivba.simbanyu.ui.screens.operator.subsribers
+package com.avivba.simbanyu.ui.screens.operator.subscribers
 
 import androidx.compose.foundation.text.input.TextFieldState
 import com.avivba.simbanyu.ui.shared.model.UiCoordinate

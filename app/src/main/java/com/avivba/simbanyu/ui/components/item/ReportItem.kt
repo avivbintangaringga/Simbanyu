@@ -25,7 +25,7 @@ import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.imageview.ImageView
 import com.avivba.simbanyu.ui.components.minimap.MiniMap
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
-import com.avivba.simbanyu.ui.screens.operator.subsribers.fakeSubscribers
+import com.avivba.simbanyu.ui.screens.operator.subscribers.fakeSubscribers
 import com.avivba.simbanyu.ui.shared.model.UiCoordinate
 import com.avivba.simbanyu.ui.shared.model.UiReport
 import com.avivba.simbanyu.ui.shared.model.UiReportStatus

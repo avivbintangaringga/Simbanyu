@@ -16,7 +16,7 @@ import com.avivba.simbanyu.ui.screens.operator.map.MapViewModel
 import com.avivba.simbanyu.ui.screens.operator.meterrecord.MeterRecordViewModel
 import com.avivba.simbanyu.ui.screens.operator.report.OperatorReportViewModel
 import com.avivba.simbanyu.ui.screens.operator.subscriberdetail.SubscriberDetailsViewModel
-import com.avivba.simbanyu.ui.screens.operator.subsribers.SubscribersViewModel
+import com.avivba.simbanyu.ui.screens.operator.subscribers.SubscribersViewModel
 import com.avivba.simbanyu.ui.screens.paymentsuccess.PaymentSuccessViewModel
 import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel

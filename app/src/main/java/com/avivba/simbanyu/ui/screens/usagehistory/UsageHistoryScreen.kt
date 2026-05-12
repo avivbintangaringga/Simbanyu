@@ -311,7 +311,8 @@ fun UsageHistoryContent(
             }
         } else {
             EmptyState(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .weight(1f),
                 message = "Anda belum memiliki riwayat penggunaan"
             )
         }
@@ -323,7 +324,7 @@ fun UsageHistoryContent(
 fun UsageHistoryPreview() {
     UsageHistoryContent(
         state = UsageHistoryUiState(
-            usages = fakeUsages,
+//            usages = fakeUsages,
             usageTotal = 103,
             usageAverage = 23.5
         )

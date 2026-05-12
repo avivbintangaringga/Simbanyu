@@ -571,6 +571,8 @@ private fun ReportList(
                 }
             } else {
                 EmptyState(
+                    modifier = Modifier
+                        .fillMaxSize(),
                     message = "Anda belum memiliki riwayat laporan"
                 )
             }
@@ -583,7 +585,7 @@ private fun ReportList(
 private fun ReportPreview() {
     ReportContent(
         state = ReportUiState(
-            selectedTabIndex = 0,
+            selectedTabIndex = 1,
         )
     )
 }
