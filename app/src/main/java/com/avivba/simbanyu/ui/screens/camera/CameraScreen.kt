@@ -138,10 +138,21 @@ fun CameraScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Black.copy(alpha = 0.5f)),
+                            .background(Color.Black),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = Color.White)
+                        Column(
+                            modifier = Modifier,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            CircularProgressIndicator(color = Color.White)
+                            SimbanyuText(
+                                modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                                text = "Memproses gambar...",
+                                color = Color.White
+                            )
+                        }
                     }
                 }
             } else {
@@ -219,11 +230,18 @@ fun CameraContent(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                SimbanyuText(
-                    text = "Memuat kamera...",
-                    textAlign = TextAlign.Center,
-                    color = Color.White
-                )
+                Column(
+                    modifier = Modifier,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator(color = Color.White)
+                    SimbanyuText(
+                        modifier = Modifier.padding(top = SimbanyuTheme.padding.medium),
+                        text = "Memuat kamera...",
+                        color = Color.White
+                    )
+                }
             }
         }
 
@@ -367,6 +385,8 @@ private fun decodeFileWithExif(file: File): Bitmap {
 @Composable
 private fun CameraScreenPreview() {
     CameraContent(
-        state = CameraUiState()
+        state = CameraUiState(
+            isCapturing = true
+        )
     )
 }
