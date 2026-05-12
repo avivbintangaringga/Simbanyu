@@ -9,7 +9,7 @@ enum class Fields {
 }
 
 data class MeterRecordUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isSendingRecord: Boolean = false,
     val isEditMode: Boolean = false,
     val usageId: String = "",

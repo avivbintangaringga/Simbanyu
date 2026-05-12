@@ -32,7 +32,7 @@ class DashboardViewModel(
             refreshEventBus.refreshEvent
                 .onStart { emit(Unit) }
                 .collect {
-                    load()
+                    load(isInit = true)
                 }
         }
 
@@ -69,6 +69,7 @@ class DashboardViewModel(
     }
 
     private suspend fun refresh() {
+        if (state.value.isRefreshing) return
         updateState {
             it.copy(
                 isRefreshing = true,
@@ -84,8 +85,8 @@ class DashboardViewModel(
         }
     }
 
-    private suspend fun load() {
-        if (state.value.isLoading) return
+    private suspend fun load(isInit: Boolean = false) {
+        if (state.value.isLoading && !isInit) return
         updateState {
             it.copy(
                 isLoading = true,

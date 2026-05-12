@@ -13,7 +13,7 @@ enum class FilterRecordState(
 }
 
 data class SubscribersUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val filteredSubscribers: List<UiSubscriber> = emptyList(),
     val filterRecordState: FilterRecordState = FilterRecordState.ALL,

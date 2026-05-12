@@ -9,7 +9,7 @@ enum class Fields {
 }
 
 data class OperatorAnnouncementUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val announcements: List<UiAnnouncement> = emptyList(),
     val isShowCreateDialog: Boolean = false,

@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.operator.announcement
 
+import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.viewModelScope
 import com.avivba.simbanyu.domain.base.Result
@@ -22,7 +23,7 @@ class OperatorAnnouncementViewModel(
             refreshEventBus.refreshEvent
                 .onStart { emit(Unit) }
                 .collect {
-                    load()
+                    load(isInit = true)
                 }
         }
     }
@@ -54,8 +55,8 @@ class OperatorAnnouncementViewModel(
         }
     }
 
-    private suspend fun load() {
-        if (state.value.isLoading) return
+    private suspend fun load(isInit: Boolean = false) {
+        if (state.value.isLoading && !isInit) return
         updateState {
             it.copy(
                 isLoading = true
@@ -72,6 +73,7 @@ class OperatorAnnouncementViewModel(
     }
 
     private suspend fun refresh() {
+        if (state.value.isRefreshing) return
         updateState {
             it.copy(
                 isRefreshing = true

@@ -6,7 +6,7 @@ import com.avivba.simbanyu.ui.shared.model.UiCost
 
 
 data class InvoiceUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isSending: Boolean = false,
     val name: String = "",
     val address: String = "",

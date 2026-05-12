@@ -40,7 +40,7 @@ data class UiPayment(
 }
 
 data class BillDetailsUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val name: String = "",
     val address: String = "",

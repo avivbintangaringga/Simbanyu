@@ -28,7 +28,7 @@ data class OperatorReport(
 )
 
 data class OperatorReportUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val reports: List<OperatorReport> = emptyList(),
     val filterStatus: ReportStatusFilter = ReportStatusFilter.ALL,

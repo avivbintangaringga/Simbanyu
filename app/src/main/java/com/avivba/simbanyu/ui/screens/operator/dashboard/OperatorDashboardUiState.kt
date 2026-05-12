@@ -3,7 +3,7 @@ package com.avivba.simbanyu.ui.screens.operator.dashboard
 import com.avivba.simbanyu.ui.shared.model.UiActivity
 
 data class OperatorDashboardUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val name: String = "Operator",
     val activities: List<UiActivity> = emptyList()

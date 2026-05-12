@@ -3,7 +3,7 @@ package com.avivba.simbanyu.ui.screens.billhistory
 import com.avivba.simbanyu.ui.shared.model.UiBill
 
 data class BillHistoryUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val isMultipleSelectMode: Boolean = false,
     val years: List<Int> = emptyList(),

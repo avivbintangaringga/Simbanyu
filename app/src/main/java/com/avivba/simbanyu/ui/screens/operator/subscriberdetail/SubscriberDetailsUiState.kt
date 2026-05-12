@@ -7,7 +7,7 @@ import com.avivba.simbanyu.ui.shared.model.UiCoordinate
 import com.avivba.simbanyu.ui.shared.model.UiUsage
 
 data class SubscriberDetailsUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val isSending: Boolean = false,
     val name: String = "",

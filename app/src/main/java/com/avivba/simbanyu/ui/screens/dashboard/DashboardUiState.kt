@@ -9,7 +9,7 @@ data class WaterUsage(
 )
 
 data class DashboardUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val name: String = "User",
     val hasPendingBill: Boolean = false,

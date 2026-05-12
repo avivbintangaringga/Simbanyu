@@ -3,7 +3,7 @@ package com.avivba.simbanyu.ui.screens.announcement
 import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
 
 data class AnnouncementUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val announcements: List<UiAnnouncement> = emptyList(),
 )

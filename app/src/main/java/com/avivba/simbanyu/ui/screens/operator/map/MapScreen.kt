@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
+import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.operator.subscribers.fakeSubscribers
 import com.avivba.simbanyu.ui.shared.Screen
@@ -76,11 +77,16 @@ fun MapScreen(
         }
     }
 
-    MapContent(
+    LoadingBox(
         modifier = modifier,
-        state = state,
-        onAction = viewModel::onAction
-    )
+        isLoading = state.isLoading
+    ) {
+        MapContent(
+            modifier = Modifier,
+            state = state,
+            onAction = viewModel::onAction
+        )
+    }
 }
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)

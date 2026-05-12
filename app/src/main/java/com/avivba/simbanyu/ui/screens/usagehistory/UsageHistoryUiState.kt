@@ -3,7 +3,7 @@ package com.avivba.simbanyu.ui.screens.usagehistory
 import com.avivba.simbanyu.ui.shared.model.UiUsage
 
 data class UsageHistoryUiState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val years: List<Int> = emptyList(),
     val selectedYear: Int = 0,

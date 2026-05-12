@@ -15,7 +15,7 @@ enum class Fields {
 data class ReportUiState(
     val isSendingReport: Boolean = false,
     val isRefreshing: Boolean = false,
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val locationState: TextFieldState = TextFieldState(),
     val descriptionState: TextFieldState = TextFieldState(),
     val locationCoordinate: UiCoordinate? = null,
