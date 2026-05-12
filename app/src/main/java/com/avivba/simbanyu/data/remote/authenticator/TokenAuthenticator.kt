@@ -73,9 +73,11 @@ class TokenAuthenticator(
 
     private fun handleSessionExpired() {
         runBlocking {
-            localTokenManager.clearToken()
-            localUserService.clearUser()
-            authEventBus.sendEvent(AuthEvent.SESSION_EXPIRED)
+            if (localTokenManager.getAccessToken() != null) {
+                localTokenManager.clearToken()
+                localUserService.clearUser()
+                authEventBus.sendEvent(AuthEvent.SESSION_EXPIRED)
+            }
         }
     }
 

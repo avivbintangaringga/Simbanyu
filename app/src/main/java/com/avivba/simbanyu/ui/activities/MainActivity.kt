@@ -11,6 +11,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.domain.model.User
@@ -75,6 +78,14 @@ class MainActivity : ComponentActivity() {
                             userRole = profile?.role,
                             authEventFlow = viewModel.authEvents
                         )
+                    }
+
+                    var previousLoggedIn by remember { mutableStateOf(isLoggedIn) }
+                    LaunchedEffect(isLoggedIn) {
+                        if (previousLoggedIn && !isLoggedIn) {
+                            intent.data = null
+                        }
+                        previousLoggedIn = isLoggedIn
                     }
                 }
             }

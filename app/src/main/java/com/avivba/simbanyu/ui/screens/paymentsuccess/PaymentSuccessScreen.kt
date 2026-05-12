@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.paymentsuccess
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,10 @@ fun PaymentSuccessScreen(
     onNavigateToBillHistory: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    BackHandler {
+        viewModel.onAction(PaymentSuccessAction.NavigateBack)
+    }
 
     ObserveAsEvent(viewModel.event) {
         when (it) {

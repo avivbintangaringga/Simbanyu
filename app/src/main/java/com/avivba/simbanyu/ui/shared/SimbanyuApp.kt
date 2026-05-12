@@ -49,7 +49,6 @@ fun SimbanyuApp(
                     "Sesi telah berakhir, silahkan login kembali",
                     Toast.LENGTH_LONG
                 ).show()
-                navHostController.navigate(Screen.Login)
             }
         }
     }
@@ -154,7 +153,7 @@ fun SimbanyuApp(
                 PaymentSuccessScreen(
                     onNavigateToBillHistory = {
                         navHostController.navigate(Screen.Main(Screen.MainScreen.BillHistory)) {
-                            popUpTo(Screen.PaymentSuccess) { inclusive = true }
+                            popUpTo(navHostController.graph.id) { inclusive = true }
                         }
                     }
                 )

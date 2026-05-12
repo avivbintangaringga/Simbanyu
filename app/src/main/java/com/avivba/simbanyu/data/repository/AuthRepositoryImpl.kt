@@ -93,11 +93,18 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun logout(): Result<Unit, DataError> {
-        return safeApiCall {
-            authService.logout()
+        return try {
+            safeApiCall {
+                authService.logout()
+            }
             FirebaseMessaging.getInstance().deleteToken()
             localTokenManager.clearToken()
             localUserService.clearUser()
+            Result.Success(Unit)
+        } catch (_: Exception) {
+            localTokenManager.clearToken()
+            localUserService.clearUser()
+            Result.Success(Unit)
         }
     }
 }
