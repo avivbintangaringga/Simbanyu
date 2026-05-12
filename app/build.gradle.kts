@@ -9,16 +9,27 @@ plugins {
     alias(libs.plugins.firebase.perf)
 }
 
-android {
-    signingConfigs {
-        create("release") {
-            storeFile =
-                file("/home/r7fx/Programming/Github-Clones/backup-files/keystore/keystore-pkcs12.jks")
-            storePassword = "dbstfdbstf"
-            keyAlias = "key0"
-            keyPassword = "dbstfdbstf"
-        }
+fun getGitCommitCount(): Int {
+    return try {
+        val process = ProcessBuilder("git", "rev-list", "--count", "HEAD")
+            .redirectError(ProcessBuilder.Redirect.PIPE)
+            .start()
+
+        val count = process.inputStream.bufferedReader().readText().trim()
+        process.waitFor()
+
+        if (process.exitValue() == 0) count.toInt() else 1
+    } catch (e: Exception) {
+        1
     }
+}
+
+
+base {
+    archivesName.set("Simbanyu_build-${getGitCommitCount()}")
+}
+
+android {
     namespace = "com.avivba.simbanyu"
     compileSdk {
         version = release(36) {
@@ -30,8 +41,8 @@ android {
         applicationId = "com.avivba.simbanyu"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = getGitCommitCount()
+        versionName = "1.0.${getGitCommitCount()}"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,7 +55,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
         }
     }
 
