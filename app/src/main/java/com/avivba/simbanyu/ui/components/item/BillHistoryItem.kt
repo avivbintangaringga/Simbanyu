@@ -6,12 +6,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -31,7 +27,6 @@ import com.avivba.simbanyu.ui.utils.conditional
 @Composable
 fun BillHistoryItem(
     modifier: Modifier = Modifier,
-    id: String,
     period: String,
     amount: String,
     status: String,
@@ -48,15 +43,12 @@ fun BillHistoryItem(
 ) {
     Box(
         modifier = modifier
-            .height(IntrinsicSize.Min)
             .fillMaxWidth()
             .background(
                 color = SimbanyuTheme.colors.surfaceCardAlternate,
                 shape = SimbanyuTheme.shapes.large
             )
-            .clip(
-                shape = SimbanyuTheme.shapes.large
-            )
+            .clip(shape = SimbanyuTheme.shapes.large)
             .conditional(!isDisabled) {
                 combinedClickable(
                     onClick = onClick,
@@ -68,16 +60,11 @@ fun BillHistoryItem(
             modifier = Modifier
                 .padding(SimbanyuTheme.padding.large)
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            )
+            verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
         ) {
             Row(
-                modifier = Modifier,
-                horizontalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.large
-                ),
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.large),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -92,44 +79,39 @@ fun BillHistoryItem(
                         .padding(SimbanyuTheme.padding.medium)
                 )
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
                 ) {
                     SimbanyuText(
                         text = period,
-                        style = SimbanyuTheme.typography.titleSection
+                        style = SimbanyuTheme.typography.titleSection,
+                        color = SimbanyuTheme.colors.textHeading
                     )
-//                    Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
-//                    SimbanyuText(
-//                        text = "ID: $id",
-//                        style = SimbanyuTheme.typography.bodySmall
-//                    )
                 }
                 Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.small)
                 ) {
                     SimbanyuText(
                         text = amount,
-                        style = SimbanyuTheme.typography.titleCard
+                        style = SimbanyuTheme.typography.titleCard,
+                        color = SimbanyuTheme.colors.textHeading
                     )
-                    Spacer(modifier = Modifier.height(SimbanyuTheme.spacing.small))
                     SimbanyuText(
                         modifier = Modifier
                             .background(
                                 color = statusBackgroundColor,
-                                shape = SimbanyuTheme.shapes.large
+                                shape = SimbanyuTheme.shapes.medium
                             )
                             .padding(
-                                vertical = SimbanyuTheme.padding.extraSmall,
-                                horizontal = SimbanyuTheme.padding.medium
+                                vertical = SimbanyuTheme.padding.extraSmall / 2,
+                                horizontal = SimbanyuTheme.padding.small
                             ),
                         text = status,
-                        style = SimbanyuTheme.typography.bodySmall,
+                        style = SimbanyuTheme.typography.labelBadge,
                         color = statusColor
                     )
                 }
-
             }
 
             if (canPayByCash) {
@@ -149,17 +131,16 @@ fun BillHistoryItem(
                             tint = SimbanyuTheme.colors.brandText
                         )
                     },
-                ) {
-                    onClickPayByCash()
-                }
+                    onClick = onClickPayByCash
+                )
             }
         }
 
         if (isDisabled) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.5f))
+                    .matchParentSize()
+                    .background(SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.4f))
             )
         }
     }
@@ -169,7 +150,6 @@ fun BillHistoryItem(
 @Composable
 private fun BillHistoryItemPreview() {
     BillHistoryItem(
-        id = "JK32301023",
         period = "Januari 2025",
         iconId = R.drawable.ic_history,
         amount = "150.000",

@@ -213,7 +213,6 @@ fun BillHistoryContent(
 
                     BillHistoryItem(
                         period = "${bill.periodMonth} ${bill.periodYear}",
-                        id = bill.id,
                         amount = bill.amount,
                         status = bill.status.status,
                         iconId = iconId,
