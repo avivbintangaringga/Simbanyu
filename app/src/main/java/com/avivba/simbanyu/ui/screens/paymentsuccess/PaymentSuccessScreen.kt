@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -25,22 +26,37 @@ import com.avivba.simbanyu.R
 import com.avivba.simbanyu.ui.components.buttons.SimbanyuButton
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
+import com.avivba.simbanyu.ui.utils.ObserveAsEvent
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun PaymentSuccessScreen(
     modifier: Modifier = Modifier,
+    viewModel: PaymentSuccessViewModel = koinViewModel(),
     onNavigateToBillHistory: () -> Unit
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvent(viewModel.event) {
+        when (it) {
+            PaymentSuccessEvent.NavigateBack -> {
+                onNavigateToBillHistory()
+            }
+        }
+    }
+
     PaymentSuccessContent(
         modifier = modifier,
-        onNavigateToBillHistory = onNavigateToBillHistory
+        state = state,
+        onAction = viewModel::onAction
     )
 }
 
 @Composable
 fun PaymentSuccessContent(
     modifier: Modifier = Modifier,
-    onNavigateToBillHistory: () -> Unit = {}
+    state: PaymentSuccessUiState,
+    onAction: (PaymentSuccessAction) -> Unit = {}
 ) {
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.success))
 
@@ -87,7 +103,9 @@ fun PaymentSuccessContent(
                         shape = SimbanyuTheme.shapes.extraLarge
                     ),
                 text = "Kembali",
-                onClick = onNavigateToBillHistory
+                onClick = {
+                    onAction(PaymentSuccessAction.NavigateBack)
+                }
             )
         }
     }
@@ -97,6 +115,8 @@ fun PaymentSuccessContent(
 @Composable
 private fun PaymentSuccessPreview() {
     SimbanyuTheme {
-        PaymentSuccessContent()
+        PaymentSuccessContent(
+            state = PaymentSuccessUiState()
+        )
     }
 }

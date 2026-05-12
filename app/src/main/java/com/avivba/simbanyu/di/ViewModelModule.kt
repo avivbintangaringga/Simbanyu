@@ -17,6 +17,7 @@ import com.avivba.simbanyu.ui.screens.operator.meterrecord.MeterRecordViewModel
 import com.avivba.simbanyu.ui.screens.operator.report.OperatorReportViewModel
 import com.avivba.simbanyu.ui.screens.operator.subscriberdetail.SubscriberDetailsViewModel
 import com.avivba.simbanyu.ui.screens.operator.subsribers.SubscribersViewModel
+import com.avivba.simbanyu.ui.screens.paymentsuccess.PaymentSuccessViewModel
 import com.avivba.simbanyu.ui.screens.profile.ProfileViewModel
 import com.avivba.simbanyu.ui.screens.report.ReportViewModel
 import com.avivba.simbanyu.ui.screens.usagehistory.UsageHistoryViewModel
@@ -38,6 +39,7 @@ val viewModelModule = module {
     viewModel { InvoiceViewModel(get(), get(), get(), get()) }
     viewModel { BillDetailsViewModel(get(), get(), get(), get()) }
     viewModel { AnnouncementViewModel(get(), get()) }
+    viewModel { PaymentSuccessViewModel(get()) }
 
     // OPERATOR
     viewModel { OperatorMainViewModel(get(), get()) }
