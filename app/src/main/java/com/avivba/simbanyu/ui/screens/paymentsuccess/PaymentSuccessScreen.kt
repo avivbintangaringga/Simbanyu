@@ -102,7 +102,7 @@ fun PaymentSuccessContent(
 
             SimbanyuButton(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.5f)
                     .background(
                         brush = SimbanyuTheme.colors.brush.brandVertical,
                         shape = SimbanyuTheme.shapes.extraLarge
