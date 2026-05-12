@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.avivba.simbanyu.R
@@ -35,29 +36,24 @@ fun SubscriberItem(
     onClick: () -> Unit = {},
     onClickRecordMeter: () -> Unit = {},
 ) {
+    val (status, iconId, statusColor) = if (subscriber.isRecorded) {
+        Triple("SELESAI", R.drawable.ic_check, SimbanyuTheme.colors.statusPositiveText)
+    } else {
+        Triple("BELUM DICATAT", R.drawable.ic_warning_filled, SimbanyuTheme.colors.statusWarningText)
+    }
+
     Column(
         modifier = modifier
-            .clip(
-                SimbanyuTheme.shapes.large
-            )
-            .clickable {
-                onClick()
-            }
-            .background(
-                SimbanyuTheme.colors.surfaceCardAlternate
-            )
+            .clip(SimbanyuTheme.shapes.large)
+            .clickable { onClick() }
+            .background(SimbanyuTheme.colors.surfaceCardAlternate)
             .fillMaxWidth()
-            .padding(
-                SimbanyuTheme.padding.large
-            ),
+            .padding(SimbanyuTheme.padding.large),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.medium
-            ),
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
+            verticalAlignment = Alignment.Top
         ) {
             Icon(
                 modifier = Modifier
@@ -66,47 +62,33 @@ fun SubscriberItem(
                         color = SimbanyuTheme.colors.brandText,
                         shape = CircleShape
                     )
-                    .padding(
-                        SimbanyuTheme.padding.medium
-                    ),
+                    .padding(SimbanyuTheme.padding.medium),
                 painter = painterResource(R.drawable.ic_person_filled),
                 contentDescription = null,
                 tint = SimbanyuTheme.colors.brand
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.small
-                )
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.Top
                 ) {
-
                     SimbanyuText(
+                        modifier = Modifier.weight(1f),
                         text = subscriber.name,
-                        style = SimbanyuTheme.typography.displaySmall
+                        style = SimbanyuTheme.typography.displaySmall,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
-
-                    var status = "BELUM DICATAT"
-                    var iconId = R.drawable.ic_warning_filled
-                    var color = SimbanyuTheme.colors.statusWarningText
-
-                    if (subscriber.isRecorded) {
-                        status = "SELESAI"
-                        iconId = R.drawable.ic_check
-                        color = SimbanyuTheme.colors.statusPositiveText
-                    }
 
                     Row(
                         modifier = Modifier
                             .background(
-                                color = color,
+                                color = statusColor,
                                 shape = SimbanyuTheme.shapes.large
                             )
                             .padding(
@@ -114,13 +96,10 @@ fun SubscriberItem(
                                 horizontal = SimbanyuTheme.padding.medium
                             ),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            SimbanyuTheme.spacing.small
-                        )
+                        horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
                     ) {
                         Icon(
-                            modifier = Modifier
-                                .size(12.dp),
+                            modifier = Modifier.size(10.dp),
                             painter = painterResource(iconId),
                             contentDescription = null,
                             tint = SimbanyuTheme.colors.brandText,
@@ -128,16 +107,32 @@ fun SubscriberItem(
 
                         SimbanyuText(
                             text = status,
-                            style = SimbanyuTheme.typography.bodySmall,
+                            style = SimbanyuTheme.typography.labelBadge,
                             color = SimbanyuTheme.colors.brandText,
                         )
                     }
                 }
 
-                SimbanyuText(
-                    text = subscriber.address,
-                    style = SimbanyuTheme.typography.bodySmall
-                )
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(top = 2.dp)
+                            .size(14.dp),
+                        painter = painterResource(R.drawable.ic_location_on_filled),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.brand
+                    )
+                    SimbanyuText(
+                        text = subscriber.address,
+                        style = SimbanyuTheme.typography.bodySmall,
+                        color = SimbanyuTheme.colors.textBody.copy(alpha = 0.7f),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
 
@@ -145,14 +140,11 @@ fun SubscriberItem(
 
         Row(
             modifier = Modifier,
-            horizontalArrangement = Arrangement.spacedBy(
-                SimbanyuTheme.spacing.small
-            ),
+            horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.small),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                modifier = Modifier
-                    .height(16.dp),
+                modifier = Modifier.height(16.dp),
                 painter = painterResource(R.drawable.ic_speed_filled),
                 contentDescription = null,
                 tint = SimbanyuTheme.colors.brand
@@ -163,30 +155,23 @@ fun SubscriberItem(
                 style = SimbanyuTheme.typography.labelOverline
             )
         }
+
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier
-                    .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.extraSmall
-                )
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.small
-                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.small),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        modifier = Modifier
-                            .height(16.dp),
+                        modifier = Modifier.height(16.dp),
                         painter = painterResource(R.drawable.ic_calendar_clock_filled),
                         contentDescription = null,
                         tint = SimbanyuTheme.colors.brand
@@ -195,7 +180,7 @@ fun SubscriberItem(
                     SimbanyuText(
                         text = "CATAT TERAKHIR",
                         style = SimbanyuTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight(900)
+                            fontWeight = FontWeight.Black
                         )
                     )
                 }
@@ -205,50 +190,31 @@ fun SubscriberItem(
                 )
             }
 
-            if (subscriber.isRecorded) {
-                SimbanyuButton(
-                    text = "Perbarui",
-                    modifier = Modifier
-                        .background(
-                            brush = Brush.verticalGradient(
+            SimbanyuButton(
+                text = if (subscriber.isRecorded) "Perbarui" else "Catat",
+                modifier = Modifier
+                    .background(
+                        brush = if (subscriber.isRecorded) {
+                            Brush.verticalGradient(
                                 colors = listOf(
                                     SimbanyuTheme.colors.statusNeutral,
-                                    SimbanyuTheme.colors.statusNeutral.copy(
-                                        alpha = 0.6f
-                                    )
+                                    SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.6f)
                                 )
-                            ),
-                        ),
-                    iconLeft = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_speed_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.actionBrandText
-                        )
-                    },
-                    onClick = {
-                        onClickRecordMeter()
-                    }
-                )
-            } else {
-                SimbanyuButton(
-                    text = "Catat",
-                    modifier = Modifier
-                        .background(
-                            brush = SimbanyuTheme.colors.brush.brandVertical,
-                        ),
-                    iconLeft = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_speed_filled),
-                            contentDescription = null,
-                            tint = SimbanyuTheme.colors.actionBrandText
-                        )
-                    },
-                    onClick = {
-                        onClickRecordMeter()
-                    }
-                )
-            }
+                            )
+                        } else {
+                            SimbanyuTheme.colors.brush.brandVertical
+                        },
+                        shape = SimbanyuTheme.shapes.extraLarge
+                    ),
+                iconLeft = {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_speed_filled),
+                        contentDescription = null,
+                        tint = SimbanyuTheme.colors.actionBrandText
+                    )
+                },
+                onClick = onClickRecordMeter
+            )
         }
     }
 }
