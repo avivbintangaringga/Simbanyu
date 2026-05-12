@@ -6,6 +6,7 @@ import com.avivba.simbanyu.domain.repository.AnnouncementRepository
 import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiAnnouncement
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class AnnouncementViewModel(
@@ -17,13 +18,11 @@ class AnnouncementViewModel(
 
     init {
         viewModelScope.launch {
-            load()
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
-            }
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
     }
 
@@ -38,6 +37,7 @@ class AnnouncementViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true

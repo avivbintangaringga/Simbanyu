@@ -6,6 +6,7 @@ import com.avivba.simbanyu.domain.repository.NotificationRepository
 import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiNotification
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class OperatorMainViewModel(
@@ -16,7 +17,11 @@ class OperatorMainViewModel(
 ) {
     init {
         viewModelScope.launch {
-            loadNotifications()
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    loadNotifications()
+                }
         }
 
         viewModelScope.launch {
@@ -29,12 +34,6 @@ class OperatorMainViewModel(
                         )
                     }
                 }
-            }
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                loadNotifications()
             }
         }
     }

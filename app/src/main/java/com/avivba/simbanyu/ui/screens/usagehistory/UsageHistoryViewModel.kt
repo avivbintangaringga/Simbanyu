@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -23,17 +24,15 @@ class UsageHistoryViewModel(
 
     init {
         viewModelScope.launch {
-            load()
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
 
         viewModelScope.launch {
             observeDataChanges()
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
-            }
         }
     }
 
@@ -115,6 +114,7 @@ class UsageHistoryViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true

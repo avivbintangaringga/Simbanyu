@@ -8,6 +8,7 @@ import com.avivba.simbanyu.domain.repository.RefreshEventBus
 import com.avivba.simbanyu.domain.repository.ReportRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiReport
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class ReportViewModel(
@@ -18,13 +19,11 @@ class ReportViewModel(
 ) {
     init {
         viewModelScope.launch {
-            load()
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
-            }
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
     }
 
@@ -203,6 +202,7 @@ class ReportViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true

@@ -15,6 +15,7 @@ import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.utils.toFullDateTime
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class MeterRecordViewModel(
@@ -29,20 +30,18 @@ class MeterRecordViewModel(
     private val editMode = savedStateHandle.toRoute<Screen.RecordMeter>().editMode
 
     init {
-        viewModelScope.launch {
-            updateState {
-                it.copy(
-                    isEditMode = editMode
-                )
-            }
-
-            load()
+        updateState {
+            it.copy(
+                isEditMode = editMode
+            )
         }
 
         viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
-            }
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
     }
 
@@ -167,6 +166,7 @@ class MeterRecordViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true

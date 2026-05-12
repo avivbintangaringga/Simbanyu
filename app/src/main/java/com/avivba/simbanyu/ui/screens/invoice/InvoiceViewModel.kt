@@ -14,6 +14,7 @@ import com.avivba.simbanyu.ui.shared.model.UiBill
 import com.avivba.simbanyu.ui.utils.toDottedCurrency
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class InvoiceViewModel(
@@ -28,7 +29,11 @@ class InvoiceViewModel(
 
     init {
         viewModelScope.launch {
-            load()
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
 
         viewModelScope.launch {
@@ -43,12 +48,6 @@ class InvoiceViewModel(
                         )
                     }
                 }
-            }
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
             }
         }
     }
@@ -68,6 +67,7 @@ class InvoiceViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true

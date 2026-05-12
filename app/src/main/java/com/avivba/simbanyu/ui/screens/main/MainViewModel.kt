@@ -10,6 +10,7 @@ import com.avivba.simbanyu.ui.shared.NavTypeMaps
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiNotification
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -28,7 +29,11 @@ class MainViewModel(
         }
 
         viewModelScope.launch {
-            loadNotifications()
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    loadNotifications()
+                }
         }
 
         viewModelScope.launch {
@@ -41,12 +46,6 @@ class MainViewModel(
                         )
                     }
                 }
-            }
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                loadNotifications()
             }
         }
     }

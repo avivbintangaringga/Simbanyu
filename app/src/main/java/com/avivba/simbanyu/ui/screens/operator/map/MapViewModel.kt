@@ -7,6 +7,7 @@ import com.avivba.simbanyu.domain.repository.SubscriberRepository
 import com.avivba.simbanyu.ui.screens.operator.map.MapUiEvent.GoToRecordMeter
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiSubscriber
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class MapViewModel(
@@ -17,13 +18,11 @@ class MapViewModel(
 ) {
     init {
         viewModelScope.launch {
-            load()
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
-            }
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
     }
 
@@ -70,6 +69,7 @@ class MapViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true

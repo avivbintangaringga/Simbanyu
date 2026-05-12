@@ -11,6 +11,7 @@ import com.avivba.simbanyu.ui.screens.billdetails.BillDetailsEvent.OpenPaymentPa
 import com.avivba.simbanyu.ui.shared.Screen
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiBill
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class BillDetailsViewModel(
@@ -25,7 +26,11 @@ class BillDetailsViewModel(
 
     init {
         viewModelScope.launch {
-            load()
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
 
         viewModelScope.launch {
@@ -40,12 +45,6 @@ class BillDetailsViewModel(
                         )
                     }
                 }
-            }
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
             }
         }
     }
@@ -66,6 +65,7 @@ class BillDetailsViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true

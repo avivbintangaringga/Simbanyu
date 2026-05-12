@@ -9,6 +9,7 @@ import com.avivba.simbanyu.ui.shared.base.BaseViewModel
 import com.avivba.simbanyu.ui.shared.model.UiActivity
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class OperatorDashboardViewModel(
@@ -20,7 +21,11 @@ class OperatorDashboardViewModel(
 ) {
     init {
         viewModelScope.launch {
-            load()
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
 
         viewModelScope.launch {
@@ -32,12 +37,6 @@ class OperatorDashboardViewModel(
                         )
                     }
                 }
-            }
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
             }
         }
     }
@@ -55,6 +54,7 @@ class OperatorDashboardViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true

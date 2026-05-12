@@ -15,6 +15,7 @@ import com.avivba.simbanyu.ui.utils.toDottedCurrency
 import com.avivba.simbanyu.ui.utils.toMonthShort
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
@@ -28,7 +29,11 @@ class DashboardViewModel(
 ) {
     init {
         viewModelScope.launch {
-            fetchData()
+            refreshEventBus.refreshEvent
+                .onStart { emit(Unit) }
+                .collect {
+                    load()
+                }
         }
 
         viewModelScope.launch {
@@ -41,12 +46,6 @@ class DashboardViewModel(
                     }
                     loadUsages(profile.subscriberId ?: "")
                 }
-            }
-        }
-
-        viewModelScope.launch {
-            refreshEventBus.refreshEvent.collect {
-                load()
             }
         }
     }
@@ -86,6 +85,7 @@ class DashboardViewModel(
     }
 
     private suspend fun load() {
+        if (state.value.isLoading) return
         updateState {
             it.copy(
                 isLoading = true,
