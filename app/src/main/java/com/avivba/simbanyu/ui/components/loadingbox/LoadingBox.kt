@@ -1,9 +1,5 @@
 package com.avivba.simbanyu.ui.components.loadingbox
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,14 +17,16 @@ fun LoadingBox(
     content: @Composable () -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        content()
+        if (!isLoading) {
+            content()
+        } else {
 
-        AnimatedVisibility(
-            visible = isLoading,
-            enter = EnterTransition.None,
-            exit = fadeOut(animationSpec = tween(durationMillis = 300)),
-            modifier = Modifier.fillMaxSize()
-        ) {
+//        AnimatedVisibility(
+//            visible = isLoading,
+//            enter = EnterTransition.None,
+//            exit = fadeOut(animationSpec = tween(durationMillis = 300)),
+//            modifier = Modifier.fillMaxSize()
+//        ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
