@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.operator.dashboard
 
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,10 @@ fun OperatorDashboardScreen(
                 onNavigate(Screen.OperatorAnnouncementScreen)
             }
         }
+    }
+
+    ReportDrawnWhen {
+        !state.isLoading
     }
 
     LoadingBox(

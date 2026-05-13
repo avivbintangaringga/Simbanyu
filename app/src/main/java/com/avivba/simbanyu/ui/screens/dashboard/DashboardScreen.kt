@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.ui.screens.dashboard
 
+import androidx.activity.compose.ReportDrawnWhen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -75,6 +76,10 @@ fun DashboardScreen(
                 onChangeTab(Screen.MainScreen.BillHistory)
             }
         }
+    }
+
+    ReportDrawnWhen {
+        !state.isLoading
     }
 
     LoadingBox(

@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.ui.screens.login
 
 import android.widget.Toast
+import androidx.activity.compose.ReportDrawn
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -312,6 +313,8 @@ fun LoginContent(
                     .fillMaxWidth()
             )
         }
+
+        ReportDrawn()
     }
 }
 
