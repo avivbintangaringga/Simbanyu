@@ -17,10 +17,12 @@ sealed interface MapUiAction {
 
     data class SetLocationPermission(val isGranted: Boolean) : MapUiAction
     data class GoToRecordMeter(val subscriber: UiSubscriber) : MapUiAction
+    data class GoToSubscriberDetail(val subscriber: UiSubscriber) : MapUiAction
     data object HasInitialZoomed : MapUiAction
 }
 
 sealed interface MapUiEvent {
+    data class GoToSubscriberDetail(val subscriberId: String) : MapUiEvent
     data class GoToRecordMeter(val subscriberId: String) : MapUiEvent
 }
 

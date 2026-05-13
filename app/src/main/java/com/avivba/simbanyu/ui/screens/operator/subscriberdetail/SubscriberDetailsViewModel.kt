@@ -190,9 +190,11 @@ class SubscriberDetailsViewModel(
             viewModelScope.async {
                 when (val usages = usageRepository.getAll(subscriberId)) {
                     is Result.Success -> {
-                        val usages = usages.data.map {
-                            UiUsage.fromDomain(it)
-                        }
+                        val usages = usages.data
+                            .sortedByDescending { it.date }
+                            .map {
+                                UiUsage.fromDomain(it)
+                            }
 
                         val years = usages.map { it.periodYear }.distinct().sortedDescending()
                         val selectedYear = years.firstOrNull() ?: 0
@@ -295,7 +297,7 @@ class SubscriberDetailsViewModel(
 
             updateState {
                 it.copy(
-                    usages = filtered,
+                    usages = filtered.sortedByDescending { it.realDate },
                     usageTotal = usageTotal,
                     usageAverage = usageAverage
                 )
@@ -313,7 +315,7 @@ class SubscriberDetailsViewModel(
         }.collect { filtered ->
             updateState {
                 it.copy(
-                    bills = filtered,
+                    bills = filtered
                 )
             }
         }

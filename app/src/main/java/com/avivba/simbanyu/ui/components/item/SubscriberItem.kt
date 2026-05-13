@@ -1,6 +1,7 @@
 package com.avivba.simbanyu.ui.components.item
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,7 +40,11 @@ fun SubscriberItem(
     val (status, iconId, statusColor) = if (subscriber.isRecorded) {
         Triple("SELESAI", R.drawable.ic_check, SimbanyuTheme.colors.statusPositiveText)
     } else {
-        Triple("BELUM DICATAT", R.drawable.ic_warning_filled, SimbanyuTheme.colors.statusWarningText)
+        Triple(
+            "BELUM DICATAT",
+            R.drawable.ic_warning_filled,
+            SimbanyuTheme.colors.statusWarningText
+        )
     }
 
     Column(
@@ -78,11 +83,13 @@ fun SubscriberItem(
                     verticalAlignment = Alignment.Top
                 ) {
                     SimbanyuText(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .basicMarquee(),
                         text = subscriber.name,
                         style = SimbanyuTheme.typography.displaySmall,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
+                        maxLines = 1,
+                        overflow = TextOverflow.Clip,
                     )
 
                     Row(

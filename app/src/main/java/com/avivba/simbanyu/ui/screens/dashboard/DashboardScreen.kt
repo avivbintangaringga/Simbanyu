@@ -114,7 +114,7 @@ fun DashboardContent(
     )
 
     val usageData = remember(state.usage, barColor, barColorMax) {
-        state.usage.map { usage ->
+        state.usage.reversed().map { usage ->
             Bars(
                 label = usage.month,
                 values = listOf(

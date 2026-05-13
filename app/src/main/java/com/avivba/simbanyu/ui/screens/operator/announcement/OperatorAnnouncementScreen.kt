@@ -236,6 +236,7 @@ fun OperatorAnnouncementContent(
             if (state.isShowCreateDialog) {
                 ModalBottomSheet(
                     sheetState = bottomSheetState,
+                    containerColor = SimbanyuTheme.colors.surfaceCard,
                     onDismissRequest = {
                         onAction(OperatorAnnouncementAction.HideCreateDialog)
                     }

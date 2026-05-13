@@ -59,7 +59,7 @@ internal fun UsageHistory(
         listOf(
             Line(
                 label = "Penggunaan",
-                values = state.usages.map { it.amount.toDouble() },
+                values = state.usages.reversed().map { it.amount.toDouble() },
                 color = chartColor,
                 firstGradientFillColor = chartGradientColor,
                 secondGradientFillColor = Color.Transparent,

@@ -4,6 +4,7 @@ import com.avivba.simbanyu.domain.model.Usage
 import com.avivba.simbanyu.ui.utils.toFullDateTime
 import com.avivba.simbanyu.ui.utils.toMonthFull
 import com.avivba.simbanyu.ui.utils.toYear
+import java.time.Instant
 
 data class UiUsage(
     val id: String,
@@ -16,6 +17,7 @@ data class UiUsage(
     val operatorNotes: String = "",
     val isExpanded: Boolean = false,
     val fullDate: String = "",
+    val realDate: Instant
 ) {
     companion object {
         fun fromDomain(data: Usage) = UiUsage(
@@ -28,6 +30,7 @@ data class UiUsage(
             imageUrl = data.evidenceImageUrl,
             operatorNotes = data.operatorNotes ?: "",
             fullDate = data.date.toFullDateTime(),
+            realDate = data.date,
             isExpanded = false,
         )
     }

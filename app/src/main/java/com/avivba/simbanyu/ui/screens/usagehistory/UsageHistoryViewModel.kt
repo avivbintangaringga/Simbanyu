@@ -81,7 +81,7 @@ class UsageHistoryViewModel(
 
             updateState {
                 it.copy(
-                    usages = filtered,
+                    usages = filtered.sortedByDescending { it.realDate },
                     usageTotal = usageTotal,
                     usageAverage = usageAverage
                 )
@@ -133,7 +133,7 @@ class UsageHistoryViewModel(
     private suspend fun fetchData() {
         when (val usage = usageRepository.getAll(null)) {
             is Result.Success -> {
-                val usages = usage.data.map {
+                val usages = usage.data.sortedByDescending { it.date }.map {
                     UiUsage.fromDomain(it)
                 }
 

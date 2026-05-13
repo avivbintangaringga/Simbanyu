@@ -2,9 +2,12 @@ package com.avivba.simbanyu.ui.screens.operator.map
 
 import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,10 +34,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,6 +47,8 @@ import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
 import com.avivba.simbanyu.ui.components.text.SimbanyuText
 import com.avivba.simbanyu.ui.screens.operator.subscribers.fakeSubscribers
 import com.avivba.simbanyu.ui.shared.Screen
+import com.avivba.simbanyu.ui.shared.Screen.RecordMeter
+import com.avivba.simbanyu.ui.shared.Screen.SubscriberDetails
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import com.avivba.simbanyu.ui.utils.ObserveAsEvent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -72,7 +77,11 @@ fun MapScreen(
     ObserveAsEvent(viewModel.event) {
         when (it) {
             is MapUiEvent.GoToRecordMeter -> {
-                onNavigate(Screen.RecordMeter(it.subscriberId))
+                onNavigate(RecordMeter(it.subscriberId))
+            }
+
+            is MapUiEvent.GoToSubscriberDetail -> {
+                onNavigate(SubscriberDetails(it.subscriberId))
             }
         }
     }
@@ -160,7 +169,7 @@ private fun MapContent(
 
     val density = LocalDensity.current
     var bottomPaddingPx by remember { mutableIntStateOf(0) }
-    val animatedBottomPadding by androidx.compose.animation.core.animateIntAsState(
+    val animatedBottomPadding by animateIntAsState(
         targetValue = bottomPaddingPx,
         label = "MapBottomPadding"
     )
@@ -239,12 +248,6 @@ private fun MapContent(
             }
         }
 
-        LaunchedEffect(state.selectedSubscriber) {
-            if (state.selectedSubscriber == null) {
-                bottomPaddingPx = 0
-            }
-        }
-
         AnimatedVisibility(
             visible = state.selectedSubscriber != null,
             enter = slideInVertically(
@@ -262,13 +265,20 @@ private fun MapContent(
                 lastSubscriber
             }
 
+
+            val (status, iconId, statusColor) = if (subscriber.isRecorded) {
+                Triple("SELESAI", R.drawable.ic_check, SimbanyuTheme.colors.statusPositiveText)
+            } else {
+                Triple(
+                    "BELUM DICATAT",
+                    R.drawable.ic_warning_filled,
+                    SimbanyuTheme.colors.statusWarningText
+                )
+            }
+
+
             Column(
                 modifier = modifier
-                    .onGloballyPositioned { coordinates ->
-                        if (state.selectedSubscriber != null) {
-                            bottomPaddingPx = coordinates.size.height
-                        }
-                    }
                     .clip(
                         SimbanyuTheme.shapes.bottomBar
                     )
@@ -280,13 +290,15 @@ private fun MapContent(
                         SimbanyuTheme.padding.large
                     ),
             ) {
+
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.medium
-                    ),
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxWidth()
+                        .clickable {
+                            onAction(MapUiAction.GoToSubscriberDetail(subscriber))
+                        },
+                    horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
+                    verticalAlignment = Alignment.Top
                 ) {
                     Icon(
                         modifier = Modifier
@@ -295,47 +307,35 @@ private fun MapContent(
                                 color = SimbanyuTheme.colors.brandText,
                                 shape = CircleShape
                             )
-                            .padding(
-                                SimbanyuTheme.padding.medium
-                            ),
+                            .padding(SimbanyuTheme.padding.medium),
                         painter = painterResource(R.drawable.ic_person_filled),
                         contentDescription = null,
                         tint = SimbanyuTheme.colors.brand
                     )
 
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(
-                            SimbanyuTheme.spacing.small
-                        )
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
                     ) {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.Top
                         ) {
-
                             SimbanyuText(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .basicMarquee(),
                                 text = subscriber.name,
-                                style = SimbanyuTheme.typography.displaySmall
+                                style = SimbanyuTheme.typography.displaySmall,
+                                maxLines = 1,
+                                overflow = TextOverflow.Clip,
                             )
-
-                            var status = "BELUM DICATAT"
-                            var iconId = R.drawable.ic_warning_filled
-                            var color = SimbanyuTheme.colors.statusWarningText
-
-                            if (subscriber.isRecorded) {
-                                status = "SELESAI"
-                                iconId = R.drawable.ic_check
-                                color = SimbanyuTheme.colors.statusPositiveText
-                            }
 
                             Row(
                                 modifier = Modifier
                                     .background(
-                                        color = color,
+                                        color = statusColor,
                                         shape = SimbanyuTheme.shapes.large
                                     )
                                     .padding(
@@ -343,13 +343,10 @@ private fun MapContent(
                                         horizontal = SimbanyuTheme.padding.medium
                                     ),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(
-                                    SimbanyuTheme.spacing.small
-                                )
+                                horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
                             ) {
                                 Icon(
-                                    modifier = Modifier
-                                        .size(12.dp),
+                                    modifier = Modifier.size(10.dp),
                                     painter = painterResource(iconId),
                                     contentDescription = null,
                                     tint = SimbanyuTheme.colors.brandText,
@@ -357,16 +354,32 @@ private fun MapContent(
 
                                 SimbanyuText(
                                     text = status,
-                                    style = SimbanyuTheme.typography.bodySmall,
+                                    style = SimbanyuTheme.typography.labelBadge,
                                     color = SimbanyuTheme.colors.brandText,
                                 )
                             }
                         }
 
-                        SimbanyuText(
-                            text = subscriber.address,
-                            style = SimbanyuTheme.typography.bodySmall
-                        )
+                        Row(
+                            verticalAlignment = Alignment.Top,
+                            horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .padding(top = 2.dp)
+                                    .size(14.dp),
+                                painter = painterResource(R.drawable.ic_location_on_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.brand
+                            )
+                            SimbanyuText(
+                                text = subscriber.address,
+                                style = SimbanyuTheme.typography.bodySmall,
+                                color = SimbanyuTheme.colors.textBody.copy(alpha = 0.7f),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 }
 
@@ -374,14 +387,11 @@ private fun MapContent(
 
                 Row(
                     modifier = Modifier,
-                    horizontalArrangement = Arrangement.spacedBy(
-                        SimbanyuTheme.spacing.small
-                    ),
+                    horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.small),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        modifier = Modifier
-                            .height(16.dp),
+                        modifier = Modifier.height(16.dp),
                         painter = painterResource(R.drawable.ic_speed_filled),
                         contentDescription = null,
                         tint = SimbanyuTheme.colors.brand
@@ -392,30 +402,23 @@ private fun MapContent(
                         style = SimbanyuTheme.typography.labelOverline
                     )
                 }
+
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
-                        modifier = Modifier
-                            .weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(
-                            SimbanyuTheme.spacing.extraSmall
-                        )
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.extraSmall)
                     ) {
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(
-                                SimbanyuTheme.spacing.small
-                            ),
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.small),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                modifier = Modifier
-                                    .height(16.dp),
+                                modifier = Modifier.height(16.dp),
                                 painter = painterResource(R.drawable.ic_calendar_clock_filled),
                                 contentDescription = null,
                                 tint = SimbanyuTheme.colors.brand
@@ -424,7 +427,7 @@ private fun MapContent(
                             SimbanyuText(
                                 text = "CATAT TERAKHIR",
                                 style = SimbanyuTheme.typography.bodySmall.copy(
-                                    fontWeight = FontWeight(900)
+                                    fontWeight = FontWeight.Black
                                 )
                             )
                         }
@@ -434,50 +437,33 @@ private fun MapContent(
                         )
                     }
 
-                    if (subscriber.isRecorded) {
-                        SimbanyuButton(
-                            text = "Perbarui",
-                            modifier = Modifier
-                                .background(
-                                    brush = Brush.verticalGradient(
+                    SimbanyuButton(
+                        text = if (subscriber.isRecorded) "Perbarui" else "Catat",
+                        modifier = Modifier
+                            .background(
+                                brush = if (subscriber.isRecorded) {
+                                    Brush.verticalGradient(
                                         colors = listOf(
                                             SimbanyuTheme.colors.statusNeutral,
-                                            SimbanyuTheme.colors.statusNeutral.copy(
-                                                alpha = 0.6f
-                                            )
+                                            SimbanyuTheme.colors.statusNeutral.copy(alpha = 0.6f)
                                         )
-                                    ),
-                                ),
-                            iconLeft = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_speed_filled),
-                                    contentDescription = null,
-                                    tint = SimbanyuTheme.colors.actionBrandText
-                                )
-                            },
-                            onClick = {
-                                onAction(MapUiAction.GoToRecordMeter(subscriber))
-                            }
-                        )
-                    } else {
-                        SimbanyuButton(
-                            text = "Catat",
-                            modifier = Modifier
-                                .background(
-                                    brush = SimbanyuTheme.colors.brush.brandVertical,
-                                ),
-                            iconLeft = {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_speed_filled),
-                                    contentDescription = null,
-                                    tint = SimbanyuTheme.colors.actionBrandText
-                                )
-                            },
-                            onClick = {
-                                onAction(MapUiAction.GoToRecordMeter(subscriber))
-                            }
-                        )
-                    }
+                                    )
+                                } else {
+                                    SimbanyuTheme.colors.brush.brandVertical
+                                },
+                                shape = SimbanyuTheme.shapes.extraLarge
+                            ),
+                        iconLeft = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_speed_filled),
+                                contentDescription = null,
+                                tint = SimbanyuTheme.colors.actionBrandText
+                            )
+                        },
+                        onClick = {
+                            onAction(MapUiAction.GoToRecordMeter(subscriber))
+                        }
+                    )
                 }
             }
         }

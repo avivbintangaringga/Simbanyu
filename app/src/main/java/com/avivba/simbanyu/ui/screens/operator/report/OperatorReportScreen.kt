@@ -243,6 +243,7 @@ private fun OperatorReportContent(
             if (state.currentReport != null) {
                 ModalBottomSheet(
                     sheetState = bottomSheetState,
+                    containerColor = SimbanyuTheme.colors.surfaceCard,
                     onDismissRequest = {
                         if (!state.currentReport.isSending) {
                             onAction(OperatorReportAction.HideUpdateReport)

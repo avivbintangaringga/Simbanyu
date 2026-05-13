@@ -64,6 +64,10 @@ class MapViewModel(
                         )
                     }
                 }
+
+                is MapUiAction.GoToSubscriberDetail -> {
+                    sendEvent(MapUiEvent.GoToSubscriberDetail(action.subscriber.id))
+                }
             }
         }
     }

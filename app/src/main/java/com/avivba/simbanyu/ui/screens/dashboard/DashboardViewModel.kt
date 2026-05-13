@@ -149,7 +149,7 @@ class DashboardViewModel(
     private suspend fun loadUsages(subscriberId: String) {
         when (val usage = usageRepository.getAll(subscriberId, 6)) {
             is Result.Success -> {
-                val usage = usage.data
+                val usage = usage.data.sortedByDescending { it.date }
                 val average = usage.map { it.amount }.average().takeIf { !it.isNaN() } ?: 0.0
                 val max = usage.maxByOrNull { it.amount }
 
