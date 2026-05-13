@@ -1,7 +1,7 @@
 package com.avivba.simbanyu.ui.screens.login
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 import org.junit.Rule
