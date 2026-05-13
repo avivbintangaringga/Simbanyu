@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -92,15 +93,12 @@ fun BillHistoryContent(
 
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(SimbanyuTheme.padding.large),
-        verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
+            .fillMaxSize(),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = SimbanyuTheme.padding.large),
+                .padding(SimbanyuTheme.padding.large),
             verticalAlignment = Alignment.CenterVertically
         ) {
             SimbanyuText(
@@ -117,6 +115,9 @@ fun BillHistoryContent(
                         .background(
                             color = SimbanyuTheme.colors.surfaceCardAlternate,
                             shape = SimbanyuTheme.shapes.medium
+                        )
+                        .clip(
+                            SimbanyuTheme.shapes.medium
                         )
                         .clickable {
                             isExpanded = true
@@ -163,10 +164,15 @@ fun BillHistoryContent(
         if (state.bills.isNotEmpty()) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(
-                    SimbanyuTheme.spacing.medium
-                ),
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(
+                        horizontal = SimbanyuTheme.padding.large
+                    )
+                    .padding(
+                        bottom = SimbanyuTheme.padding.large
+                    ),
+                verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium),
             ) {
                 state.bills.forEach { bill ->
                     var iconId: Int
@@ -232,6 +238,10 @@ fun BillHistoryContent(
             if (state.isMultipleSelectMode) {
                 Row(
                     modifier = Modifier
+                        .padding(
+                            horizontal = SimbanyuTheme.padding.large,
+                            vertical = SimbanyuTheme.padding.medium
+                        )
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
