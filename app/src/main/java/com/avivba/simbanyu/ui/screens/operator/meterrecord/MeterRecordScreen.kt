@@ -7,8 +7,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -97,6 +99,7 @@ fun MeterRecordScreen(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MeterRecordContent(
     modifier: Modifier = Modifier,
@@ -135,7 +138,8 @@ fun MeterRecordContent(
     ) { paddingValues ->
         LoadingBox(
             modifier = Modifier
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .consumeWindowInsets(paddingValues),
             isLoading = state.isLoading
         ) {
             Column(
