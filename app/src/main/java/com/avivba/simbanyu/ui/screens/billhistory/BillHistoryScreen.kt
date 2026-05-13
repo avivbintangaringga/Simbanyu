@@ -163,8 +163,7 @@ fun BillHistoryContent(
         if (state.bills.isNotEmpty()) {
             Column(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxSize(),
+                    .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(
                     SimbanyuTheme.spacing.medium
                 ),
