@@ -6,6 +6,8 @@ import com.avivba.simbanyu.data.utils.safeApiCall
 import com.avivba.simbanyu.domain.base.DataError
 import com.avivba.simbanyu.domain.base.Result
 import com.avivba.simbanyu.domain.repository.FcmTokenRepository
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.tasks.await
 
 class FcmTokenRepositoryImpl(
     private val fcmTokenService: FcmTokenService
@@ -17,6 +19,14 @@ class FcmTokenRepositoryImpl(
                     token = token
                 )
             )
+        }
+    }
+
+    override suspend fun getFcmToken(): String? {
+        return try {
+            FirebaseMessaging.getInstance().token.await()
+        } catch (e: Exception) {
+            null
         }
     }
 }

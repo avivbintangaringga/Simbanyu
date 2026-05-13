@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Simbanyu"
 include(":app")
+include(":benchmark")

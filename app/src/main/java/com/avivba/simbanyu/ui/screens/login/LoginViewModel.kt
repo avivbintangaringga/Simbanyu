@@ -8,10 +8,8 @@ import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.domain.repository.AuthRepository
 import com.avivba.simbanyu.domain.repository.FcmTokenRepository
 import com.avivba.simbanyu.ui.shared.base.BaseViewModel
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class LoginViewModel(
@@ -81,15 +79,17 @@ class LoginViewModel(
 
     private suspend fun sendFcmToken() {
         try {
-            val token = FirebaseMessaging.getInstance().token.await()
-            withContext(NonCancellable) {
-                when (fcmTokenRepository.save(token)) {
-                    is Result.Success -> {
-                        Log.d("SDKSDK", "FCM token sent successfully: $token")
-                    }
+            val token = fcmTokenRepository.getFcmToken()
+            if (token != null) {
+                withContext(NonCancellable) {
+                    when (fcmTokenRepository.save(token)) {
+                        is Result.Success -> {
+                            Log.d("SDKSDK", "FCM token sent successfully: $token")
+                        }
 
-                    is Result.Error -> {
-                        Log.e("SDKSDK", "Failed to send FCM token")
+                        is Result.Error -> {
+                            Log.e("SDKSDK", "Failed to send FCM token")
+                        }
                     }
                 }
             }

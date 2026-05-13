@@ -13,12 +13,23 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="ReportPreview">
+      <SelectionState runConfigName="Tests in 'com.avivba.simbanyu.ui.screens'">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-04-17T15:40:58.494223618Z">
+        <DropdownSelection timestamp="2026-05-10T18:35:57.834911684Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=a0b4faae" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/r7fx/.android/avd/Medium_Phone.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
+      </SelectionState>
+      <SelectionState runConfigName="All Tests">
+        <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2026-05-10T18:35:57.834911684Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/r7fx/.android/avd/Medium_Phone.avd" />
             </handle>
           </Target>
         </DropdownSelection>
