@@ -23,16 +23,32 @@ class DashboardBenchmark {
         metrics = listOf(FrameTimingMetric()),
         iterations = 5,
         startupMode = StartupMode.WARM,
-        compilationMode = CompilationMode.None()
+        compilationMode = CompilationMode.None(),
+        setupBlock = {
+            pressHome()
+            startActivityAndWait()
+            
+            // Check if login is needed. Wait for a few seconds for either dashboard or login
+            val loginButton = device.wait(Until.findObject(By.res("login_button")), 5000)
+            if (loginButton != null) {
+                val usernameField = device.findObject(By.res("username_field"))
+                val passwordField = device.findObject(By.res("password_field"))
+                
+                // NOTE: Replace these with valid test credentials for your environment
+                usernameField.text = "testuser"
+                passwordField.text = "password123"
+                
+                loginButton.click()
+                
+                // Wait for dashboard content to appear
+                device.wait(Until.hasObject(By.textContains("Penggunaan Air")), 10000)
+            }
+        }
     ) {
-        startActivityAndWait()
-        
-        // Wait for dashboard to load (assuming it lands on login or dashboard)
-        // If it lands on login, we might need to bypass it or use a pre-authenticated state
-        // For now, let's assume we want to measure scrolling on the main screen if it's there
-        
         val scrollable = device.wait(Until.findObject(By.scrollable(true)), 5000)
-        scrollable?.setGestureMargin(device.displayWidth / 5)
-        scrollable?.fling(Direction.DOWN)
+        if (scrollable != null) {
+            scrollable.setGestureMargin(device.displayWidth / 5)
+            scrollable.fling(Direction.DOWN)
+        }
     }
 }

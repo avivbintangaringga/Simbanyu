@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,6 +33,7 @@ fun SimbanyuTextField(
     modifier: Modifier = Modifier,
     state: TextFieldState,
     hint: String,
+    testTag: String? = null,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
     isPassword: Boolean = false,
@@ -84,7 +86,7 @@ fun SimbanyuTextField(
         if (isPassword) {
             BasicSecureTextField(
                 state = state,
-                modifier = modifier2,
+                modifier = if (testTag != null) modifier2.testTag(testTag) else modifier2,
                 textStyle = SimbanyuTheme.typography.bodyStandard.copy(
                     color = SimbanyuTheme.colors.textInput,
                     fontSize = fontSize
@@ -105,7 +107,7 @@ fun SimbanyuTextField(
         } else {
             BasicTextField(
                 state = state,
-                modifier = modifier2,
+                modifier = if (testTag != null) modifier2.testTag(testTag) else modifier2,
                 textStyle = SimbanyuTheme.typography.bodyStandard.copy(
                     color = SimbanyuTheme.colors.textInput,
                     fontSize = fontSize

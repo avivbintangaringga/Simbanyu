@@ -215,6 +215,7 @@ fun LoginContent(
                 SimbanyuTextField(
                     modifier = Modifier,
                     state = state.username,
+                    testTag = "username_field",
                     hint = "Masukkan identitas anda",
                     prefix = {
                         Icon(
@@ -239,6 +240,7 @@ fun LoginContent(
                 SimbanyuTextField(
                     modifier = Modifier,
                     state = state.password,
+                    testTag = "password_field",
                     hint = "Password anda",
                     isPassword = true,
                     isPasswordVisible = state.isPasswordVisible,
@@ -286,6 +288,7 @@ fun LoginContent(
                             brush = SimbanyuTheme.colors.brush.brandVertical
                         ),
                     text = "Login",
+                    testTag = "login_button",
                     iconRight = {
                         if (state.isLoading) {
                             CircularProgressIndicator(

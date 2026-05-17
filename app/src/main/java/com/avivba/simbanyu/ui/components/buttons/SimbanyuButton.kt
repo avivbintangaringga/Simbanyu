@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +27,7 @@ import com.avivba.simbanyu.ui.theme.SimbanyuTheme
 @Composable
 fun SimbanyuButton(
     modifier: Modifier = Modifier,
+    testTag: String? = null,
     iconLeft: @Composable (() -> Unit)? = null,
     iconRight: @Composable (() -> Unit)? = null,
     text: String,
@@ -36,6 +38,7 @@ fun SimbanyuButton(
         modifier = Modifier
             .clip(SimbanyuTheme.shapes.extraLarge)
             .then(modifier)
+            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
             .clickable {
                 onClick()
             }

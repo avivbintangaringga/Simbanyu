@@ -15,7 +15,9 @@ class StartupBenchmark {
     @Test
     fun startup() = benchmarkRule.measureRepeated(
         packageName = "com.avivba.simbanyu",
-        metrics = listOf(androidx.benchmark.macro.StartupTimingMetric()),
+        metrics = listOf(
+            androidx.benchmark.macro.StartupTimingMetric()
+        ),
         iterations = 5,
         startupMode = StartupMode.COLD
     ) {
