@@ -69,7 +69,7 @@ class SimbanyuFirebaseMessagingService : FirebaseMessagingService(), KoinCompone
         val notification = NotificationCompat.Builder(this, "simbanyu_channel")
             .setContentTitle(title)
             .setContentText(message)
-            .setSmallIcon(R.drawable.logo_only)
+            .setSmallIcon(R.drawable.logo_v2)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setDefaults(NotificationCompat.DEFAULT_ALL)

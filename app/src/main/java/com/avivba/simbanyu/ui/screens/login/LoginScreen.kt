@@ -118,7 +118,7 @@ fun LoginContent(
                 verticalArrangement = Arrangement.spacedBy(SimbanyuTheme.spacing.medium)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.logo),
+                    painter = painterResource(R.drawable.logo_v2),
                     contentDescription = "Logo",
                     modifier = Modifier.height(64.dp)
                 )

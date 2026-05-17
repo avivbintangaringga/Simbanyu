@@ -1,11 +1,11 @@
 package com.avivba.simbanyu.ui.components.topbar
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,12 +26,23 @@ fun TopBar(
     modifier: Modifier = Modifier,
     text: String = "Simbanyu",
     navigationIcon: @Composable () -> Unit = {
-        Icon(
+//        Icon(
+//            modifier = Modifier
+//                .padding(horizontal = SimbanyuTheme.padding.large),
+//            painter = painterResource(R.drawable.logo_v2),
+//            contentDescription = null,
+////            tint = SimbanyuTheme.colors.brand
+//        )
+
+
+        Image(
+            painter = painterResource(R.drawable.logo_v2),
+            contentDescription = "Logo",
             modifier = Modifier
-                .padding(horizontal = SimbanyuTheme.padding.large),
-            painter = painterResource(R.drawable.logo_only),
-            contentDescription = null,
-            tint = SimbanyuTheme.colors.brand
+                .height(28.dp)
+                .padding(
+                    horizontal = SimbanyuTheme.padding.large
+                )
         )
     },
     actions: @Composable RowScope.() -> Unit = {}
