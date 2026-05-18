@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -171,7 +172,8 @@ fun SubscribersContent(
         if (state.filteredSubscribers.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .testTag("subscriber_list"),
                 contentPadding = PaddingValues(SimbanyuTheme.padding.large),
                 verticalArrangement = Arrangement.spacedBy(
                     SimbanyuTheme.spacing.medium

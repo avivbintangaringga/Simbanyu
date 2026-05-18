@@ -1,5 +1,6 @@
 package com.avivba.simbanyu.benchmark
 
+import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.junit4.MacrobenchmarkRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -13,13 +14,20 @@ class StartupBenchmark {
     val benchmarkRule = MacrobenchmarkRule()
 
     @Test
-    fun startup() = benchmarkRule.measureRepeated(
+    fun startupCold() = startup(StartupMode.COLD)
+
+    @Test
+    fun startupWarm() = startup(StartupMode.WARM)
+
+    @Test
+    fun startupHot() = startup(StartupMode.HOT)
+
+    private fun startup(mode: StartupMode) = benchmarkRule.measureRepeated(
         packageName = "com.avivba.simbanyu",
-        metrics = listOf(
-            androidx.benchmark.macro.StartupTimingMetric()
-        ),
+        metrics = listOf(androidx.benchmark.macro.StartupTimingMetric()),
         iterations = 5,
-        startupMode = StartupMode.COLD
+        startupMode = mode,
+        compilationMode = CompilationMode.None()
     ) {
         pressHome()
         startActivityAndWait()

@@ -18,12 +18,17 @@ class DashboardBenchmark {
     val benchmarkRule = MacrobenchmarkRule()
 
     @Test
-    fun scrollDashboard() = benchmarkRule.measureRepeated(
+    fun scrollDashboardCompilationNone() = scrollDashboard(CompilationMode.None())
+
+    @Test
+    fun scrollDashboardCompilationBaseline() = scrollDashboard(CompilationMode.Partial())
+
+    private fun scrollDashboard(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
         packageName = "com.avivba.simbanyu",
         metrics = listOf(FrameTimingMetric()),
         iterations = 5,
         startupMode = StartupMode.WARM,
-        compilationMode = CompilationMode.None(),
+        compilationMode = compilationMode,
         setupBlock = {
             pressHome()
             startActivityAndWait()
@@ -45,10 +50,12 @@ class DashboardBenchmark {
             }
         }
     ) {
-        val scrollable = device.wait(Until.findObject(By.scrollable(true)), 5000)
+        val scrollable = device.wait(Until.findObject(By.res("dashboard_scrollable")), 5000)
         if (scrollable != null) {
             scrollable.setGestureMargin(device.displayWidth / 5)
             scrollable.fling(Direction.DOWN)
+            device.waitForIdle()
+            scrollable.fling(Direction.UP)
         }
     }
 }
