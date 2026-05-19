@@ -8,13 +8,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.avivba.simbanyu.domain.model.User
 import com.avivba.simbanyu.ui.components.loadingbox.LoadingBox
@@ -45,7 +49,12 @@ class MainActivity : ComponentActivity() {
             val profile by viewModel.profile.collectAsStateWithLifecycle()
 
             SimbanyuTheme {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Box(
+                    modifier = Modifier.semantics {
+                        testTagsAsResourceId = true
+                    }
+                ) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     val notificationPermissionState = rememberPermissionState(
                         Manifest.permission.POST_NOTIFICATIONS
                     )
@@ -87,6 +96,7 @@ class MainActivity : ComponentActivity() {
                         }
                         previousLoggedIn = isLoggedIn
                     }
+                }
                 }
             }
         }
