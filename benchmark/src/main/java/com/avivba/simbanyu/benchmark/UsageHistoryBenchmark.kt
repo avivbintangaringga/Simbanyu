@@ -23,7 +23,7 @@ class UsageHistoryBenchmark {
         metrics = listOf(FrameTimingMetric()),
         iterations = 5,
         startupMode = StartupMode.WARM,
-        compilationMode = CompilationMode.None(),
+        compilationMode = CompilationMode.Partial(),
         setupBlock = {
             pressHome()
             startActivityAndWait()
@@ -31,8 +31,8 @@ class UsageHistoryBenchmark {
             // Handle login
             val loginButton = device.wait(Until.findObject(By.res("login_button")), 5000)
             if (loginButton != null) {
-                device.findObject(By.res("username_field")).text = "testuser"
-                device.findObject(By.res("password_field")).text = "password123"
+                device.findObject(By.res("username_field")).text = "SW050105"
+                device.findObject(By.res("password_field")).text = "demo"
                 loginButton.click()
                 device.wait(Until.hasObject(By.textContains("Penggunaan Air")), 10000)
             }

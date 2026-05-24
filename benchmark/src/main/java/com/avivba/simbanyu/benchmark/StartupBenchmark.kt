@@ -27,7 +27,7 @@ class StartupBenchmark {
         metrics = listOf(androidx.benchmark.macro.StartupTimingMetric()),
         iterations = 5,
         startupMode = mode,
-        compilationMode = CompilationMode.None()
+        compilationMode = CompilationMode.Partial()
     ) {
         pressHome()
         startActivityAndWait()

@@ -23,7 +23,7 @@ class OperatorBenchmark {
         metrics = listOf(FrameTimingMetric()),
         iterations = 5,
         startupMode = StartupMode.WARM,
-        compilationMode = CompilationMode.None(),
+        compilationMode = CompilationMode.Partial(),
         setupBlock = {
             pressHome()
             startActivityAndWait()
@@ -59,7 +59,7 @@ class OperatorBenchmark {
         metrics = listOf(FrameTimingMetric()),
         iterations = 5,
         startupMode = StartupMode.WARM,
-        compilationMode = CompilationMode.None(),
+        compilationMode = CompilationMode.Partial(),
         setupBlock = {
             pressHome()
             startActivityAndWait()

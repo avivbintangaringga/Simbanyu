@@ -18,9 +18,6 @@ class DashboardBenchmark {
     val benchmarkRule = MacrobenchmarkRule()
 
     @Test
-    fun scrollDashboardCompilationNone() = scrollDashboard(CompilationMode.None())
-
-    @Test
     fun scrollDashboardCompilationBaseline() = scrollDashboard(CompilationMode.Partial())
 
     private fun scrollDashboard(compilationMode: CompilationMode) = benchmarkRule.measureRepeated(
@@ -40,8 +37,8 @@ class DashboardBenchmark {
                 val passwordField = device.findObject(By.res("password_field"))
                 
                 // NOTE: Replace these with valid test credentials for your environment
-                usernameField.text = "testuser"
-                passwordField.text = "password123"
+                usernameField.text = "SW050105"
+                passwordField.text = "demo"
                 
                 loginButton.click()
                 

@@ -27,8 +27,9 @@ class BaselineProfileGenerator {
         if (loginButton != null) {
             val usernameField = device.findObject(By.res("username_field"))
             val passwordField = device.findObject(By.res("password_field"))
-            usernameField.text = "testuser"
-            passwordField.text = "password123"
+            // Use credentials that are known to work in benchmarks
+            usernameField.text = "SW050105"
+            passwordField.text = "demo"
             loginButton.click()
             device.wait(Until.hasObject(By.textContains("Penggunaan Air")), 10000)
         }
@@ -36,6 +37,12 @@ class BaselineProfileGenerator {
         // Navigate through main screens
         val usageTab = device.findObject(By.text("Penggunaan"))
         usageTab?.click()
+        device.waitForIdle()
+
+        // Scroll usage history list to include it in the profile
+        val usageHistoryList = device.wait(Until.findObject(By.res("usage_history_list")), 5000)
+        usageHistoryList?.setGestureMargin(device.displayWidth / 5)
+        usageHistoryList?.fling(Direction.DOWN)
         device.waitForIdle()
 
         val billTab = device.findObject(By.text("Tagihan"))
@@ -50,12 +57,14 @@ class BaselineProfileGenerator {
         profileTab?.click()
         device.waitForIdle()
 
-        // Scroll some lists
+        // Home Screen and scrolling
         val homeTab = device.findObject(By.text("Home"))
         homeTab?.click()
         device.waitForIdle()
         
-        val scrollable = device.wait(Until.findObject(By.scrollable(true)), 5000)
-        scrollable?.fling(Direction.DOWN)
+        val dashboardScrollable = device.wait(Until.findObject(By.res("dashboard_scrollable")), 5000)
+        dashboardScrollable?.setGestureMargin(device.displayWidth / 5)
+        dashboardScrollable?.fling(Direction.DOWN)
+        device.waitForIdle()
     }
 }
